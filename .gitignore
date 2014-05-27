@@ -1,0 +1,7 @@
+Podfile.lock
+Pods/
+TreasureData.xcodeproj/project.xcworkspace/xcshareddata/
+TreasureData.xcworkspace/
+TreasureDataExample/Podfile.lock
+TreasureDataExample/Pods/
+TreasureDataExample/TreasureDataExample.xcworkspace/
