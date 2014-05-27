@@ -47,7 +47,7 @@
     self.client = [[MyClient alloc] initWithProjectId:@"_treasure data_" andWriteKey:@"dummy_write_key" andReadKey:@"dummy_read_key"];
     if (self.client) {
         self.client.apiKey = secret;
-        self.client.apiEndpoint = @"http://in-staging.treasuredata.com/ios/v3";
+        self.client.apiEndpoint = @"http://in.treasuredata.com/ios/v3";
     }
     else {
         KCLog(@"Failed to initialize client");
