@@ -1,1 +1,1 @@
-pod 'TreasureData', :path => '..'
+pod 'TreasureData-iOS-SDK', :path => '..'

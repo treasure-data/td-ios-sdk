@@ -7,7 +7,7 @@
 #
 
 Pod::Spec.new do |s|
-  s.name         = "TreasureData"
+  s.name         = "TreasureData-iOS-SDK"
   s.version      = "0.0.1"
   s.summary      = "TreasureData SDK for iOS."
   s.license      = "Apache"

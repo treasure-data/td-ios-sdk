@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "TreasureData/TreasureData.h"
+#import "TreasureData-iOS-SDK/TreasureData.h"
 
 @implementation AppDelegate
 

@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "TreasureData.h"
+#import "TreasureData-iOS-SDK/TreasureData.h"
 
 @interface ViewController ()
 
