@@ -25,8 +25,6 @@
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setValue:self.apiKey forHTTPHeaderField:@"X-TD-Write-Key"];
     [request setValue:@"k" forHTTPHeaderField:@"X-TD-Data-Type"];   // means KeenIO data type
-    // TODO check if setHTTPBody also sets content-length
-    [request setValue:[NSString stringWithFormat:@"%lud",(unsigned long) [data length]] forHTTPHeaderField:@"Content-Length"];
     [request setHTTPBody:data];
     NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:response error:error];
     KCLog(@"response=%@", *response);
