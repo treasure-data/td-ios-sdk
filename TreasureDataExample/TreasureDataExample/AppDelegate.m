@@ -33,7 +33,7 @@
         NSLog(@"Background task is being expired.");
     }];
 
-    [[TreasureData sharedInstance] uploadWithFinishedBlock:^(void) {
+    [[TreasureData sharedInstance] uploadWithBlock:^(void) {
         [application endBackgroundTask:taskId];
     }];
 }

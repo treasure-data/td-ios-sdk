@@ -19,7 +19,7 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    [TreasureData initializeWithSecret:@"your_api_key_for_staging_env"];
+    [TreasureData initializeWithSecret:@"your_api_key"];
 }
 
 - (void)didReceiveMemoryWarning

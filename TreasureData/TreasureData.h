@@ -24,7 +24,7 @@
 
 - (void)event:(NSString *)database table:(NSString *)table properties:(NSDictionary *)properties options:(NSDictionary *)options;
 
-- (void)uploadWithFinishedBlock:(void (^)())block;
+- (void)uploadWithBlock:(void (^)())block;
 
 - (void)setApiEndpoint:(NSString*)endpoint;
 

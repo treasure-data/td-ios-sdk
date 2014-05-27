@@ -76,7 +76,7 @@
     }
 }
 
-- (void)uploadWithFinishedBlock:(void (^)())block {
+- (void)uploadWithBlock:(void (^)())block {
     if (self.client) {
         [self.client uploadWithFinishedBlock:block];
     }
