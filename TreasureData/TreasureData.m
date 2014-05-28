@@ -42,6 +42,20 @@
 @implementation TreasureData
 
 - (id)initWithSecret:(NSString *)secret {
+    /*
+     * This client uses the parent's resources as follows:
+     *
+     *  - global_dispatch_queue
+     *    - Although the client uses the same label when calling dispatch_queue_create(),
+     *      dispatch_queue_create() returns the different queue and there is no conflict with
+     *      the parent client.
+     *
+     *  - cache directory
+     *    - Although the client uses the same root directory,
+     *      the client uses a special project id which is not conflicted with
+     *      the parent client's project ids.
+     *
+     */
     self.client = [[MyClient alloc] initWithProjectId:@"_treasure data_" andWriteKey:@"dummy_write_key" andReadKey:@"dummy_read_key"];
     if (self.client) {
         self.client.apiKey = secret;
