@@ -32,4 +32,6 @@
 
 + (void)enableLogging;
 
+- (NSData*)sendData;
+
 @end

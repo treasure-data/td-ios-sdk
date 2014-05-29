@@ -8,6 +8,7 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 #import "TreasureData.h"
+#import "TDHttpClient.h"
 #import "KeenClient/KeenClient.h"
 
 @interface MyClient : KeenClient
@@ -26,12 +27,7 @@
     [request setValue:self.apiKey forHTTPHeaderField:@"X-TD-Write-Key"];
     [request setValue:@"k" forHTTPHeaderField:@"X-TD-Data-Type"];   // means KeenIO data type
     [request setHTTPBody:data];
-    NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:response error:error];
-    KCLog(@"response=%@", *response);
-    KCLog(@"responseData=%@", [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding]);
-    KCLog(@"error=%@", *error);
-
-    return responseData;
+    return [[[TDHttpClient alloc] init] sendRequest:request returningResponse:response error:error];
 }
 @end
 
@@ -59,7 +55,7 @@
     self.client = [[MyClient alloc] initWithProjectId:@"_treasure data_" andWriteKey:@"dummy_write_key" andReadKey:@"dummy_read_key"];
     if (self.client) {
         self.client.apiKey = secret;
-        self.client.apiEndpoint = @"http://in.treasuredata.com/ios/v3";
+        self.client.apiEndpoint = @"https://in.treasuredata.com/ios/v3";
     }
     else {
         KCLog(@"Failed to initialize client");
@@ -123,6 +119,12 @@ static TreasureData *SharedInstance = nil;
 
 + (void)enableLogging {
     [KeenClient enableLogging];
+}
+
+- (NSData*)sendData {
+    NSURLResponse *response = [[NSURLResponse alloc]init];
+    NSError *error = [[NSError alloc] init];
+    return [self.client sendEvents:nil returningResponse:&response error:&error];
 }
 
 @end
