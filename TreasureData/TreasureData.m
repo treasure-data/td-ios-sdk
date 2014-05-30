@@ -11,6 +11,9 @@
 #import "TDHttpClient.h"
 #import "KeenClient/KeenClient.h"
 
+static BOOL isTraceLoggingEnabled = false;
+static TreasureData *sharedInstance = nil;
+
 @interface TDClient : KeenClient
 @property(nonatomic, strong) NSString *apiKey;
 @property(nonatomic, strong) NSString *apiEndpoint;
@@ -19,7 +22,7 @@
 @implementation TDClient
 - (NSData *)sendEvents:(NSData *)data returningResponse:(NSURLResponse **)response error:(NSError **)error {
     NSString *urlString = [NSString stringWithFormat:@"%@/%@", self.apiEndpoint, @"event"];
-    KCLog(@"Sending request to: %@", urlString);
+    KCLog(@"Sending events to: %@", urlString);
     NSURL *url = [NSURL URLWithString:urlString];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:@"POST"];
@@ -27,7 +30,11 @@
     [request setValue:self.apiKey forHTTPHeaderField:@"X-TD-Write-Key"];
     [request setValue:@"k" forHTTPHeaderField:@"X-TD-Data-Type"];   // means KeenIO data type
     [request setHTTPBody:data];
-    return [[[TDHttpClient alloc] init] sendRequest:request returningResponse:response error:error];
+    TDHttpClient *tdHttpClient = [[TDHttpClient alloc] init];
+    if (isTraceLoggingEnabled) {
+        [tdHttpClient setLogging:true];
+    }
+    return [tdHttpClient sendRequest:request returningResponse:response error:error];
 }
 @end
 
@@ -36,7 +43,6 @@
 @end
 
 @implementation TreasureData
-
 - (id)initWithSecret:(NSString *)secret {
     self = [self init];
 
@@ -103,7 +109,6 @@
     self.client.apiEndpoint = endpoint;
 }
 
-static TreasureData *sharedInstance = nil;
 
 + (void)initializeWithSecret:(NSString *)secret {
     static dispatch_once_t onceToken;
@@ -123,6 +128,14 @@ static TreasureData *sharedInstance = nil;
 
 + (void)enableLogging {
     [KeenClient enableLogging];
+}
+
++ (void)disableTraceLogging {
+    isTraceLoggingEnabled = false;
+}
+
++ (void)enableTraceLogging {
+    isTraceLoggingEnabled = true;
 }
 
 @end

@@ -19,7 +19,7 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    [TreasureData enableLogging];
+    // [TreasureData enableLogging];
     [TreasureData initializeWithSecret:@"your_api_key"];
 }
 

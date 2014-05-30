@@ -30,4 +30,8 @@
 
 + (void)enableLogging;
 
++ (void)disableTraceLogging;
+
++ (void)enableTraceLogging;
+
 @end

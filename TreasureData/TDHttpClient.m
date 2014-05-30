@@ -14,13 +14,21 @@
 @property(nonatomic, strong) NSURLResponse *response;
 @property(nonatomic, strong) NSError *error;
 @property BOOL isFinished;
+@property BOOL isLoggingEnabled;
 @end
 
 @implementation TDHttpClient
+
+- (void)setLogging:(BOOL)isLoggingEnabled {
+    self.isLoggingEnabled = isLoggingEnabled;
+}
+
 - (NSData *)sendRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error {
     self.conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     if (!self.conn) {
-        NSLog(@"Connection wasn't created");
+        if (self.isLoggingEnabled) {
+            NSLog(@"Connection wasn't created");
+        }
         return nil;
     }
 
@@ -30,20 +38,22 @@
     self.error = nil;
     self.isFinished = false;
     while (!self.isFinished && count-- > 0) {
-        NSLog(@"Waiting...");
+        if (self.isLoggingEnabled) {
+            NSLog(@"Waiting...");
+        }
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5]];
     }
-    NSLog(@"error=%@", self.error);
-    NSLog(@"responseData=%@", [[NSString alloc] initWithData:self.responseData encoding:NSUTF8StringEncoding]);
-    NSLog(@"response=%@", self.response);
-
+    if (self.isLoggingEnabled) {
+        NSLog(@"error=%@", self.error);
+        NSLog(@"responseData=%@", [[NSString alloc] initWithData:self.responseData encoding:NSUTF8StringEncoding]);
+        NSLog(@"response=%@", self.response);
+    }
     *response = self.response;
     *error = self.error;
     return self.responseData;
 }
 
 - (BOOL)shouldTrustProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
-    NSLog(@"shouldTrustProtectionSpace");
     // Load up the bundled certificate.
     NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"Resources" ofType:@"bundle"];
     NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
@@ -73,14 +83,10 @@
 #pragma mark NSURLConnection Delegate Methods
 
 - (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
-    NSLog(@"canAuthenticateAgainstProtectionSpace");
-    
     return [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-    NSLog(@"didReceiveAuthenticationChallenge");
-    
     if ([self shouldTrustProtectionSpace:challenge.protectionSpace]) {
         [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
     } else {
@@ -94,10 +100,12 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
     self.response = response;
+    self.isFinished = true;
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     self.error = error;
+    self.isFinished = true;
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {

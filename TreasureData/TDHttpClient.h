@@ -9,5 +9,9 @@
 #import <Foundation/Foundation.h>
 
 @interface TDHttpClient : NSObject <NSURLConnectionDelegate>
+
 - (NSData *)sendRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error;
+
+- (void)setLogging:(BOOL)isLoggingEnabled;
+
 @end
