@@ -21,7 +21,6 @@ Pod::Spec.new do |s|
   s.source       = { :git => "git@github.com:treasure-data/td-ios-sdk.git", :tag => "0.0.1" }
 
   s.source_files  = "TreasureData",
-  s.frameworks = 'Security'
   s.public_header_files = "TreasureData/TreasureData.h"
   s.requires_arc = true
   s.dependency "KeenClient", '= 3.2.7'

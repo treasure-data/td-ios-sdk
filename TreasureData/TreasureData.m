@@ -11,12 +11,12 @@
 #import "TDHttpClient.h"
 #import "KeenClient/KeenClient.h"
 
-@interface MyClient : KeenClient
+@interface TDClient : KeenClient
 @property(nonatomic, strong) NSString *apiKey;
 @property(nonatomic, strong) NSString *apiEndpoint;
 @end
 
-@implementation MyClient
+@implementation TDClient
 - (NSData *)sendEvents:(NSData *)data returningResponse:(NSURLResponse **)response error:(NSError **)error {
     NSString *urlString = [NSString stringWithFormat:@"%@/%@", self.apiEndpoint, @"event"];
     KCLog(@"Sending request to: %@", urlString);
@@ -32,33 +32,37 @@
 @end
 
 @interface TreasureData ()
-@property MyClient *client;
+@property TDClient *client;
 @end
 
 @implementation TreasureData
 
 - (id)initWithSecret:(NSString *)secret {
-    /*
-     * This client uses the parent's resources as follows:
-     *
-     *  - global_dispatch_queue
-     *    - Although the client uses the same label when calling dispatch_queue_create(),
-     *      dispatch_queue_create() returns the different queue and there is no conflict with
-     *      the parent client.
-     *
-     *  - cache directory
-     *    - Although the client uses the same root directory,
-     *      the client uses a special project id which is not conflicted with
-     *      the parent client's project ids.
-     *
-     */
-    self.client = [[MyClient alloc] initWithProjectId:@"_treasure data_" andWriteKey:@"dummy_write_key" andReadKey:@"dummy_read_key"];
-    if (self.client) {
-        self.client.apiKey = secret;
-        self.client.apiEndpoint = @"https://in.treasuredata.com/ios/v3";
-    }
-    else {
-        KCLog(@"Failed to initialize client");
+    self = [self init];
+
+    if (self) {
+        /*
+         * This client uses the parent's resources as follows:
+         *
+         *  - global_dispatch_queue
+         *    - Although the client uses the same label when calling dispatch_queue_create(),
+         *      dispatch_queue_create() returns the different queue and there is no conflict with
+         *      the parent client.
+         *
+         *  - cache directory
+         *    - Although the client uses the same root directory,
+         *      the client uses a special project id which is not conflicted with
+         *      the parent client's project ids.
+         *
+         */
+        self.client = [[TDClient alloc] initWithProjectId:@"_treasure data_" andWriteKey:@"dummy_write_key" andReadKey:@"dummy_read_key"];
+        if (self.client) {
+            self.client.apiKey = secret;
+            self.client.apiEndpoint = @"https://in.treasuredata.com/ios/v3";
+        }
+        else {
+            KCLog(@"Failed to initialize client");
+        }
     }
     return self;
 }
@@ -99,18 +103,18 @@
     self.client.apiEndpoint = endpoint;
 }
 
-static TreasureData *SharedInstance = nil;
+static TreasureData *sharedInstance = nil;
 
 + (void)initializeWithSecret:(NSString *)secret {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        SharedInstance = [[self alloc] initWithSecret:secret];
+        sharedInstance = [[self alloc] initWithSecret:secret];
     });
 }
 
 + (instancetype)sharedInstance {
-    NSAssert(SharedInstance, @"%@ sharedInstance called before withSecret", self);
-    return SharedInstance;
+    NSAssert(sharedInstance, @"%@ sharedInstance called before withSecret", self);
+    return sharedInstance;
 }
 
 + (void)disableLogging {
@@ -119,12 +123,6 @@ static TreasureData *SharedInstance = nil;
 
 + (void)enableLogging {
     [KeenClient enableLogging];
-}
-
-- (NSData*)sendData {
-    NSURLResponse *response = [[NSURLResponse alloc]init];
-    NSError *error = [[NSError alloc] init];
-    return [self.client sendEvents:nil returningResponse:&response error:&error];
 }
 
 @end

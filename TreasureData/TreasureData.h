@@ -10,13 +10,11 @@
 
 @interface TreasureData : NSObject
 
-@property(nonatomic, copy) NSString *secret;
-@property(nonatomic, copy, readonly) NSDictionary *providers;
-
-
 + (void)initializeWithSecret:(NSString *)secret;
 
 + (instancetype)sharedInstance;
+
+- (id)initWithSecret:(NSString *)secret;
 
 - (void)event:(NSString *)database table:(NSString *)table;
 
@@ -31,7 +29,5 @@
 + (void)disableLogging;
 
 + (void)enableLogging;
-
-- (NSData*)sendData;
 
 @end

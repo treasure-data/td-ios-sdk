@@ -8,6 +8,14 @@
 
 #import "TDHttpClient.h"
 
+@interface TDHttpClient ()
+@property(nonatomic, strong) NSURLConnection *conn;
+@property(nonatomic, strong) NSData *responseData;
+@property(nonatomic, strong) NSURLResponse *response;
+@property(nonatomic, strong) NSError *error;
+@property BOOL isFinished;
+@end
+
 @implementation TDHttpClient
 - (NSData *)sendRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error {
     self.conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];

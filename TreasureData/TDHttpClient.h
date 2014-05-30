@@ -9,12 +9,5 @@
 #import <Foundation/Foundation.h>
 
 @interface TDHttpClient : NSObject <NSURLConnectionDelegate>
-@property(nonatomic, strong) NSURLConnection *conn;
-// TODO: handle multi requests
-@property(nonatomic, strong) NSData *responseData;
-@property(nonatomic, strong) NSURLResponse *response;
-@property(nonatomic, strong) NSError *error;
-@property BOOL isFinished;
-
 - (NSData *)sendRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error;
 @end
