@@ -57,7 +57,6 @@
 		6B7380A9192A09160097D56E /* TreasureDataTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TreasureDataTests-Info.plist"; sourceTree = "<group>"; };
 		6B7380AB192A09160097D56E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6B7380AD192A09160097D56E /* TreasureDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TreasureDataTests.m; sourceTree = "<group>"; };
-		6BCDCD181936F87A00D57F34 /* gd_bundle.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = gd_bundle.der; sourceTree = "<group>"; };
 		6BCDCD1A1937196200D57F34 /* TDHttpClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDHttpClient.h; sourceTree = "<group>"; };
 		6BCDCD1B1937196200D57F34 /* TDHttpClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDHttpClient.m; sourceTree = "<group>"; };
 		E81516D77A3B42D89ECF71AD /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
@@ -91,7 +90,6 @@
 			isa = PBXGroup;
 			children = (
 				6B5197BB19374A5000477F84 /* Resources.bundle */,
-				6BCDCD181936F87A00D57F34 /* gd_bundle.der */,
 				6B738093192A09160097D56E /* TreasureData */,
 				6B7380A7192A09160097D56E /* TreasureDataTests */,
 				6B738090192A09160097D56E /* Frameworks */,
