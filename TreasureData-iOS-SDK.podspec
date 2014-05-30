@@ -22,6 +22,7 @@ Pod::Spec.new do |s|
 
   s.source_files  = "TreasureData",
   s.public_header_files = "TreasureData/TreasureData.h"
+  s.resources = 'Resources.bundle'
   s.requires_arc = true
   s.dependency "KeenClient", '= 3.2.7'
 end
