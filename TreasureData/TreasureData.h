@@ -16,11 +16,9 @@
 
 - (id)initWithSecret:(NSString *)secret;
 
-- (void)event:(NSString *)database table:(NSString *)table;
+- (void)setDefaultDatabase:(NSString*)defaultDatabase;
 
-- (void)event:(NSString *)database table:(NSString *)table properties:(NSDictionary *)properties;
-
-- (void)event:(NSString *)database table:(NSString *)table properties:(NSDictionary *)properties options:(NSDictionary *)options;
+- (void)event:(NSDictionary *)record database:(NSString *)database table:(NSString *)table;
 
 - (void)uploadWithBlock:(void (^)())block;
 

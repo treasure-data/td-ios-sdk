@@ -39,7 +39,8 @@ static TreasureData *sharedInstance = nil;
 @end
 
 @interface TreasureData ()
-@property TDClient *client;
+@property(nonatomic, strong) TDClient *client;
+@property(nonatomic, strong) NSString *defaultDatabase;
 @end
 
 @implementation TreasureData
@@ -73,19 +74,19 @@ static TreasureData *sharedInstance = nil;
     return self;
 }
 
-- (void)event:(NSString *)database table:(NSString *)table {
-    [self event:database table:table properties:nil options:nil];
+- (void)setDefaultDatabase:(NSString*)defaultDatabase {
+    self.defaultDatabase = defaultDatabase;
 }
 
-- (void)event:(NSString *)database table:(NSString *)table properties:(NSDictionary *)properties {
-    [self event:database table:table properties:properties options:nil];
+- (void)event:(NSDictionary *)record table:(NSString *)table {
+    [self event:record database:self.defaultDatabase table:table];
 }
 
-- (void)event:(NSString *)database table:(NSString *)table properties:(NSDictionary *)properties options:(NSDictionary *)options {
+- (void)event:(NSDictionary *)record database:(NSString *)database table:(NSString *)table {
     if (self.client) {
         if (database && table) {
             NSString *tag = [NSString stringWithFormat:@"%@.%@", database, table];
-            [self.client addEvent:properties toEventCollection:tag error:nil];
+            [self.client addEvent:record toEventCollection:tag error:nil];
         }
         else {
             KCLog(@"database or table is nil: database=%@, table=%@", database, table);
@@ -108,7 +109,6 @@ static TreasureData *sharedInstance = nil;
 - (void)setApiEndpoint:(NSString*)endpoint {
     self.client.apiEndpoint = endpoint;
 }
-
 
 + (void)initializeWithSecret:(NSString *)secret {
     static dispatch_once_t onceToken;

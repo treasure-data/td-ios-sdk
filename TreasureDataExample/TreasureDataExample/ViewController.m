@@ -31,11 +31,13 @@
 
 - (IBAction)addEvent:(id)sender {
     NSLog(@"Click!!!!");
-    [[TreasureData sharedInstance] event:@"foo_db" table:@"bar_tbl"
-                              properties:@{
+    [[TreasureData sharedInstance] event:@{
                                            @"name": @"komamitsu",
-                                           @"age": @42,
-                                           }];
+                                           @"age": @81
+                                           }
+                                database:@"foo_db"
+                                   table:@"bar_tbl"
+     ];
 }
 
 - (IBAction)uploadEvents:(id)sender {
