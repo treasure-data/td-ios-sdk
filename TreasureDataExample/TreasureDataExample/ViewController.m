@@ -18,36 +18,29 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
     // [TreasureData enableLogging];
     [TreasureData initializeWithSecret:@"your_api_key"];
+    [[TreasureData sharedInstance] setDefaultDatabase:@"foo_db"];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (IBAction)addEvent:(id)sender {
     NSLog(@"Click!!!!");
     [[TreasureData sharedInstance] event:@{
                                            @"name": @"komamitsu",
-                                           @"age": @81
+                                           @"age": @99
                                            }
-                                database:@"foo_db"
                                    table:@"bar_tbl"
      ];
 }
 
 - (IBAction)uploadEvents:(id)sender {
-    UIBackgroundTaskIdentifier taskId =
-        [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^(void) {
-            NSLog(@"Uploaded");
-        }];
-    
     [[TreasureData sharedInstance] uploadWithBlock:^(void) {
-        [[UIApplication sharedApplication] endBackgroundTask:taskId];
+        NSLog(@"Uploaded");
     }];
 }
 

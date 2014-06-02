@@ -40,7 +40,6 @@ static TreasureData *sharedInstance = nil;
 
 @interface TreasureData ()
 @property(nonatomic, strong) TDClient *client;
-@property(nonatomic, strong) NSString *defaultDatabase;
 @end
 
 @implementation TreasureData
@@ -72,10 +71,6 @@ static TreasureData *sharedInstance = nil;
         }
     }
     return self;
-}
-
-- (void)setDefaultDatabase:(NSString*)defaultDatabase {
-    self.defaultDatabase = defaultDatabase;
 }
 
 - (void)event:(NSDictionary *)record table:(NSString *)table {

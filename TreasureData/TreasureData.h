@@ -10,6 +10,8 @@
 
 @interface TreasureData : NSObject
 
+@property(nonatomic, strong) NSString *defaultDatabase;
+
 + (void)initializeWithSecret:(NSString *)secret;
 
 + (instancetype)sharedInstance;
@@ -19,6 +21,8 @@
 - (void)setDefaultDatabase:(NSString*)defaultDatabase;
 
 - (void)event:(NSDictionary *)record database:(NSString *)database table:(NSString *)table;
+
+- (void)event:(NSDictionary *)record table:(NSString *)table;
 
 - (void)uploadWithBlock:(void (^)())block;
 
