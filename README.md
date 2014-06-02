@@ -37,14 +37,14 @@ To create a new write-only user for the application and use the API key of the u
 ### Add Events
 
 ```objc
-- (IBAction)click_button:(id)sender {
-    [[TreasureData sharedInstance] event:@"database_a" table:@"table_b"
-      properties:@{
-        @"name": @"foo bar",
-        @"age": @42,
-        @"comment": @"hello world"
-      }
-    ];
+- (IBAction)clickButton:(id)sender {
+    [[TreasureData sharedInstance] event:@{
+                                     @"name": @"foo bar",
+                                     @"age": @42,
+                                     @"comment": @"hello world"
+                                   }
+                                database:@"database_a"
+                                   table:@"table_b"];
 }
 ```
 
@@ -54,20 +54,8 @@ Specify the database and table to which you want to import the events.
 
 ```objc
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    [[TreasureData sharedInstance] uploadWithBlock:nil];
-}
-```
-
-or 
-
-```objc
-- (void)applicationDidEnterBackground:(UIApplication *)application {
-    UIBackgroundTaskIdentifier taskId = [application beginBackgroundTaskWithExpirationHandler:^(void) {
-        NSLog(@"Uploaded.");
-    }];
-
     [[TreasureData sharedInstance] uploadWithBlock:^(void) {
-        [application endBackgroundTask:taskId];
+        NSLog(@"Uploaded.");
     }];
 }
 ```
