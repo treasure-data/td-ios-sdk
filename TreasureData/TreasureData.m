@@ -44,6 +44,8 @@ static TreasureData *sharedInstance = nil;
 
 @implementation TreasureData
 - (id)initWithSecret:(NSString *)secret {
+    [KeenClient disableGeoLocation];
+
     self = [self init];
 
     if (self) {
