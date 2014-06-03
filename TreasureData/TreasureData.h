@@ -12,11 +12,11 @@
 
 @property(nonatomic, strong) NSString *defaultDatabase;
 
-+ (void)initializeWithSecret:(NSString *)secret;
++ (void)initializeWithApiKey:(NSString *)apiKey;
 
 + (instancetype)sharedInstance;
 
-- (id)initWithSecret:(NSString *)secret;
+- (id)initWithApiKey:(NSString *)apiKey;
 
 - (void)setDefaultDatabase:(NSString*)defaultDatabase;
 

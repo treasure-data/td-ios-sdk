@@ -43,7 +43,7 @@ static TreasureData *sharedInstance = nil;
 @end
 
 @implementation TreasureData
-- (id)initWithSecret:(NSString *)secret {
+- (id)initWithApiKey:(NSString *)apiKey {
     [KeenClient disableGeoLocation];
 
     self = [self init];
@@ -65,7 +65,7 @@ static TreasureData *sharedInstance = nil;
          */
         self.client = [[TDClient alloc] initWithProjectId:@"_treasure data_" andWriteKey:@"dummy_write_key" andReadKey:@"dummy_read_key"];
         if (self.client) {
-            self.client.apiKey = secret;
+            self.client.apiKey = apiKey;
             self.client.apiEndpoint = @"https://in.treasuredata.com/ios/v3";
         }
         else {
@@ -107,10 +107,10 @@ static TreasureData *sharedInstance = nil;
     self.client.apiEndpoint = endpoint;
 }
 
-+ (void)initializeWithSecret:(NSString *)secret {
++ (void)initializeWithApiKey:(NSString *)apiKey {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sharedInstance = [[self alloc] initWithSecret:secret];
+        sharedInstance = [[self alloc] initWithApiKey:apiKey];
     });
 }
 

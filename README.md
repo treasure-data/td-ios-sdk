@@ -28,7 +28,7 @@ $ pod install
 
 ```objc
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    [TreasureData initializeWithSecret:@"your_api_key"];
+    [TreasureData initializeWithApiKey:@"your_api_key"];
 }
 ```
 
