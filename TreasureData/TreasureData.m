@@ -76,10 +76,18 @@ static TreasureData *sharedInstance = nil;
 }
 
 - (void)event:(NSDictionary *)record table:(NSString *)table {
-    [self event:record database:self.defaultDatabase table:table];
+    [self addEvent:record table:table];
 }
 
 - (void)event:(NSDictionary *)record database:(NSString *)database table:(NSString *)table {
+    [self addEvent:record database:database table:table];
+}
+
+- (void)addEvent:(NSDictionary *)record table:(NSString *)table {
+    [self addEvent:record database:self.defaultDatabase table:table];
+}
+
+- (void)addEvent:(NSDictionary *)record database:(NSString *)database table:(NSString *)table {
     if (self.client) {
         if (database && table) {
             NSString *tag = [NSString stringWithFormat:@"%@.%@", database, table];
@@ -95,6 +103,10 @@ static TreasureData *sharedInstance = nil;
 }
 
 - (void)uploadWithBlock:(void (^)())block {
+    [self uploadEventsWithBlock:block];
+}
+
+- (void)uploadEventsWithBlock:(void (^)())block {
     if (self.client) {
         [self.client uploadWithFinishedBlock:block];
     }

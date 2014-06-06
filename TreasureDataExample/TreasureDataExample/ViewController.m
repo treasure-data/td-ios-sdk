@@ -30,7 +30,7 @@
 
 - (IBAction)addEvent:(id)sender {
     NSLog(@"Click!!!!");
-    [[TreasureData sharedInstance] event:@{
+    [[TreasureData sharedInstance] addEvent:@{
                                            @"name": @"komamitsu",
                                            @"age": @99
                                            }
@@ -39,7 +39,7 @@
 }
 
 - (IBAction)uploadEvents:(id)sender {
-    [[TreasureData sharedInstance] uploadWithBlock:^(void) {
+    [[TreasureData sharedInstance] uploadEventsWithBlock:^(void) {
         NSLog(@"Uploaded");
     }];
 }

@@ -20,11 +20,17 @@
 
 - (void)setDefaultDatabase:(NSString*)defaultDatabase;
 
-- (void)event:(NSDictionary *)record database:(NSString *)database table:(NSString *)table;
+- (void)event:(NSDictionary *)record database:(NSString *)database table:(NSString *)table DEPRECATED_ATTRIBUTE;
 
-- (void)event:(NSDictionary *)record table:(NSString *)table;
+- (void)event:(NSDictionary *)record table:(NSString *)table DEPRECATED_ATTRIBUTE;
 
-- (void)uploadWithBlock:(void (^)())block;
+- (void)addEvent:(NSDictionary *)record database:(NSString *)database table:(NSString *)table;
+
+- (void)addEvent:(NSDictionary *)record table:(NSString *)table;
+
+- (void)uploadWithBlock:(void (^)())block DEPRECATED_ATTRIBUTE;
+
+- (void)uploadEventsWithBlock:(void (^)())block;
 
 - (void)setApiEndpoint:(NSString*)endpoint;
 
