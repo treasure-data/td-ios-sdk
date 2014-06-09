@@ -7,6 +7,7 @@
 //
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+#import <CommonCrypto/CommonDigest.h>
 #import "TreasureData.h"
 #import "TDHttpClient.h"
 #import "KeenClient/KeenClient.h"
@@ -63,7 +64,9 @@ static TreasureData *sharedInstance = nil;
          *      the parent client's project ids.
          *
          */
-        self.client = [[TDClient alloc] initWithProjectId:@"_treasure data_" andWriteKey:@"dummy_write_key" andReadKey:@"dummy_read_key"];
+        NSString *projectId = [NSString stringWithFormat:@"_td %@", [self md5:apiKey]];
+        
+        self.client = [[TDClient alloc] initWithProjectId:projectId andWriteKey:@"dummy_write_key" andReadKey:@"dummy_read_key"];
         if (self.client) {
             self.client.apiKey = apiKey;
             self.client.apiEndpoint = @"https://in.treasuredata.com/ios/v3";
@@ -73,6 +76,20 @@ static TreasureData *sharedInstance = nil;
         }
     }
     return self;
+}
+
+- (NSString *) md5:(NSString *) input
+{
+    const char *cStr = [input UTF8String];
+    unsigned char digest[16];
+    CC_MD5(cStr, strlen(cStr), digest);
+    
+    NSMutableString *output = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
+    
+    for(int i = 0; i < CC_MD5_DIGEST_LENGTH; i++)
+        [output appendFormat:@"%02x", digest[i]];
+    
+    return output;
 }
 
 - (void)event:(NSDictionary *)record table:(NSString *)table {
