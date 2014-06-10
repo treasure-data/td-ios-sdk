@@ -70,6 +70,9 @@ static TreasureData *sharedInstance = nil;
         if (self.client) {
             self.client.apiKey = apiKey;
             self.client.apiEndpoint = @"https://in.treasuredata.com/ios/v3";
+            self.client.globalPropertiesBlock = ^NSDictionary *(NSString *eventCollection) {
+                return @{@"#UUID": [[NSUUID UUID] UUIDString]};
+            };
         }
         else {
             KCLog(@"Failed to initialize client");
