@@ -14,6 +14,7 @@
 
 static BOOL isTraceLoggingEnabled = false;
 static TreasureData *sharedInstance = nil;
+static NSString *tableNamePattern = @"[^0-9a-z_]";
 
 @interface TDClient : KeenClient
 @property(nonatomic, strong) NSString *apiKey;
@@ -110,8 +111,16 @@ static TreasureData *sharedInstance = nil;
 - (void)addEvent:(NSDictionary *)record database:(NSString *)database table:(NSString *)table {
     if (self.client) {
         if (database && table) {
-            NSString *tag = [NSString stringWithFormat:@"%@.%@", database, table];
-            [self.client addEvent:record toEventCollection:tag error:nil];
+            NSError *error = nil;
+            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^[0-9a-z_]+$" options:0 error:&error];
+            if (!([regex firstMatchInString:database options:0 range:NSMakeRange(0, [database length])] &&
+                  [regex firstMatchInString:table    options:0 range:NSMakeRange(0, [table length])])) {
+                KCLog(@"database and table need to be consist of lower letters, numbers or '_': database=%@, table=%@", database, table);
+            }
+            else {
+                NSString *tag = [NSString stringWithFormat:@"%@.%@", database, table];
+                [self.client addEvent:record toEventCollection:tag error:nil];
+            }
         }
         else {
             KCLog(@"database or table is nil: database=%@, table=%@", database, table);
