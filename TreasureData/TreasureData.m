@@ -112,7 +112,7 @@ static NSString *tableNamePattern = @"[^0-9a-z_]";
     if (self.client) {
         if (database && table) {
             NSError *error = nil;
-            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^[0-9a-z_]+$" options:0 error:&error];
+            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^[0-9a-z_]{3,255}$" options:0 error:&error];
             if (!([regex firstMatchInString:database options:0 range:NSMakeRange(0, [database length])] &&
                   [regex firstMatchInString:table    options:0 range:NSMakeRange(0, [table length])])) {
                 KCLog(@"database and table need to be consist of lower letters, numbers or '_': database=%@, table=%@", database, table);
