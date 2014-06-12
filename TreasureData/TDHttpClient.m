@@ -10,7 +10,7 @@
 
 @interface TDHttpClient ()
 @property(nonatomic, strong) NSURLConnection *conn;
-@property(nonatomic, strong) NSData *responseData;
+@property(nonatomic, strong) NSMutableData *responseData;
 @property(nonatomic, strong) NSURLResponse *response;
 @property(nonatomic, strong) NSError *error;
 @property BOOL isFinished;
@@ -34,7 +34,7 @@
 
     int count = 20;
     self.response = nil;
-    self.responseData = nil;
+    self.responseData = [[NSMutableData alloc]init];
     self.error = nil;
     self.isFinished = false;
     while (!self.isFinished && count-- > 0) {
@@ -95,7 +95,7 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-    self.responseData = data;
+    [self.responseData appendData:data];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
