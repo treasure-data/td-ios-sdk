@@ -10,9 +10,11 @@
 #import <CommonCrypto/CommonDigest.h>
 #import "TreasureData.h"
 #import "TDHttpClient.h"
+#import "Deflate.h"
 #import "KeenClient/KeenClient.h"
 
-static BOOL isTraceLoggingEnabled = false;
+static bool isTraceLoggingEnabled = false;
+static bool isEventCompressionEnabled = true;
 static TreasureData *sharedInstance = nil;
 static NSString *tableNamePattern = @"[^0-9a-z_]";
 
@@ -31,6 +33,25 @@ static NSString *tableNamePattern = @"[^0-9a-z_]";
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setValue:self.apiKey forHTTPHeaderField:@"X-TD-Write-Key"];
     [request setValue:@"k" forHTTPHeaderField:@"X-TD-Data-Type"];   // means KeenIO data type
+
+    if (isEventCompressionEnabled) {
+        NSData *compressedData = [Deflate deflate:data];
+        if (!compressedData) {
+            KCLog(@"Compression failed");
+        }
+        else {
+            KCLog(@"Compressed: before=%d, after=%d", [data length], [compressedData length]);
+            data = compressedData;
+            /*
+             Byte* bytes = [data bytes];
+             for (int i=0; i < [data length]; i++) {
+             NSLog(@"byte[%d]: 0x%02x", i, bytes[i]);
+             }
+             */      
+            [request setValue:@"deflate" forHTTPHeaderField:@"Content-Encoding"];
+        }
+    }
+
     [request setHTTPBody:data];
     TDHttpClient *tdHttpClient = [[TDHttpClient alloc] init];
     if (isTraceLoggingEnabled) {
@@ -158,6 +179,14 @@ static NSString *tableNamePattern = @"[^0-9a-z_]";
 + (instancetype)sharedInstance {
     NSAssert(sharedInstance, @"%@ sharedInstance called before withSecret", self);
     return sharedInstance;
+}
+
++ (void)disableEventCompression {
+    isEventCompressionEnabled = false;
+}
+
++ (void)enableEventCompression {
+    isEventCompressionEnabled = true;
 }
 
 + (void)disableLogging {

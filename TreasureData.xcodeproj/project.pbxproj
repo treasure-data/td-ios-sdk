@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6B351A76194ABF0F001CBAAD /* Deflate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B351A75194ABF0F001CBAAD /* Deflate.m */; };
 		6B738092192A09160097D56E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B738091192A09160097D56E /* Foundation.framework */; };
 		6B738097192A09160097D56E /* TreasureData.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6B738096192A09160097D56E /* TreasureData.h */; };
 		6B738099192A09160097D56E /* TreasureData.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B738098192A09160097D56E /* TreasureData.m */; };
@@ -45,6 +46,8 @@
 
 /* Begin PBXFileReference section */
 		206C1F02227B450EA0AF6E54 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6B351A74194ABF0F001CBAAD /* Deflate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Deflate.h; sourceTree = "<group>"; };
+		6B351A75194ABF0F001CBAAD /* Deflate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Deflate.m; sourceTree = "<group>"; };
 		6B5197BB19374A5000477F84 /* Resources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Resources.bundle; sourceTree = "<group>"; };
 		6B73808E192A09160097D56E /* libTreasureData.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libTreasureData.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B738091192A09160097D56E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -121,6 +124,8 @@
 		6B738093192A09160097D56E /* TreasureData */ = {
 			isa = PBXGroup;
 			children = (
+				6B351A74194ABF0F001CBAAD /* Deflate.h */,
+				6B351A75194ABF0F001CBAAD /* Deflate.m */,
 				6B738096192A09160097D56E /* TreasureData.h */,
 				6B738098192A09160097D56E /* TreasureData.m */,
 				6B738094192A09160097D56E /* Supporting Files */,
@@ -274,6 +279,7 @@
 			files = (
 				6BCDCD1C1937196200D57F34 /* TDHttpClient.m in Sources */,
 				6B738099192A09160097D56E /* TreasureData.m in Sources */,
+				6B351A76194ABF0F001CBAAD /* Deflate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

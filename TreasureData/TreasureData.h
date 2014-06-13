@@ -34,6 +34,10 @@
 
 - (void)setApiEndpoint:(NSString*)endpoint;
 
++ (void)disableEventCompression;
+
++ (void)enableEventCompression;
+
 + (void)disableLogging;
 
 + (void)enableLogging;

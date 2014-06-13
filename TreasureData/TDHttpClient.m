@@ -13,13 +13,13 @@
 @property(nonatomic, strong) NSMutableData *responseData;
 @property(nonatomic, strong) NSURLResponse *response;
 @property(nonatomic, strong) NSError *error;
-@property BOOL isFinished;
-@property BOOL isLoggingEnabled;
+@property bool isFinished;
+@property bool isLoggingEnabled;
 @end
 
 @implementation TDHttpClient
 
-- (void)setLogging:(BOOL)isLoggingEnabled {
+- (void)setLogging:(bool)isLoggingEnabled {
     self.isLoggingEnabled = isLoggingEnabled;
 }
 

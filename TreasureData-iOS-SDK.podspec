@@ -7,7 +7,8 @@ Pod::Spec.new do |s|
   s.platform     = :ios
   s.homepage     = "https://github.com/treasure-data/td-ios-sdk"
   s.source       = { :git => "https://github.com/treasure-data/td-ios-sdk.git", :tag => "0.0.5" }
-  s.source_files  = "TreasureData",
+  s.source_files  = "TreasureData"
+  s.library      = 'z'
   s.public_header_files = "TreasureData/TreasureData.h"
   s.resources = 'Resources.bundle'
   s.requires_arc = true

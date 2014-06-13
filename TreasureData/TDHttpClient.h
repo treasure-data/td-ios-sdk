@@ -12,6 +12,6 @@
 
 - (NSData *)sendRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error;
 
-- (void)setLogging:(BOOL)isLoggingEnabled;
+- (void)setLogging:(bool)isLoggingEnabled;
 
 @end
