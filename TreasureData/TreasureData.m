@@ -17,6 +17,7 @@ static bool isTraceLoggingEnabled = false;
 static bool isEventCompressionEnabled = true;
 static TreasureData *sharedInstance = nil;
 static NSString *tableNamePattern = @"[^0-9a-z_]";
+static NSString *version = @"0.0.5";
 
 @interface TDClient : KeenClient
 @property(nonatomic, strong) NSString *apiKey;
@@ -33,6 +34,7 @@ static NSString *tableNamePattern = @"[^0-9a-z_]";
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setValue:self.apiKey forHTTPHeaderField:@"X-TD-Write-Key"];
     [request setValue:@"k" forHTTPHeaderField:@"X-TD-Data-Type"];   // means KeenIO data type
+    [request setValue:[NSString stringWithFormat:@"TD-iOS-SDK/%@ (%@ %@)", version, [[UIDevice currentDevice] systemName], [[UIDevice currentDevice] systemVersion]] forHTTPHeaderField:@"User-Agent"];
 
     if (isEventCompressionEnabled) {
         NSData *compressedData = [Deflate deflate:data];
