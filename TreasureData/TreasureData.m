@@ -42,7 +42,7 @@ static NSString *version = @"0.0.6";
             KCLog(@"Compression failed");
         }
         else {
-            KCLog(@"Compressed: before=%d, after=%d", [data length], [compressedData length]);
+            KCLog(@"Compressed: before=%ld, after=%ld", (unsigned long)[data length], (unsigned long)[compressedData length]);
             data = compressedData;
             /*
              Byte* bytes = [data bytes];

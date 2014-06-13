@@ -26,7 +26,7 @@
     int status;
     while (1) {
         zlib.next_out = [buf mutableBytes] + zlib.total_out;
-        zlib.avail_out = (uInt)[buf length] - zlib.total_out;
+        zlib.avail_out = (uInt)([buf length] - zlib.total_out);
         status = deflate(&zlib, zlib.avail_in ? Z_NO_FLUSH : Z_FINISH);
         
         if (status == Z_STREAM_END) {
