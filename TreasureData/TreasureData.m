@@ -3,7 +3,7 @@
 //  TreasureData
 //
 //  Created by Mitsunori Komatsu on 5/19/14.
-//  Copyright (c) 2014 TreasureData Inc. All rights reserved.
+//  Copyright (c) 2014 Treasure Data Inc. All rights reserved.
 //
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
