@@ -1,0 +1,5 @@
+Release 0.1.0
+
+* Added 'Security' framework to TreasureData-iOS-SDK.podspec
+* Updated KeenClient version up to 3.2.8
+
