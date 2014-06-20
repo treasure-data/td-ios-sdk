@@ -9,6 +9,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/treasure-data/td-ios-sdk.git", :tag => "0.0.6" }
   s.source_files  = "TreasureData"
   s.library      = 'z'
+  s.frameworks   = ['Security']
   s.public_header_files = "TreasureData/TreasureData.h"
   s.resources = 'Resources.bundle'
   s.requires_arc = true
