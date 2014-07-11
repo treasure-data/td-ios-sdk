@@ -16,7 +16,6 @@
 static bool isTraceLoggingEnabled = false;
 static bool isEventCompressionEnabled = true;
 static TreasureData *sharedInstance = nil;
-static NSString *tableNamePattern = @"[^0-9a-z_]";
 static NSString *version = @"0.0.6";
 
 @interface TDClient : KeenClient
@@ -61,6 +60,15 @@ static NSString *version = @"0.0.6";
     }
     return [tdHttpClient sendRequest:request returningResponse:response error:error];
 }
+
+#if !__has_feature(objc_arc)
+- (void)dealloc {
+    self.apiKey = nil;
+    self.apiEndpoint = nil;
+    [super dealloc];
+}
+#endif
+
 @end
 
 @interface TreasureData ()
@@ -206,5 +214,12 @@ static NSString *version = @"0.0.6";
 + (void)enableTraceLogging {
     isTraceLoggingEnabled = true;
 }
+
+#if !__has_feature(objc_arc)
+- (void)dealloc {
+    self.defaultDatabase = nil;
+    [super dealloc];
+}
+#endif
 
 @end

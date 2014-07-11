@@ -59,7 +59,12 @@
     NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
     NSString *certPath = [bundle pathForResource:@"gd_bundle" ofType:@"der"];
     NSData *certData = [[NSData alloc] initWithContentsOfFile:certPath];
+#if __has_feature(objc_arc)
     CFDataRef certDataRef = (__bridge_retained CFDataRef)certData;
+#else
+    CFDataRef certDataRef = (CFDataRef)certData;
+#endif
+
     SecCertificateRef cert = SecCertificateCreateWithData(NULL, certDataRef);
     
     // Establish a chain of trust anchored on our bundled certificate.
@@ -79,6 +84,16 @@
 	// Did our custom trust chain evaluate successfully?
     return trustResult == kSecTrustResultUnspecified;
 }
+
+#if !__has_feature(objc_arc)
+- (void)dealloc {
+    self.conn = nil;
+    self.responseData = nil;
+    self.response = nil;
+    self.error = nil;
+    [super dealloc];
+}
+#endif
 
 #pragma mark NSURLConnection Delegate Methods
 
