@@ -32,7 +32,12 @@ $ pod install
 }
 ```
 
-To create a new write-only user for the application and use the API key of the user here is recommended. With multi-user feature of TreasureData, you can add a new user easily.
+We recommend to use a write-only API key for the SDK. To obtain one, please:
+
+1. Login into the Treasure Data Console at http://console.treasuredata.com;
+2. Visit your Profile page at http://console.treasuredata.com/users/current;
+3. Insert your password under the 'API Keys' panel;
+4. In the bottom part of the panel, under 'Write-Only API keys', either copy the API key or click on 'Generate New' and copy the new API key.
 
 ### Add Events
 
@@ -60,5 +65,13 @@ Specify the database and table to which you want to import the events.
 }
 ```
 
-The sent events is going to be buffered for a few minutes before they get imported into TreasureData storage.
+The events are going to be buffered for a few minutes before they get sent and imported into TreasureData storage.
+
+## Additional Configuration
+
+### Endpoint
+
+The API endpoint (default: https://in.treasuredata.com/ios/v3) can be modified using the `setApiEndpoint` API after the client has been initialized using the `initializeWithApiKey` API.
+
+
 
