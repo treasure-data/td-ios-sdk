@@ -48,7 +48,6 @@
 		206C1F02227B450EA0AF6E54 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B351A74194ABF0F001CBAAD /* Deflate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Deflate.h; sourceTree = "<group>"; };
 		6B351A75194ABF0F001CBAAD /* Deflate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Deflate.m; sourceTree = "<group>"; };
-		6B5197BB19374A5000477F84 /* Resources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Resources.bundle; sourceTree = "<group>"; };
 		6B73808E192A09160097D56E /* libTreasureData.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libTreasureData.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B738091192A09160097D56E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6B738095192A09160097D56E /* TreasureData-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TreasureData-Prefix.pch"; sourceTree = "<group>"; };
@@ -92,7 +91,6 @@
 		6B738085192A09160097D56E = {
 			isa = PBXGroup;
 			children = (
-				6B5197BB19374A5000477F84 /* Resources.bundle */,
 				6B738093192A09160097D56E /* TreasureData */,
 				6B7380A7192A09160097D56E /* TreasureDataTests */,
 				6B738090192A09160097D56E /* Frameworks */,
