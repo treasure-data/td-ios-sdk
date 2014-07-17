@@ -11,7 +11,7 @@
 #import "TreasureData.h"
 #import "TDHttpClient.h"
 #import "Deflate.h"
-#import "KeenClient/KeenClient.h"
+#import "KeenClient.h"
 
 static bool isTraceLoggingEnabled = false;
 static bool isEventCompressionEnabled = true;

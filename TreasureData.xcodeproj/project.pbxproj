@@ -59,6 +59,7 @@
 		6B7380A9192A09160097D56E /* TreasureDataTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TreasureDataTests-Info.plist"; sourceTree = "<group>"; };
 		6B7380AB192A09160097D56E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6B7380AD192A09160097D56E /* TreasureDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TreasureDataTests.m; sourceTree = "<group>"; };
+		6BA037BF197815E200EBFA69 /* KeenClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeenClient.h; sourceTree = "<group>"; };
 		6BCDCD1A1937196200D57F34 /* TDHttpClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDHttpClient.h; sourceTree = "<group>"; };
 		6BCDCD1B1937196200D57F34 /* TDHttpClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDHttpClient.m; sourceTree = "<group>"; };
 		E81516D77A3B42D89ECF71AD /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
@@ -91,6 +92,7 @@
 		6B738085192A09160097D56E = {
 			isa = PBXGroup;
 			children = (
+				6BA037BE197815E200EBFA69 /* KeenClient */,
 				6B738093192A09160097D56E /* TreasureData */,
 				6B7380A7192A09160097D56E /* TreasureDataTests */,
 				6B738090192A09160097D56E /* Frameworks */,
@@ -157,6 +159,15 @@
 				6B7380AA192A09160097D56E /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		6BA037BE197815E200EBFA69 /* KeenClient */ = {
+			isa = PBXGroup;
+			children = (
+				6BA037BF197815E200EBFA69 /* KeenClient.h */,
+			);
+			name = KeenClient;
+			path = Headers/KeenClient;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -389,6 +400,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = "${SOURCE_ROOT}/Headers/**";
 			};
 			name = Debug;
 		};
@@ -402,6 +414,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = "${SOURCE_ROOT}/Headers/**";
 			};
 			name = Release;
 		};
