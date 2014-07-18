@@ -27,8 +27,7 @@ static NSString *defaultApiEndpoint = nil;
 
 @implementation TDClient
 - (NSData *)sendEvents:(NSData *)data returningResponse:(NSURLResponse **)response error:(NSError **)error {
-    NSString *apiEndpoint = defaultApiEndpoint ? defaultApiEndpoint : self.apiEndpoint;
-    NSString *urlString = [NSString stringWithFormat:@"%@/%@", apiEndpoint, @"ios/v3/event"];
+    NSString *urlString = [NSString stringWithFormat:@"%@/%@", self.apiEndpoint, @"ios/v3/event"];
     KCLog(@"Sending events to: %@", urlString);
     NSURL *url = [NSURL URLWithString:urlString];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
@@ -95,7 +94,7 @@ static NSString *defaultApiEndpoint = nil;
         self.client = [[TDClient alloc] initWithProjectId:projectId andWriteKey:@"dummy_write_key" andReadKey:@"dummy_read_key"];
         if (self.client) {
             self.client.apiKey = apiKey;
-            self.client.apiEndpoint = @"https://in.treasuredata.com";
+            self.client.apiEndpoint = defaultApiEndpoint ? defaultApiEndpoint : @"https://in.treasuredata.com";
             self.client.globalPropertiesBlock = ^NSDictionary *(NSString *eventCollection) {
                 return @{@"#UUID": [[NSUUID UUID] UUIDString]};
             };
