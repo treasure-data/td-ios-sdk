@@ -13,7 +13,7 @@ namespace :keen do
     end
   end
 
-  desc "Create the KeenClient static liabrary and header files"
+  desc "Create the KeenClient static library and header files"
   task :build, :path do |t, args|
     cd args[:path] do
       lib_dir = File.join(t.application.original_dir, 'Libraries')
@@ -40,3 +40,8 @@ namespace :keen do
   end
 end
 
+
+desc "Create the static library"
+task :build do
+  sh "xcodebuild -scheme TreasureData -configuration Release -sdk iphoneos SYMROOT=Output"
+end
