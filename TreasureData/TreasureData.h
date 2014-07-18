@@ -16,6 +16,8 @@
 
 + (instancetype)sharedInstance;
 
++ (void)initializeApiEndpoint:(NSString *)apiEndpoint;
+
 - (id)initWithApiKey:(NSString *)apiKey;
 
 - (void)setDefaultDatabase:(NSString*)defaultDatabase;
@@ -32,7 +34,7 @@
 
 - (void)uploadEventsWithBlock:(void (^)())block;
 
-- (void)setApiEndpoint:(NSString*)endpoint;
+- (void)setApiEndpoint:(NSString*)endpoint DEPRECATED_ATTRIBUTE;
 
 + (void)disableEventCompression;
 

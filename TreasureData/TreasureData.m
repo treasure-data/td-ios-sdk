@@ -18,6 +18,7 @@ static bool isEventCompressionEnabled = true;
 static TreasureData *sharedInstance = nil;
 static NSString *tableNamePattern = @"[^0-9a-z_]";
 static NSString *version = @"0.0.6";
+static NSString *defaultApiEndpoint = nil;
 
 @interface TDClient : KeenClient
 @property(nonatomic, strong) NSString *apiKey;
@@ -26,7 +27,8 @@ static NSString *version = @"0.0.6";
 
 @implementation TDClient
 - (NSData *)sendEvents:(NSData *)data returningResponse:(NSURLResponse **)response error:(NSError **)error {
-    NSString *urlString = [NSString stringWithFormat:@"%@/%@", self.apiEndpoint, @"event"];
+    NSString *apiEndpoint = defaultApiEndpoint ? defaultApiEndpoint : self.apiEndpoint;
+    NSString *urlString = [NSString stringWithFormat:@"%@/%@", apiEndpoint, @"ios/v3/event"];
     KCLog(@"Sending events to: %@", urlString);
     NSURL *url = [NSURL URLWithString:urlString];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
@@ -93,7 +95,7 @@ static NSString *version = @"0.0.6";
         self.client = [[TDClient alloc] initWithProjectId:projectId andWriteKey:@"dummy_write_key" andReadKey:@"dummy_read_key"];
         if (self.client) {
             self.client.apiKey = apiKey;
-            self.client.apiEndpoint = @"https://in.treasuredata.com/ios/v3";
+            self.client.apiEndpoint = @"https://in.treasuredata.com";
             self.client.globalPropertiesBlock = ^NSDictionary *(NSString *eventCollection) {
                 return @{@"#UUID": [[NSUUID UUID] UUIDString]};
             };
@@ -181,6 +183,10 @@ static NSString *version = @"0.0.6";
 + (instancetype)sharedInstance {
     NSAssert(sharedInstance, @"%@ sharedInstance called before withSecret", self);
     return sharedInstance;
+}
+
++ (void)initializeApiEndpoint:(NSString *)apiEndpoint {
+    defaultApiEndpoint = apiEndpoint;
 }
 
 + (void)disableEventCompression {
