@@ -167,6 +167,20 @@ static NSString *version = @"0.0.6";
     }
 }
 
+- (void)uploadEventsWithCallback:(void (^)())onSuccess onError:(void (^)(NSString*, NSString*))onError {
+    if (self.client) {
+        [self.client uploadWithCallbacks:onSuccess onError:onError];
+    }
+    else {
+        KCLog(@"Client is nil");
+    }
+}
+
+- (void)uploadEvents {
+    [self uploadEventsWithCallback:nil onError:nil];
+}
+
+
 - (void)setApiEndpoint:(NSString*)endpoint {
     self.client.apiEndpoint = endpoint;
 }

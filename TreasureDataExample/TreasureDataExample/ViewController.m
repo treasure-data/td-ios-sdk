@@ -39,8 +39,12 @@
 }
 
 - (IBAction)uploadEvents:(id)sender {
-    [[TreasureData sharedInstance] uploadEventsWithBlock:^(void) {
-        NSLog(@"Uploaded");
+    // [[TreasureData sharedInstance] uploadEvents];
+
+    [[TreasureData sharedInstance] uploadEventsWithCallback:^(){
+        NSLog(@"Success");
+    } onError:^(NSString* errorCode, NSString* message) {
+        NSLog(@"Error: errorCode=%@, message=%@", errorCode, message);
     }];
 }
 
