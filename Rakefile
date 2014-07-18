@@ -21,8 +21,12 @@ namespace :keen do
       sh "rm -rf build"
       sh "xcodebuild -sdk iphoneos"
       sh "xcodebuild -sdk iphonesimulator"
+
+      sh "rm -rf #{lib_dir}"
       sh "mkdir -p #{lib_dir}"
-      sh "lipo -create build/Release-iphoneos/libKeenClient.a build/Release-iphonesimulator/libKeenClient.a -output #{File.join(lib_dir, 'libKeenClient.a')}"
+      sh "cp -p build/Release-iphoneos/libKeenClient.a #{File.join(lib_dir, "libKeenClient-device.a")}"
+      sh "cp -p build/Release-iphonesimulator/libKeenClient.a #{File.join(lib_dir, "libKeenClient-simulator.a")}"
+
       sh "rm -rf #{header_dir}"
       sh "mkdir -p #{header_dir}"
       sh "cp -p build/Release-iphoneos/usr/local/include/* #{header_dir}"
