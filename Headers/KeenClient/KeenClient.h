@@ -98,6 +98,13 @@ typedef NSDictionary* (^KeenGlobalPropertiesBlock)(NSString *eventCollection);
 @property (nonatomic, strong) CLLocation *currentLocation;
 
 /**
+ For extending this library
+ */
+@property (nonatomic, strong) void (^onSuccessInUploading) ();
+@property (nonatomic, strong) void (^onErrorInUploading) (NSString* errorCode, NSString* message);
+- (void)uploadWithCallbacks:(void(^)())onSuccess onError:(void (^)(NSString* errorCode, NSString* message))onError;
+
+/**
  Call this to retrieve the managed instance of KeenClient and set its project ID and Write/Read Keys
  to the given parameters.
  
@@ -248,7 +255,16 @@ typedef NSDictionary* (^KeenGlobalPropertiesBlock)(NSString *eventCollection);
 - (void)importFileData;
 
 // defines the KCLog macro
-#define KEEN_LOGGING_ENABLED [[KeenClient sharedClient] loggingEnabled]
+#define KEEN_LOGGING_ENABLED [KeenClient loggingEnabled]
 #define KCLog(message, ...)if([KeenClient isLoggingEnabled]) NSLog(message, ##__VA_ARGS__)
 
 @end
+
+/**
+ For extending this library
+ */
+#ifndef ERROR_CODE_INVALID_FORMAT
+#define ERROR_CODE_INVALID_FORMAT @"invalid_format"
+#define ERROR_CODE_SERVER_RESPONSE @"server_response"
+#endif
+
