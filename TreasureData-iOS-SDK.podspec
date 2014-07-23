@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.source_files  = 'TreasureData'
   s.library      = 'z'
   s.frameworks   = ['Security']
-  s.vendored_libraries = ['Libraries/libKeenClient-device.a', 'Libraries/libKeenClient-simulator.a']
   s.public_header_files = "TreasureData/TreasureData.h"
+  s.dependency "KeenClientTD", '= 0.1.1'
   s.requires_arc = true
 end
