@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios
   s.homepage     = "https://github.com/treasure-data/td-ios-sdk"
   s.source       = { :git => "https://github.com/treasure-data/td-ios-sdk.git", :tag => "0.1.0" }
-  s.source_files  = 'TreasureData','Headers/**/*.h'
+  s.source_files  = 'TreasureData'
   s.library      = 'z'
   s.frameworks   = ['Security']
   s.vendored_libraries = ['Libraries/libKeenClient-device.a', 'Libraries/libKeenClient-simulator.a']
