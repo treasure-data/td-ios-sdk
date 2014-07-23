@@ -43,5 +43,5 @@ end
 
 desc "Create the static library"
 task :build do
-  sh "xcodebuild -scheme TreasureData -configuration Release -sdk iphoneos SYMROOT=Output"
+  sh "xcodebuild -workspace TreasureData.xcworkspace -scheme TreasureData -configuration Release -sdk iphoneos SYMROOT=$(PWD)/Output"
 end
