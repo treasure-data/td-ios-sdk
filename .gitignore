@@ -1,6 +1,7 @@
 Podfile.lock
 Pods/
 TreasureData.xcodeproj/project.xcworkspace/xcshareddata/
+TreasureData.xcodeproj/project.xcworkspace/xcuserdata/
 TreasureData.xcworkspace/
 TreasureDataExample/Podfile.lock
 TreasureDataExample/Pods/

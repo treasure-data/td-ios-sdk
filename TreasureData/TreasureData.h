@@ -32,7 +32,11 @@
 
 - (void)uploadWithBlock:(void (^)())block DEPRECATED_ATTRIBUTE;
 
-- (void)uploadEventsWithBlock:(void (^)())block;
+- (void)uploadEventsWithBlock:(void (^)())block DEPRECATED_ATTRIBUTE;
+
+- (void)uploadEventsWithCallback:(void (^)())onSuccess onError:(void (^)(NSString*, NSString*))onError;
+
+- (void)uploadEvents;
 
 - (void)setApiEndpoint:(NSString*)endpoint DEPRECATED_ATTRIBUTE;
 
@@ -48,4 +52,5 @@
 
 + (void)enableTraceLogging;
 
++ (void)initializeEncryptionKey:(NSString*)encryptionKey;
 @end

@@ -11,7 +11,7 @@
 #import "TreasureData.h"
 #import "TDHttpClient.h"
 #import "Deflate.h"
-#import "KeenClient/KeenClient.h"
+#import "KeenClient.h"
 
 static bool isTraceLoggingEnabled = false;
 static bool isEventCompressionEnabled = true;
@@ -62,6 +62,7 @@ static NSString *defaultApiEndpoint = nil;
     }
     return [tdHttpClient sendRequest:request returningResponse:response error:error];
 }
+
 @end
 
 @interface TreasureData ()
@@ -168,6 +169,20 @@ static NSString *defaultApiEndpoint = nil;
     }
 }
 
+- (void)uploadEventsWithCallback:(void (^)())onSuccess onError:(void (^)(NSString*, NSString*))onError {
+    if (self.client) {
+        [self.client uploadWithCallbacks:onSuccess onError:onError];
+    }
+    else {
+        KCLog(@"Client is nil");
+    }
+}
+
+- (void)uploadEvents {
+    [self uploadEventsWithCallback:nil onError:nil];
+}
+
+
 - (void)setApiEndpoint:(NSString*)endpoint {
     self.client.apiEndpoint = endpoint;
 }
@@ -178,6 +193,11 @@ static NSString *defaultApiEndpoint = nil;
         sharedInstance = [[self alloc] initWithApiKey:apiKey];
     });
 }
+
++ (void)initializeEncryptionKey:(NSString*)encryptionKey {
+    [TDClient initializeEncryptionKey:encryptionKey];
+}
+
 
 + (instancetype)sharedInstance {
     NSAssert(sharedInstance, @"%@ sharedInstance called before withSecret", self);

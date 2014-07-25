@@ -18,7 +18,7 @@
 		6B7380AC192A09160097D56E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6B7380AA192A09160097D56E /* InfoPlist.strings */; };
 		6B7380AE192A09160097D56E /* TreasureDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B7380AD192A09160097D56E /* TreasureDataTests.m */; };
 		6BCDCD1C1937196200D57F34 /* TDHttpClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BCDCD1B1937196200D57F34 /* TDHttpClient.m */; };
-		DF4A0BE706014F26B8A10C0F /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 206C1F02227B450EA0AF6E54 /* libPods.a */; };
+		D50EC3D45E854BECA06CCD7C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 206C1F02227B450EA0AF6E54 /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,7 +70,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6B738092192A09160097D56E /* Foundation.framework in Frameworks */,
-				DF4A0BE706014F26B8A10C0F /* libPods.a in Frameworks */,
+				D50EC3D45E854BECA06CCD7C /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -166,11 +166,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6B7380B1192A09160097D56E /* Build configuration list for PBXNativeTarget "TreasureData" */;
 			buildPhases = (
-				B8AC5CF6B1C446E4B48332DD /* Check Pods Manifest.lock */,
+				E73E59E45A674C79BF007F49 /* Check Pods Manifest.lock */,
 				6B73808A192A09160097D56E /* Sources */,
 				6B73808B192A09160097D56E /* Frameworks */,
 				6B73808C192A09160097D56E /* CopyFiles */,
-				B4F79B2B13D94B7AA5977A53 /* Copy Pods Resources */,
+				1212A622E6FD49DE9CF4D90A /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -238,7 +238,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		B4F79B2B13D94B7AA5977A53 /* Copy Pods Resources */ = {
+		1212A622E6FD49DE9CF4D90A /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -253,7 +253,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B8AC5CF6B1C446E4B48332DD /* Check Pods Manifest.lock */ = {
+		E73E59E45A674C79BF007F49 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -386,9 +386,13 @@
 				DSTROOT = /tmp/TreasureData.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TreasureData/TreasureData-Prefix.pch";
+				HEADER_SEARCH_PATHS = "$(PODS_ROOT)/Headers/**";
+				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-ObjC";
+				PODS_ROOT = "${SRCROOT}/Pods";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = "${SOURCE_ROOT}/Headers/**";
 			};
 			name = Debug;
 		};
@@ -399,9 +403,13 @@
 				DSTROOT = /tmp/TreasureData.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TreasureData/TreasureData-Prefix.pch";
+				HEADER_SEARCH_PATHS = "$(PODS_ROOT)/Headers/**";
+				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-ObjC";
+				PODS_ROOT = "${SRCROOT}/Pods";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = "${SOURCE_ROOT}/Headers/**";
 			};
 			name = Release;
 		};

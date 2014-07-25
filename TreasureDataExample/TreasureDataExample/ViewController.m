@@ -18,8 +18,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // [TreasureData enableLogging];
+    [TreasureData enableLogging];
     [TreasureData initializeWithApiKey:@"your_api_key"];
+    [TreasureData initializeEncryptionKey:@"hello world"];
     [[TreasureData sharedInstance] setDefaultDatabase:@"foo_db"];
 }
 
@@ -39,8 +40,12 @@
 }
 
 - (IBAction)uploadEvents:(id)sender {
-    [[TreasureData sharedInstance] uploadEventsWithBlock:^(void) {
-        NSLog(@"Uploaded");
+    // [[TreasureData sharedInstance] uploadEvents];
+
+    [[TreasureData sharedInstance] uploadEventsWithCallback:^(){
+        NSLog(@"Success");
+    } onError:^(NSString* errorCode, NSString* message) {
+        NSLog(@"Error: errorCode=%@, message=%@", errorCode, message);
     }];
 }
 
