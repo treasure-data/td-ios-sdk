@@ -1,1 +1,1 @@
-pod 'KeenClientTD', '= 0.1.1'
+pod 'KeenClientTD', '= 3.2.13'

@@ -193,6 +193,11 @@ static NSString *version = @"0.0.6";
     });
 }
 
++ (void)initializeEncryptionKey:(NSString*)encryptionKey {
+    [TDClient initializeEncryptionKey:encryptionKey];
+}
+
+
 + (instancetype)sharedInstance {
     NSAssert(sharedInstance, @"%@ sharedInstance called before withSecret", self);
     return sharedInstance;

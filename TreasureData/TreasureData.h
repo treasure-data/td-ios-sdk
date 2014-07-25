@@ -50,4 +50,5 @@
 
 + (void)enableTraceLogging;
 
++ (void)initializeEncryptionKey:(NSString*)encryptionKey;
 @end
