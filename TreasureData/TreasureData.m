@@ -134,6 +134,9 @@ static NSString *defaultApiEndpoint = nil;
 }
 
 - (void)addEvent:(NSDictionary *)record database:(NSString *)database table:(NSString *)table {
+}
+
+- (void)addEventWithCallback:(NSDictionary *)record database:(NSString *)database table:(NSString *)table onSuccess:(void (^)())onSuccess onError:(void (^)(NSString*, NSString*))onError {
     if (self.client) {
         if (database && table) {
             NSError *error = nil;
@@ -144,7 +147,7 @@ static NSString *defaultApiEndpoint = nil;
             }
             else {
                 NSString *tag = [NSString stringWithFormat:@"%@.%@", database, table];
-                [self.client addEvent:record toEventCollection:tag error:nil];
+                [self.client addEventWithCallbacks:record toEventCollection:tag onSuccess:onSuccess onError:onError];
             }
         }
         else {
@@ -154,6 +157,10 @@ static NSString *defaultApiEndpoint = nil;
     else {
         KCLog(@"Client is nil");
     }
+}
+
+- (void)addEventWithCallback:(NSDictionary *)record table:(NSString *)table onSuccess:(void (^)())onSuccess onError:(void (^)(NSString*, NSString*))onError {
+    [self addEventWithCallback:record database:self.defaultDatabase table:table onSuccess:onSuccess onError:onError];
 }
 
 - (void)uploadWithBlock:(void (^)())block {

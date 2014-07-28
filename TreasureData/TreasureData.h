@@ -30,6 +30,10 @@
 
 - (void)addEvent:(NSDictionary *)record table:(NSString *)table;
 
+- (void)addEventWithCallback:(NSDictionary *)record database:(NSString *)database table:(NSString *)table onSuccess:(void (^)())onSuccess onError:(void (^)(NSString*, NSString*))onError;
+
+- (void)addEventWithCallback:(NSDictionary *)record table:(NSString *)table onSuccess:(void (^)())onSuccess onError:(void (^)(NSString*, NSString*))onError;
+
 - (void)uploadWithBlock:(void (^)())block DEPRECATED_ATTRIBUTE;
 
 - (void)uploadEventsWithBlock:(void (^)())block DEPRECATED_ATTRIBUTE;

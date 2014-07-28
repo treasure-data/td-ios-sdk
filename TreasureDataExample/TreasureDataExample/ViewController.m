@@ -31,21 +31,26 @@
 
 - (IBAction)addEvent:(id)sender {
     NSLog(@"Click!!!!");
-    [[TreasureData sharedInstance] addEvent:@{
-                                           @"name": @"komamitsu",
-                                           @"age": @99
-                                           }
-                                   table:@"bar_tbl"
+    [[TreasureData sharedInstance]
+        addEventWithCallback:@{
+                              @"name": @"komamitsu",
+                              @"age": @99
+                              }
+                      table:@"bar_tbl"
+                  onSuccess:^(){
+                      NSLog(@"addEvent: success");
+                  }
+                    onError:^(NSString* errorCode, NSString* message) {
+                        NSLog(@"addEvent: error. errorCode=%@, message=%@", errorCode, message);
+                    }
      ];
 }
 
 - (IBAction)uploadEvents:(id)sender {
-    // [[TreasureData sharedInstance] uploadEvents];
-
     [[TreasureData sharedInstance] uploadEventsWithCallback:^(){
-        NSLog(@"Success");
+        NSLog(@"uploadEvents: success");
     } onError:^(NSString* errorCode, NSString* message) {
-        NSLog(@"Error: errorCode=%@, message=%@", errorCode, message);
+        NSLog(@"uploadEvents: error. errorCode=%@, message=%@", errorCode, message);
     }];
 }
 
