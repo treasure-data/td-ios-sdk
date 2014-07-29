@@ -143,7 +143,9 @@ static NSString *defaultApiEndpoint = nil;
             NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^[0-9a-z_]{3,255}$" options:0 error:&error];
             if (!([regex firstMatchInString:database options:0 range:NSMakeRange(0, [database length])] &&
                   [regex firstMatchInString:table    options:0 range:NSMakeRange(0, [table length])])) {
-                KCLog(@"database and table need to be consist of lower letters, numbers or '_': database=%@, table=%@", database, table);
+                NSString *errMsg = [NSString stringWithFormat:@"database and table need to be consist of lower letters, numbers or '_': database=%@, table=%@", database, table];
+                KCLog(@"%@", errMsg);
+                onError(ERROR_CODE_INVALID_PARAM, errMsg);
             }
             else {
                 NSString *tag = [NSString stringWithFormat:@"%@.%@", database, table];
@@ -151,11 +153,15 @@ static NSString *defaultApiEndpoint = nil;
             }
         }
         else {
-            KCLog(@"database or table is nil: database=%@, table=%@", database, table);
+            NSString *errMsg = [NSString stringWithFormat:@"database or table is nil: database=%@, table=%@", database, table];
+            KCLog(@"%@", errMsg);
+            onError(ERROR_CODE_INVALID_PARAM, errMsg);
         }
     }
     else {
-        KCLog(@"Client is nil");
+        NSString *errMsg = @"Client is nil";
+        KCLog(@"%@", errMsg);
+        onError(ERROR_CODE_INIT_ERROR, errMsg);
     }
 }
 
@@ -181,7 +187,9 @@ static NSString *defaultApiEndpoint = nil;
         [self.client uploadWithCallbacks:onSuccess onError:onError];
     }
     else {
-        KCLog(@"Client is nil");
+        NSString *errMsg = @"Client is nil";
+        KCLog(@"%@", errMsg);
+        onError(ERROR_CODE_INIT_ERROR, errMsg);
     }
 }
 
