@@ -31,6 +31,12 @@ $ pod install
 
 ## Usage
 
+### Import SDK header file
+
+```
+#import "TreasureData.h"
+```
+
 ### Register Your TreasureData API Key
 
 ```
@@ -68,7 +74,6 @@ We recommend to use a write-only API key for the SDK. To obtain one, please:
 Or, simply
 
 ```
-- (IBAction)clickButton:(id)sender {
     [[TreasureData sharedInstance] addEvent:@{
                                        @"name": @"boo bar",
                                        @"age": @42,
@@ -76,8 +81,6 @@ Or, simply
                                    }
                                    database:@"database_a"
                                       table:@"table_b"];
-}
-
 ```
 
 
@@ -98,9 +101,7 @@ Specify the database and table to which you want to import the events.
 Or, simply
 
 ```
-- (void)applicationDidEnterBackground:(UIApplication *)application {
     [[TreasureData sharedInstance] uploadEvents];
-}
 
 ```
 
