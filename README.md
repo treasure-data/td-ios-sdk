@@ -11,13 +11,20 @@ iOS SDK for [TreasureData](http://www.treasuredata.com/). With this SDK, you can
 $ gem install cocoapods
 ```
 
+Then, add our Pods to use some components.
+
+```
+$ pod repo add td https://github.com/treasure-data/PodSpecs.git
+```
+
 Next, add this line in your Podfile.
 
 ```
-pod 'TreasureData-iOS-SDK', '= 0.1.0'
+pod 'TreasureData-iOS-SDK', '= 0.1.1'
 ```
 
 Finally, execute 'pod install'.
+
 ```
 $ pod install
 ```
@@ -26,7 +33,7 @@ $ pod install
 
 ### Register Your TreasureData API Key
 
-```objc
+```
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     [TreasureData initializeWithApiKey:@"your_api_key"];
 }
@@ -41,37 +48,93 @@ We recommend to use a write-only API key for the SDK. To obtain one, please:
 
 ### Add Events
 
-```objc
+```
 - (IBAction)clickButton:(id)sender {
-    [[TreasureData sharedInstance] event:@{
-                                     @"name": @"foo bar",
-                                     @"age": @42,
-                                     @"comment": @"hello world"
+    [[TreasureData sharedInstance] addEventWithCallback:@{
+                                       @"name": @"boo bar",
+                                       @"age": @42,
+                                       @"comment": @"hello world"
                                    }
-                                database:@"database_a"
-                                   table:@"table_b"];
+                                   database:@"database_a"
+                                      table:@"table_b"
+                                  onSuccess:^(){
+                                      NSLog(@"addEvent: success");
+                                  }
+                                    onError:^(NSString* errorCode, NSString* message) {
+                                        NSLog(@"addEvent: error. errorCode=%@, message=%@", errorCode, message);
+                                    }];
 }
 ```
+Or, simply
+
+```
+- (IBAction)clickButton:(id)sender {
+    [[TreasureData sharedInstance] addEvent:@{
+                                       @"name": @"boo bar",
+                                       @"age": @42,
+                                       @"comment": @"hello world"
+                                   }
+                                   database:@"database_a"
+                                      table:@"table_b"];
+}
+
+```
+
 
 Specify the database and table to which you want to import the events.
 
 ### Upload Events to TreasureData
 
-```objc
+```
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    [[TreasureData sharedInstance] uploadWithBlock:^(void) {
-        NSLog(@"Uploaded.");
-    }];
+    [[TreasureData sharedInstance] uploadEventsWithCallback:^(){
+                                       NSLog(@"uploadEvents: success");
+                                   }
+                                   onError:^(NSString* errorCode, NSString* message) {
+                                       NSLog(@"uploadEvents: error. errorCode=%@, message=%@", errorCode, message);
+                                   }];
 }
 ```
+Or, simply
+
+```
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+    [[TreasureData sharedInstance] uploadEvents];
+}
+
+```
+
 
 The events are going to be buffered for a few minutes before they get sent and imported into TreasureData storage.
+
+## About Error Code
+
+`TreasureData#addEventWithCallback()` and `uploadEventsWithCallback()` call back `onError` block with `errorCode` argument. This argument is useful to know the cause type of the error. There are the following error codes.
+
+- "init_error"
+  - The initialization failed.
+- "invalid_param"
+  - The parameter passed to the API was invalid
+- "invalid_event"
+  - The event was invalid
+- "data_conversion"
+  - Failed to convert the data to/from JSON
+- "storage_error"
+  - Failed to read/write data in the storage
+- "network_error"
+  - Failed to communicate with the server due to network problem 
+- "server_response"
+  - The server returned an error response
+
 
 ## Additional Configuration
 
 ### Endpoint
 
-The API endpoint (default: https://in.treasuredata.com/ios/v3) can be modified using the `setApiEndpoint` API after the client has been initialized using the `initializeWithApiKey` API.
+The API endpoint (default: https://in.treasuredata.com) can be modified using the `setApiEndpoint` API after the client has been initialized using the `initializeWithApiKey` API.
 
+### Encryption key
+
+If you've set an encryption key via `initializeEncryptionKey`, our SDK saves the event data as encrypted when called `addEvent` or `addEventWithCallback`.  
 
 
