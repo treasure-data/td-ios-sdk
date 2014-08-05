@@ -132,7 +132,12 @@ The events are going to be buffered for a few minutes before they get sent and i
 
 ### Endpoint
 
-The API endpoint (default: https://in.treasuredata.com) can be modified using the `setApiEndpoint` API after the client has been initialized using the `initializeWithApiKey` API.
+The API endpoint (default: https://in.treasuredata.com) can be modified using the `setApiEndpoint` API after the client has been initialized using the `initializeWithApiKey` API. For example,
+
+```
+    [TreasureData initializeApiEndpoint:@"https://in.treasuredata.com"];
+    [TreasureData initializeWithApiKey:@"your_api_key"];
+```
 
 ### Encryption key
 
