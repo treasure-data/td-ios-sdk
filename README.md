@@ -138,4 +138,9 @@ The API endpoint (default: https://in.treasuredata.com) can be modified using th
 
 If you've set an encryption key via `initializeEncryptionKey`, our SDK saves the event data as encrypted when called `addEvent` or `addEventWithCallback`.  
 
+```
+    [TreasureData initializeEncryptionKey:@"hello world"];
+        :
+    [[TreasureData sharedInstance] addEventWithCallback: ....];
+```
 
