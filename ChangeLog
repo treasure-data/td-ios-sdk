@@ -1,3 +1,11 @@
+Release 0.1.1
+
+* Implement gd_bundle.crt into the source file
+* Enable to change API endpoint with TreasureData#initializeApiEndpoint()
+* Improve error handling with TreasureData#addEventWithCallback() and TreasureData#uploadEventsWithCallback()
+* Enable the encryption of bufferred event data with TreasureData.initializeEncryptionKey()
+* Buffer event data in Sqlite3 instead of files
+
 Release 0.1.0
 
 * Added 'Security' framework to TreasureData-iOS-SDK.podspec
