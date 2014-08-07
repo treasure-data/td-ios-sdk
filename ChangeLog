@@ -1,3 +1,7 @@
+Release 0.1.2
+
+* Fix some bugs related to encryption
+
 Release 0.1.1
 
 * Implement gd_bundle.crt into the source file
