@@ -97,6 +97,9 @@ static NSString *defaultApiEndpoint = nil;
             self.client.apiKey = apiKey;
             self.client.apiEndpoint = defaultApiEndpoint ? defaultApiEndpoint : @"https://in.treasuredata.com";
             self.client.globalPropertiesBlock = ^NSDictionary *(NSString *eventCollection) {
+                if (!NSClassFromString(@"NSUUID")) {
+                    return @{};
+                }
                 return @{@"#UUID": [[NSUUID UUID] UUIDString]};
             };
         }
