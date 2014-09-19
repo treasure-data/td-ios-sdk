@@ -1,7 +1,7 @@
 TreasureData iOS SDK
 ===============
 
-iOS SDK for [TreasureData](http://www.treasuredata.com/). With this SDK, you can import the events on your applications into TreasureData easily.
+iOS SDK for [TreasureData](http://www.treasuredata.com/). With this SDK, you can import the events on your applications into TreasureData easily. This library supports iOS 5 or later.
 
 ## Installation
 
@@ -20,7 +20,7 @@ $ pod repo add td https://github.com/treasure-data/PodSpecs.git
 Next, add this line in your Podfile.
 
 ```
-pod 'TreasureData-iOS-SDK', '= 0.1.2'
+pod 'TreasureData-iOS-SDK', '= 0.1.3'
 ```
 
 Finally, execute 'pod install'.
