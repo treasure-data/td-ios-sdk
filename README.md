@@ -151,9 +151,9 @@ If you've set an encryption key via `initializeEncryptionKey`, our SDK saves the
 
 ## Use Cases
 
-### Collect Installation Event
+### Collect The First Run Event (Installation Event)
 
-You can collect an installation event of your application like this.
+You can collect the first run event of your application like this. Probably, this event can be used as an installation event.
 
 ```
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
