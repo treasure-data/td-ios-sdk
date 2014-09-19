@@ -149,3 +149,31 @@ If you've set an encryption key via `initializeEncryptionKey`, our SDK saves the
     [[TreasureData sharedInstance] addEventWithCallback: ....];
 ```
 
+## Use Cases
+
+### Collect Installation Event
+
+You can collect an installation event of your application like this.
+
+```
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    [TreasureData initializeWithApiKey:@"your_api_key"];
+
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"]) {
+        [[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"installed" }
+						 database:@"database_a"
+						    table:@"table_b"
+						onSuccess:^(){
+						    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
+						    [[NSUserDefaults standardUserDefaults] synchronize];
+						    [[TreasureData sharedInstance] uploadEvents];
+						}
+						  onError:^(NSString* errorCode, NSString* message) {
+						      NSLog(@"addEvent: error. errorCode=%@, message=%@", errorCode, message);
+						  }];
+    }
+    
+    return YES;
+}
+```

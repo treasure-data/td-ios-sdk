@@ -7,12 +7,28 @@
 //
 
 #import "AppDelegate.h"
+#import "TreasureData.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    [TreasureData initializeWithApiKey:@"your_api_key"];
+
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"]) {
+        [[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"installed" }
+                                                   database:@"database_a"
+                                                      table:@"table_b"
+                                                  onSuccess:^(){
+                                                      [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
+                                                      [[NSUserDefaults standardUserDefaults] synchronize];
+                                                      [[TreasureData sharedInstance] uploadEvents];
+                                                  }
+                                                    onError:^(NSString* errorCode, NSString* message) {
+                                                        NSLog(@"addEvent: error. errorCode=%@, message=%@", errorCode, message);
+                                                    }];
+    }
+    
     return YES;
 }
 							
