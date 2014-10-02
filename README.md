@@ -20,7 +20,7 @@ $ pod repo add td https://github.com/treasure-data/PodSpecs.git
 Next, add this line in your Podfile.
 
 ```
-pod 'TreasureData-iOS-SDK', '= 0.1.3'
+pod 'TreasureData-iOS-SDK', '= 0.1.4'
 ```
 
 Finally, execute 'pod install'.
