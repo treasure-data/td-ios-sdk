@@ -18,9 +18,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [TreasureData enableLogging];
-    [TreasureData initializeWithApiKey:@"your_api_key"];
-    [TreasureData initializeEncryptionKey:@"hello world"];
     [[TreasureData sharedInstance] setDefaultDatabase:@"foo_db"];
 }
 

@@ -17,6 +17,7 @@
 @property bool isLoggingEnabled;
 @end
 
+const NSString *DEFAULT_ENDPOINT_HOST = @"in.treasuredata.com";
 const static unsigned char GD_BUNDLE_DER[] = {
     0x30, 0x82, 0x04, 0xd0, 0x30, 0x82, 0x03, 0xb8,
     0xa0, 0x03, 0x02, 0x01, 0x02, 0x02, 0x01, 0x07,
@@ -241,7 +242,7 @@ const static unsigned char GD_BUNDLE_DER[] = {
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-    if ([self shouldTrustProtectionSpace:challenge.protectionSpace]) {
+    if ([DEFAULT_ENDPOINT_HOST isEqualToString:self.conn.currentRequest.URL.host] && [self shouldTrustProtectionSpace:challenge.protectionSpace]) {
         [challenge.sender useCredential:[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust] forAuthenticationChallenge:challenge];
     } else {
         [challenge.sender performDefaultHandlingForAuthenticationChallenge:challenge];

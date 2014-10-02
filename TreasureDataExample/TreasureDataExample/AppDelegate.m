@@ -13,6 +13,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [TreasureData enableLogging];
+    // [TreasureData initializeApiEndpoint:@"https://mobile-ybi.jp-east.idcfcloud.com"];
+    [TreasureData initializeEncryptionKey:@"hello world"];
     [TreasureData initializeWithApiKey:@"your_api_key"];
 
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"]) {
