@@ -17,7 +17,7 @@ static bool isTraceLoggingEnabled = false;
 static bool isEventCompressionEnabled = true;
 static TreasureData *sharedInstance = nil;
 static NSString *tableNamePattern = @"[^0-9a-z_]";
-static NSString *version = @"0.1.4";
+static NSString *version = @"0.1.5";
 static NSString *defaultApiEndpoint = nil;
 
 @interface TDClient : KeenClient

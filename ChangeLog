@@ -1,3 +1,7 @@
+Release 0.1.5
+
+* Fix TreasureData.addEvent
+
 Release 0.1.4
 
 * Fix HTTP connectivity issue to an endpoint other than the default one
