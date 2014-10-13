@@ -61,7 +61,8 @@
 		6B7380AD192A09160097D56E /* TreasureDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TreasureDataTests.m; sourceTree = "<group>"; };
 		6BCDCD1A1937196200D57F34 /* TDHttpClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDHttpClient.h; sourceTree = "<group>"; };
 		6BCDCD1B1937196200D57F34 /* TDHttpClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDHttpClient.m; sourceTree = "<group>"; };
-		E81516D77A3B42D89ECF71AD /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		D7703DBACAC24041D3C2FAA2 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		DA1A4142BC8193FCBB929397 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,7 +96,7 @@
 				6B7380A7192A09160097D56E /* TreasureDataTests */,
 				6B738090192A09160097D56E /* Frameworks */,
 				6B73808F192A09160097D56E /* Products */,
-				E81516D77A3B42D89ECF71AD /* Pods.xcconfig */,
+				FC669D005E6AAD79F6207CC2 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -157,6 +158,15 @@
 				6B7380AA192A09160097D56E /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		FC669D005E6AAD79F6207CC2 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				DA1A4142BC8193FCBB929397 /* Pods.debug.xcconfig */,
+				D7703DBACAC24041D3C2FAA2 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -250,7 +260,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E73E59E45A674C79BF007F49 /* Check Pods Manifest.lock */ = {
@@ -381,16 +391,16 @@
 		};
 		6B7380B2192A09160097D56E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E81516D77A3B42D89ECF71AD /* Pods.xcconfig */;
+			baseConfigurationReference = DA1A4142BC8193FCBB929397 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				DSTROOT = /tmp/TreasureData.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TreasureData/TreasureData-Prefix.pch";
-				HEADER_SEARCH_PATHS = "$(PODS_ROOT)/Headers/**";
+				HEADER_SEARCH_PATHS = "$(inherited)/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "-ObjC";
-				PODS_ROOT = "${SRCROOT}/Pods";
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				PODS_ROOT = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				"USER_HEADER_SEARCH_PATHS[arch=*]" = "${SOURCE_ROOT}/Headers/**";
@@ -399,16 +409,16 @@
 		};
 		6B7380B3192A09160097D56E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E81516D77A3B42D89ECF71AD /* Pods.xcconfig */;
+			baseConfigurationReference = D7703DBACAC24041D3C2FAA2 /* Pods.release.xcconfig */;
 			buildSettings = {
 				DSTROOT = /tmp/TreasureData.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TreasureData/TreasureData-Prefix.pch";
-				HEADER_SEARCH_PATHS = "$(PODS_ROOT)/Headers/**";
+				HEADER_SEARCH_PATHS = "$(inherited)/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "-ObjC";
-				PODS_ROOT = "${SRCROOT}/Pods";
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				PODS_ROOT = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				"USER_HEADER_SEARCH_PATHS[arch=*]" = "${SOURCE_ROOT}/Headers/**";
