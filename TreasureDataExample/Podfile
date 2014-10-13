@@ -1,1 +1,4 @@
+source 'https://github.com/CocoaPods/Specs.git'
+source 'https://github.com/treasure-data/PodSpecs.git'
+
 pod 'TreasureData-iOS-SDK', :path => '..'
