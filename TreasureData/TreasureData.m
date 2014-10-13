@@ -137,6 +137,7 @@ static NSString *defaultApiEndpoint = nil;
 }
 
 - (void)addEvent:(NSDictionary *)record database:(NSString *)database table:(NSString *)table {
+    [self addEventWithCallback:record database:database table:table onSuccess:nil onError:nil];
 }
 
 - (void)addEventWithCallback:(NSDictionary *)record database:(NSString *)database table:(NSString *)table onSuccess:(void (^)())onSuccess onError:(void (^)(NSString*, NSString*))onError {
