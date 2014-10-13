@@ -20,8 +20,6 @@ $ pod repo add td https://github.com/treasure-data/PodSpecs.git
 Next, add this line in your Podfile.
 
 ```
-source 'https://github.com/CocoaPods/Specs.git'
-source 'https://github.com/treasure-data/PodSpecs.git'
 pod 'TreasureData-iOS-SDK', '= 0.1.5'
 ```
 
