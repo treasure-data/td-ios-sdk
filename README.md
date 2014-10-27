@@ -177,3 +177,19 @@ You can collect the first run event of your application like this. Probably, thi
     return YES;
 }
 ```
+
+### Upload events when the application finishes
+
+```
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+    UIBackgroundTaskIdentifier bgTask = [application beginBackgroundTaskWithExpirationHandler:^{}];
+    [[TreasureData sharedInstance] uploadEventsWithCallback:^() {
+            [application endBackgroundTask:bgTask];
+        }
+        onError:^(NSString *code, NSString *msg) {
+            [application endBackgroundTask:bgTask];
+        }
+     ];
+}
+```
