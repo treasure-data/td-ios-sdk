@@ -17,7 +17,6 @@
 		6B7380A6192A09160097D56E /* libTreasureData.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B73808E192A09160097D56E /* libTreasureData.a */; };
 		6B7380AC192A09160097D56E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6B7380AA192A09160097D56E /* InfoPlist.strings */; };
 		6B7380AE192A09160097D56E /* TreasureDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B7380AD192A09160097D56E /* TreasureDataTests.m */; };
-		6BCDCD1C1937196200D57F34 /* TDHttpClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BCDCD1B1937196200D57F34 /* TDHttpClient.m */; };
 		D50EC3D45E854BECA06CCD7C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 206C1F02227B450EA0AF6E54 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -59,8 +58,6 @@
 		6B7380A9192A09160097D56E /* TreasureDataTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TreasureDataTests-Info.plist"; sourceTree = "<group>"; };
 		6B7380AB192A09160097D56E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6B7380AD192A09160097D56E /* TreasureDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TreasureDataTests.m; sourceTree = "<group>"; };
-		6BCDCD1A1937196200D57F34 /* TDHttpClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDHttpClient.h; sourceTree = "<group>"; };
-		6BCDCD1B1937196200D57F34 /* TDHttpClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDHttpClient.m; sourceTree = "<group>"; };
 		D7703DBACAC24041D3C2FAA2 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		DA1A4142BC8193FCBB929397 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -128,8 +125,6 @@
 				6B738096192A09160097D56E /* TreasureData.h */,
 				6B738098192A09160097D56E /* TreasureData.m */,
 				6B738094192A09160097D56E /* Supporting Files */,
-				6BCDCD1A1937196200D57F34 /* TDHttpClient.h */,
-				6BCDCD1B1937196200D57F34 /* TDHttpClient.m */,
 			);
 			path = TreasureData;
 			sourceTree = "<group>";
@@ -285,7 +280,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6BCDCD1C1937196200D57F34 /* TDHttpClient.m in Sources */,
 				6B738099192A09160097D56E /* TreasureData.m in Sources */,
 				6B351A76194ABF0F001CBAAD /* Deflate.m in Sources */,
 			);

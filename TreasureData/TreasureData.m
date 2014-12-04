@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <CommonCrypto/CommonDigest.h>
 #import "TreasureData.h"
-#import "TDHttpClient.h"
 #import "Deflate.h"
 #import "KeenClient.h"
 
@@ -56,11 +55,10 @@ static NSString *defaultApiEndpoint = nil;
     }
 
     [request setHTTPBody:data];
-    TDHttpClient *tdHttpClient = [[TDHttpClient alloc] init];
-    if (isTraceLoggingEnabled) {
-        [tdHttpClient setLogging:true];
-    }
-    return [tdHttpClient sendRequest:request returningResponse:response error:error];
+
+    NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:response error:error];
+
+    return responseData;
 }
 
 @end
