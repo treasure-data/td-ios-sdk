@@ -44,6 +44,14 @@
 
 - (void)setApiEndpoint:(NSString*)endpoint DEPRECATED_ATTRIBUTE;
 
+- (void)disableAutoAppendUniqId;
+
+- (void)enableAutoAppendUniqId;
+
+- (void)disableAutoAppendModelInformation;
+
+- (void)enableAutoAppendModelInformation;
+
 + (void)disableEventCompression;
 
 + (void)enableEventCompression;

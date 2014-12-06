@@ -17,6 +17,8 @@
     // [TreasureData initializeApiEndpoint:@"https://mobile-ybi.jp-east.idcfcloud.com"];
     [TreasureData initializeEncryptionKey:@"hello world"];
     [TreasureData initializeWithApiKey:@"your_api_key"];
+    [[TreasureData sharedInstance] enableAutoAppendUniqId];
+    [[TreasureData sharedInstance] enableAutoAppendModelInformation];
 
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"]) {
         [[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"installed" }

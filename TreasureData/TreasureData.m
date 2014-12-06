@@ -18,6 +18,16 @@ static TreasureData *sharedInstance = nil;
 static NSString *tableNamePattern = @"[^0-9a-z_]";
 static NSString *version = @"0.1.5";
 static NSString *defaultApiEndpoint = nil;
+static NSString *storage_key_of_uuid = @"td_sdk_uuid";
+static NSString *key_of_uuid = @"td_uuid";
+static NSString *key_of_board = @"td_board";
+static NSString *key_of_brand = @"td_brand";
+static NSString *key_of_device = @"td_device";
+static NSString *key_of_display = @"td_display";
+static NSString *key_of_model = @"td_model";
+static NSString *key_of_os_ver = @"td_os_ver";
+static NSString *key_of_os_type = @"td_os_type";
+static NSString *os_type = @"iOS";
 
 @interface TDClient : KeenClient
 @property(nonatomic, strong) NSString *apiKey;
@@ -65,6 +75,8 @@ static NSString *defaultApiEndpoint = nil;
 
 @interface TreasureData ()
 @property(nonatomic, strong) TDClient *client;
+@property BOOL autoAppendUniqId;
+@property BOOL autoAppendModelInformation;
 @end
 
 @implementation TreasureData
@@ -108,6 +120,7 @@ static NSString *defaultApiEndpoint = nil;
     return self;
 }
 
+
 - (NSString *) md5:(NSString *) input
 {
     const char *cStr = [input UTF8String];
@@ -150,6 +163,12 @@ static NSString *defaultApiEndpoint = nil;
                 onError(ERROR_CODE_INVALID_PARAM, errMsg);
             }
             else {
+                if (self.autoAppendUniqId) {
+                    record = [self appendUniqId:record];
+                }
+                if (self.autoAppendModelInformation) {
+                    record = [self appendModelInformation:record];
+                }
                 NSString *tag = [NSString stringWithFormat:@"%@.%@", database, table];
                 [self.client addEventWithCallbacks:record toEventCollection:tag onSuccess:onSuccess onError:onError];
             }
@@ -169,6 +188,41 @@ static NSString *defaultApiEndpoint = nil;
 
 - (void)addEventWithCallback:(NSDictionary *)record table:(NSString *)table onSuccess:(void (^)())onSuccess onError:(void (^)(NSString*, NSString*))onError {
     [self addEventWithCallback:record database:self.defaultDatabase table:table onSuccess:onSuccess onError:onError];
+}
+
+- (NSString*)getUUID {
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    NSString *uuid = [ud stringForKey:storage_key_of_uuid];
+    if (!uuid) {
+        if (!NSClassFromString(@"NSUUID")) {
+            uuid = @"";
+        }
+        uuid = [[NSUUID UUID] UUIDString];
+        [ud setObject:uuid forKey:storage_key_of_uuid];
+        [ud synchronize];
+    }
+    return uuid;
+}
+
+- (NSDictionary*)appendUniqId:(NSDictionary *)origRecord {
+    NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
+    [record setValue:[self getUUID] forKey:key_of_uuid];
+    return record;
+}
+
+- (NSDictionary*)appendModelInformation:(NSDictionary *)origRecord {
+    NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
+    UIDevice *dev = [UIDevice currentDevice];
+    [record setValue:@"" forKey:key_of_board];
+    [record setValue:@"" forKey:key_of_brand];
+    [record setValue:dev.name forKey:key_of_device];
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    NSString *display = [NSString stringWithFormat:@"%.0fx%.0f", screenRect.size.width, screenRect.size.height];
+    [record setValue:display forKey:key_of_display];
+    [record setValue:dev.model forKey:key_of_model];
+    [record setValue:dev.systemVersion forKey:key_of_os_ver];
+    [record setValue:os_type forKey:key_of_os_type];
+    return record;
 }
 
 - (void)uploadWithBlock:(void (^)())block {
@@ -202,6 +256,22 @@ static NSString *defaultApiEndpoint = nil;
 
 - (void)setApiEndpoint:(NSString*)endpoint {
     self.client.apiEndpoint = endpoint;
+}
+
+- (void)disableAutoAppendUniqId {
+    self.autoAppendUniqId = false;
+}
+
+- (void)enableAutoAppendUniqId {
+    self.autoAppendUniqId = true;
+}
+
+- (void)disableAutoAppendModelInformation {
+    self.autoAppendModelInformation = false;
+}
+
+- (void)enableAutoAppendModelInformation {
+    self.autoAppendModelInformation = true;
 }
 
 + (void)initializeWithApiKey:(NSString *)apiKey {
