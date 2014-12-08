@@ -50,6 +50,10 @@
 
 - (void)disableAutoAppendModelInformation;
 
+- (BOOL)isFirstRun;
+
+- (void)clearFitstRun;
+
 - (void)enableAutoAppendModelInformation;
 
 + (void)disableEventCompression;

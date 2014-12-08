@@ -20,20 +20,23 @@
     [[TreasureData sharedInstance] enableAutoAppendUniqId];
     [[TreasureData sharedInstance] enableAutoAppendModelInformation];
 
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"]) {
+    if ([[TreasureData sharedInstance] isFirstRun]) {
         [[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"installed" }
                                                    database:@"database_a"
                                                       table:@"table_b"
                                                   onSuccess:^(){
-                                                      [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
-                                                      [[NSUserDefaults standardUserDefaults] synchronize];
-                                                      [[TreasureData sharedInstance] uploadEvents];
-                                                  }
+                                                      [[TreasureData sharedInstance] uploadEventsWithCallback:^() {
+                                                          [[TreasureData sharedInstance] clearFitstRun];
+                                                        }
+                                                        onError:^(NSString* errorCode, NSString* message) {
+                                                          NSLog(@"uploadEvents: error. errorCode=%@, message=%@", errorCode, message);
+                                                        }
+                                                       ];
+                                                    }
                                                     onError:^(NSString* errorCode, NSString* message) {
                                                         NSLog(@"addEvent: error. errorCode=%@, message=%@", errorCode, message);
                                                     }];
     }
-    
     return YES;
 }
 							

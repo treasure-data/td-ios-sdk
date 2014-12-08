@@ -19,6 +19,7 @@ static NSString *tableNamePattern = @"[^0-9a-z_]";
 static NSString *version = @"0.1.5";
 static NSString *defaultApiEndpoint = nil;
 static NSString *storage_key_of_uuid = @"td_sdk_uuid";
+static NSString *storage_key_of_first_run = @"td_sdk_first_run";
 static NSString *key_of_uuid = @"td_uuid";
 static NSString *key_of_board = @"td_board";
 static NSString *key_of_brand = @"td_brand";
@@ -213,10 +214,10 @@ static NSString *os_type = @"iOS";
 - (NSDictionary*)appendModelInformation:(NSDictionary *)origRecord {
     NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
     UIDevice *dev = [UIDevice currentDevice];
-    [record setValue:@"" forKey:key_of_board];
-    [record setValue:@"" forKey:key_of_brand];
+    // [record setValue:@"" forKey:key_of_board];
+    // [record setValue:@"" forKey:key_of_brand];
     [record setValue:dev.name forKey:key_of_device];
-    [record setValue:@"" forKey:key_of_display];
+    // [record setValue:@"" forKey:key_of_display];
     [record setValue:dev.model forKey:key_of_model];
     [record setValue:dev.systemVersion forKey:key_of_os_ver];
     [record setValue:os_type forKey:key_of_os_type];
@@ -270,6 +271,16 @@ static NSString *os_type = @"iOS";
 
 - (void)enableAutoAppendModelInformation {
     self.autoAppendModelInformation = true;
+}
+
+- (BOOL)isFirstRun {
+    NSInteger state = [[NSUserDefaults standardUserDefaults] integerForKey:storage_key_of_first_run];
+    return state == 0;
+}
+
+- (void)clearFitstRun {
+    [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:storage_key_of_first_run];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 + (void)initializeWithApiKey:(NSString *)apiKey {
