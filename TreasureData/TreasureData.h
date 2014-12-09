@@ -50,11 +50,15 @@
 
 - (void)disableAutoAppendModelInformation;
 
+- (void)enableAutoAppendModelInformation;
+
+- (void)disableRetryUploading;
+
+- (void)enableRetryUploading;
+
 - (BOOL)isFirstRun;
 
 - (void)clearFitstRun;
-
-- (void)enableAutoAppendModelInformation;
 
 + (void)disableEventCompression;
 

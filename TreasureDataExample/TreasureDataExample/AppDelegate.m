@@ -19,7 +19,8 @@
     [TreasureData initializeWithApiKey:@"your_api_key"];
     [[TreasureData sharedInstance] enableAutoAppendUniqId];
     [[TreasureData sharedInstance] enableAutoAppendModelInformation];
-
+    // [[TreasureData sharedInstance] disableRetryUploading];
+    
     if ([[TreasureData sharedInstance] isFirstRun]) {
         [[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"installed" }
                                                    database:@"database_a"

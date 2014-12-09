@@ -11,6 +11,7 @@
 #import "TreasureData.h"
 #import "Deflate.h"
 #import "KeenClient.h"
+#import "math.h"
 
 static bool isTraceLoggingEnabled = false;
 static bool isEventCompressionEnabled = true;
@@ -33,6 +34,8 @@ static NSString *os_type = @"iOS";
 @interface TDClient : KeenClient
 @property(nonatomic, strong) NSString *apiKey;
 @property(nonatomic, strong) NSString *apiEndpoint;
+@property int uploadRetryCount;
+@property BOOL enableRetryUploading;
 @end
 
 @implementation TDClient
@@ -67,9 +70,20 @@ static NSString *os_type = @"iOS";
 
     [request setHTTPBody:data];
 
-    NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:response error:error];
-
-    return responseData;
+    for (int i = 0; i < self.uploadRetryCount; i++) {
+        NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:response error:error];
+        if (responseData) {
+            return responseData;
+        }
+        else {
+            KCLog(@"sendSynchronousRequest error occurred(%@/%@)", [NSNumber numberWithInt:i], [NSNumber numberWithInt:self.uploadRetryCount]);
+            if (!self.enableRetryUploading || i >= self.uploadRetryCount - 1) {
+                return nil;
+            }
+            [NSThread sleepForTimeInterval:pow(2.0, i)];
+        }
+    }
+    return nil;
 }
 
 @end
@@ -113,6 +127,8 @@ static NSString *os_type = @"iOS";
                 }
                 return @{@"#UUID": [[NSUUID UUID] UUIDString]};
             };
+            self.client.uploadRetryCount = 7;
+            self.client.enableRetryUploading = true;
         }
         else {
             KCLog(@"Failed to initialize client");
@@ -271,6 +287,14 @@ static NSString *os_type = @"iOS";
 
 - (void)enableAutoAppendModelInformation {
     self.autoAppendModelInformation = true;
+}
+
+- (void)disableRetryUploading {
+    self.client.enableRetryUploading = false;
+}
+
+- (void)enableRetryUploading {
+    self.client.enableRetryUploading = true;
 }
 
 - (BOOL)isFirstRun {
