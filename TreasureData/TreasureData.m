@@ -55,18 +55,10 @@ static NSString *os_type = @"iOS";
          *      the parent client's project ids.
          *
          */
-        self.client = [[TDClient alloc] initWithApiKey:apiKey];
+        NSString *endpoint = defaultApiEndpoint ? defaultApiEndpoint : @"https://in.treasuredata.com";
+        self.client = [[TDClient alloc] initWithApiKey:apiKey apiEndpoint:endpoint];
         if (self.client) {
-            self.client.apiKey = apiKey;
-            self.client.apiEndpoint = defaultApiEndpoint ? defaultApiEndpoint : @"https://in.treasuredata.com";
-            self.client.globalPropertiesBlock = ^NSDictionary *(NSString *eventCollection) {
-                if (!NSClassFromString(@"NSUUID")) {
-                    return @{};
-                }
-                return @{@"#UUID": [[NSUUID UUID] UUIDString]};
-            };
-            self.client.uploadRetryCount = 7;
-            self.client.enableRetryUploading = true;
+
         }
         else {
             KCLog(@"Failed to initialize client");

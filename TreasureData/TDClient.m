@@ -14,9 +14,19 @@ static NSString *version = @"0.1.6";
 
 @implementation TDClient
 
-- (id)initWithApiKey:(NSString *)apiKey {
+- (id)initWithApiKey:(NSString *)apiKey apiEndpoint:(NSString*)apiEndpoint {
     NSString *projectId = [NSString stringWithFormat:@"_td %@", [self md5:apiKey]];
-    self = [[TDClient alloc] initWithProjectId:projectId andWriteKey:@"dummy_write_key" andReadKey:@"dummy_read_key"];
+    self = [self initWithProjectId:projectId andWriteKey:@"dummy_write_key" andReadKey:@"dummy_read_key"];
+    self.apiKey = apiKey;
+    self.apiEndpoint = apiEndpoint;
+    self.globalPropertiesBlock = ^NSDictionary *(NSString *eventCollection) {
+        if (!NSClassFromString(@"NSUUID")) {
+            return @{};
+        }
+        return @{@"#UUID": [[NSUUID UUID] UUIDString]};
+    };
+    self.uploadRetryCount = 7;
+    self.enableRetryUploading = true;
     return self;
 }
 

@@ -10,8 +10,9 @@
 #import "TreasureData.h"
 #import "TDClient.h"
 
+static NSString *END_POINT = @"http://localhost";
 @interface TreasureDataTests : XCTestCase
-
+@property bool isFinished;
 @end
 
 
@@ -19,6 +20,9 @@
 @property NSURLRequest *requestData;
 @property NSData *expectedResponseBody;
 @property NSURLResponse *expectedResponse;
+@end
+
+@interface MyTDClient ()
 @end
 
 @implementation MyTDClient
@@ -33,6 +37,12 @@
 @end
 
 @implementation MyTreasureData
+- (id)initWithApiKey:(NSString *)apiKey {
+    self = [super initWithApiKey:apiKey];
+    MyTDClient *myClient = [[MyTDClient alloc] initWithApiKey:apiKey apiEndpoint:END_POINT];
+    self.client = myClient;
+    return self;
+}
 @end
 
 @implementation TreasureDataTests
@@ -40,20 +50,47 @@
 - (void)setUp
 {
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
 }
 
 - (void)tearDown
 {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
+    do {
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0]];
+    } while (!self.isFinished);
     [super tearDown];
 }
 
 - (void)testSingleEvent {
     MyTreasureData *td = [[MyTreasureData alloc] initWithApiKey:@"dummy_apikey"];
-    [td addEvent:@{@"name":@"foobar"} database:@"db_" table:@"tbl"];
-    [td uploadEvents];
-    NSLog(@"%@", td.client.apiKey);
+    [[MyTDClient getEventStore] deleteAllEvents];
+    MyTDClient* client = (MyTDClient*)td.client;
+    [MyTreasureData disableEventCompression];
+    
+    NSHTTPURLResponse *expectedResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:@"1.1" headerFields:nil];
+    client.expectedResponse = expectedResponse;
+    
+    NSError *error = [NSError alloc];
+    NSData *expectedResponseBody = [NSJSONSerialization dataWithJSONObject:@{@"db_.tbl":@[@{@"success":@"true"}]} options:0 error:&error];
+    client.expectedResponseBody = expectedResponseBody;
+    
+    [td addEvent:@{@"name":@"foobar"} database:@"db_" table:@"tbl" ];
+    [td uploadEventsWithCallback:^(){
+        NSString *url = [client.requestData.URL absoluteString];
+        XCTAssertTrue([@"http://localhost/ios/v3/event" isEqualToString:url]);
+        NSError *error = [NSError alloc];
+        NSDictionary *ev = [NSJSONSerialization JSONObjectWithData:client.requestData.HTTPBody options:0 error:&error];
+        XCTAssertEqual(1, ev.count);
+        NSArray *arr = [ev objectForKey:@"db_.tbl"];
+        XCTAssertEqual(1, arr.count);
+        NSDictionary *dict = [arr objectAtIndex:0];
+        XCTAssertTrue([[dict objectForKey:@"name"] isEqualToString:@"foobar"]);
+        self.isFinished = true;
+    }
+                          onError:^(NSString* ecode, NSString* detail){
+                              XCTAssertTrue(false);
+                              self.isFinished = true;
+                          }
+     ];
 }
 
 

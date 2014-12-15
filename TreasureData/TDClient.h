@@ -16,7 +16,7 @@
 @property int uploadRetryCount;
 @property BOOL enableRetryUploading;
 
-- (id)initWithApiKey:(NSString *)apiKey;
+- (id)initWithApiKey:(NSString *)apiKey apiEndpoint:(NSString*)apiEndpoint;
 
 - (NSData*) sendHTTPRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error;
 @end
