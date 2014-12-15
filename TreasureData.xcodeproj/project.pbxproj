@@ -17,6 +17,10 @@
 		6B7380A6192A09160097D56E /* libTreasureData.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B73808E192A09160097D56E /* libTreasureData.a */; };
 		6B7380AC192A09160097D56E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6B7380AA192A09160097D56E /* InfoPlist.strings */; };
 		6B7380AE192A09160097D56E /* TreasureDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B7380AD192A09160097D56E /* TreasureDataTests.m */; };
+		6BF8C92D1A3E971D005B1804 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BF8C92C1A3E971D005B1804 /* CoreLocation.framework */; };
+		6BF8C92F1A3E972C005B1804 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BF8C92E1A3E972C005B1804 /* Security.framework */; };
+		6BF8C9311A3E977B005B1804 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BF8C9301A3E977B005B1804 /* libz.dylib */; };
+		6BF8C9341A3E9B76005B1804 /* TDClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BF8C9331A3E9B76005B1804 /* TDClient.m */; };
 		D50EC3D45E854BECA06CCD7C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 206C1F02227B450EA0AF6E54 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +62,11 @@
 		6B7380A9192A09160097D56E /* TreasureDataTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TreasureDataTests-Info.plist"; sourceTree = "<group>"; };
 		6B7380AB192A09160097D56E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6B7380AD192A09160097D56E /* TreasureDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TreasureDataTests.m; sourceTree = "<group>"; };
+		6BF8C92C1A3E971D005B1804 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		6BF8C92E1A3E972C005B1804 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		6BF8C9301A3E977B005B1804 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		6BF8C9321A3E9B76005B1804 /* TDClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDClient.h; sourceTree = "<group>"; };
+		6BF8C9331A3E9B76005B1804 /* TDClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDClient.m; sourceTree = "<group>"; };
 		D7703DBACAC24041D3C2FAA2 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		DA1A4142BC8193FCBB929397 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -76,6 +85,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6BF8C9311A3E977B005B1804 /* libz.dylib in Frameworks */,
+				6BF8C92F1A3E972C005B1804 /* Security.framework in Frameworks */,
+				6BF8C92D1A3E971D005B1804 /* CoreLocation.framework in Frameworks */,
 				6B7380A6192A09160097D56E /* libTreasureData.a in Frameworks */,
 				6B7380A0192A09160097D56E /* XCTest.framework in Frameworks */,
 				6B7380A3192A09160097D56E /* UIKit.framework in Frameworks */,
@@ -109,6 +121,9 @@
 		6B738090192A09160097D56E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6BF8C9301A3E977B005B1804 /* libz.dylib */,
+				6BF8C92E1A3E972C005B1804 /* Security.framework */,
+				6BF8C92C1A3E971D005B1804 /* CoreLocation.framework */,
 				6B738091192A09160097D56E /* Foundation.framework */,
 				6B73809F192A09160097D56E /* XCTest.framework */,
 				6B7380A2192A09160097D56E /* UIKit.framework */,
@@ -125,6 +140,8 @@
 				6B738096192A09160097D56E /* TreasureData.h */,
 				6B738098192A09160097D56E /* TreasureData.m */,
 				6B738094192A09160097D56E /* Supporting Files */,
+				6BF8C9321A3E9B76005B1804 /* TDClient.h */,
+				6BF8C9331A3E9B76005B1804 /* TDClient.m */,
 			);
 			path = TreasureData;
 			sourceTree = "<group>";
@@ -280,6 +297,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6BF8C9341A3E9B76005B1804 /* TDClient.m in Sources */,
 				6B738099192A09160097D56E /* TreasureData.m in Sources */,
 				6B351A76194ABF0F001CBAAD /* Deflate.m in Sources */,
 			);
@@ -393,7 +411,7 @@
 				HEADER_SEARCH_PATHS = "$(inherited)/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_CFLAGS = "$(inherited)";
-				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "";
 				PODS_ROOT = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -411,7 +429,7 @@
 				HEADER_SEARCH_PATHS = "$(inherited)/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_CFLAGS = "$(inherited)";
-				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "";
 				PODS_ROOT = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -421,6 +439,7 @@
 		};
 		6B7380B5192A09160097D56E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DA1A4142BC8193FCBB929397 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -434,6 +453,12 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "TreasureDataTests/TreasureDataTests-Info.plist";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-framework",
+					"\"CoreLocation\"",
+					"-l\"Pods-KeenClientTD\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = xctest;
 			};

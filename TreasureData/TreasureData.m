@@ -5,19 +5,16 @@
 //  Created by Mitsunori Komatsu on 5/19/14.
 //  Copyright (c) 2014 Treasure Data Inc. All rights reserved.
 //
-#import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
-#import <CommonCrypto/CommonDigest.h>
+#import <UIKit/UIKit.h>
 #import "TreasureData.h"
-#import "Deflate.h"
-#import "KeenClient.h"
 #import "math.h"
+#import "TDClient.h"
 
 static bool isTraceLoggingEnabled = false;
 static bool isEventCompressionEnabled = true;
 static TreasureData *sharedInstance = nil;
 static NSString *tableNamePattern = @"[^0-9a-z_]";
-static NSString *version = @"0.1.6";
 static NSString *defaultApiEndpoint = nil;
 static NSString *storage_key_of_uuid = @"td_sdk_uuid";
 static NSString *storage_key_of_first_run = @"td_sdk_first_run";
@@ -31,65 +28,8 @@ static NSString *key_of_os_ver = @"td_os_ver";
 static NSString *key_of_os_type = @"td_os_type";
 static NSString *os_type = @"iOS";
 
-@interface TDClient : KeenClient
-@property(nonatomic, strong) NSString *apiKey;
-@property(nonatomic, strong) NSString *apiEndpoint;
-@property int uploadRetryCount;
-@property BOOL enableRetryUploading;
-@end
-
-@implementation TDClient
-- (NSData *)sendEvents:(NSData *)data returningResponse:(NSURLResponse **)response error:(NSError **)error {
-    NSString *urlString = [NSString stringWithFormat:@"%@/%@", self.apiEndpoint, @"ios/v3/event"];
-    KCLog(@"Sending events to: %@", urlString);
-    NSURL *url = [NSURL URLWithString:urlString];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [request setValue:self.apiKey forHTTPHeaderField:@"X-TD-Write-Key"];
-    [request setValue:@"k" forHTTPHeaderField:@"X-TD-Data-Type"];   // means KeenIO data type
-    [request setValue:[NSString stringWithFormat:@"TD-iOS-SDK/%@ (%@ %@)", version, [[UIDevice currentDevice] systemName], [[UIDevice currentDevice] systemVersion]] forHTTPHeaderField:@"User-Agent"];
-
-    if (isEventCompressionEnabled) {
-        NSData *compressedData = [Deflate deflate:data];
-        if (!compressedData) {
-            KCLog(@"Compression failed");
-        }
-        else {
-            KCLog(@"Compressed: before=%ld, after=%ld", (unsigned long)[data length], (unsigned long)[compressedData length]);
-            data = compressedData;
-            /*
-             Byte* bytes = [data bytes];
-             for (int i=0; i < [data length]; i++) {
-             NSLog(@"byte[%d]: 0x%02x", i, bytes[i]);
-             }
-             */      
-            [request setValue:@"deflate" forHTTPHeaderField:@"Content-Encoding"];
-        }
-    }
-
-    [request setHTTPBody:data];
-
-    for (int i = 0; i < self.uploadRetryCount; i++) {
-        NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:response error:error];
-        if (responseData) {
-            return responseData;
-        }
-        else {
-            KCLog(@"sendSynchronousRequest error occurred(%@/%@)", [NSNumber numberWithInt:i], [NSNumber numberWithInt:self.uploadRetryCount]);
-            if (!self.enableRetryUploading || i >= self.uploadRetryCount - 1) {
-                return nil;
-            }
-            [NSThread sleepForTimeInterval:pow(2.0, i)];
-        }
-    }
-    return nil;
-}
-
-@end
 
 @interface TreasureData ()
-@property(nonatomic, strong) TDClient *client;
 @property BOOL autoAppendUniqId;
 @property BOOL autoAppendModelInformation;
 @end
@@ -115,9 +55,7 @@ static NSString *os_type = @"iOS";
          *      the parent client's project ids.
          *
          */
-        NSString *projectId = [NSString stringWithFormat:@"_td %@", [self md5:apiKey]];
-        
-        self.client = [[TDClient alloc] initWithProjectId:projectId andWriteKey:@"dummy_write_key" andReadKey:@"dummy_read_key"];
+        self.client = [[TDClient alloc] initWithApiKey:apiKey];
         if (self.client) {
             self.client.apiKey = apiKey;
             self.client.apiEndpoint = defaultApiEndpoint ? defaultApiEndpoint : @"https://in.treasuredata.com";
@@ -137,20 +75,6 @@ static NSString *os_type = @"iOS";
     return self;
 }
 
-
-- (NSString *) md5:(NSString *) input
-{
-    const char *cStr = [input UTF8String];
-    unsigned char digest[16];
-    CC_MD5(cStr, (CC_LONG)strlen(cStr), digest);
-    
-    NSMutableString *output = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
-    
-    for(int i = 0; i < CC_MD5_DIGEST_LENGTH; i++)
-        [output appendFormat:@"%02x", digest[i]];
-    
-    return output;
-}
 
 - (void)event:(NSDictionary *)record table:(NSString *)table {
     [self addEvent:record table:table];
@@ -255,6 +179,7 @@ static NSString *os_type = @"iOS";
 
 - (void)uploadEventsWithCallback:(void (^)())onSuccess onError:(void (^)(NSString*, NSString*))onError {
     if (self.client) {
+        self.client.enableEventCompression = isEventCompressionEnabled;
         [self.client uploadWithCallbacks:onSuccess onError:onError];
     }
     else {

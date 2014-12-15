@@ -7,8 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TDClient.h"
 
 @interface TreasureData : NSObject
+
+@property(nonatomic, strong) TDClient *client;
 
 @property(nonatomic, strong) NSString *defaultDatabase;
 

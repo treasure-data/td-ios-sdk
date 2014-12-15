@@ -7,9 +7,32 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "TreasureData.h"
+#import "TDClient.h"
 
 @interface TreasureDataTests : XCTestCase
 
+@end
+
+
+@interface MyTDClient : TDClient
+@property NSURLRequest *requestData;
+@property NSData *expectedResponseBody;
+@property NSURLResponse *expectedResponse;
+@end
+
+@implementation MyTDClient
+- (NSData*) sendHTTPRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error {
+    self.requestData = request;
+    *response = self.expectedResponse;
+    return self.expectedResponseBody;
+}
+@end
+
+@interface MyTreasureData : TreasureData
+@end
+
+@implementation MyTreasureData
 @end
 
 @implementation TreasureDataTests
@@ -26,9 +49,12 @@
     [super tearDown];
 }
 
-- (void)testExample
-{
-    XCTFail(@"No implementation for \"%s\"", __PRETTY_FUNCTION__);
+- (void)testSingleEvent {
+    MyTreasureData *td = [[MyTreasureData alloc] initWithApiKey:@"dummy_apikey"];
+    [td addEvent:@{@"name":@"foobar"} database:@"db_" table:@"tbl"];
+    [td uploadEvents];
+    NSLog(@"%@", td.client.apiKey);
 }
+
 
 @end
