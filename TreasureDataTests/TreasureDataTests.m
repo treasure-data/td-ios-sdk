@@ -132,6 +132,7 @@ static NSString *END_POINT = @"http://localhost";
                        expectedKeys:(NSArray*)expectedKeys {
     NSMutableArray* extacted = [[NSMutableArray alloc] init];
     for (NSDictionary* x in xs) {
+        NSLog(@"%@", x);
         XCTAssertEqualObjects(
               [[x allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)],
               [expectedKeys sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)]
@@ -221,6 +222,38 @@ static NSString *END_POINT = @"http://localhost";
             assertion:^(NSString *ecode){
                 XCTAssertEqualObjects(@"server_response", ecode);
                 XCTAssertEqual(3, self.client.sendRequestCount);
+            }];
+}
+
+- (void)testAutoAppendUuid {
+    [self baseTesting:^() {
+        [self.td enableAutoAppendUniqId];
+        [self setupDefaultExpectedResponseBody: @{@"db_.tbl":@[@{@"success":@"true"}]}];
+        [self.td addEvent:@{@"name":@"foobar"} database:@"db_" table:@"tbl"];
+    }
+            assertion:^(NSDictionary *ev){
+                XCTAssertEqual(1, self.client.sendRequestCount);
+                XCTAssertEqual(1, ev.count);
+                NSArray *arr = [ev objectForKey:@"db_.tbl"];
+                [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"foobar"]
+                                     expectedKeys:@[@"name", @"keen", @"#UUID", @"td_uuid"]
+                 ];
+            }];
+}
+
+- (void)testAutoAppendModelInformation {
+    [self baseTesting:^() {
+        [self.td enableAutoAppendModelInformation];
+        [self setupDefaultExpectedResponseBody: @{@"db_.tbl":@[@{@"success":@"true"}]}];
+        [self.td addEvent:@{@"name":@"foobar"} database:@"db_" table:@"tbl"];
+    }
+            assertion:^(NSDictionary *ev){
+                XCTAssertEqual(1, self.client.sendRequestCount);
+                XCTAssertEqual(1, ev.count);
+                NSArray *arr = [ev objectForKey:@"db_.tbl"];
+                [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"foobar"]
+                                     expectedKeys:@[@"name", @"keen", @"#UUID", @"td_device", @"td_model", @"td_os_ver", @"td_os_type"]
+                 ];
             }];
 }
 
