@@ -48,11 +48,15 @@ static NSString *END_POINT = @"http://localhost";
 
 - (void)setUp
 {
+    [self initializeTD];
+    [super setUp];
+}
+
+- (void)initializeTD {
     self.td = [[MyTreasureData alloc] initWithApiKey:@"dummy_apikey"];
     self.client = (MyTDClient*)self.td.client;
     [[MyTDClient getEventStore] deleteAllEvents];
     [MyTreasureData disableEventCompression];
-    [super setUp];
 }
 
 - (void)tearDown
@@ -76,13 +80,16 @@ static NSString *END_POINT = @"http://localhost";
 
 - (void)assertRequest:(void(^)(NSDictionary*))assertion {
     NSString *url = [self.client.requestData.URL absoluteString];
-    XCTAssertTrue([@"http://localhost/ios/v3/event" isEqualToString:url]);
+    XCTAssertEqualObjects(@"http://localhost/ios/v3/event", url);
     NSError *error = [NSError alloc];
     NSDictionary *ev = [NSJSONSerialization JSONObjectWithData:self.client.requestData.HTTPBody options:0 error:&error];
     assertion(ev);
 }
 
 - (void)baseTesting:(void(^)())setup assertion:(void(^)(NSDictionary*))assert {
+    NSString *url = self.client.apiEndpoint;
+    XCTAssertEqualObjects(@"http://localhost", url);
+    
     [self setupDefaultExpectedResponse];
 
     setup();
@@ -97,6 +104,17 @@ static NSString *END_POINT = @"http://localhost";
       }];
 }
 
+- (void)assertCollectedValueWithKey:(NSArray*)xs key:(NSString*)key expectedVals:(NSArray*)expectedVals {
+    NSMutableArray* extacted = [[NSMutableArray alloc] init];
+    for (NSDictionary* x in xs) {
+        [extacted addObject:[x objectForKey:key]];
+    }
+    XCTAssertEqualObjects(
+                          [expectedVals sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)],
+                          [extacted sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)]
+    );
+}
+
 - (void)testSingleEvent {
     [self baseTesting:^() {
         [self setupDefaultExpectedResponseBody: @{@"db_.tbl":@[@{@"success":@"true"}]}];
@@ -105,9 +123,7 @@ static NSString *END_POINT = @"http://localhost";
         assertion:^(NSDictionary *ev){
             XCTAssertEqual(1, ev.count);
             NSArray *arr = [ev objectForKey:@"db_.tbl"];
-            XCTAssertEqual(1, arr.count);
-            NSDictionary *dict = [arr objectAtIndex:0];
-            XCTAssertTrue([[dict objectForKey:@"name"] isEqualToString:@"foobar"]);
+            [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"foobar"]];
         }];
 }
 
@@ -120,9 +136,7 @@ static NSString *END_POINT = @"http://localhost";
             assertion:^(NSDictionary *ev){
                 XCTAssertEqual(1, ev.count);
                 NSArray *arr = [ev objectForKey:@"db_.tbl"];
-                XCTAssertEqual(1, arr.count);
-                NSDictionary *dict = [arr objectAtIndex:0];
-                XCTAssertTrue([[dict objectForKey:@"name"] isEqualToString:@"foobar"]);
+                [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"foobar"]];
             }];
 }
 
@@ -140,19 +154,19 @@ static NSString *END_POINT = @"http://localhost";
     }
             assertion:^(NSDictionary *ev){
                 XCTAssertEqual(2, ev.count);
-                
                 NSArray *arr = [ev objectForKey:@"db0.tbl0"];
-                XCTAssertEqual(2, arr.count);
-                NSDictionary *dict = [arr objectAtIndex:0];
-                XCTAssertTrue([[dict objectForKey:@"name"] isEqualToString:@"one"]);
-                dict = [arr objectAtIndex:1];
-                XCTAssertTrue([[dict objectForKey:@"name"] isEqualToString:@"three"]);
-                
+                [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"one", @"three"]];
                 arr = [ev objectForKey:@"db1.tbl1"];
-                XCTAssertEqual(1, arr.count);
-                dict = [arr objectAtIndex:0];
-                XCTAssertTrue([[dict objectForKey:@"name"] isEqualToString:@"two"]);
+                [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"two"]];
             }];
+}
+
+- (void)testSetDefaultApiEndpoint {
+    [TreasureData initializeApiEndpoint:@"https://another.apiendpoint.xyz"];
+    [TreasureData initializeWithApiKey:@"hello_apikey"];
+    NSString *url = [TreasureData sharedInstance].client.apiEndpoint;
+    XCTAssertTrue([url isEqualToString:@"https://another.apiendpoint.xyz"]);
+    self.isFinished = true;
 }
 
 @end
