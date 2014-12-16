@@ -16,21 +16,21 @@ static bool isEventCompressionEnabled = true;
 static TreasureData *sharedInstance = nil;
 static NSString *tableNamePattern = @"[^0-9a-z_]";
 static NSString *defaultApiEndpoint = nil;
-static NSString *storage_key_of_uuid = @"td_sdk_uuid";
-static NSString *storage_key_of_first_run = @"td_sdk_first_run";
-static NSString *key_of_uuid = @"td_uuid";
-static NSString *key_of_board = @"td_board";
-static NSString *key_of_brand = @"td_brand";
-static NSString *key_of_device = @"td_device";
-static NSString *key_of_display = @"td_display";
-static NSString *key_of_model = @"td_model";
-static NSString *key_of_os_ver = @"td_os_ver";
-static NSString *key_of_os_type = @"td_os_type";
-static NSString *key_of_session_id = @"td_session_id";
-static NSString *key_of_session_event = @"td_session_event";
-static NSString *os_type = @"iOS";
-static NSString *session_event_start = @"start";
-static NSString *session_event_end = @"end";
+static NSString *storageKeyOfUuid = @"td_sdk_uuid";
+static NSString *storageKeyOfFirstRun = @"td_sdk_first_run";
+static NSString *keyOfUuid = @"td_uuid";
+static NSString *keyOfBoard = @"td_board";
+static NSString *keyOfBrand = @"td_brand";
+static NSString *keyOfDevice = @"td_device";
+static NSString *keyOfDisplay = @"td_display";
+static NSString *keyOfModel = @"td_model";
+static NSString *keyOfOsVer = @"td_os_ver";
+static NSString *keyOfOsType = @"td_os_type";
+static NSString *keyOfSessionId = @"td_session_id";
+static NSString *keyOfSessionEvent = @"td_session_event";
+static NSString *osType = @"iOS";
+static NSString *sessionEventStart = @"start";
+static NSString *sessionEventEnd = @"end";
 
 @interface TreasureData ()
 @property BOOL autoAppendUniqId;
@@ -133,13 +133,13 @@ static NSString *session_event_end = @"end";
 
 - (NSString*)getUUID {
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-    NSString *uuid = [ud stringForKey:storage_key_of_uuid];
+    NSString *uuid = [ud stringForKey:storageKeyOfUuid];
     if (!uuid) {
         if (!NSClassFromString(@"NSUUID")) {
             uuid = @"";
         }
         uuid = [[NSUUID UUID] UUIDString];
-        [ud setObject:uuid forKey:storage_key_of_uuid];
+        [ud setObject:uuid forKey:storageKeyOfUuid];
         [ud synchronize];
     }
     return uuid;
@@ -147,7 +147,7 @@ static NSString *session_event_end = @"end";
 
 - (NSDictionary*)appendUniqId:(NSDictionary *)origRecord {
     NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
-    [record setValue:[self getUUID] forKey:key_of_uuid];
+    [record setValue:[self getUUID] forKey:keyOfUuid];
     return record;
 }
 
@@ -156,17 +156,17 @@ static NSString *session_event_end = @"end";
     UIDevice *dev = [UIDevice currentDevice];
     // [record setValue:@"" forKey:key_of_board];
     // [record setValue:@"" forKey:key_of_brand];
-    [record setValue:dev.name forKey:key_of_device];
+    [record setValue:dev.name forKey:keyOfDevice];
     // [record setValue:@"" forKey:key_of_display];
-    [record setValue:dev.model forKey:key_of_model];
-    [record setValue:dev.systemVersion forKey:key_of_os_ver];
-    [record setValue:os_type forKey:key_of_os_type];
+    [record setValue:dev.model forKey:keyOfModel];
+    [record setValue:dev.systemVersion forKey:keyOfOsVer];
+    [record setValue:osType forKey:keyOfOsType];
     return record;
 }
 
 - (NSDictionary*)appendSessionId:(NSDictionary *)origRecord {
     NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
-    [record setValue:self.sessionId forKey:key_of_session_id];
+    [record setValue:self.sessionId forKey:keyOfSessionId];
     return record;
 }
 
@@ -229,17 +229,17 @@ static NSString *session_event_end = @"end";
 }
 
 - (BOOL)isFirstRun {
-    NSInteger state = [[NSUserDefaults standardUserDefaults] integerForKey:storage_key_of_first_run];
+    NSInteger state = [[NSUserDefaults standardUserDefaults] integerForKey:storageKeyOfFirstRun];
     return state == 0;
 }
 
 - (void)clearFitstRun {
-    [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:storage_key_of_first_run];
+    [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:storageKeyOfFirstRun];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (void)initializeFitstRun {
-    [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:storage_key_of_first_run];
+    [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:storageKeyOfFirstRun];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
@@ -249,7 +249,7 @@ static NSString *session_event_end = @"end";
 
 - (void)startSession:(NSString*)table database:(NSString*)database {
     self.sessionId = [[NSUUID UUID] UUIDString];
-    [self addEvent:@{key_of_session_event: session_event_start} database:database table:table];
+    [self addEvent:@{keyOfSessionEvent: sessionEventStart} database:database table:table];
 }
 
 - (void)endSession:(NSString*)table {
@@ -257,7 +257,7 @@ static NSString *session_event_end = @"end";
 }
 
 - (void)endSession:(NSString*)table database:(NSString*)database {
-    [self addEvent:@{key_of_session_event: session_event_end} database:database table:table];
+    [self addEvent:@{keyOfSessionEvent: sessionEventEnd} database:database table:table];
     self.sessionId = nil;
 }
 
@@ -307,3 +307,4 @@ static NSString *session_event_end = @"end";
 }
 
 @end
+
