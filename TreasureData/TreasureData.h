@@ -65,6 +65,14 @@
 
 - (void)initializeFitstRun;     // Only for test
 
+- (void)startSession:(NSString*)table;
+
+- (void)startSession:(NSString*)table database:(NSString*)database;
+
+- (void)endSession:(NSString*)table;
+
+- (void)endSession:(NSString*)table database:(NSString*)database;
+
 + (void)disableEventCompression;
 
 + (void)enableEventCompression;

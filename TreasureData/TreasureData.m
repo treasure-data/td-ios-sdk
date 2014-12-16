@@ -26,12 +26,16 @@ static NSString *key_of_display = @"td_display";
 static NSString *key_of_model = @"td_model";
 static NSString *key_of_os_ver = @"td_os_ver";
 static NSString *key_of_os_type = @"td_os_type";
+static NSString *key_of_session_id = @"td_session_id";
+static NSString *key_of_session_event = @"td_session_event";
 static NSString *os_type = @"iOS";
-
+static NSString *session_event_start = @"start";
+static NSString *session_event_end = @"end";
 
 @interface TreasureData ()
 @property BOOL autoAppendUniqId;
 @property BOOL autoAppendModelInformation;
+@property NSString *sessionId;
 @end
 
 @implementation TreasureData
@@ -102,6 +106,10 @@ static NSString *os_type = @"iOS";
                 if (self.autoAppendModelInformation) {
                     record = [self appendModelInformation:record];
                 }
+                if (self.sessionId) {
+                    record = [self appendSessionId:record];
+                }
+
                 NSString *tag = [NSString stringWithFormat:@"%@.%@", database, table];
                 [self.client addEventWithCallbacks:record toEventCollection:tag onSuccess:onSuccess onError:onError];
             }
@@ -153,6 +161,12 @@ static NSString *os_type = @"iOS";
     [record setValue:dev.model forKey:key_of_model];
     [record setValue:dev.systemVersion forKey:key_of_os_ver];
     [record setValue:os_type forKey:key_of_os_type];
+    return record;
+}
+
+- (NSDictionary*)appendSessionId:(NSDictionary *)origRecord {
+    NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
+    [record setValue:self.sessionId forKey:key_of_session_id];
     return record;
 }
 
@@ -227,6 +241,24 @@ static NSString *os_type = @"iOS";
 - (void)initializeFitstRun {
     [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:storage_key_of_first_run];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)startSession:(NSString*)table {
+    [self startSession:table database:self.defaultDatabase];
+}
+
+- (void)startSession:(NSString*)table database:(NSString*)database {
+    self.sessionId = [[NSUUID UUID] UUIDString];
+    [self addEvent:@{key_of_session_event: session_event_start} database:database table:table];
+}
+
+- (void)endSession:(NSString*)table {
+    [self endSession:table database:self.defaultDatabase];
+}
+
+- (void)endSession:(NSString*)table database:(NSString*)database {
+    [self addEvent:@{key_of_session_event: session_event_end} database:database table:table];
+    self.sessionId = nil;
 }
 
 + (void)initializeWithApiKey:(NSString *)apiKey {

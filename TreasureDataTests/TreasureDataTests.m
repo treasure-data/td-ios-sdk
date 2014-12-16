@@ -227,18 +227,29 @@ static NSString *END_POINT = @"http://localhost";
 
 - (void)testAutoAppendUuid {
     [self baseTesting:^() {
+        MyTreasureData *anotherTd = [[MyTreasureData alloc] initWithApiKey:@"dummy_apikey"];
         [self.td enableAutoAppendUniqId];
-        [self setupDefaultExpectedResponseBody: @{@"db_.tbl":@[@{@"success":@"true"}]}];
-        [self.td addEvent:@{@"name":@"foobar"} database:@"db_" table:@"tbl"];
+        [self setupDefaultExpectedResponseBody:
+                @{@"db0.tbl0":@[@{@"success":@"true"}],
+                  @"db1.tbl1":@[@{@"success":@"true"}]}];
+
+         [self.td addEvent:@{@"name":@"foobar"} database:@"db0" table:@"tbl0"];
+        [anotherTd addEvent:@{@"name":@"helloworld"} database:@"db1" table:@"tbl1"];
     }
             assertion:^(NSDictionary *ev){
                 XCTAssertEqual(1, self.client.sendRequestCount);
-                XCTAssertEqual(1, ev.count);
-                NSArray *arr = [ev objectForKey:@"db_.tbl"];
+                XCTAssertEqual(2, ev.count);
+                
+                NSArray *arr = [ev objectForKey:@"db0.tbl0"];
                 [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"foobar"]
                                      expectedKeys:@[@"name", @"keen", @"#UUID", @"td_uuid"]
                  ];
-            }];
+
+                arr = [ev objectForKey:@"db1.tbl1"];
+                [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"helloworld"]
+                                     expectedKeys:@[@"name", @"keen", @"#UUID"]
+                 ];
+}];
 }
 
 - (void)testAutoAppendModelInformation {
@@ -263,6 +274,72 @@ static NSString *END_POINT = @"http://localhost";
     XCTAssertFalse([self.td isFirstRun]);
 
     self.isFinished = true;
+}
+
+- (void)testSessionId {
+    [self baseTesting:^() {
+        [self.td setDefaultDatabase:@"db_"];
+        [self setupDefaultExpectedResponseBody: @{@"db_.tbl":@[@{@"success":@"true"}, @{@"success":@"true"}, @{@"success":@"true"}, @{@"success":@"true"}]}];
+        [self.td startSession:@"tbl"];
+        [self.td addEvent:@{@"counter":@"one"} database:@"db_" table:@"tbl"];
+        [self.td endSession:@"tbl" database:@"db_"];
+        [self.td addEvent:@{@"counter":@"two"} database:@"db_" table:@"tbl"];
+    }
+            assertion:^(NSDictionary *ev){
+                XCTAssertEqual(1, self.client.sendRequestCount);
+                XCTAssertEqual(1, ev.count);
+                NSArray *arr = [ev objectForKey:@"db_.tbl"];
+                XCTAssertEqual(4, arr.count);
+                NSString *uuidStartSession;
+                NSString *uuidAddEvent;
+                NSString *uuidEndSession;
+
+                bool gotStartSession = false;
+                bool gotAddEvent0 = false;
+                bool gotEndSession = false;
+                bool gotAddEvent1 = false;
+                for (NSDictionary *x in arr) {
+                    NSLog(@"%@", x);
+                    if ([[x objectForKey:@"td_session_event"] isEqualToString:@"start"]) {
+                        gotStartSession = true;
+                        uuidStartSession = [x objectForKey:@"td_session_id"];
+                        XCTAssertEqualObjects(
+                              [[x allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)],
+                              [(@[@"#UUID", @"keen", @"td_session_id", @"td_session_event"]) sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)]
+                          );
+                    }
+                    else if ([[x objectForKey:@"td_session_event"] isEqualToString:@"end"]) {
+                        gotEndSession = true;
+                        uuidEndSession = [x objectForKey:@"td_session_id"];
+                        XCTAssertEqualObjects(
+                                              [[x allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)],
+                                              [(@[@"#UUID", @"keen", @"td_session_id", @"td_session_event"]) sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)]
+                                              );
+                    }
+                    else if ([[x objectForKey:@"counter"] isEqualToString:@"one"]) {
+                        gotAddEvent0 = true;
+                        uuidAddEvent = [x objectForKey:@"td_session_id"];
+                        XCTAssertEqualObjects(
+                                              [[x allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)],
+                                              [(@[@"#UUID", @"keen", @"td_session_id", @"counter"]) sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)]
+                                              );
+                    }
+                    else if ([[x objectForKey:@"counter"] isEqualToString:@"two"]) {
+                        gotAddEvent1 = true;
+                        XCTAssertEqualObjects(
+                                              [[x allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)],
+                                              [(@[@"#UUID", @"keen", @"counter"]) sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)]
+                                              );
+                    }
+                }
+                XCTAssertTrue(gotStartSession);
+                XCTAssertTrue(gotEndSession);
+                XCTAssertTrue(gotAddEvent0);
+                XCTAssertTrue(gotAddEvent1);
+                XCTAssertNotNil(uuidStartSession);
+                XCTAssertEqualObjects(uuidStartSession, uuidEndSession);
+                XCTAssertEqualObjects(uuidStartSession, uuidAddEvent);
+            }];
 }
 
 @end
