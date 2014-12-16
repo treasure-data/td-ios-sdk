@@ -224,6 +224,11 @@ static NSString *os_type = @"iOS";
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
+- (void)initializeFitstRun {
+    [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:storage_key_of_first_run];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 + (void)initializeWithApiKey:(NSString *)apiKey {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{

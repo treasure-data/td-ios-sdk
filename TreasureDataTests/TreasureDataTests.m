@@ -16,10 +16,12 @@ static NSString *END_POINT = @"http://localhost";
 @property NSURLRequest *requestData;
 @property NSData *expectedResponseBody;
 @property NSURLResponse *expectedResponse;
+@property int sendRequestCount;
 @end
 
 @implementation MyTDClient
 - (NSData*) sendHTTPRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error {
+    self.sendRequestCount++;
     self.requestData = request;
     *response = self.expectedResponse;
     return self.expectedResponseBody;
@@ -54,6 +56,7 @@ static NSString *END_POINT = @"http://localhost";
 
 - (void)initializeTD {
     self.td = [[MyTreasureData alloc] initWithApiKey:@"dummy_apikey"];
+    [self.td initializeFitstRun];
     self.client = (MyTDClient*)self.td.client;
     [[MyTDClient getEventStore] deleteAllEvents];
     [MyTreasureData disableEventCompression];
@@ -62,14 +65,18 @@ static NSString *END_POINT = @"http://localhost";
 - (void)tearDown
 {
     do {
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0]];
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.2]];
     } while (!self.isFinished);
     [super tearDown];
 }
 
-- (void)setupDefaultExpectedResponse {
-    NSHTTPURLResponse *expectedResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:@"1.1" headerFields:nil];
+- (void)setupDefaultExpectedResponse:(NSInteger)statusCode {
+    NSHTTPURLResponse *expectedResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:statusCode HTTPVersion:@"1.1" headerFields:nil];
     self.client.expectedResponse = expectedResponse;
+}
+
+- (void)setupDefaultExpectedResponse {
+    [self setupDefaultExpectedResponse:200];
 }
 
 - (void)setupDefaultExpectedResponseBody:(NSDictionary*)dict {
@@ -86,7 +93,7 @@ static NSString *END_POINT = @"http://localhost";
     assertion(ev);
 }
 
-- (void)baseTesting:(void(^)())setup assertion:(void(^)(NSDictionary*))assert {
+- (void)baseTesting:(void(^)())setup onSuccess:(void(^)(void))onSuccess onError:(void(^)(NSString*, NSString*))onError {
     NSString *url = self.client.apiEndpoint;
     XCTAssertEqualObjects(@"http://localhost", url);
     
@@ -94,19 +101,41 @@ static NSString *END_POINT = @"http://localhost";
 
     setup();
     
-    [self.td uploadEventsWithCallback:^(){
+    [self.td uploadEventsWithCallback:onSuccess onError:onError];
+}
+
+- (void)baseTesting:(void(^)())setup assertion:(void(^)(NSDictionary*))assert {
+    [self baseTesting:setup onSuccess:^(){
         [self assertRequest:assert];
         self.isFinished = true;
     }
-      onError:^(NSString* ecode, NSString* detail){
-          XCTAssertTrue(false);
-          self.isFinished = true;
-      }];
+                              onError:^(NSString* ecode, NSString* detail){
+                                  XCTAssertTrue(false);
+                                  self.isFinished = true;
+                              }];
 }
 
-- (void)assertCollectedValueWithKey:(NSArray*)xs key:(NSString*)key expectedVals:(NSArray*)expectedVals {
+- (void)baseTestingError:(void(^)())setup assertion:(void(^)(NSString*))assertion {
+    [self baseTesting:setup onSuccess:^(){
+        XCTAssertTrue(false);
+        self.isFinished = true;
+    }
+              onError:^(NSString* ecode, NSString* detail){
+                  assertion(ecode);
+                  self.isFinished = true;
+              }];
+}
+
+- (void)assertCollectedValueWithKey:(NSArray*)xs
+                                key:(NSString*)key
+                       expectedVals:(NSArray*)expectedVals
+                       expectedKeys:(NSArray*)expectedKeys {
     NSMutableArray* extacted = [[NSMutableArray alloc] init];
     for (NSDictionary* x in xs) {
+        XCTAssertEqualObjects(
+              [[x allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)],
+              [expectedKeys sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)]
+        );
         [extacted addObject:[x objectForKey:key]];
     }
     XCTAssertEqualObjects(
@@ -121,9 +150,12 @@ static NSString *END_POINT = @"http://localhost";
         [self.td addEvent:@{@"name":@"foobar"} database:@"db_" table:@"tbl"];
     }
         assertion:^(NSDictionary *ev){
+            XCTAssertEqual(1, self.client.sendRequestCount);
             XCTAssertEqual(1, ev.count);
             NSArray *arr = [ev objectForKey:@"db_.tbl"];
-            [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"foobar"]];
+            [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"foobar"]
+                expectedKeys:@[@"name", @"keen", @"#UUID"]
+             ];
         }];
 }
 
@@ -136,7 +168,9 @@ static NSString *END_POINT = @"http://localhost";
             assertion:^(NSDictionary *ev){
                 XCTAssertEqual(1, ev.count);
                 NSArray *arr = [ev objectForKey:@"db_.tbl"];
-                [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"foobar"]];
+                [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"foobar"]
+                     expectedKeys:@[@"name", @"keen", @"#UUID"]
+                 ];
             }];
 }
 
@@ -155,9 +189,13 @@ static NSString *END_POINT = @"http://localhost";
             assertion:^(NSDictionary *ev){
                 XCTAssertEqual(2, ev.count);
                 NSArray *arr = [ev objectForKey:@"db0.tbl0"];
-                [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"one", @"three"]];
+                [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"one", @"three"]
+                     expectedKeys:@[@"name", @"keen", @"#UUID"]
+                 ];
                 arr = [ev objectForKey:@"db1.tbl1"];
-                [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"two"]];
+                [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"two"]
+                     expectedKeys:@[@"name", @"keen", @"#UUID"]
+                 ];
             }];
 }
 
@@ -166,6 +204,31 @@ static NSString *END_POINT = @"http://localhost";
     [TreasureData initializeWithApiKey:@"hello_apikey"];
     NSString *url = [TreasureData sharedInstance].client.apiEndpoint;
     XCTAssertTrue([url isEqualToString:@"https://another.apiendpoint.xyz"]);
+    self.isFinished = true;
+}
+
+- (void)testDisableUploading {
+    [self baseTestingError:^() {
+        self.client.enableRetryUploading = false;
+        
+        self.client.uploadRetryCount = 3;
+        [self.td enableRetryUploading];
+
+        self.client.expectedResponseBody = nil;
+
+        [self.td addEvent:@{@"name":@"foobar"} database:@"db_" table:@"tbl"];
+    }
+            assertion:^(NSString *ecode){
+                XCTAssertEqualObjects(@"server_response", ecode);
+                XCTAssertEqual(3, self.client.sendRequestCount);
+            }];
+}
+
+- (void)testIsFirstRun {
+    XCTAssertTrue([self.td isFirstRun]);
+    [self.td clearFitstRun];
+    XCTAssertFalse([self.td isFirstRun]);
+
     self.isFinished = true;
 }
 

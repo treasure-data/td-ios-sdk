@@ -63,6 +63,8 @@
 
 - (void)clearFitstRun;
 
+- (void)initializeFitstRun;     // Only for test
+
 + (void)disableEventCompression;
 
 + (void)enableEventCompression;
