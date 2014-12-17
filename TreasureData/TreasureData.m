@@ -117,13 +117,17 @@ static NSString *sessionEventEnd = @"end";
         else {
             NSString *errMsg = [NSString stringWithFormat:@"database or table is nil: database=%@, table=%@", database, table];
             KCLog(@"%@", errMsg);
-            onError(ERROR_CODE_INVALID_PARAM, errMsg);
+            if (onError) {
+                onError(ERROR_CODE_INVALID_PARAM, errMsg);
+            }
         }
     }
     else {
         NSString *errMsg = @"Client is nil";
         KCLog(@"%@", errMsg);
-        onError(ERROR_CODE_INIT_ERROR, errMsg);
+        if (onError) {
+            onError(ERROR_CODE_INIT_ERROR, errMsg);
+        }
     }
 }
 
