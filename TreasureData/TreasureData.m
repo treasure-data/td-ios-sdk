@@ -160,7 +160,7 @@ static NSString *sessionEventEnd = @"end";
     UIDevice *dev = [UIDevice currentDevice];
     // [record setValue:@"" forKey:key_of_board];
     // [record setValue:@"" forKey:key_of_brand];
-    [record setValue:dev.name forKey:keyOfDevice];
+    [record setValue:dev.model forKey:keyOfDevice];
     // [record setValue:@"" forKey:key_of_display];
     [record setValue:dev.model forKey:keyOfModel];
     [record setValue:dev.systemVersion forKey:keyOfOsVer];
