@@ -18,7 +18,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [[TreasureData sharedInstance] setDefaultDatabase:@"foo_db"];
 }
 
 - (void)didReceiveMemoryWarning
@@ -33,7 +32,7 @@
                               @"name": @"komamitsu",
                               @"age": @99
                               }
-                      table:@"bar_tbl"
+                      table:@"demotbl"
                   onSuccess:^(){
                       NSLog(@"addEvent: success");
                   }

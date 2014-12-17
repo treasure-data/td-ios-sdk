@@ -17,14 +17,16 @@
     // [TreasureData initializeApiEndpoint:@"https://mobile-ybi.jp-east.idcfcloud.com"];
     [TreasureData initializeEncryptionKey:@"hello world"];
     [TreasureData initializeWithApiKey:@"your_api_key"];
+    [[TreasureData sharedInstance] setDefaultDatabase:@"testdb"];
     [[TreasureData sharedInstance] enableAutoAppendUniqId];
     [[TreasureData sharedInstance] enableAutoAppendModelInformation];
     // [[TreasureData sharedInstance] disableRetryUploading];
+    [[TreasureData sharedInstance] startSession:@"demotbl"];
     
     if ([[TreasureData sharedInstance] isFirstRun]) {
         [[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"installed" }
-                                                   database:@"database_a"
-                                                      table:@"table_b"
+                                                   database:@"testdb"
+                                                      table:@"demotbl"
                                                   onSuccess:^(){
                                                       [[TreasureData sharedInstance] uploadEventsWithCallback:^() {
                                                           [[TreasureData sharedInstance] clearFitstRun];
@@ -49,8 +51,15 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    [[TreasureData sharedInstance] endSession:@"demotbl"];
+    UIBackgroundTaskIdentifier bgTask = [application beginBackgroundTaskWithExpirationHandler:^{}];
+    [[TreasureData sharedInstance] uploadEventsWithCallback:^() {
+        [application endBackgroundTask:bgTask];
+    }
+                                                    onError:^(NSString *code, NSString *msg) {
+                                                        [application endBackgroundTask:bgTask];
+                                                    }
+     ];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
