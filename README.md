@@ -84,12 +84,14 @@ Specify the database and table to which you want to import the events.
 
 ```
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    [[TreasureData sharedInstance] uploadEventsWithCallback:^(){
-                                       NSLog(@"uploadEvents: success");
-                                   }
-                                   onError:^(NSString* errorCode, NSString* message) {
-                                       NSLog(@"uploadEvents: error. errorCode=%@, message=%@", errorCode, message);
-                                   }];
+    UIBackgroundTaskIdentifier bgTask = [application beginBackgroundTaskWithExpirationHandler:^{}];
+    [[TreasureData sharedInstance] uploadEventsWithCallback:^() {
+        [application endBackgroundTask:bgTask];
+    }
+            onError:^(NSString *code, NSString *msg) {
+                [application endBackgroundTask:bgTask];
+            }
+     ];
 }
 ```
 Or, simply
@@ -156,16 +158,16 @@ You can collect the first run event of your application like this. Probably, thi
 
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"]) {
         [[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"installed" }
-						 database:@"database_a"
-						    table:@"table_b"
-						onSuccess:^(){
-						    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
-						    [[NSUserDefaults standardUserDefaults] synchronize];
-						    [[TreasureData sharedInstance] uploadEvents];
-						}
-						  onError:^(NSString* errorCode, NSString* message) {
-						      NSLog(@"addEvent: error. errorCode=%@, message=%@", errorCode, message);
-						  }];
+		 database:@"database_a"
+		    table:@"table_b"
+		onSuccess:^(){
+		    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
+		    [[NSUserDefaults standardUserDefaults] synchronize];
+		    [[TreasureData sharedInstance] uploadEvents];
+		}
+		  onError:^(NSString* errorCode, NSString* message) {
+		      NSLog(@"addEvent: error. errorCode=%@, message=%@", errorCode, message);
+		  }];
     }
     
     return YES;
