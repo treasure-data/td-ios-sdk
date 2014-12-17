@@ -11,16 +11,10 @@ iOS SDK for [TreasureData](http://www.treasuredata.com/). With this SDK, you can
 $ gem install cocoapods
 ```
 
-Then, add our Pods to use some components.
-
-```
-$ pod repo add td https://github.com/treasure-data/PodSpecs.git
-```
-
 Next, add this line in your Podfile.
 
 ```
-pod 'TreasureData-iOS-SDK', '= 0.1.5'
+pod 'TreasureData-iOS-SDK', '= 0.1.6'
 ```
 
 Finally, execute 'pod install'.
