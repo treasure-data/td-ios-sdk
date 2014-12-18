@@ -31,7 +31,7 @@ $ pod install
 #import "TreasureData.h"
 ```
 
-### Register Your TreasureData API Key
+### Register your TreasureData API key
 
 ```
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -46,41 +46,41 @@ We recommend to use a write-only API key for the SDK. To obtain one, please:
 3. Insert your password under the 'API Keys' panel;
 4. In the bottom part of the panel, under 'Write-Only API keys', either copy the API key or click on 'Generate New' and copy the new API key.
 
-### Add Events
+### Add events to local buffer
 
 ```
 - (IBAction)clickButton:(id)sender {
     [[TreasureData sharedInstance] addEventWithCallback:@{
-                                       @"name": @"boo bar",
-                                       @"age": @42,
-                                       @"comment": @"hello world"
-                                   }
-                                   database:@"database_a"
-                                      table:@"table_b"
-                                  onSuccess:^(){
-                                      NSLog(@"addEvent: success");
-                                  }
-                                    onError:^(NSString* errorCode, NSString* message) {
-                                        NSLog(@"addEvent: error. errorCode=%@, message=%@", errorCode, message);
-                                    }];
+                       @"name": @"boo bar",
+                       @"age": @42,
+                       @"comment": @"hello world"
+                   }
+                   database:@"testdb"
+                      table:@"demotbl"
+                  onSuccess:^(){
+                      NSLog(@"addEvent: success");
+                  }
+                    onError:^(NSString* errorCode, NSString* message) {
+                        NSLog(@"addEvent: error. errorCode=%@, message=%@", errorCode, message);
+                    }];
 }
 ```
-Or, simply
+Or, simply call `TreasureData#addEvent` instead of `TreasureData#addEventWithCallback`.
 
 ```
     [[TreasureData sharedInstance] addEvent:@{
-                                       @"name": @"boo bar",
-                                       @"age": @42,
-                                       @"comment": @"hello world"
-                                   }
-                                   database:@"database_a"
-                                      table:@"table_b"];
+                       @"name": @"boo bar",
+                       @"age": @42,
+                       @"comment": @"hello world"
+                   }
+                   database:@"testdb"
+                      table:@"demotbl"];
 ```
 
 
 Specify the database and table to which you want to import the events.
 
-### Upload Events to TreasureData
+### Upload buffered events to TreasureData
 
 ```
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -94,17 +94,79 @@ Specify the database and table to which you want to import the events.
      ];
 }
 ```
-Or, simply
+Or, simply call `TreasureData#uploadEvents` instead of `TreasureData#uploadEventsWithCallback`.
 
 ```
     [[TreasureData sharedInstance] uploadEvents];
 
 ```
 
+The sent events are going to be buffered for a few minutes before they get sent and imported into TreasureData storage.
 
-The events are going to be buffered for a few minutes before they get sent and imported into TreasureData storage.
 
-## About Error Code
+### Start/End session
+
+When you call `TreasureData#startSession()`, the SDK generates a session ID that's kept until `TreasureData#endSession()` is called. The session id is outputs as a column name "td_session_id". Also, `TreasureData#startSession()` and `TreasureData#endSession()` add an event that includes `{"td_session_event":"start" or "end"}`.
+
+```
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+	[TreasureData initializeWithApiKey:@"your_api_key"];
+	[[TreasureData sharedInstance] setDefaultDatabase:@"testdb"];
+	[[TreasureData sharedInstance] startSession:@"demotbl"];    
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{		      	
+	[[TreasureData sharedInstance] endSession:@"demotbl"];
+	
+	UIBackgroundTaskIdentifier bgTask = [application beginBackgroundTaskWithExpirationHandler:^{}];
+	[[TreasureData sharedInstance] uploadEventsWithCallback:^() {
+				[application endBackgroundTask:bgTask];
+			}
+			onError:^(NSString *code, NSString *msg) {
+			    [application endBackgroundTask:bgTask];
+			}
+			
+			// Outputs =>>
+			//   [{"td_session_id":"cad88260-67b4-0242-1329-2650772a66b1",
+			//		"td_session_event":"start", "time":1418880000},
+			//
+			//    {"td_session_id":"cad88260-67b4-0242-1329-2650772a66b1",
+			//		"td_session_event":"end", "time":1418880123}
+			//    ]
+	];
+```
+
+### Detect if it's the first running
+
+You can detect if it's the first running or not easily using `TreasureData#isFirstRun()` and then clear the flag with `TreasureData#clearFirstRun()`.
+
+```
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+		:
+    if ([[TreasureData sharedInstance] isFirstRun]) {
+        [[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"installed" }
+                               database:@"testdb"
+                                  table:@"demotbl"
+                              onSuccess:^(){
+                                  [[TreasureData sharedInstance] uploadEventsWithCallback:^() {
+                                      [[TreasureData sharedInstance] clearFitstRun];
+                                    }
+                                    onError:^(NSString* errorCode, NSString* message) {
+                                      NSLog(@"uploadEvents: error. errorCode=%@, message=%@", errorCode, message);
+                                    }
+                                   ];
+                                }
+                                onError:^(NSString* errorCode, NSString* message) {
+                                    NSLog(@"addEvent: error. errorCode=%@, message=%@", errorCode, message);
+                                }];
+    }
+```
+
+
+
+## About Error code
 
 `TreasureData#addEventWithCallback()` and `uploadEventsWithCallback()` call back `onError` block with `errorCode` argument. This argument is useful to know the cause type of the error. There are the following error codes.
 
@@ -145,47 +207,42 @@ If you've set an encryption key via `initializeEncryptionKey`, our SDK saves the
     [[TreasureData sharedInstance] addEventWithCallback: ....];
 ```
 
-## Use Cases
-
-### Collect The First Run Event (Installation Event)
-
-You can collect the first run event of your application like this. Probably, this event can be used as an installation event.
+### Default database
 
 ```
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    [TreasureData initializeWithApiKey:@"your_api_key"];
+    [[TreasureData sharedInstance] setDefaultDatabase:@"testdb"];
+		:
+	[[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"clicked" } table:@"demotbl"]
+```	
 
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"]) {
-        [[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"installed" }
-		 database:@"database_a"
-		    table:@"table_b"
-		onSuccess:^(){
-		    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
-		    [[NSUserDefaults standardUserDefaults] synchronize];
-		    [[TreasureData sharedInstance] uploadEvents];
-		}
-		  onError:^(NSString* errorCode, NSString* message) {
-		      NSLog(@"addEvent: error. errorCode=%@, message=%@", errorCode, message);
-		  }];
-    }
-    
-    return YES;
-}
-```
+### Adding UUID of the device to each event automatically
 
-### Upload events when the application finishes
+UUID of the device will be added to each event automatically if you call `TreasureData#enableAutoAppendUniqId()`. This value won't change until the application is uninstalled.
 
 ```
-- (void)applicationDidEnterBackground:(UIApplication *)application
-{
-    UIBackgroundTaskIdentifier bgTask = [application beginBackgroundTaskWithExpirationHandler:^{}];
-    [[TreasureData sharedInstance] uploadEventsWithCallback:^() {
-            [application endBackgroundTask:bgTask];
-        }
-        onError:^(NSString *code, NSString *msg) {
-            [application endBackgroundTask:bgTask];
-        }
-     ];
-}
+    [[TreasureData sharedInstance] enableAutoAppendUniqId];
+		:
+	[[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"dragged" }
+												database:@"testdb" table:@"demotbl"];
 ```
+
+It outputs the value as a column name `td_uuid`.
+
+
+### Adding the device model information to each event automatically
+
+Device model infromation will be added to each event automatically if you call `TreasureData#enableAutoAppendModelInformation()`.
+
+```
+    [[TreasureData sharedInstance] enableAutoAppendModelInformation];
+		:
+	[[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"dragged" }
+												database:@"testdb" table:@"demotbl"];
+```
+
+It outputs the following column names and values:
+
+- `td_device` : UIDevice.model
+- `td_model` : UIDevice.model
+- `td_os_ver` : UIDevice.model.systemVersion
+- `td_os_type` : "iOS"
