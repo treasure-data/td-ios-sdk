@@ -65,7 +65,7 @@ We recommend to use a write-only API key for the SDK. To obtain one, please:
                     }];
 }
 ```
-Or, simply call `TreasureData#addEvent` instead of `TreasureData#addEventWithCallback`.
+Or, simply call `addEvent` method instead of `addEventWithCallback`.
 
 ```
     [[TreasureData sharedInstance] addEvent:@{
@@ -94,7 +94,7 @@ Specify the database and table to which you want to import the events.
      ];
 }
 ```
-Or, simply call `TreasureData#uploadEvents` instead of `TreasureData#uploadEventsWithCallback`.
+Or, simply call `uploadEvents` method instead of `uploadEventsWithCallback`.
 
 ```
     [[TreasureData sharedInstance] uploadEvents];
@@ -106,7 +106,7 @@ The sent events are going to be buffered for a few minutes before they get sent 
 
 ### Start/End session
 
-When you call `TreasureData#startSession()`, the SDK generates a session ID that's kept until `TreasureData#endSession()` is called. The session id is outputs as a column name "td_session_id". Also, `TreasureData#startSession()` and `TreasureData#endSession()` add an event that includes `{"td_session_event":"start" or "end"}`.
+When you call `startSession` method,  the SDK generates a session ID that's kept until `endSession` is called. The session id is outputs as a column name "td_session_id". Also, `startSession` and `endSession` methods add an event that includes `{"td_session_event":"start" or "end"}`.
 
 ```
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -140,7 +140,7 @@ When you call `TreasureData#startSession()`, the SDK generates a session ID that
 
 ### Detect if it's the first running
 
-You can detect if it's the first running or not easily using `TreasureData#isFirstRun()` and then clear the flag with `TreasureData#clearFirstRun()`.
+You can detect if it's the first running or not easily using `isFirstRun` method and then clear the flag with `clearFirstRun`.
 
 ```
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -168,29 +168,22 @@ You can detect if it's the first running or not easily using `TreasureData#isFir
 
 ## About Error code
 
-`TreasureData#addEventWithCallback()` and `uploadEventsWithCallback()` call back `onError` block with `errorCode` argument. This argument is useful to know the cause type of the error. There are the following error codes.
+`addEventWithCallback` and `uploadEventsWithCallback` methods call back `onError` block with `errorCode` argument. This argument is useful to know the cause type of the error. There are the following error codes.
 
-- "init_error"
-  - The initialization failed.
-- "invalid_param"
-  - The parameter passed to the API was invalid
-- "invalid_event"
-  - The event was invalid
-- "data_conversion"
-  - Failed to convert the data to/from JSON
-- "storage_error"
-  - Failed to read/write data in the storage
-- "network_error"
-  - Failed to communicate with the server due to network problem 
-- "server_response"
-  - The server returned an error response
+- `init_error` :  The initialization failed.
+- `invalid_param` : The parameter passed to the API was invalid
+- `invalid_event` : The event was invalid
+- `data_conversion` : Failed to convert the data to/from JSON
+- `storage_error` : Failed to read/write data in the storage
+- `network_error` : Failed to communicate with the server due to network problem 
+- `server_response` : The server returned an error response
 
 
 ## Additional Configuration
 
 ### Endpoint
 
-The API endpoint (default: https://in.treasuredata.com) can be modified using the `setApiEndpoint` API after the client has been initialized using the `initializeWithApiKey` API. For example,
+The API endpoint (default: https://in.treasuredata.com) can be modified using `initializeApiEndpoint` class method. For example,
 
 ```
     [TreasureData initializeApiEndpoint:@"https://in.treasuredata.com"];
@@ -199,7 +192,7 @@ The API endpoint (default: https://in.treasuredata.com) can be modified using th
 
 ### Encryption key
 
-If you've set an encryption key via `initializeEncryptionKey`, our SDK saves the event data as encrypted when called `addEvent` or `addEventWithCallback`.  
+If you've set an encryption key via `initializeEncryptionKey` class method, our SDK saves the events data as encrypted when called `addEvent` or `addEventWithCallback` methods.
 
 ```
     [TreasureData initializeEncryptionKey:@"hello world"];
@@ -217,7 +210,7 @@ If you've set an encryption key via `initializeEncryptionKey`, our SDK saves the
 
 ### Adding UUID of the device to each event automatically
 
-UUID of the device will be added to each event automatically if you call `TreasureData#enableAutoAppendUniqId()`. This value won't change until the application is uninstalled.
+UUID of the device will be added to each event automatically if you call `enableAutoAppendUniqId`. This value won't change until the application is uninstalled.
 
 ```
     [[TreasureData sharedInstance] enableAutoAppendUniqId];
@@ -231,7 +224,7 @@ It outputs the value as a column name `td_uuid`.
 
 ### Adding the device model information to each event automatically
 
-Device model infromation will be added to each event automatically if you call `TreasureData#enableAutoAppendModelInformation()`.
+Device model infromation will be added to each event automatically if you call `enableAutoAppendModelInformation`.
 
 ```
     [[TreasureData sharedInstance] enableAutoAppendModelInformation];
