@@ -293,7 +293,7 @@ static NSString *END_POINT = @"http://localhost";
                 NSString *uuidStartSession;
                 NSString *uuidAddEvent;
                 NSString *uuidEndSession;
-
+                
                 bool gotStartSession = false;
                 bool gotAddEvent0 = false;
                 bool gotEndSession = false;
@@ -304,9 +304,9 @@ static NSString *END_POINT = @"http://localhost";
                         gotStartSession = true;
                         uuidStartSession = [x objectForKey:@"td_session_id"];
                         XCTAssertEqualObjects(
-                              [[x allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)],
-                              [(@[@"#UUID", @"keen", @"td_session_id", @"td_session_event"]) sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)]
-                          );
+                                              [[x allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)],
+                                              [(@[@"#UUID", @"keen", @"td_session_id", @"td_session_event"]) sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)]
+                                              );
                     }
                     else if ([[x objectForKey:@"td_session_event"] isEqualToString:@"end"]) {
                         gotEndSession = true;
@@ -339,6 +339,33 @@ static NSString *END_POINT = @"http://localhost";
                 XCTAssertNotNil(uuidStartSession);
                 XCTAssertEqualObjects(uuidStartSession, uuidEndSession);
                 XCTAssertEqualObjects(uuidStartSession, uuidAddEvent);
+            }];
+}
+
+- (void)testSessionIdShouldBeChanged {
+    [self baseTesting:^() {
+        [self.td setDefaultDatabase:@"db_"];
+        [self setupDefaultExpectedResponseBody: @{@"db_.tbl":@[@{@"success":@"true"}, @{@"success":@"true"}, @{@"success":@"true"}, @{@"success":@"true"}]}];
+        [self.td startSession:@"tbl"];
+        [self.td endSession:@"tbl" database:@"db_"];
+        [self.td startSession:@"tbl"];
+        [self.td endSession:@"tbl" database:@"db_"];
+    }
+            assertion:^(NSDictionary *ev){
+                XCTAssertEqual(1, self.client.sendRequestCount);
+                XCTAssertEqual(1, ev.count);
+                NSArray *arr = [ev objectForKey:@"db_.tbl"];
+                XCTAssertEqual(4, arr.count);
+                NSMutableSet *set = [[NSMutableSet alloc] init];
+                for (NSDictionary *x in arr) {
+                    NSLog(@"%@", x);
+                    NSString *sessionIdAndEvent =
+                    [NSString stringWithFormat:@"%@:%@",
+                     [x objectForKey:@"td_session_id"],
+                     [x objectForKey:@"td_session_event"]];
+                    [set addObject:sessionIdAndEvent];
+                }
+                XCTAssertEqual(4, set.count);
             }];
 }
 
