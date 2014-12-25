@@ -270,7 +270,7 @@ static NSString *END_POINT = @"http://localhost";
 
 - (void)testIsFirstRun {
     XCTAssertTrue([self.td isFirstRun]);
-    [self.td clearFitstRun];
+    [self.td clearFirstRun];
     XCTAssertFalse([self.td isFirstRun]);
 
     self.isFinished = true;

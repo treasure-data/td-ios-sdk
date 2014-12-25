@@ -237,7 +237,7 @@ static NSString *sessionEventEnd = @"end";
     return state == 0;
 }
 
-- (void)clearFitstRun {
+- (void)clearFirstRun {
     [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:storageKeyOfFirstRun];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }

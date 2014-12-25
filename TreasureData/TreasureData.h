@@ -61,7 +61,7 @@
 
 - (BOOL)isFirstRun;
 
-- (void)clearFitstRun;
+- (void)clearFirstRun;
 
 - (void)initializeFitstRun;     // Only for test
 

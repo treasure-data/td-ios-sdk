@@ -29,7 +29,7 @@
                                                       table:@"demotbl"
                                                   onSuccess:^(){
                                                       [[TreasureData sharedInstance] uploadEventsWithCallback:^() {
-                                                          [[TreasureData sharedInstance] clearFitstRun];
+                                                          [[TreasureData sharedInstance] clearFirstRun];
                                                         }
                                                         onError:^(NSString* errorCode, NSString* message) {
                                                           NSLog(@"uploadEvents: error. errorCode=%@, message=%@", errorCode, message);
