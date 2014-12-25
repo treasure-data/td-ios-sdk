@@ -84,14 +84,20 @@ Specify the database and table to which you want to import the events.
 
 ```
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    UIBackgroundTaskIdentifier bgTask = [application beginBackgroundTaskWithExpirationHandler:^{}];
-    [[TreasureData sharedInstance] uploadEventsWithCallback:^() {
-        [application endBackgroundTask:bgTask];
-    }
-            onError:^(NSString *code, NSString *msg) {
-                [application endBackgroundTask:bgTask];
-            }
-     ];
+	__block UIBackgroundTaskIdentifier bgTask = [application beginBackgroundTaskWithExpirationHandler:^{
+		[application endBackgroundTask:bgTask];
+		bgTask = UIBackgroundTaskInvalid;
+	}];
+	
+	[[TreasureData sharedInstance] uploadEventsWithCallback:^() {
+			[application endBackgroundTask:bgTask];
+			bgTask = UIBackgroundTaskInvalid;
+		}
+		onError:^(NSString *code, NSString *msg) {
+			[application endBackgroundTask:bgTask];
+			bgTask = UIBackgroundTaskInvalid;
+		}
+	];
 }
 ```
 Or, simply call `uploadEvents` method instead of `uploadEventsWithCallback`.
@@ -120,21 +126,26 @@ When you call `startSession` method,  the SDK generates a session ID that's kept
 {		      	
 	[[TreasureData sharedInstance] endSession:@"demotbl"];
 	
-	UIBackgroundTaskIdentifier bgTask = [application beginBackgroundTaskWithExpirationHandler:^{}];
+	__block UIBackgroundTaskIdentifier bgTask = [application beginBackgroundTaskWithExpirationHandler:^{
+		[application endBackgroundTask:bgTask];
+		bgTask = UIBackgroundTaskInvalid;
+	}];
+    
 	[[TreasureData sharedInstance] uploadEventsWithCallback:^() {
-				[application endBackgroundTask:bgTask];
-			}
-			onError:^(NSString *code, NSString *msg) {
-			    [application endBackgroundTask:bgTask];
-			}
-			
-			// Outputs =>>
-			//   [{"td_session_id":"cad88260-67b4-0242-1329-2650772a66b1",
-			//		"td_session_event":"start", "time":1418880000},
-			//
-			//    {"td_session_id":"cad88260-67b4-0242-1329-2650772a66b1",
-			//		"td_session_event":"end", "time":1418880123}
-			//    ]
+			[application endBackgroundTask:bgTask];
+			bgTask = UIBackgroundTaskInvalid;
+		}
+		onError:^(NSString *code, NSString *msg) {
+			[application endBackgroundTask:bgTask];
+			bgTask = UIBackgroundTaskInvalid;
+		}
+		// Outputs =>>
+		//   [{"td_session_id":"cad88260-67b4-0242-1329-2650772a66b1",
+		//		"td_session_event":"start", "time":1418880000},
+		//
+		//    {"td_session_id":"cad88260-67b4-0242-1329-2650772a66b1",
+		//		"td_session_event":"end", "time":1418880123}
+		//    ]
 	];
 ```
 
