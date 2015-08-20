@@ -250,3 +250,13 @@ It outputs the following column names and values:
 - `td_model` : UIDevice.model
 - `td_os_ver` : UIDevice.model.systemVersion
 - `td_os_type` : "iOS"
+
+### Enable/Disable debug log
+
+```
+	[TreasureData enableLogging];
+```
+
+```
+	[TreasureData disableLogging];
+```
