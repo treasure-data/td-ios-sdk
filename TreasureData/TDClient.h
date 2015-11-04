@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "KeenClient.h"
+#import <KeenClientTD/KeenClient.h>
 
 @interface TDClient : KeenClient
 @property(nonatomic, strong) NSString *apiKey;
