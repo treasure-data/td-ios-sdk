@@ -34,7 +34,7 @@ $ pod install
 ### Register your TreasureData API key
 
 ```
-- (void)applicationDidBecomeActive:(UIApplication *)application {
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [TreasureData initializeWithApiKey:@"your_api_key"];
 }
 ```
