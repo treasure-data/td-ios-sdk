@@ -63,7 +63,7 @@
 
 - (void)clearFirstRun;
 
-- (void)initializeFitstRun;     // Only for test
+- (void)initializeFirstRun;     // Only for test
 
 - (void)startSession:(NSString*)table;
 

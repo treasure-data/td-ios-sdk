@@ -56,7 +56,7 @@ static NSString *END_POINT = @"http://localhost";
 
 - (void)initializeTD {
     self.td = [[MyTreasureData alloc] initWithApiKey:@"dummy_apikey"];
-    [self.td initializeFitstRun];
+    [self.td initializeFirstRun];
     self.client = (MyTDClient*)self.td.client;
     [[MyTDClient getEventStore] deleteAllEvents];
     [MyTreasureData disableEventCompression];
@@ -96,11 +96,11 @@ static NSString *END_POINT = @"http://localhost";
 - (void)baseTesting:(void(^)())setup onSuccess:(void(^)(void))onSuccess onError:(void(^)(NSString*, NSString*))onError {
     NSString *url = self.client.apiEndpoint;
     XCTAssertEqualObjects(@"http://localhost", url);
-    
+
     [self setupDefaultExpectedResponse];
 
     setup();
-    
+
     [self.td uploadEventsWithCallback:onSuccess onError:onError];
 }
 
@@ -211,7 +211,7 @@ static NSString *END_POINT = @"http://localhost";
 - (void)testDisableUploading {
     [self baseTestingError:^() {
         self.client.enableRetryUploading = false;
-        
+
         self.client.uploadRetryCount = 3;
         [self.td enableRetryUploading];
 
@@ -239,7 +239,7 @@ static NSString *END_POINT = @"http://localhost";
             assertion:^(NSDictionary *ev){
                 XCTAssertEqual(1, self.client.sendRequestCount);
                 XCTAssertEqual(2, ev.count);
-                
+
                 NSArray *arr = [ev objectForKey:@"db0.tbl0"];
                 [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"foobar"]
                                      expectedKeys:@[@"name", @"keen", @"#UUID", @"td_uuid"]
@@ -293,7 +293,7 @@ static NSString *END_POINT = @"http://localhost";
                 NSString *uuidStartSession;
                 NSString *uuidAddEvent;
                 NSString *uuidEndSession;
-                
+
                 bool gotStartSession = false;
                 bool gotAddEvent0 = false;
                 bool gotEndSession = false;

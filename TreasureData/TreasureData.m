@@ -242,7 +242,7 @@ static NSString *sessionEventEnd = @"end";
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-- (void)initializeFitstRun {
+- (void)initializeFirstRun {
     [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:storageKeyOfFirstRun];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
