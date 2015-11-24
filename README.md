@@ -5,6 +5,10 @@ iOS SDK for [TreasureData](http://www.treasuredata.com/). With this SDK, you can
 
 ## Installation
 
+There are several ways to install the library.
+
+### CocoaPods
+
 [CocoaPods](http://cocoapods.org/) is needed to set up the SDK. If you've not installed it yet, install it at first.
 
 ```
@@ -23,6 +27,15 @@ Finally, execute 'pod install'.
 $ pod install
 ```
 
+### Framework
+
+Download [TreasureData.framework](http://cdn.treasuredata.com/sdk/ios/0.1.7/TreasureData.framework.zip) and add it and `libz` library into your project.
+
+### Static libraries and header files
+
+Download [Static libraries and header files](http://cdn.treasuredata.com/sdk/ios/0.1.7/TreasureData.zip) and add it and `libz` library into your project.
+
+
 ## Usage
 
 ### Import SDK header file
@@ -30,6 +43,14 @@ $ pod install
 ```
 #import "TreasureData.h"
 ```
+
+When you install the library as a framework, use the following statement.
+
+```
+#import <TreasureData/TreasureData.h>
+```
+
+
 
 ### Register your TreasureData API key
 
