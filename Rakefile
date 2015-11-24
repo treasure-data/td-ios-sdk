@@ -30,7 +30,7 @@ desc "Create framework"
 task :framework do
   Rake::Task[:build].invoke
 
-  framework_dir = File.expand_path("../Output/Framework/TreasureData.framework", __FILE__)
+  framework_dir = File.expand_path("../Output/Framework/TreasureData-iOS-SDK.framework", __FILE__)
   rm_rf(framework_dir)
 
   version_base_dir = File.join(framework_dir, 'Versions')
@@ -38,7 +38,7 @@ task :framework do
   mkdir_p(version_dir)
 
   libs = create_universal_library(version_dir)
-  sh "libtool -static -o #{File.join(version_dir, 'TreasureData')} #{libs.join(' ')}"
+  sh "libtool -static -o #{File.join(version_dir, 'TreasureData-iOS-SDK')} #{libs.join(' ')}"
   libs.each do |f|
     rm_f(f)
   end
@@ -53,7 +53,7 @@ task :framework do
 
   cd framework_dir
   version_dir_in_fw = File.join('Versions', 'Current')
-  ln_sf(File.join(version_dir_in_fw, 'TreasureData'), pwd)
+  ln_sf(File.join(version_dir_in_fw, 'TreasureData-iOS-SDK'), pwd)
   ln_sf(File.join(version_dir_in_fw, 'Headers'), pwd)
   ln_sf(File.join(version_dir_in_fw, 'Resources'), pwd)
   ln_sf(File.join(version_dir_in_fw, 'Resources', 'Info.plist'), pwd)
@@ -62,9 +62,9 @@ task :framework do
   ln_sf('A', 'Current')
 
   cd File.expand_path("../Output/Framework", __FILE__)
-  zipfile = 'TreasureData.framework.zip'
+  zipfile = 'TreasureData-iOS-SDK.framework.zip'
   rm_f(zipfile)
-  sh("zip -ry #{zipfile} TreasureData.framework")
+  sh("zip -ry #{zipfile} TreasureData-iOS-SDK.framework")
 end
 
 def create_universal_library(output_dir)
