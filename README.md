@@ -98,7 +98,7 @@ Specify the database and table to which you want to import the events.
 		[application endBackgroundTask:bgTask];
 		bgTask = UIBackgroundTaskInvalid;
 	}];
-	
+
 	[[TreasureData sharedInstance] uploadEventsWithCallback:^() {
 			[application endBackgroundTask:bgTask];
 			bgTask = UIBackgroundTaskInvalid;
@@ -129,18 +129,18 @@ When you call `startSession` method,  the SDK generates a session ID that's kept
 {
 	[TreasureData initializeWithApiKey:@"your_api_key"];
 	[[TreasureData sharedInstance] setDefaultDatabase:@"testdb"];
-	[[TreasureData sharedInstance] startSession:@"demotbl"];    
+	[[TreasureData sharedInstance] startSession:@"demotbl"];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
-{		      	
+{
 	[[TreasureData sharedInstance] endSession:@"demotbl"];
-	
+
 	__block UIBackgroundTaskIdentifier bgTask = [application beginBackgroundTaskWithExpirationHandler:^{
 		[application endBackgroundTask:bgTask];
 		bgTask = UIBackgroundTaskInvalid;
 	}];
-    
+
 	[[TreasureData sharedInstance] uploadEventsWithCallback:^() {
 			[application endBackgroundTask:bgTask];
 			bgTask = UIBackgroundTaskInvalid;
@@ -172,7 +172,7 @@ You can detect if it's the first running or not easily using `isFirstRun` method
                                   table:@"demotbl"
                               onSuccess:^(){
                                   [[TreasureData sharedInstance] uploadEventsWithCallback:^() {
-                                      [[TreasureData sharedInstance] clearFitstRun];
+                                      [[TreasureData sharedInstance] clearFirstRun];
                                     }
                                     onError:^(NSString* errorCode, NSString* message) {
                                       NSLog(@"uploadEvents: error. errorCode=%@, message=%@", errorCode, message);
@@ -196,7 +196,7 @@ You can detect if it's the first running or not easily using `isFirstRun` method
 - `invalid_event` : The event was invalid
 - `data_conversion` : Failed to convert the data to/from JSON
 - `storage_error` : Failed to read/write data in the storage
-- `network_error` : Failed to communicate with the server due to network problem 
+- `network_error` : Failed to communicate with the server due to network problem
 - `server_response` : The server returned an error response
 
 
@@ -227,7 +227,7 @@ If you've set an encryption key via `initializeEncryptionKey` class method, our 
     [[TreasureData sharedInstance] setDefaultDatabase:@"testdb"];
 		:
 	[[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"clicked" } table:@"demotbl"]
-```	
+```
 
 ### Adding UUID of the device to each event automatically
 
