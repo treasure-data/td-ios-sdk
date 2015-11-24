@@ -20,9 +20,10 @@ task :package do
   create_universal_library(output_dir)
   copy_header_file(output_dir)
 
-  zipfile = File.expand_path("../Output/TreasureData.zip", __FILE__)
+  cd File.expand_path("../Output", __FILE__)
+  zipfile = 'TreasureData.zip'
   rm_f(zipfile)
-  sh("zip -ry #{zipfile} #{output_dir}")
+  sh("zip -ry #{zipfile} TreasureData")
 end
 
 desc "Create framework"
@@ -60,9 +61,10 @@ task :framework do
   cd 'Versions'
   ln_sf('A', 'Current')
 
-  zipfile = File.expand_path("../Output/TreasureData.framework.zip", __FILE__)
+  cd File.expand_path("../Output/Framework", __FILE__)
+  zipfile = 'TreasureData.framework.zip'
   rm_f(zipfile)
-  sh("zip -ry #{zipfile} #{framework_dir}")
+  sh("zip -ry #{zipfile} TreasureData.framework")
 end
 
 def create_universal_library(output_dir)
