@@ -29,11 +29,7 @@ $ pod install
 
 ### Framework
 
-Download [TreasureData.framework](http://cdn.treasuredata.com/sdk/ios/0.1.7/TreasureData.framework.zip) and add it and `libz` library into your project.
-
-### Static libraries and header files
-
-Download [Static libraries and header files](http://cdn.treasuredata.com/sdk/ios/0.1.7/TreasureData.zip) and add it and `libz` library into your project.
+Download [TreasureData-iOS-SDK.framework](https://s3.amazonaws.com/td-cdn/sdk/ios/0.1.7/TreasureData-iOS-SDK.framework.zip) and add it and `libz` library into your project.
 
 
 ## Usage
@@ -41,15 +37,8 @@ Download [Static libraries and header files](http://cdn.treasuredata.com/sdk/ios
 ### Import SDK header file
 
 ```
-#import "TreasureData.h"
+#import <TreasureData-iOS-SDK/TreasureData.h>
 ```
-
-When you install the library as a framework, use the following statement.
-
-```
-#import <TreasureData/TreasureData.h>
-```
-
 
 
 ### Register your TreasureData API key
