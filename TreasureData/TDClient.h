@@ -13,6 +13,8 @@
 @property(nonatomic, strong) NSString *apiKey;
 @property(nonatomic, strong) NSString *apiEndpoint;
 @property BOOL enableEventCompression;
+@property int uploadRetryIntervalCoeficient;
+@property int uploadRetryIntervalBase;
 @property int uploadRetryCount;
 @property BOOL enableRetryUploading;
 
