@@ -71,7 +71,9 @@ static NSString *END_POINT = @"http://localhost";
 }
 
 - (void)setupDefaultExpectedResponse:(NSInteger)statusCode {
-    NSHTTPURLResponse *expectedResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:statusCode HTTPVersion:@"1.1" headerFields:nil];
+    NSHTTPURLResponse *expectedResponse =
+    [[NSHTTPURLResponse alloc] initWithURL:[[NSURL alloc] initWithString:@"http://localhost/dummy"]
+                                statusCode:statusCode HTTPVersion:@"1.1" headerFields:nil];
     self.client.expectedResponse = expectedResponse;
 }
 
