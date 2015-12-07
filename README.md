@@ -18,7 +18,7 @@ $ gem install cocoapods
 Next, add this line in your Podfile.
 
 ```
-pod 'TreasureData-iOS-SDK', '= 0.1.6'
+pod 'TreasureData-iOS-SDK', '= 0.1.8'
 ```
 
 Finally, execute 'pod install'.
@@ -29,11 +29,11 @@ $ pod install
 
 ### Framework
 
-Download [TreasureData.framework](http://cdn.treasuredata.com/sdk/ios/0.1.7/TreasureData.framework.zip) and add it and `libz` library into your project.
+Download [TreasureData.framework](http://cdn.treasuredata.com/sdk/ios/0.1.8/TreasureData.framework.zip) and add it and `libz` library into your project.
 
 ### Static libraries and header files
 
-Download [Static libraries and header files](http://cdn.treasuredata.com/sdk/ios/0.1.7/TreasureData.zip) and add it and `libz` library into your project.
+Download [Static libraries and header files](http://cdn.treasuredata.com/sdk/ios/0.1.8/TreasureData.zip) and add it and `libz` library into your project.
 
 
 ## Usage
