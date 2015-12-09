@@ -1,3 +1,20 @@
+Release 0.1.8
+
+* Fix a lot of warnings in amalgamation sqlite3.c
+* Improve the retry interval of HTTP request
+
+Release 0.1.7
+
+* Support Framework
+
+Release 0.1.6
+
+* Append device model infromation and persistent UUID which is generated at the first launch to each event if it's turned on
+* Add session id
+* Add first run flag so that the application detects the first launch
+* Retry uploading
+* Remove gd_bundle.crt from Objective-C source file
+
 Release 0.1.5
 
 * Fix TreasureData.addEvent
