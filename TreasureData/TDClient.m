@@ -10,7 +10,7 @@
 #import "Deflate.h"
 #import "TDClient.h"
 
-static NSString *version = @"0.1.7";
+static NSString *version = @"0.1.8";
 
 @implementation TDClient
 
@@ -25,7 +25,17 @@ static NSString *version = @"0.1.7";
         }
         return @{@"#UUID": [[NSUUID UUID] UUIDString]};
     };
-    self.uploadRetryCount = 7;
+    /*
+     > 5.times.inject(0){|a, i| puts a; x = 4 * (2 ** i); a += x; a}
+     0
+     4
+     12
+     28
+     60
+    */
+    self.uploadRetryIntervalCoeficient = 4;
+    self.uploadRetryIntervalBase = 2;
+    self.uploadRetryCount = 5;
     self.enableRetryUploading = true;
     return self;
 }
@@ -85,7 +95,8 @@ static NSString *version = @"0.1.7";
             if (!self.enableRetryUploading || i >= self.uploadRetryCount - 1) {
                 return nil;
             }
-            [NSThread sleepForTimeInterval:pow(2.0, i)];
+            double wait = self.uploadRetryIntervalCoeficient * pow(self.uploadRetryIntervalBase, i);
+            [NSThread sleepForTimeInterval:wait];
         }
     }
     return nil;
