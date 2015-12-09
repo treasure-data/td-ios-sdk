@@ -29,7 +29,7 @@ $ pod install
 
 ### Framework
 
-Download [TreasureData.framework](http://cdn.treasuredata.com/sdk/ios/0.1.8/TreasureData.framework.zip) and add it and `libz` library into your project.
+Download [TreasureData.framework](http://cdn.treasuredata.com/sdk/ios/0.1.8/TreasureData-iOS-SDK.framework.zip) and add it and `libz` library into your project.
 
 ## Usage
 
