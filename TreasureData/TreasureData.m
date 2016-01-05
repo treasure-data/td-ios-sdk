@@ -28,6 +28,7 @@ static NSString *keyOfOsVer = @"td_os_ver";
 static NSString *keyOfOsType = @"td_os_type";
 static NSString *keyOfSessionId = @"td_session_id";
 static NSString *keyOfSessionEvent = @"td_session_event";
+static NSString *keyOfServerSideUploadTimestamp = @"#SSUT";
 static NSString *osType = @"iOS";
 static NSString *sessionEventStart = @"start";
 static NSString *sessionEventEnd = @"end";
@@ -36,6 +37,7 @@ static NSString *sessionEventEnd = @"end";
 @property BOOL autoAppendUniqId;
 @property BOOL autoAppendModelInformation;
 @property NSString *sessionId;
+@property BOOL serverSideUploadTimestamp;
 @end
 
 @implementation TreasureData
@@ -109,6 +111,9 @@ static NSString *sessionEventEnd = @"end";
                 if (self.sessionId) {
                     record = [self appendSessionId:record];
                 }
+                if (self.serverSideUploadTimestamp) {
+                    record = [self appendServerSideUploadTimestamp:record];
+                }
 
                 NSString *tag = [NSString stringWithFormat:@"%@.%@", database, table];
                 [self.client addEventWithCallbacks:record toEventCollection:tag onSuccess:onSuccess onError:onError];
@@ -171,6 +176,12 @@ static NSString *sessionEventEnd = @"end";
 - (NSDictionary*)appendSessionId:(NSDictionary *)origRecord {
     NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
     [record setValue:self.sessionId forKey:keyOfSessionId];
+    return record;
+}
+
+- (NSDictionary*)appendServerSideUploadTimestamp:(NSDictionary *)origRecord {
+    NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
+    [record setValue:@true forKey:keyOfServerSideUploadTimestamp];
     return record;
 }
 
@@ -263,6 +274,14 @@ static NSString *sessionEventEnd = @"end";
 - (void)endSession:(NSString*)table database:(NSString*)database {
     [self addEvent:@{keyOfSessionEvent: sessionEventEnd} database:database table:table];
     self.sessionId = nil;
+}
+
+- (void)enableServerSideUploadTimestamp {
+    self.serverSideUploadTimestamp = TRUE;
+}
+
+- (void)disableServerSideUploadTimestamp {
+    self.serverSideUploadTimestamp = FALSE;
 }
 
 + (void)initializeWithApiKey:(NSString *)apiKey {
