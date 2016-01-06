@@ -162,6 +162,22 @@ static NSString *END_POINT = @"http://localhost";
         }];
 }
 
+- (void)testSingleEventWithServerSideUploadTimestamp {
+    [self baseTesting:^() {
+        [self setupDefaultExpectedResponseBody: @{@"db_.tbl":@[@{@"success":@"true"}]}];
+        [self.td enableServerSideUploadTimestamp];
+        [self.td addEvent:@{@"name":@"foobar"} database:@"db_" table:@"tbl"];
+    }
+            assertion:^(NSDictionary *ev){
+                XCTAssertEqual(1, self.client.sendRequestCount);
+                XCTAssertEqual(1, ev.count);
+                NSArray *arr = [ev objectForKey:@"db_.tbl"];
+                [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"foobar"]
+                                     expectedKeys:@[@"name", @"keen", @"#UUID", @"#SSUT"]
+                 ];
+            }];
+}
+
 - (void)testSingleEventWithDefaultDatabase {
     [self baseTesting:^() {
         [self.td setDefaultDatabase:@"db_"];

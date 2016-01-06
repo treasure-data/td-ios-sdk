@@ -73,6 +73,10 @@
 
 - (void)endSession:(NSString*)table database:(NSString*)database;
 
+- (void)enableServerSideUploadTimestamp;
+
+- (void)disableServerSideUploadTimestamp;
+
 + (void)disableEventCompression;
 
 + (void)enableEventCompression;
