@@ -1,3 +1,7 @@
+Release 0.1.9
+
+* Enable server side upload timestamp
+
 Release 0.1.8
 
 * Fix a lot of warnings in amalgamation sqlite3.c

@@ -21,6 +21,7 @@
     [[TreasureData sharedInstance] enableAutoAppendUniqId];
     [[TreasureData sharedInstance] enableAutoAppendModelInformation];
     // [[TreasureData sharedInstance] disableRetryUploading];
+    // [[TreasureData sharedInstance] enableServerSideUploadTimestamp];
     [[TreasureData sharedInstance] startSession:@"demotbl"];
     
     if ([[TreasureData sharedInstance] isFirstRun]) {
