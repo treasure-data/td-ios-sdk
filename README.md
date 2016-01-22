@@ -275,6 +275,21 @@ It outputs the following column names and values:
 	[TreasureData disableLogging];
 ```
 
+## Troubleshooting
+
+#### With "Data Protection" enabled, TD iOS SDK occasionally crashes
+
+- If your app calls the SDK's API such as `TreasureData#endSession` in `UIApplicationDelegate applicationDidEnterBackground`, check if it's likely the app calls the SDK's API several seconds after iOS is locked. If so, please make other tasks that takes time and is called prior to the SDK's API run in background.
+
+```
+- (void)applicationWillResignActive:(UIApplication *)application
+{
+    dispatch_async(dispatch_get_global_queue(
+DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // Some tasks that can take more than 10 seconds.
+    });
+```
+
 ## Usage in Swift
 
 See this example project (https://github.com/treasure-data/td-ios-sdk/tree/master/TreasureDataExampleSwift) for details.
