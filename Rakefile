@@ -9,7 +9,7 @@ end
 desc "Create static libraries"
 task :build do
   sh("xcodebuild -workspace TreasureData.xcworkspace -scheme TreasureData -configuration Release -sdk iphoneos SYMROOT=$(PWD)/Output")
-  sh("xcodebuild -workspace TreasureData.xcworkspace -scheme TreasureData -configuration Release -sdk iphonesimulator SYMROOT=$(PWD)/Output")
+  sh("xcodebuild -workspace TreasureData.xcworkspace -scheme TreasureData -configuration Release -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPad' SYMROOT=$(PWD)/Output")
 end
 
 desc "Create package"
