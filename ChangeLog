@@ -1,3 +1,7 @@
+Release 0.1.11
+
+* Fix crash that occurs when handling invalid database or table name
+
 Release 0.1.10
 
 * Fix crash that happens when Data Protection is enabled and API is called 10 seconds after iOS is locked
