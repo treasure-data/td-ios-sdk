@@ -99,7 +99,9 @@ static NSString *sessionEventEnd = @"end";
                   [regex firstMatchInString:table    options:0 range:NSMakeRange(0, [table length])])) {
                 NSString *errMsg = [NSString stringWithFormat:@"database and table need to be consist of lower letters, numbers or '_': database=%@, table=%@", database, table];
                 KCLog(@"%@", errMsg);
-                onError(ERROR_CODE_INVALID_PARAM, errMsg);
+                if (onError) {
+                    onError(ERROR_CODE_INVALID_PARAM, errMsg);
+                }
             }
             else {
                 if (self.autoAppendUniqId) {
@@ -206,7 +208,9 @@ static NSString *sessionEventEnd = @"end";
     else {
         NSString *errMsg = @"Client is nil";
         KCLog(@"%@", errMsg);
-        onError(ERROR_CODE_INIT_ERROR, errMsg);
+        if (onError) {
+            onError(ERROR_CODE_INIT_ERROR, errMsg);
+        }
     }
 }
 

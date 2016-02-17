@@ -387,4 +387,44 @@ static NSString *END_POINT = @"http://localhost";
             }];
 }
 
+- (void)testSingleEventWithoutCallbackWithWrongDatabaseName {
+    [self.td addEvent:@{@"name":@"foobar"} database:@"DB_" table:@"tbl"];
+    XCTAssertTrue(true);
+    self.isFinished = true;
+}
+
+- (void)testSingleEventWithCallbackWithWrongDatabaseName {
+    __block NSString* result;
+    [self.td addEventWithCallback:@{@"name":@"foobar"}
+                     database:@"DB_"
+                        table:@"tbl"
+                    onSuccess:^() {
+                    }
+                      onError:^(NSString* errorCode, NSString* message) {
+                          result = errorCode;
+                      }];
+    XCTAssertTrue([result isEqualToString:@"invalid_param"]);
+    self.isFinished = true;
+}
+
+- (void)testSingleEventWithoutCallbackWithWrongTableName {
+    [self.td addEvent:@{@"name":@"foobar"} database:@"db_" table:@"TBL"];
+    XCTAssertTrue(true);
+    self.isFinished = true;
+}
+
+- (void)testSingleEventWithCallbackWithWrongTableName {
+    __block NSString* result;
+    [self.td addEventWithCallback:@{@"name":@"foobar"}
+                         database:@"db_"
+                            table:@"TBL"
+                        onSuccess:^() {
+                        }
+                          onError:^(NSString* errorCode, NSString* message) {
+                              result = errorCode;
+                          }];
+    XCTAssertTrue([result isEqualToString:@"invalid_param"]);
+    self.isFinished = true;
+}
+
 @end
