@@ -1,3 +1,7 @@
+Release 0.1.12
+
+* Fix a lot of warnings when building with `DWARF with dSYM`
+
 Release 0.1.11
 
 * Fix crash that occurs when handling invalid database or table name
