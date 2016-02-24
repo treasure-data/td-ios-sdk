@@ -407,9 +407,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DA1A4142BC8193FCBB929397 /* Pods.debug.xcconfig */;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = NO;
+				CLANG_ENABLE_MODULES = YES;
 				DSTROOT = /tmp/TreasureData.dst;
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TreasureData/TreasureData-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(inherited)/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
@@ -426,9 +426,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D7703DBACAC24041D3C2FAA2 /* Pods.release.xcconfig */;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = NO;
+				CLANG_ENABLE_MODULES = YES;
 				DSTROOT = /tmp/TreasureData.dst;
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TreasureData/TreasureData-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(inherited)/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
