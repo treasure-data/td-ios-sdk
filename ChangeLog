@@ -1,3 +1,7 @@
+Release 0.1.13
+
+* Fix warnings that version 0.1.12 failed to fix
+
 Release 0.1.12
 
 * Fix a lot of warnings when building with `DWARF with dSYM`
