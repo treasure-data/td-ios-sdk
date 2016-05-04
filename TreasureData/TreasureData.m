@@ -42,8 +42,6 @@ static NSString *sessionEventEnd = @"end";
 
 @implementation TreasureData
 - (id)initWithApiKey:(NSString *)apiKey {
-    [KeenClient disableGeoLocation];
-
     self = [self init];
 
     if (self) {
