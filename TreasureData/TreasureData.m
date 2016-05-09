@@ -28,6 +28,8 @@ static NSString *keyOfOsVer = @"td_os_ver";
 static NSString *keyOfOsType = @"td_os_type";
 static NSString *keyOfAppVer = @"td_app_ver";
 static NSString *keyOfAppVerNum = @"td_app_ver_num";
+static NSString *keyOfLocaleCountry = @"td_locale_country";
+static NSString *keyOfLocaleLang = @"td_locale_lang";
 static NSString *keyOfSessionId = @"td_session_id";
 static NSString *keyOfSessionEvent = @"td_session_event";
 static NSString *keyOfServerSideUploadTimestamp = @"#SSUT";
@@ -39,6 +41,7 @@ static NSString *sessionEventEnd = @"end";
 @property BOOL autoAppendUniqId;
 @property BOOL autoAppendModelInformation;
 @property BOOL autoAppendAppInformation;
+@property BOOL autoAppendLocaleInformation;
 @property NSString *sessionId;
 @property BOOL serverSideUploadTimestamp;
 @end
@@ -114,6 +117,9 @@ static NSString *sessionEventEnd = @"end";
                 if (self.autoAppendAppInformation) {
                     record = [self appendAppInformation:record];
                 }
+                if (self.autoAppendLocaleInformation) {
+                    record = [self appendLocaleInformation:record];
+                }
                 if (self.sessionId) {
                     record = [self appendSessionId:record];
                 }
@@ -187,6 +193,13 @@ static NSString *sessionEventEnd = @"end";
     return [record copy];
 }
 
+- (NSDictionary *)appendLocaleInformation:(NSDictionary *)origRecord {
+    NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
+    record[keyOfLocaleCountry] = [[NSLocale currentLocale] objectForKey:NSLocaleCountryCode] ?: @"";
+    record[keyOfLocaleLang] = [[NSLocale preferredLanguages] firstObject] ?: @"";
+    return [record copy];
+}
+
 - (NSDictionary*)appendSessionId:(NSDictionary *)origRecord {
     NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
     [record setValue:self.sessionId forKey:keyOfSessionId];
@@ -257,6 +270,14 @@ static NSString *sessionEventEnd = @"end";
 
 - (void)enableAutoAppendAppInformation {
     self.autoAppendAppInformation = true;
+}
+
+- (void)disableAutoAppendLocaleInformation {
+    self.autoAppendLocaleInformation = false;
+}
+
+- (void)enableAutoAppendLocaleInformation {
+    self.autoAppendLocaleInformation = true;
 }
 
 - (void)disableRetryUploading {
