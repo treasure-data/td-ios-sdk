@@ -54,7 +54,7 @@ static NSString *version = @"0.1.15";
     return output;
 }
 
-- (NSData *)sendEvents:(NSData *)data returningResponse:(NSURLResponse **)response error:(NSError **)error {
+- (void)sendEvents:(NSData *)data completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler {
     NSString *urlString = [NSString stringWithFormat:@"%@/%@", self.apiEndpoint, @"ios/v3/event"];
     KCLog(@"Sending events to: %@", urlString);
     NSURL *url = [NSURL URLWithString:urlString];
@@ -85,26 +85,44 @@ static NSString *version = @"0.1.15";
     
     [request setHTTPBody:data];
     
-    for (int i = 0; i < self.uploadRetryCount; i++) {
-        NSData *responseData = [self sendHTTPRequest:request returningResponse:response error:error];
-        if (responseData) {
-            return responseData;
-        }
-        else {
-            KCLog(@"sendSynchronousRequest error occurred(%@/%@)", [NSNumber numberWithInt:i], [NSNumber numberWithInt:self.uploadRetryCount]);
-            if (!self.enableRetryUploading || i >= self.uploadRetryCount - 1) {
-                return nil;
-            }
-            double wait = self.uploadRetryIntervalCoeficient * pow(self.uploadRetryIntervalBase, i);
-            [NSThread sleepForTimeInterval:wait];
-        }
-    }
-    return nil;
+    [self sendHTTPRequest:request retryCounter:0 completionHandler:completionHandler];
 }
 
-- (NSData*) sendHTTPRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error {
-    NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:response error:error];
-    return responseData;
+- (void) sendHTTPRequest:(NSURLRequest *)request
+            retryCounter:(int)retryCounter
+       completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler {
+
+    __weak __typeof(self)weakSelf = self;
+
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *dataTask = [session
+                                      dataTaskWithRequest:request
+                                      completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
+        if (data) {
+            completionHandler(data, response, error);
+        }
+        else {
+            KCLog(@"sendSynchronousRequest error occurred(%@/%@)",
+                  [NSNumber numberWithInt:retryCounter],
+                  [NSNumber numberWithInt:self.uploadRetryCount]);
+            KCLog(@"response=%@", httpResponse);
+
+            if (!self.enableRetryUploading || retryCounter >= self.uploadRetryCount - 1) {
+                // Give up retry
+                completionHandler(data, response, error);
+            }
+            else {
+                double wait = self.uploadRetryIntervalCoeficient * pow(self.uploadRetryIntervalBase, retryCounter);
+                [NSThread sleepForTimeInterval:wait];
+                [weakSelf sendHTTPRequest: request
+                             retryCounter: (retryCounter + 1)
+                        completionHandler: completionHandler
+                ];
+            }
+        }
+    }];
+    [dataTask resume];
 }
 
 @end

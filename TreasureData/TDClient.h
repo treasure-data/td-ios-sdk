@@ -20,5 +20,7 @@
 
 - (id)initWithApiKey:(NSString *)apiKey apiEndpoint:(NSString*)apiEndpoint;
 
-- (NSData*) sendHTTPRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error;
+- (void) sendHTTPRequest:(NSURLRequest *)request
+            retryCounter:(int)retryCounter
+       completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler;
 @end
