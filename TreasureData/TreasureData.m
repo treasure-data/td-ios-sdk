@@ -29,7 +29,11 @@ static NSString *keyOfOsType = @"td_os_type";
 static NSString *keyOfSessionId = @"td_session_id";
 static NSString *keyOfSessionEvent = @"td_session_event";
 static NSString *keyOfServerSideUploadTimestamp = @"#SSUT";
+#if TARGET_OS_TV
+static NSString *osType = @"tvOS";
+#else
 static NSString *osType = @"iOS";
+#endif
 static NSString *sessionEventStart = @"start";
 static NSString *sessionEventEnd = @"end";
 
