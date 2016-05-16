@@ -93,8 +93,6 @@ static NSString *version = @"0.1.15";
             retryCounter:(int)retryCounter
        completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler {
 
-    __weak __typeof(self)weakSelf = self;
-
     NSURLSessionDataTask *dataTask = [self.session
                                       dataTaskWithRequest:request
                                       completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
@@ -115,7 +113,7 @@ static NSString *version = @"0.1.15";
             else {
                 double wait = self.uploadRetryIntervalCoeficient * pow(self.uploadRetryIntervalBase, retryCounter);
                 [NSThread sleepForTimeInterval:wait];
-                [weakSelf sendHTTPRequest: request
+                [self sendHTTPRequest: request
                              retryCounter: (retryCounter + 1)
                         completionHandler: completionHandler
                 ];
