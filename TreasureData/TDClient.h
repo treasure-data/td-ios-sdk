@@ -12,6 +12,7 @@
 @interface TDClient : KeenClient
 @property(nonatomic, strong) NSString *apiKey;
 @property(nonatomic, strong) NSString *apiEndpoint;
+@property(nonatomic, strong) NSURLSession *session;
 @property BOOL enableEventCompression;
 @property int uploadRetryIntervalCoeficient;
 @property int uploadRetryIntervalBase;

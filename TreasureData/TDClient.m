@@ -37,6 +37,7 @@ static NSString *version = @"0.1.15";
     self.uploadRetryIntervalBase = 2;
     self.uploadRetryCount = 5;
     self.enableRetryUploading = true;
+    self.session = [NSURLSession sharedSession];
     return self;
 }
 
@@ -94,8 +95,7 @@ static NSString *version = @"0.1.15";
 
     __weak __typeof(self)weakSelf = self;
 
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSURLSessionDataTask *dataTask = [session
+    NSURLSessionDataTask *dataTask = [self.session
                                       dataTaskWithRequest:request
                                       completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
@@ -124,5 +124,4 @@ static NSString *version = @"0.1.15";
     }];
     [dataTask resume];
 }
-
 @end
