@@ -1,6 +1,7 @@
 Release 0.1.15
 
 * Support tvOS
+* Remove deprecated API call
 
 Release 0.1.14
 
