@@ -13,18 +13,31 @@
 static NSString *END_POINT = @"http://localhost";
 
 @interface MyTDClient : TDClient
+@end
+
+@implementation MyTDClient
+@end
+
+@interface MySessionDataTask : NSURLSessionDataTask
+@end
+
+@implementation MySessionDataTask
+- (void)resume {}
+@end
+
+@interface MySession : NSURLSession
 @property NSURLRequest *requestData;
 @property NSData *expectedResponseBody;
 @property NSURLResponse *expectedResponse;
 @property int sendRequestCount;
 @end
 
-@implementation MyTDClient
-- (NSData*) sendHTTPRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error {
+@implementation MySession
+- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request completionHandler:(void (^)(NSData * __nullable data, NSURLResponse * __nullable response, NSError * __nullable error))completionHandler {
     self.sendRequestCount++;
     self.requestData = request;
-    *response = self.expectedResponse;
-    return self.expectedResponseBody;
+    completionHandler(self.expectedResponseBody, self.expectedResponse, nil);
+    return (NSURLSessionDataTask*)[[MySessionDataTask alloc] init];
 }
 @end
 
@@ -36,6 +49,8 @@ static NSString *END_POINT = @"http://localhost";
     self = [super initWithApiKey:apiKey];
     MyTDClient *myClient = [[MyTDClient alloc] initWithApiKey:apiKey apiEndpoint:END_POINT];
     self.client = myClient;
+    MySession *session = [[MySession alloc] init];
+    self.client.session = session;
     return self;
 }
 @end
@@ -44,6 +59,7 @@ static NSString *END_POINT = @"http://localhost";
 @property bool isFinished;
 @property MyTreasureData* td;
 @property MyTDClient *client;
+@property MySession *session;
 @end
 
 @implementation TreasureDataTests
@@ -58,6 +74,7 @@ static NSString *END_POINT = @"http://localhost";
     self.td = [[MyTreasureData alloc] initWithApiKey:@"dummy_apikey"];
     [self.td initializeFirstRun];
     self.client = (MyTDClient*)self.td.client;
+    self.session = (MySession*)self.td.client.session;
     [[MyTDClient getEventStore] deleteAllEvents];
     [MyTreasureData disableEventCompression];
 }
@@ -74,7 +91,7 @@ static NSString *END_POINT = @"http://localhost";
     NSHTTPURLResponse *expectedResponse =
     [[NSHTTPURLResponse alloc] initWithURL:[[NSURL alloc] initWithString:@"http://localhost/dummy"]
                                 statusCode:statusCode HTTPVersion:@"1.1" headerFields:nil];
-    self.client.expectedResponse = expectedResponse;
+    self.session.expectedResponse = expectedResponse;
 }
 
 - (void)setupDefaultExpectedResponse {
@@ -84,14 +101,14 @@ static NSString *END_POINT = @"http://localhost";
 - (void)setupDefaultExpectedResponseBody:(NSDictionary*)dict {
     NSError *error = [NSError alloc];
     NSData *expectedResponseBody = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&error];
-    self.client.expectedResponseBody = expectedResponseBody;
+    self.session.expectedResponseBody = expectedResponseBody;
 }
 
 - (void)assertRequest:(void(^)(NSDictionary*))assertion {
-    NSString *url = [self.client.requestData.URL absoluteString];
+    NSString *url = [self.session.requestData.URL absoluteString];
     XCTAssertEqualObjects(@"http://localhost/ios/v3/event", url);
     NSError *error = [NSError alloc];
-    NSDictionary *ev = [NSJSONSerialization JSONObjectWithData:self.client.requestData.HTTPBody options:0 error:&error];
+    NSDictionary *ev = [NSJSONSerialization JSONObjectWithData:self.session.requestData.HTTPBody options:0 error:&error];
     assertion(ev);
 }
 
@@ -153,7 +170,7 @@ static NSString *END_POINT = @"http://localhost";
         [self.td addEvent:@{@"name":@"foobar"} database:@"db_" table:@"tbl"];
     }
         assertion:^(NSDictionary *ev){
-            XCTAssertEqual(1, self.client.sendRequestCount);
+            XCTAssertEqual(1, self.session.sendRequestCount);
             XCTAssertEqual(1, ev.count);
             NSArray *arr = [ev objectForKey:@"db_.tbl"];
             [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"foobar"]
@@ -169,7 +186,7 @@ static NSString *END_POINT = @"http://localhost";
         [self.td addEvent:@{@"name":@"foobar"} database:@"db_" table:@"tbl"];
     }
             assertion:^(NSDictionary *ev){
-                XCTAssertEqual(1, self.client.sendRequestCount);
+                XCTAssertEqual(1, self.session.sendRequestCount);
                 XCTAssertEqual(1, ev.count);
                 NSArray *arr = [ev objectForKey:@"db_.tbl"];
                 [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"foobar"]
@@ -233,13 +250,13 @@ static NSString *END_POINT = @"http://localhost";
         self.client.uploadRetryCount = 3;
         [self.td enableRetryUploading];
 
-        self.client.expectedResponseBody = nil;
+        self.session.expectedResponseBody = nil;
 
         [self.td addEvent:@{@"name":@"foobar"} database:@"db_" table:@"tbl"];
     }
             assertion:^(NSString *ecode){
                 XCTAssertEqualObjects(@"server_response", ecode);
-                XCTAssertEqual(3, self.client.sendRequestCount);
+                XCTAssertEqual(3, self.session.sendRequestCount);
             }];
 }
 
@@ -255,7 +272,7 @@ static NSString *END_POINT = @"http://localhost";
         [anotherTd addEvent:@{@"name":@"helloworld"} database:@"db1" table:@"tbl1"];
     }
             assertion:^(NSDictionary *ev){
-                XCTAssertEqual(1, self.client.sendRequestCount);
+                XCTAssertEqual(1, self.session.sendRequestCount);
                 XCTAssertEqual(2, ev.count);
 
                 NSArray *arr = [ev objectForKey:@"db0.tbl0"];
@@ -277,7 +294,7 @@ static NSString *END_POINT = @"http://localhost";
         [self.td addEvent:@{@"name":@"foobar"} database:@"db_" table:@"tbl"];
     }
             assertion:^(NSDictionary *ev){
-                XCTAssertEqual(1, self.client.sendRequestCount);
+                XCTAssertEqual(1, self.session.sendRequestCount);
                 XCTAssertEqual(1, ev.count);
                 NSArray *arr = [ev objectForKey:@"db_.tbl"];
                 [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"foobar"]
@@ -304,7 +321,7 @@ static NSString *END_POINT = @"http://localhost";
         [self.td addEvent:@{@"counter":@"two"} database:@"db_" table:@"tbl"];
     }
             assertion:^(NSDictionary *ev){
-                XCTAssertEqual(1, self.client.sendRequestCount);
+                XCTAssertEqual(1, self.session.sendRequestCount);
                 XCTAssertEqual(1, ev.count);
                 NSArray *arr = [ev objectForKey:@"db_.tbl"];
                 XCTAssertEqual(4, arr.count);
@@ -370,7 +387,7 @@ static NSString *END_POINT = @"http://localhost";
         [self.td endSession:@"tbl" database:@"db_"];
     }
             assertion:^(NSDictionary *ev){
-                XCTAssertEqual(1, self.client.sendRequestCount);
+                XCTAssertEqual(1, self.session.sendRequestCount);
                 XCTAssertEqual(1, ev.count);
                 NSArray *arr = [ev objectForKey:@"db_.tbl"];
                 XCTAssertEqual(4, arr.count);

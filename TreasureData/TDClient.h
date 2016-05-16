@@ -12,6 +12,7 @@
 @interface TDClient : KeenClient
 @property(nonatomic, strong) NSString *apiKey;
 @property(nonatomic, strong) NSString *apiEndpoint;
+@property(nonatomic, strong) NSURLSession *session;
 @property BOOL enableEventCompression;
 @property int uploadRetryIntervalCoeficient;
 @property int uploadRetryIntervalBase;
@@ -20,5 +21,7 @@
 
 - (id)initWithApiKey:(NSString *)apiKey apiEndpoint:(NSString*)apiEndpoint;
 
-- (NSData*) sendHTTPRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error;
+- (void) sendHTTPRequest:(NSURLRequest *)request
+            retryCounter:(int)retryCounter
+       completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler;
 @end
