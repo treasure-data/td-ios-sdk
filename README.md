@@ -3,6 +3,8 @@ TreasureData iOS SDK
 
 iOS SDK for [TreasureData](http://www.treasuredata.com/). With this SDK, you can import the events on your applications into TreasureData easily. This library supports iOS 5 or later.
 
+Also, there is a more modern alternative SDK written in Swift [https://github.com/recruit-lifestyle/TreasureDataSDK](https://github.com/recruit-lifestyle/TreasureDataSDK).
+
 ## Installation
 
 There are several ways to install the library.
