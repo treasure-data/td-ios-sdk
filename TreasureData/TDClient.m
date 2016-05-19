@@ -101,7 +101,7 @@ static NSString *version = @"0.1.15";
             completionHandler(data, response, error);
         }
         else {
-            KCLog(@"sendSynchronousRequest error occurred(%@/%@)",
+            KCLog(@"dataTaskWithRequest error occurred(%@/%@)",
                   [NSNumber numberWithInt:retryCounter],
                   [NSNumber numberWithInt:self.uploadRetryCount]);
             KCLog(@"response=%@", httpResponse);
