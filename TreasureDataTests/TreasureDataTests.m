@@ -36,7 +36,11 @@ static NSString *END_POINT = @"http://localhost";
 - (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request completionHandler:(void (^)(NSData * __nullable data, NSURLResponse * __nullable response, NSError * __nullable error))completionHandler {
     self.sendRequestCount++;
     self.requestData = request;
-    completionHandler(self.expectedResponseBody, self.expectedResponse, nil);
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(queue, ^{
+        [NSThread sleepForTimeInterval:0.2];
+        completionHandler(self.expectedResponseBody, self.expectedResponse, nil);
+    });
     return (NSURLSessionDataTask*)[[MySessionDataTask alloc] init];
 }
 @end
