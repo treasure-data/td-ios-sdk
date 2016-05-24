@@ -55,6 +55,14 @@
 
 - (void)enableAutoAppendModelInformation;
 
+- (void)disableAutoAppendAppInformation;
+
+- (void)enableAutoAppendAppInformation;
+
+- (void)disableAutoAppendLocaleInformation;
+
+- (void)enableAutoAppendLocaleInformation;
+
 - (void)disableRetryUploading;
 
 - (void)enableRetryUploading;
