@@ -27,6 +27,10 @@ static NSString *keyOfDisplay = @"td_display";
 static NSString *keyOfModel = @"td_model";
 static NSString *keyOfOsVer = @"td_os_ver";
 static NSString *keyOfOsType = @"td_os_type";
+static NSString *keyOfAppVer = @"td_app_ver";
+static NSString *keyOfAppVerNum = @"td_app_ver_num";
+static NSString *keyOfLocaleCountry = @"td_locale_country";
+static NSString *keyOfLocaleLang = @"td_locale_lang";
 static NSString *keyOfSessionId = @"td_session_id";
 static NSString *keyOfSessionEvent = @"td_session_event";
 static NSString *keyOfServerSideUploadTimestamp = @"#SSUT";
@@ -39,6 +43,8 @@ static long sessionTimeoutMilli = -1;
 @interface TreasureData ()
 @property BOOL autoAppendUniqId;
 @property BOOL autoAppendModelInformation;
+@property BOOL autoAppendAppInformation;
+@property BOOL autoAppendLocaleInformation;
 @property NSString *sessionId;
 @property BOOL serverSideUploadTimestamp;
 @end
@@ -117,6 +123,12 @@ static long sessionTimeoutMilli = -1;
                 if (self.serverSideUploadTimestamp) {
                     record = [self appendServerSideUploadTimestamp:record];
                 }
+                if (self.autoAppendAppInformation) {
+                    record = [self appendAppInformation:record];
+                }
+                if (self.autoAppendLocaleInformation) {
+                    record = [self appendLocaleInformation:record];
+                }
 
                 NSString *tag = [NSString stringWithFormat:@"%@.%@", database, table];
                 [self.client addEventWithCallbacks:record toEventCollection:tag onSuccess:onSuccess onError:onError];
@@ -173,6 +185,25 @@ static long sessionTimeoutMilli = -1;
     [record setValue:dev.model forKey:keyOfModel];
     [record setValue:dev.systemVersion forKey:keyOfOsVer];
     [record setValue:osType forKey:keyOfOsType];
+    return record;
+}
+
+- (NSDictionary*)appendAppInformation:(NSDictionary *)origRecord {
+    NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
+    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+    NSString *appVersion = [infoDict objectForKey:@"CFBundleShortVersionString"];
+    // TODO: Should cast this string to integer?
+    NSString *buildNumber = [infoDict objectForKey:@"CFBundleVersion"];
+    [record setValue:appVersion forKey:keyOfAppVer];
+    [record setValue:buildNumber forKey:keyOfAppVerNum];
+    return record;
+}
+
+- (NSDictionary*)appendLocaleInformation:(NSDictionary *)origRecord {
+    NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
+    NSLocale *locale = [NSLocale currentLocale];
+    [record setValue:[locale objectForKey: NSLocaleCountryCode] forKey:keyOfLocaleCountry];
+    [record setValue:[locale objectForKey: NSLocaleLanguageCode] forKey:keyOfLocaleLang];
     return record;
 }
 
@@ -246,6 +277,22 @@ static long sessionTimeoutMilli = -1;
 
 - (void)enableAutoAppendModelInformation {
     self.autoAppendModelInformation = true;
+}
+
+- (void)enableAutoAppendAppInformation {
+    self.autoAppendAppInformation = true;
+}
+
+- (void)disableAutoAppendAppInformation {
+    self.autoAppendAppInformation = false;
+}
+
+- (void)enableAutoAppendLocaleInformation {
+    self.autoAppendLocaleInformation = true;
+}
+
+- (void)disableAutoAppendLocaleInformation {
+    self.autoAppendLocaleInformation = false;
 }
 
 - (void)disableRetryUploading {
