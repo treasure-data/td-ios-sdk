@@ -73,6 +73,12 @@
 
 - (void)endSession:(NSString*)table database:(NSString*)database;
 
++ (void)startSession;
+
++ (void)endSession;
+
++ (void)setSessionTimeoutMilli:(long)to;
+
 - (void)enableServerSideUploadTimestamp;
 
 - (void)disableServerSideUploadTimestamp;
