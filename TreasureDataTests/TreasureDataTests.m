@@ -71,6 +71,7 @@ static NSString *END_POINT = @"http://localhost";
 - (void)setUp
 {
     [self initializeTD];
+    [TreasureData setSessionTimeoutMilli:-1];
     [super setUp];
 }
 
@@ -315,7 +316,7 @@ static NSString *END_POINT = @"http://localhost";
     self.isFinished = true;
 }
 
-- (void)testSessionId {
+- (void)testSessionIdWithInstanceSession {
     [self baseTesting:^() {
         [self.td setDefaultDatabase:@"db_"];
         [self setupDefaultExpectedResponseBody: @{@"db_.tbl":@[@{@"success":@"true"}, @{@"success":@"true"}, @{@"success":@"true"}, @{@"success":@"true"}]}];
@@ -381,7 +382,7 @@ static NSString *END_POINT = @"http://localhost";
             }];
 }
 
-- (void)testSessionIdShouldBeChanged {
+- (void)testSessionIdWithInstanceSessionShouldBeChanged {
     [self baseTesting:^() {
         [self.td setDefaultDatabase:@"db_"];
         [self setupDefaultExpectedResponseBody: @{@"db_.tbl":@[@{@"success":@"true"}, @{@"success":@"true"}, @{@"success":@"true"}, @{@"success":@"true"}]}];
@@ -407,6 +408,86 @@ static NSString *END_POINT = @"http://localhost";
                 XCTAssertEqual(4, set.count);
             }];
 }
+
+
+- (void)testSessionIdWithGlobalSession {
+    [self baseTesting:^() {
+        [TreasureData setSessionTimeoutMilli:500];
+        [self.td setDefaultDatabase:@"db_"];
+        [self setupDefaultExpectedResponseBody: @{@"db_.tbl":@[@{@"success":@"true"}, @{@"success":@"true"}, @{@"success":@"true"}, @{@"success":@"true"}, @{@"success":@"true"}]}];
+        [TreasureData startSession];
+        [self.td addEvent:@{@"counter":@"one"} database:@"db_" table:@"tbl"];
+        [self.td addEvent:@{@"counter":@"two"} database:@"db_" table:@"tbl"];
+        [TreasureData endSession];
+        [self.td addEvent:@{@"counter":@"three"} database:@"db_" table:@"tbl"];
+        [TreasureData startSession];
+        [self.td addEvent:@{@"counter":@"four"} database:@"db_" table:@"tbl"];
+        [TreasureData endSession];
+        [NSThread sleepForTimeInterval:1.0];
+        [TreasureData startSession];
+        [self.td addEvent:@{@"counter":@"five"} database:@"db_" table:@"tbl"];
+        [TreasureData endSession];
+    }
+            assertion:^(NSDictionary *ev){
+                XCTAssertEqual(1, self.session.sendRequestCount);
+                XCTAssertEqual(1, ev.count);
+                NSArray *arr = [ev objectForKey:@"db_.tbl"];
+                XCTAssertEqual(5, arr.count);
+                NSString *uuidAddEventOne;
+                NSString *uuidAddEventTwo;
+                NSString *uuidAddEventFour;
+                NSString *uuidAddEventFive;
+                
+                for (NSDictionary *x in arr) {
+                    NSLog(@"%@", x);
+                    if ([[x objectForKey:@"counter"] isEqualToString:@"one"]) {
+                        uuidAddEventOne = [x objectForKey:@"td_session_id"];
+                        XCTAssertEqualObjects(
+                                              [[x allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)],
+                                              [(@[@"#UUID", @"keen", @"td_session_id", @"counter"]) sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)]
+                                              );
+                    }
+                    else if ([[x objectForKey:@"counter"] isEqualToString:@"two"]) {
+                        uuidAddEventTwo = [x objectForKey:@"td_session_id"];
+                        XCTAssertEqualObjects(
+                                              [[x allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)],
+                                              [(@[@"#UUID", @"keen", @"td_session_id", @"counter"]) sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)]
+                                              );
+                    }
+                    else if ([[x objectForKey:@"counter"] isEqualToString:@"three"]) {
+                        XCTAssertEqualObjects(
+                                              [[x allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)],
+                                              [(@[@"#UUID", @"keen", @"counter"]) sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)]
+                                              );
+                    }
+                    else if ([[x objectForKey:@"counter"] isEqualToString:@"four"]) {
+                        uuidAddEventFour = [x objectForKey:@"td_session_id"];
+                        XCTAssertEqualObjects(
+                                              [[x allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)],
+                                              [(@[@"#UUID", @"keen", @"td_session_id", @"counter"]) sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)]
+                                              );
+                    }
+                    else if ([[x objectForKey:@"counter"] isEqualToString:@"five"]) {
+                        uuidAddEventFive = [x objectForKey:@"td_session_id"];
+                        XCTAssertEqualObjects(
+                                              [[x allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)],
+                                              [(@[@"#UUID", @"keen", @"td_session_id", @"counter"]) sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)]
+                                              );
+                    }
+                    else {
+                        XCTFail(@"Shouldn't reach here");
+                    }
+                }
+                XCTAssertNotNil(uuidAddEventOne);
+                XCTAssertNotNil(uuidAddEventTwo);
+                XCTAssertNotNil(uuidAddEventFour);
+                XCTAssertNotNil(uuidAddEventFive);
+                XCTAssertEqualObjects(uuidAddEventOne, uuidAddEventTwo);
+                XCTAssertEqualObjects(uuidAddEventOne, uuidAddEventFour);
+                XCTAssertNotEqualObjects(uuidAddEventOne, uuidAddEventFive);
+            }];
+}
+
 
 - (void)testSingleEventWithoutCallbackWithWrongDatabaseName {
     [self.td addEvent:@{@"name":@"foobar"} database:@"DB_" table:@"tbl"];

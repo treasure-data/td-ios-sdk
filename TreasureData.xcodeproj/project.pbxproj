@@ -18,6 +18,8 @@
 		6B7380AC192A09160097D56E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6B7380AA192A09160097D56E /* InfoPlist.strings */; };
 		6B7380AE192A09160097D56E /* TreasureDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B7380AD192A09160097D56E /* TreasureDataTests.m */; };
 		6B758E4E1C00C59A00D597F8 /* TDClient.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6BF8C9321A3E9B76005B1804 /* TDClient.h */; };
+		6BB5A9D41D1A86EF0006A534 /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BB5A9D31D1A86EE0006A534 /* Session.m */; };
+		6BB5A9D61D1BBFE60006A534 /* SessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BB5A9D51D1BBFE60006A534 /* SessionTests.m */; };
 		6BF8C92D1A3E971D005B1804 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BF8C92C1A3E971D005B1804 /* CoreLocation.framework */; };
 		6BF8C92F1A3E972C005B1804 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BF8C92E1A3E972C005B1804 /* Security.framework */; };
 		6BF8C9311A3E977B005B1804 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BF8C9301A3E977B005B1804 /* libz.dylib */; };
@@ -64,6 +66,9 @@
 		6B7380A9192A09160097D56E /* TreasureDataTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TreasureDataTests-Info.plist"; sourceTree = "<group>"; };
 		6B7380AB192A09160097D56E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6B7380AD192A09160097D56E /* TreasureDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TreasureDataTests.m; sourceTree = "<group>"; };
+		6BB5A9D21D1A86CD0006A534 /* Session.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Session.h; sourceTree = "<group>"; };
+		6BB5A9D31D1A86EE0006A534 /* Session.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Session.m; sourceTree = "<group>"; };
+		6BB5A9D51D1BBFE60006A534 /* SessionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionTests.m; sourceTree = "<group>"; };
 		6BF8C92C1A3E971D005B1804 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		6BF8C92E1A3E972C005B1804 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		6BF8C9301A3E977B005B1804 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -144,6 +149,8 @@
 				6B738094192A09160097D56E /* Supporting Files */,
 				6BF8C9321A3E9B76005B1804 /* TDClient.h */,
 				6BF8C9331A3E9B76005B1804 /* TDClient.m */,
+				6BB5A9D21D1A86CD0006A534 /* Session.h */,
+				6BB5A9D31D1A86EE0006A534 /* Session.m */,
 			);
 			path = TreasureData;
 			sourceTree = "<group>";
@@ -161,6 +168,7 @@
 			children = (
 				6B7380AD192A09160097D56E /* TreasureDataTests.m */,
 				6B7380A8192A09160097D56E /* Supporting Files */,
+				6BB5A9D51D1BBFE60006A534 /* SessionTests.m */,
 			);
 			path = TreasureDataTests;
 			sourceTree = "<group>";
@@ -299,6 +307,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6BB5A9D41D1A86EF0006A534 /* Session.m in Sources */,
 				6BF8C9341A3E9B76005B1804 /* TDClient.m in Sources */,
 				6B738099192A09160097D56E /* TreasureData.m in Sources */,
 				6B351A76194ABF0F001CBAAD /* Deflate.m in Sources */,
@@ -309,6 +318,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6BB5A9D61D1BBFE60006A534 /* SessionTests.m in Sources */,
 				6B7380AE192A09160097D56E /* TreasureDataTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

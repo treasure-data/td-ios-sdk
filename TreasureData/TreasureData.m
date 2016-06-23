@@ -10,6 +10,7 @@
 #import "TreasureData.h"
 #import "math.h"
 #import "TDClient.h"
+#import "Session.h"
 
 static bool isTraceLoggingEnabled = false;
 static bool isEventCompressionEnabled = true;
@@ -32,6 +33,8 @@ static NSString *keyOfServerSideUploadTimestamp = @"#SSUT";
 static NSString *osType = @"iOS";
 static NSString *sessionEventStart = @"start";
 static NSString *sessionEventEnd = @"end";
+static Session *session = nil;
+static long sessionTimeoutMilli = -1;
 
 @interface TreasureData ()
 @property BOOL autoAppendUniqId;
@@ -108,7 +111,7 @@ static NSString *sessionEventEnd = @"end";
                 if (self.autoAppendModelInformation) {
                     record = [self appendModelInformation:record];
                 }
-                if (self.sessionId) {
+                if (session || self.sessionId) {
                     record = [self appendSessionId:record];
                 }
                 if (self.serverSideUploadTimestamp) {
@@ -175,7 +178,15 @@ static NSString *sessionEventEnd = @"end";
 
 - (NSDictionary*)appendSessionId:(NSDictionary *)origRecord {
     NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
-    [record setValue:self.sessionId forKey:keyOfSessionId];
+    if (session) {
+        NSString *sessionId = [session getId];
+        if (sessionId) {
+            [record setValue:sessionId forKey:keyOfSessionId];
+        }
+    }
+    else {
+        [record setValue:self.sessionId forKey:keyOfSessionId];
+    }
     return record;
 }
 
@@ -276,6 +287,26 @@ static NSString *sessionEventEnd = @"end";
 - (void)endSession:(NSString*)table database:(NSString*)database {
     [self addEvent:@{keyOfSessionEvent: sessionEventEnd} database:database table:table];
     self.sessionId = nil;
+}
+
++ (void)startSession {
+    if (!session) {
+        session = [Session new];
+        if (sessionTimeoutMilli > 0) {
+            session.sessionPendingMillis = sessionTimeoutMilli;
+        }
+    }
+    [session start];
+}
+
++ (void)endSession {
+    if (session) {
+        [session finish];
+    }
+}
+
++ (void)setSessionTimeoutMilli:(long)to {
+    sessionTimeoutMilli = to;
 }
 
 - (void)enableServerSideUploadTimestamp {
