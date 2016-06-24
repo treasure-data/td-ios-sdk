@@ -190,7 +190,6 @@ static long sessionTimeoutMilli = -1;
 
 - (NSDictionary*)appendAppInformation:(NSDictionary *)origRecord {
     NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
-    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
     NSString *appVersion = [self getAppVersion];
     NSString *buildNumber = [self getBuildNumber];
     [record setValue:appVersion forKey:keyOfAppVer];
