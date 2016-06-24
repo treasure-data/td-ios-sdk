@@ -191,12 +191,21 @@ static long sessionTimeoutMilli = -1;
 - (NSDictionary*)appendAppInformation:(NSDictionary *)origRecord {
     NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
     NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
-    NSString *appVersion = [infoDict objectForKey:@"CFBundleShortVersionString"];
-    // TODO: Should cast this string to integer?
-    NSString *buildNumber = [infoDict objectForKey:@"CFBundleVersion"];
+    NSString *appVersion = [self getAppVersion];
+    NSString *buildNumber = [self getBuildNumber];
     [record setValue:appVersion forKey:keyOfAppVer];
     [record setValue:buildNumber forKey:keyOfAppVerNum];
     return record;
+}
+
+- (NSString*)getAppVersion {
+    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+    return [infoDict objectForKey:@"CFBundleShortVersionString"];
+}
+
+- (NSString*)getBuildNumber {
+    NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+    return [infoDict objectForKey:@"CFBundleVersion"];
 }
 
 - (NSDictionary*)appendLocaleInformation:(NSDictionary *)origRecord {

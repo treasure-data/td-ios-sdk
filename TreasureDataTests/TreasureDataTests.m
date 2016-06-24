@@ -57,6 +57,14 @@ static NSString *END_POINT = @"http://localhost";
     self.client.session = session;
     return self;
 }
+
+- (NSString*)getAppVersion {
+    return @"1.2.3";
+}
+
+- (NSString*)getBuildNumber {
+    return @"42";
+}
 @end
 
 @interface TreasureDataTests : XCTestCase
@@ -307,6 +315,39 @@ static NSString *END_POINT = @"http://localhost";
                  ];
             }];
 }
+
+- (void)testAutoAppendAppInformation {
+    [self baseTesting:^() {
+        [self.td enableAutoAppendAppInformation];
+        [self setupDefaultExpectedResponseBody: @{@"db_.tbl":@[@{@"success":@"true"}]}];
+        [self.td addEvent:@{@"name":@"foobar"} database:@"db_" table:@"tbl"];
+    }
+            assertion:^(NSDictionary *ev){
+                XCTAssertEqual(1, self.session.sendRequestCount);
+                XCTAssertEqual(1, ev.count);
+                NSArray *arr = [ev objectForKey:@"db_.tbl"];
+                [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"foobar"]
+                                     expectedKeys:@[@"name", @"keen", @"#UUID", @"td_app_ver", @"td_app_ver_num"]
+                 ];
+            }];
+}
+
+- (void)testAutoAppendLocaleInformation {
+    [self baseTesting:^() {
+        [self.td enableAutoAppendLocaleInformation];
+        [self setupDefaultExpectedResponseBody: @{@"db_.tbl":@[@{@"success":@"true"}]}];
+        [self.td addEvent:@{@"name":@"foobar"} database:@"db_" table:@"tbl"];
+    }
+            assertion:^(NSDictionary *ev){
+                XCTAssertEqual(1, self.session.sendRequestCount);
+                XCTAssertEqual(1, ev.count);
+                NSArray *arr = [ev objectForKey:@"db_.tbl"];
+                [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"foobar"]
+                                     expectedKeys:@[@"name", @"keen", @"#UUID", @"td_locale_country", @"td_locale_lang"]
+                 ];
+            }];
+}
+
 
 - (void)testIsFirstRun {
     XCTAssertTrue([self.td isFirstRun]);
