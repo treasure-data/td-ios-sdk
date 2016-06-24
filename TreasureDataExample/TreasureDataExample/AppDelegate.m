@@ -20,6 +20,8 @@
     [[TreasureData sharedInstance] setDefaultDatabase:@"testdb"];
     [[TreasureData sharedInstance] enableAutoAppendUniqId];
     [[TreasureData sharedInstance] enableAutoAppendModelInformation];
+    [[TreasureData sharedInstance] enableAutoAppendAppInformation];
+    [[TreasureData sharedInstance] enableAutoAppendLocaleInformation];
     // [[TreasureData sharedInstance] disableRetryUploading];
     // [[TreasureData sharedInstance] enableServerSideUploadTimestamp];
     [[TreasureData sharedInstance] startSession:@"demotbl"];
