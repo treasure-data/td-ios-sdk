@@ -82,6 +82,7 @@ static NSString *END_POINT = @"http://localhost";
     self.session = (MySession*)self.td.client.session;
     [[MyTDClient getEventStore] deleteAllEvents];
     [MyTreasureData disableEventCompression];
+    [MyTreasureData resetSession];
 }
 
 - (void)tearDown

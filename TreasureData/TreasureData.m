@@ -177,6 +177,10 @@ static long sessionTimeoutMilli = -1;
 }
 
 - (NSDictionary*)appendSessionId:(NSDictionary *)origRecord {
+    if (session && self.sessionId) {
+        NSLog(@"instance method TreasureData#startSession(String) and static method TreasureData.startSession() are both enabled, but the instance method will be ignored.");
+    }
+
     NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
     if (session) {
         NSString *sessionId = [session getId];
@@ -303,6 +307,11 @@ static long sessionTimeoutMilli = -1;
     if (session) {
         [session finish];
     }
+}
+
+// Only for test
++ (void)resetSession {
+    session = nil;
 }
 
 + (void)setSessionTimeoutMilli:(long)to {

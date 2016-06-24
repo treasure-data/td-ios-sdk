@@ -77,6 +77,8 @@
 
 + (void)endSession;
 
++ (void)resetSession;       // Only for test
+
 + (void)setSessionTimeoutMilli:(long)to;
 
 - (void)enableServerSideUploadTimestamp;
