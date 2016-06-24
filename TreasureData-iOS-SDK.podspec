@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
   s.author       = { "TreasureData" => "mitsu@treasure-data.com" }
   s.platforms    = { :ios => "", :tvos => "" }
   s.homepage     = "https://github.com/treasure-data/td-ios-sdk"
-  s.source       = { :git => "https://github.com/treasure-data/td-ios-sdk.git", :tag => "0.1.17" }
+  s.source       = { :git => "https://github.com/treasure-data/td-ios-sdk.git", :tag => "0.1.17.1" }
   s.source_files  = 'TreasureData'
   s.library      = 'z'
   s.frameworks   = ['Security']
