@@ -1,3 +1,8 @@
+Release 0.1.17
+
+* Support application based global session to be able to handle a short screen transition from/to other screen as the same session
+* Add enableAutoAppendAppInformation and enableAutoAppendLocaleInformation functions to TreasureData
+
 Release 0.1.16
 
 * Fix bug TreasureData#uploadEventsWithCallback doesn't call callbacks
