@@ -24,7 +24,6 @@
     [[TreasureData sharedInstance] enableAutoAppendLocaleInformation];
     // [[TreasureData sharedInstance] disableRetryUploading];
     // [[TreasureData sharedInstance] enableServerSideUploadTimestamp];
-    [[TreasureData sharedInstance] startSession:@"demotbl"];
     
     if ([[TreasureData sharedInstance] isFirstRun]) {
         [[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"installed" }
@@ -54,7 +53,8 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    [[TreasureData sharedInstance] endSession:@"demotbl"];
+    // [[TreasureData sharedInstance] endSession:@"demotbl"];
+    [TreasureData endSession];
     UIBackgroundTaskIdentifier bgTask = [application beginBackgroundTaskWithExpirationHandler:^{}];
     [[TreasureData sharedInstance] uploadEventsWithCallback:^() {
         [application endBackgroundTask:bgTask];
@@ -73,6 +73,8 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    // [[TreasureData sharedInstance] startSession:@"demotbl"];
+    [TreasureData startSession];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
