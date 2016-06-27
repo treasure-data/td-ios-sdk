@@ -165,6 +165,24 @@ When you call `startSession` method,  the SDK generates a session ID that's kept
 	];
 ```
 
+If you want to handle the following case, use a pair of class methods `startSession` and `endSession` for global session tracking
+
+- User opens the application and starts session tracking using `startSession`. Let's call this session session#0
+- User moves to home screen and finishes the session using `endSession`
+- User reopens the application and restarts session tracking within default 10 seconds. But you want to deal with this new session as the same session as session#0
+
+```
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+	[TreasureData startSession];
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+	[TreasureData endSession];
+}
+```
+
 ### Detect if it's the first running
 
 You can detect if it's the first running or not easily using `isFirstRun` method and then clear the flag with `clearFirstRun`.
@@ -266,6 +284,33 @@ It outputs the following column names and values:
 - `td_model` : UIDevice.model
 - `td_os_ver` : UIDevice.model.systemVersion
 - `td_os_type` : "iOS"
+
+### Adding application version information to each event automatically
+
+Application version infromation will be added to each event automatically if you call `enableAutoAppendAppInformation`.
+
+```
+	[[TreasureData sharedInstance] enableAutoAppendAppInformation];
+```
+
+It outputs the following column names and values:
+
+- `td_app_ver` : Core Foundation key `CFBundleShortVersionString`
+- `td_app_ver_num` : Core Foundation key `CFBundleVersion`
+
+### Adding locale configuration information to each event automatically
+
+Locale configuration infromation will be added to each event automatically if you call `enableAutoAppendLocaleInformation`.
+
+```
+    [[TreasureData sharedInstance] enableAutoAppendLocaleInformation];
+```
+
+It outputs the following column names and values:
+
+- `td_locale_country` : `[[NSLocale currentLocale] objectForKey: NSLocaleCountryCode]`
+- `td_locale_lang` : `[[NSLocale currentLocale] objectForKey: NSLocaleLanguageCode]`
+
 
 ### Enable/Disable debug log
 
