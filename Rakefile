@@ -8,11 +8,33 @@ task :clean do
   rm_rf('Output')
 end
 
+task :build_for_device do
+  sh('xcodebuild -workspace TreasureData.xcworkspace -scheme TreasureData -configuration Release -sdk iphoneos SYMROOT=$(PWD)/Output OTHER_CFLAGS="-fembed-bitcode" CLANG_ENABLE_MODULE_DEBUGGING=NO GCC_PRECOMPILE_PREFIX_HEADER=NO DEBUG_INFORMATION_FORMAT="DWARF with dSYM"')
+end
+
+task :build_for_simulator do
+  sh('xcodebuild -workspace TreasureData.xcworkspace -scheme TreasureData -configuration Release -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPad" SYMROOT=$(PWD)/Output OTHER_CFLAGS="-fembed-bitcode" CLANG_ENABLE_MODULE_DEBUGGING=NO GCC_PRECOMPILE_PREFIX_HEADER=NO DEBUG_INFORMATION_FORMAT="DWARF with dSYM"')
+end
+
+task :pod_install do
+  Rake::Task[:clean].invoke
+  sh('pod install')
+end
+
 desc "Create static libraries"
 task :build do
-  sh('pod install')
-  sh('xcodebuild -workspace TreasureData.xcworkspace -scheme TreasureData -configuration Release -sdk iphoneos SYMROOT=$(PWD)/Output OTHER_CFLAGS="-fembed-bitcode" CLANG_ENABLE_MODULE_DEBUGGING=NO GCC_PRECOMPILE_PREFIX_HEADER=NO DEBUG_INFORMATION_FORMAT="DWARF with dSYM"')
-  sh('xcodebuild -workspace TreasureData.xcworkspace -scheme TreasureData -configuration Release -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPad" SYMROOT=$(PWD)/Output OTHER_CFLAGS="-fembed-bitcode" CLANG_ENABLE_MODULE_DEBUGGING=NO GCC_PRECOMPILE_PREFIX_HEADER=NO DEBUG_INFORMATION_FORMAT="DWARF with dSYM"')
+  Rake::Task[:pod_install].invoke
+  Rake::Task[:build_for_device].invoke
+  Rake::Task[:build_for_simulator].invoke
+end
+
+desc "Create static libraries for Unity"
+task :unity_package do
+  Rake::Task[:pod_install].invoke
+  Rake::Task[:build_for_device].invoke
+  output_file = File.expand_path("../Output/Unity/libTreasureData.a", __FILE__)
+  mkdir_p(File.dirname(output_file))
+  sh "libtool -static -o #{output_file} Output/Release-iphoneos/lib*.a"
 end
 
 desc "Create package"
