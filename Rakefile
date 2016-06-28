@@ -33,10 +33,7 @@ task :unity_package do
   Rake::Task[:build].invoke
   output_file = File.expand_path("../Output/Unity/libTreasureData.a", __FILE__)
   mkdir_p(File.dirname(output_file))
-  tmp_dir = File.expand_path("../Output/Unity/tmp", __FILE__)
-  mkdir_p(tmp_dir)
-  libs = create_universal_library(tmp_dir)
-  sh "libtool -static -o #{output_file} #{libs.join(' ')}"
+  sh "libtool -static -o #{output_file} Output/Release-iphoneos/libKeenClientTD.a Output/Release-iphoneos/libTreasureData.a"
 end
 
 desc "Create package"
