@@ -30,11 +30,13 @@ end
 
 desc "Create static libraries for Unity"
 task :unity_package do
-  Rake::Task[:pod_install].invoke
-  Rake::Task[:build_for_device].invoke
+  Rake::Task[:build].invoke
   output_file = File.expand_path("../Output/Unity/libTreasureData.a", __FILE__)
   mkdir_p(File.dirname(output_file))
-  sh "libtool -static -o #{output_file} Output/Release-iphoneos/lib*.a"
+  tmp_dir = File.expand_path("../Output/Unity/tmp", __FILE__)
+  mkdir_p(tmp_dir)
+  libs = create_universal_library(tmp_dir)
+  sh "libtool -static -o #{output_file} #{libs.join(' ')}"
 end
 
 desc "Create package"
