@@ -2,8 +2,8 @@
 //  ViewController.m
 //  TreasureDataExample
 //
-//  Created by Mitsunori Komatsu on 5/20/14.
-//  Copyright (c) 2014 Treasure Data Inc. All rights reserved.
+//  Created by Mitsunori Komatsu on 7/13/16.
+//  Copyright © 2016 Treasure Data. All rights reserved.
 //
 
 #import "ViewController.h"
@@ -15,30 +15,30 @@
 
 @implementation ViewController
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
+    // Do any additional setup after loading the view, typically from a nib.
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
 - (IBAction)addEvent:(id)sender {
     NSLog(@"Click!!!!");
     [[TreasureData sharedInstance]
-        addEventWithCallback:@{
-                              @"name": @"komamitsu",
-                              @"age": @99
-                              }
-                      table:@"demotbl"
-                  onSuccess:^(){
-                      NSLog(@"addEvent: success");
-                  }
-                    onError:^(NSString* errorCode, NSString* message) {
-                        NSLog(@"addEvent: error. errorCode=%@, message=%@", errorCode, message);
-                    }
+     addEventWithCallback:@{
+                            @"name": @"komamitsu",
+                            @"age": @99
+                            }
+     table:@"demotbl"
+     onSuccess:^(){
+         NSLog(@"addEvent: success");
+     }
+     onError:^(NSString* errorCode, NSString* message) {
+         NSLog(@"addEvent: error. errorCode=%@, message=%@", errorCode, message);
+     }
      ];
 }
 
@@ -49,5 +49,4 @@
         NSLog(@"uploadEvents: error. errorCode=%@, message=%@", errorCode, message);
     }];
 }
-
 @end
