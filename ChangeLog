@@ -1,3 +1,7 @@
+Release 0.1.18
+
+* Set minimum iOS version explicitly
+
 Release 0.1.17
 
 * Support application based global session to be able to handle a short screen transition from/to other screen as the same session
