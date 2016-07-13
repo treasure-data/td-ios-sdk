@@ -11,6 +11,6 @@ Pod::Spec.new do |s|
   s.library      = 'z'
   s.frameworks   = ['Security']
   s.public_header_files = ["TreasureData/TreasureData.h", "TreasureData/TDClient.h"]
-  s.dependency "KeenClientTD", '= 3.2.28'
+  s.dependency "KeenClientTD", '= 3.2.29'
   s.requires_arc = true
 end
