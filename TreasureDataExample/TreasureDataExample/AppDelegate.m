@@ -14,7 +14,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [TreasureData enableLogging];
-    // [TreasureData initializeApiEndpoint:@"https://mobile-ybi.jp-east.idcfcloud.com"];
+    // [TreasureData initializeApiEndpoint:@"https://in.ybi.idcfcloud.net"];
     [TreasureData initializeEncryptionKey:@"hello world"];
     [TreasureData initializeWithApiKey:@"your_api_key"];
     [[TreasureData sharedInstance] setDefaultDatabase:@"testdb"];
