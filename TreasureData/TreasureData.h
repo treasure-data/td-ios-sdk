@@ -95,6 +95,12 @@
 
 - (void)disableServerSideUploadTimestamp;
 
+- (void)enableAutoAppendRecordUUID;
+
+- (void)enableAutoAppendRecordUUID: (NSString*)columnName;
+
+- (void)disableAutoAppendRecordUUID;
+
 + (void)disableEventCompression;
 
 + (void)enableEventCompression;
