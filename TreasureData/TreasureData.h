@@ -91,6 +91,8 @@
 
 - (void)enableServerSideUploadTimestamp;
 
+- (void)enableServerSideUploadTimestamp: (NSString*)columnName;
+
 - (void)disableServerSideUploadTimestamp;
 
 + (void)disableEventCompression;
