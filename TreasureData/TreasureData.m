@@ -47,6 +47,7 @@ static long sessionTimeoutMilli = -1;
 @property BOOL autoAppendLocaleInformation;
 @property NSString *sessionId;
 @property BOOL serverSideUploadTimestamp;
+@property NSString *serverSideUploadTimestampColumn;
 @end
 
 @implementation TreasureData
@@ -235,7 +236,12 @@ static long sessionTimeoutMilli = -1;
 
 - (NSDictionary*)appendServerSideUploadTimestamp:(NSDictionary *)origRecord {
     NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
-    [record setValue:@true forKey:keyOfServerSideUploadTimestamp];
+    if (self.serverSideUploadTimestampColumn) {
+        [record setValue:self.serverSideUploadTimestampColumn forKey:keyOfServerSideUploadTimestamp];
+    }
+    else {
+        [record setValue:@true forKey:keyOfServerSideUploadTimestamp];
+    }
     return record;
 }
 
@@ -375,10 +381,17 @@ static long sessionTimeoutMilli = -1;
 
 - (void)enableServerSideUploadTimestamp {
     self.serverSideUploadTimestamp = TRUE;
+    self.serverSideUploadTimestampColumn = nil;
+}
+
+- (void)enableServerSideUploadTimestamp: (NSString*)columnName {
+    self.serverSideUploadTimestamp = TRUE;
+    self.serverSideUploadTimestampColumn = columnName;
 }
 
 - (void)disableServerSideUploadTimestamp {
     self.serverSideUploadTimestamp = FALSE;
+    self.serverSideUploadTimestampColumn = nil;
 }
 
 + (void)initializeWithApiKey:(NSString *)apiKey {

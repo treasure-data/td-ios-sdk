@@ -23,7 +23,7 @@
     [[TreasureData sharedInstance] enableAutoAppendAppInformation];
     [[TreasureData sharedInstance] enableAutoAppendLocaleInformation];
     // [[TreasureData sharedInstance] disableRetryUploading];
-    // [[TreasureData sharedInstance] enableServerSideUploadTimestamp];
+    [[TreasureData sharedInstance] enableServerSideUploadTimestamp: @"server_upload_time"];
     
     if ([[TreasureData sharedInstance] isFirstRun]) {
         [[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"installed" }
