@@ -19,6 +19,7 @@
     [TreasureData initializeWithApiKey:@"your_api_key"];
     [[TreasureData sharedInstance] setDefaultDatabase:@"testdb"];
     [[TreasureData sharedInstance] enableAutoAppendUniqId];
+    [[TreasureData sharedInstance] enableAutoAppendRecordUUID];
     [[TreasureData sharedInstance] enableAutoAppendModelInformation];
     [[TreasureData sharedInstance] enableAutoAppendAppInformation];
     [[TreasureData sharedInstance] enableAutoAppendLocaleInformation];

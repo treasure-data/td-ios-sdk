@@ -48,6 +48,7 @@ static long sessionTimeoutMilli = -1;
 @property NSString *sessionId;
 @property BOOL serverSideUploadTimestamp;
 @property NSString *serverSideUploadTimestampColumn;
+@property NSString *autoAppendRecordUUIDColumn;
 @end
 
 @implementation TreasureData
@@ -115,6 +116,9 @@ static long sessionTimeoutMilli = -1;
                 if (self.autoAppendUniqId) {
                     record = [self appendUniqId:record];
                 }
+                if (self.autoAppendRecordUUIDColumn) {
+                    record = [self appendRecordUUID:record];
+                }
                 if (self.autoAppendModelInformation) {
                     record = [self appendModelInformation:record];
                 }
@@ -163,7 +167,9 @@ static long sessionTimeoutMilli = -1;
         if (!NSClassFromString(@"NSUUID")) {
             uuid = @"";
         }
-        uuid = [[NSUUID UUID] UUIDString];
+        else {
+            uuid = [[NSUUID UUID] UUIDString];
+        }
         [ud setObject:uuid forKey:storageKeyOfUuid];
         [ud synchronize];
     }
@@ -173,6 +179,19 @@ static long sessionTimeoutMilli = -1;
 - (NSDictionary*)appendUniqId:(NSDictionary *)origRecord {
     NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
     [record setValue:[self getUUID] forKey:keyOfUuid];
+    return record;
+}
+
+- (NSDictionary*)appendRecordUUID:(NSDictionary *)origRecord {
+    NSString *uuid;
+    if (!NSClassFromString(@"NSUUID")) {
+        uuid = @"";
+    }
+    else {
+        uuid = [[NSUUID UUID] UUIDString];
+    }
+    NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
+    [record setValue:uuid forKey:self.autoAppendRecordUUIDColumn];
     return record;
 }
 
@@ -392,6 +411,18 @@ static long sessionTimeoutMilli = -1;
 - (void)disableServerSideUploadTimestamp {
     self.serverSideUploadTimestamp = FALSE;
     self.serverSideUploadTimestampColumn = nil;
+}
+
+- (void)enableAutoAppendRecordUUID {
+    self.autoAppendRecordUUIDColumn = @"record_uuid";
+}
+
+- (void)enableAutoAppendRecordUUID: (NSString*)columnName {
+    self.autoAppendRecordUUIDColumn = columnName;
+}
+
+- (void)disableAutoAppendRecordUUID {
+    self.autoAppendRecordUUIDColumn = nil;
 }
 
 + (void)initializeWithApiKey:(NSString *)apiKey {
