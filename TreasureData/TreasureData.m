@@ -404,6 +404,10 @@ static long sessionTimeoutMilli = -1;
 }
 
 - (void)enableServerSideUploadTimestamp: (NSString*)columnName {
+    if (!columnName) {
+        NSLog(@"columnName shouldn't be nil");
+        return;
+    }
     self.serverSideUploadTimestamp = TRUE;
     self.serverSideUploadTimestampColumn = columnName;
 }
@@ -418,6 +422,10 @@ static long sessionTimeoutMilli = -1;
 }
 
 - (void)enableAutoAppendRecordUUID: (NSString*)columnName {
+    if (!columnName) {
+        NSLog(@"columnName shouldn't be nil");
+        return;
+    }
     self.autoAppendRecordUUIDColumn = columnName;
 }
 
