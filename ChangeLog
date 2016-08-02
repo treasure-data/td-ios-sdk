@@ -1,3 +1,8 @@
+Release 0.1.19
+
+* Add enableAutoAppendRecordUUID()
+* Make enableServerSideUploadTimestamp() accept a custom column name
+
 Release 0.1.18
 
 * Set minimum iOS version explicitly
