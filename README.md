@@ -266,6 +266,21 @@ UUID of the device will be added to each event automatically if you call `enable
 
 It outputs the value as a column name `td_uuid`.
 
+### Adding an UUID to each event record automatically
+
+UUID will be added to each event record automatically if you call `enableAutoAppendRecordUUID`. Each event has different UUID.
+
+```
+	[[TreasureData sharedInstance] enableAutoAppendRecordUUID];
+	// If you want to customize the column name, pass it to the API
+	// [[TreasureData sharedInstance] enableAutoAppendRecordUUID:@"my_record_uuid"];
+		:
+	[[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"dragged" }
+												database:@"testdb" table:@"demotbl"];
+```
+
+It outputs the value as a column name `record_uuid` by default.
+
 
 ### Adding the device model information to each event automatically
 
@@ -311,6 +326,17 @@ It outputs the following column names and values:
 - `td_locale_country` : `[[NSLocale currentLocale] objectForKey: NSLocaleCountryCode]`
 - `td_locale_lang` : `[[NSLocale currentLocale] objectForKey: NSLocaleLanguageCode]`
 
+### Use server side upload timestamp
+
+If you want to use server side upload timestamp not only client device time that is recorded when your application calls `addEvent`, use `enableServerSideUploadTimestamp`.
+
+```
+	// Use server side upload time as `time` column
+	[[TreasureData sharedInstance] enableServerSideUploadTimestamp];
+	
+	// Add server side upload time as a customized column name
+	[[TreasureData sharedInstance] enableServerSideUploadTimestamp:@"server_upload_time"];
+```
 
 ### Enable/Disable debug log
 
