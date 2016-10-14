@@ -1,3 +1,7 @@
+Release 0.1.20
+
+* Fix a rare crash that might occur when the first calling `createTable` fails in KeenClientTD
+
 Release 0.1.19
 
 * Add enableAutoAppendRecordUUID()
