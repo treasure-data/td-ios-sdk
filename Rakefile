@@ -13,7 +13,7 @@ task :build_for_device do
 end
 
 task :build_for_simulator do
-  sh('xcodebuild -workspace TreasureData.xcworkspace -scheme TreasureData -configuration Release -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPad" SYMROOT=$(PWD)/Output OTHER_CFLAGS="-fembed-bitcode" CLANG_ENABLE_MODULE_DEBUGGING=NO GCC_PRECOMPILE_PREFIX_HEADER=NO DEBUG_INFORMATION_FORMAT="DWARF with dSYM"')
+  sh('xcodebuild -workspace TreasureData.xcworkspace -scheme TreasureData -configuration Release -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 6s" SYMROOT=$(PWD)/Output OTHER_CFLAGS="-fembed-bitcode" CLANG_ENABLE_MODULE_DEBUGGING=NO GCC_PRECOMPILE_PREFIX_HEADER=NO DEBUG_INFORMATION_FORMAT="DWARF with dSYM"')
 end
 
 task :pod_install do
