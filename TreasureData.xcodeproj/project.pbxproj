@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F68EE6328E24A445D660A51 /* libPods-TreasureDataTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E0DB92B1F49BBC30A854EB53 /* libPods-TreasureDataTests.a */; };
 		6B351A76194ABF0F001CBAAD /* Deflate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B351A75194ABF0F001CBAAD /* Deflate.m */; };
 		6B738092192A09160097D56E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B738091192A09160097D56E /* Foundation.framework */; };
 		6B738097192A09160097D56E /* TreasureData.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6B738096192A09160097D56E /* TreasureData.h */; };
@@ -24,7 +25,8 @@
 		6BF8C92F1A3E972C005B1804 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BF8C92E1A3E972C005B1804 /* Security.framework */; };
 		6BF8C9311A3E977B005B1804 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BF8C9301A3E977B005B1804 /* libz.dylib */; };
 		6BF8C9341A3E9B76005B1804 /* TDClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BF8C9331A3E9B76005B1804 /* TDClient.m */; };
-		D50EC3D45E854BECA06CCD7C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 206C1F02227B450EA0AF6E54 /* libPods.a */; };
+		91661AA60D7A5F1C6FB187B9 /* libPods-TreasureData-TreasureDataTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EB7804473BB5537C3491CB4 /* libPods-TreasureData-TreasureDataTests.a */; };
+		EF5A04E746876D639D752AE1 /* libPods-TreasureData.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11FADA7F69E6E148978C0F7C /* libPods-TreasureData.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,7 +54,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		206C1F02227B450EA0AF6E54 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		11FADA7F69E6E148978C0F7C /* libPods-TreasureData.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TreasureData.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		27C46146494E527DCE7A92A1 /* Pods-TreasureData-TreasureDataTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureData-TreasureDataTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureData-TreasureDataTests/Pods-TreasureData-TreasureDataTests.debug.xcconfig"; sourceTree = "<group>"; };
+		644A82FEB7ABBA6EEE825324 /* Pods-TreasureDataTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureDataTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureDataTests/Pods-TreasureDataTests.release.xcconfig"; sourceTree = "<group>"; };
 		6B351A74194ABF0F001CBAAD /* Deflate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Deflate.h; sourceTree = "<group>"; };
 		6B351A75194ABF0F001CBAAD /* Deflate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Deflate.m; sourceTree = "<group>"; };
 		6B73808E192A09160097D56E /* libTreasureData.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libTreasureData.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -74,8 +78,12 @@
 		6BF8C9301A3E977B005B1804 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		6BF8C9321A3E9B76005B1804 /* TDClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDClient.h; sourceTree = "<group>"; };
 		6BF8C9331A3E9B76005B1804 /* TDClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDClient.m; sourceTree = "<group>"; };
-		D7703DBACAC24041D3C2FAA2 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
-		DA1A4142BC8193FCBB929397 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		7AAAA06E102D8C6F76B84CC0 /* Pods-TreasureData-TreasureDataTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureData-TreasureDataTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureData-TreasureDataTests/Pods-TreasureData-TreasureDataTests.release.xcconfig"; sourceTree = "<group>"; };
+		8E147DCC7983A7FC2558B0A8 /* Pods-TreasureData.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureData.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureData/Pods-TreasureData.debug.xcconfig"; sourceTree = "<group>"; };
+		8EB7804473BB5537C3491CB4 /* libPods-TreasureData-TreasureDataTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TreasureData-TreasureDataTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9F0EF4E7CEE8DA4E298326B9 /* Pods-TreasureData.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureData.release.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureData/Pods-TreasureData.release.xcconfig"; sourceTree = "<group>"; };
+		C672A66407ACBC0B49C815A4 /* Pods-TreasureDataTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureDataTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureDataTests/Pods-TreasureDataTests.debug.xcconfig"; sourceTree = "<group>"; };
+		E0DB92B1F49BBC30A854EB53 /* libPods-TreasureDataTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TreasureDataTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,7 +92,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6B738092192A09160097D56E /* Foundation.framework in Frameworks */,
-				D50EC3D45E854BECA06CCD7C /* libPods.a in Frameworks */,
+				EF5A04E746876D639D752AE1 /* libPods-TreasureData.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,6 +107,8 @@
 				6B7380A0192A09160097D56E /* XCTest.framework in Frameworks */,
 				6B7380A3192A09160097D56E /* UIKit.framework in Frameworks */,
 				6B7380A1192A09160097D56E /* Foundation.framework in Frameworks */,
+				1F68EE6328E24A445D660A51 /* libPods-TreasureDataTests.a in Frameworks */,
+				91661AA60D7A5F1C6FB187B9 /* libPods-TreasureData-TreasureDataTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,7 +122,7 @@
 				6B7380A7192A09160097D56E /* TreasureDataTests */,
 				6B738090192A09160097D56E /* Frameworks */,
 				6B73808F192A09160097D56E /* Products */,
-				FC669D005E6AAD79F6207CC2 /* Pods */,
+				81303D87A0647FB407EA911A /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -134,7 +144,9 @@
 				6B738091192A09160097D56E /* Foundation.framework */,
 				6B73809F192A09160097D56E /* XCTest.framework */,
 				6B7380A2192A09160097D56E /* UIKit.framework */,
-				206C1F02227B450EA0AF6E54 /* libPods.a */,
+				11FADA7F69E6E148978C0F7C /* libPods-TreasureData.a */,
+				E0DB92B1F49BBC30A854EB53 /* libPods-TreasureDataTests.a */,
+				8EB7804473BB5537C3491CB4 /* libPods-TreasureData-TreasureDataTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -182,11 +194,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		FC669D005E6AAD79F6207CC2 /* Pods */ = {
+		81303D87A0647FB407EA911A /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				DA1A4142BC8193FCBB929397 /* Pods.debug.xcconfig */,
-				D7703DBACAC24041D3C2FAA2 /* Pods.release.xcconfig */,
+				8E147DCC7983A7FC2558B0A8 /* Pods-TreasureData.debug.xcconfig */,
+				9F0EF4E7CEE8DA4E298326B9 /* Pods-TreasureData.release.xcconfig */,
+				C672A66407ACBC0B49C815A4 /* Pods-TreasureDataTests.debug.xcconfig */,
+				644A82FEB7ABBA6EEE825324 /* Pods-TreasureDataTests.release.xcconfig */,
+				27C46146494E527DCE7A92A1 /* Pods-TreasureData-TreasureDataTests.debug.xcconfig */,
+				7AAAA06E102D8C6F76B84CC0 /* Pods-TreasureData-TreasureDataTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -198,11 +214,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6B7380B1192A09160097D56E /* Build configuration list for PBXNativeTarget "TreasureData" */;
 			buildPhases = (
-				E73E59E45A674C79BF007F49 /* Check Pods Manifest.lock */,
+				60BA478A76FC90AEF22FE6A4 /* [CP] Check Pods Manifest.lock */,
 				6B73808A192A09160097D56E /* Sources */,
 				6B73808B192A09160097D56E /* Frameworks */,
 				6B73808C192A09160097D56E /* CopyFiles */,
-				1212A622E6FD49DE9CF4D90A /* Copy Pods Resources */,
+				9EBA1F044C24E6A640CAF055 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -217,9 +233,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6B7380B4192A09160097D56E /* Build configuration list for PBXNativeTarget "TreasureDataTests" */;
 			buildPhases = (
+				5F62EAC907F3EEA5C1BAB630 /* [CP] Check Pods Manifest.lock */,
 				6B73809A192A09160097D56E /* Sources */,
 				6B73809B192A09160097D56E /* Frameworks */,
 				6B73809C192A09160097D56E /* Resources */,
+				55A58BE0DFF4BC9C1102BCD8 /* [CP] Embed Pods Frameworks */,
+				2E8AFDBC88EE236B7A1B972E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -238,7 +257,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0510;
-				ORGANIZATIONNAME = "___FULLUSERNAME___";
+				ORGANIZATIONNAME = ___FULLUSERNAME___;
 			};
 			buildConfigurationList = 6B738089192A09160097D56E /* Build configuration list for PBXProject "TreasureData" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -270,34 +289,79 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1212A622E6FD49DE9CF4D90A /* Copy Pods Resources */ = {
+		2E8AFDBC88EE236B7A1B972E /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TreasureData-TreasureDataTests/Pods-TreasureData-TreasureDataTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E73E59E45A674C79BF007F49 /* Check Pods Manifest.lock */ = {
+		55A58BE0DFF4BC9C1102BCD8 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TreasureData-TreasureDataTests/Pods-TreasureData-TreasureDataTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5F62EAC907F3EEA5C1BAB630 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		60BA478A76FC90AEF22FE6A4 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		9EBA1F044C24E6A640CAF055 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TreasureData/Pods-TreasureData-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -415,7 +479,7 @@
 		};
 		6B7380B2192A09160097D56E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DA1A4142BC8193FCBB929397 /* Pods.debug.xcconfig */;
+			baseConfigurationReference = 8E147DCC7983A7FC2558B0A8 /* Pods-TreasureData.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				DSTROOT = /tmp/TreasureData.dst;
@@ -434,7 +498,7 @@
 		};
 		6B7380B3192A09160097D56E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D7703DBACAC24041D3C2FAA2 /* Pods.release.xcconfig */;
+			baseConfigurationReference = 9F0EF4E7CEE8DA4E298326B9 /* Pods-TreasureData.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				DSTROOT = /tmp/TreasureData.dst;
@@ -453,7 +517,7 @@
 		};
 		6B7380B5192A09160097D56E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DA1A4142BC8193FCBB929397 /* Pods.debug.xcconfig */;
+			baseConfigurationReference = 27C46146494E527DCE7A92A1 /* Pods-TreasureData-TreasureDataTests.debug.xcconfig */;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -475,6 +539,7 @@
 		};
 		6B7380B6192A09160097D56E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7AAAA06E102D8C6F76B84CC0 /* Pods-TreasureData-TreasureDataTests.release.xcconfig */;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
