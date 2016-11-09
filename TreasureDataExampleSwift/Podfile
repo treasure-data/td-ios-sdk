@@ -1,2 +1,4 @@
 use_frameworks!
-pod 'TreasureData-iOS-SDK'
+target 'TreasureDataExampleSwift' do
+  pod 'TreasureData-iOS-SDK'
+end
