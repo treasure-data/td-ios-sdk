@@ -1,6 +1,7 @@
-target 'TreasureData' do
-  pod 'KeenClientTD', '= 3.2.30'
+pod 'KeenClientTD', '= 3.2.30'
 
-  target 'TreasureDataTests' do
-  end
+target 'TreasureData' do
+end
+
+target 'TreasureDataTests' do
 end

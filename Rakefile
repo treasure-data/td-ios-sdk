@@ -10,10 +10,12 @@ end
 
 task :build_for_device do
   sh('xcodebuild -workspace TreasureData.xcworkspace -scheme TreasureData -configuration Release -sdk iphoneos SYMROOT=$(PWD)/Output OTHER_CFLAGS="-fembed-bitcode" CLANG_ENABLE_MODULE_DEBUGGING=NO GCC_PRECOMPILE_PREFIX_HEADER=NO DEBUG_INFORMATION_FORMAT="DWARF with dSYM"')
+  sh('cd Output/Release-iphoneos && ln -s KeenClientTD-iOS5.1/libKeenClientTD-iOS5.1.a libKeenClientTD.a')
 end
 
 task :build_for_simulator do
   sh('xcodebuild -workspace TreasureData.xcworkspace -scheme TreasureData -configuration Release -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 6s" SYMROOT=$(PWD)/Output OTHER_CFLAGS="-fembed-bitcode" CLANG_ENABLE_MODULE_DEBUGGING=NO GCC_PRECOMPILE_PREFIX_HEADER=NO DEBUG_INFORMATION_FORMAT="DWARF with dSYM"')
+  sh('cd Output/Release-iphonesimulator && ln -s KeenClientTD-iOS5.1/libKeenClientTD-iOS5.1.a libKeenClientTD.a')
 end
 
 task :pod_install do
@@ -104,7 +106,7 @@ def copy_header_file(output_dir)
   keen_header_dir = File.join(output_dir, 'KeenClientTD')
   mkdir_p(keen_header_dir)
   sh("cp -p Output/Release-iphoneos/include/TreasureData/* #{output_dir}")
-  sh("cp -p Output/Release-iphoneos/*.h #{keen_header_dir}")
+  sh("cp -p Output/Release-iphoneos/KeenClientTD-iOS5.1/*.h #{keen_header_dir}")
 end
 
 def create_info_plist(output_dir)
