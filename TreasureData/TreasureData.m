@@ -389,6 +389,13 @@ static long sessionTimeoutMilli = -1;
     }
 }
 
++ (NSString*)getSessionId {
+    if (!session) {
+        return nil;
+    }
+    return [session getId];
+}
+
 // Only for test
 + (void)resetSession {
     session = nil;
