@@ -85,6 +85,8 @@
 
 + (void)endSession;
 
++ (NSString*)getSessionId;
+
 + (void)resetSession;       // Only for test
 
 + (void)setSessionTimeoutMilli:(long)to;
