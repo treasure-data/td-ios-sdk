@@ -1,5 +1,10 @@
 # Change Log
 
+## Version 0.1.22
+_2017-03-10_
+
+* Add getSessionId function to TreasureData
+
 ## Version 0.1.21
 _2016-11-11_
 
@@ -13,8 +18,8 @@ _2016-10-14_
 ## Version 0.1.19
 _2016-08-02_
 
-* Add enableAutoAppendRecordUUID()
-* Make enableServerSideUploadTimestamp() accept a custom column name
+* Add enableAutoAppendRecordUUID method to TreasureData
+* Make enableServerSideUploadTimestamp method of TreasureData accept a custom column name
 
 ## Version 0.1.18
 _2016-07-13_
