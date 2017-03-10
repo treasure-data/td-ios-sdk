@@ -183,6 +183,16 @@ If you want to handle the following case, use a pair of class methods `startSess
 }
 ```
 
+In this case, you can get the current session ID using `getSessionId` class method
+
+```
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+	[TreasureData startSession];
+    NSLog(@"Session ID=%@", [TreasureData getSessionId]);
+}
+```
+
 ### Detect if it's the first running
 
 You can detect if it's the first running or not easily using `isFirstRun` method and then clear the flag with `clearFirstRun`.
