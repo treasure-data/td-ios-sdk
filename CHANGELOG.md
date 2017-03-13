@@ -1,9 +1,14 @@
 # Change Log
 
+## Version 0.1.23
+_2017-03-13_
+
+* Add an instance method `getSessionId` to TreasureData class
+
 ## Version 0.1.22
 _2017-03-10_
 
-* Add getSessionId function to TreasureData
+* Add a class method `getSessionId` to TreasureData class
 
 ## Version 0.1.21
 _2016-11-11_
