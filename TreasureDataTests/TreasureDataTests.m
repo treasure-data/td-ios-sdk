@@ -408,12 +408,22 @@ static NSString *END_POINT = @"http://localhost";
 }
 
 - (void)testSessionIdWithInstanceSession {
+    __block NSString *sessionId0;
+    __block NSString *sessionId1;
+    __block NSString *sessionId2;
+    __block NSString *sessionId3;
+
     [self baseTesting:^() {
         [self.td setDefaultDatabase:@"db_"];
         [self setupDefaultExpectedResponseBody: @{@"db_.tbl":@[@{@"success":@"true"}, @{@"success":@"true"}, @{@"success":@"true"}, @{@"success":@"true"}]}];
+        sessionId0 = [self.td getSessionId];
         [self.td startSession:@"tbl"];
+        sessionId1 = [self.td getSessionId];
+
         [self.td addEvent:@{@"counter":@"one"} database:@"db_" table:@"tbl"];
+        sessionId2 = [self.td getSessionId];
         [self.td endSession:@"tbl" database:@"db_"];
+        sessionId3 = [self.td getSessionId];
         [self.td addEvent:@{@"counter":@"two"} database:@"db_" table:@"tbl"];
     }
             assertion:^(NSDictionary *ev){
@@ -470,6 +480,10 @@ static NSString *END_POINT = @"http://localhost";
                 XCTAssertNotNil(uuidStartSession);
                 XCTAssertEqualObjects(uuidStartSession, uuidEndSession);
                 XCTAssertEqualObjects(uuidStartSession, uuidAddEvent);
+                XCTAssertNil(sessionId0);
+                XCTAssertEqualObjects(sessionId1, uuidStartSession);
+                XCTAssertEqualObjects(sessionId2, uuidStartSession);
+                XCTAssertNil(sessionId3);
             }];
 }
 
@@ -505,26 +519,30 @@ static NSString *END_POINT = @"http://localhost";
     __block NSString *sessionId0;
     __block NSString *sessionId1;
     __block NSString *sessionId2;
-
+    __block NSString *sessionId3;
+    __block NSString *sessionId4;
+    
     [self baseTesting:^() {
         [TreasureData setSessionTimeoutMilli:500];
         [self.td setDefaultDatabase:@"db_"];
         [self setupDefaultExpectedResponseBody: @{@"db_.tbl":@[@{@"success":@"true"}, @{@"success":@"true"}, @{@"success":@"true"}, @{@"success":@"true"}, @{@"success":@"true"}]}];
-        [TreasureData startSession];
         sessionId0 = [TreasureData getSessionId];
+        [TreasureData startSession];
+        sessionId1 = [TreasureData getSessionId];
         [self.td addEvent:@{@"counter":@"one"} database:@"db_" table:@"tbl"];
         [self.td addEvent:@{@"counter":@"two"} database:@"db_" table:@"tbl"];
         [TreasureData endSession];
         [self.td addEvent:@{@"counter":@"three"} database:@"db_" table:@"tbl"];
         [TreasureData startSession];
-        sessionId1 = [TreasureData getSessionId];
+        sessionId2 = [TreasureData getSessionId];
         [self.td addEvent:@{@"counter":@"four"} database:@"db_" table:@"tbl"];
         [TreasureData endSession];
         [NSThread sleepForTimeInterval:1.0];
         [TreasureData startSession];
-        sessionId2 = [TreasureData getSessionId];
+        sessionId3 = [TreasureData getSessionId];
         [self.td addEvent:@{@"counter":@"five"} database:@"db_" table:@"tbl"];
         [TreasureData endSession];
+        sessionId4 = [TreasureData getSessionId];
     }
             assertion:^(NSDictionary *ev){
                 XCTAssertEqual(1, self.session.sendRequestCount);
@@ -583,9 +601,11 @@ static NSString *END_POINT = @"http://localhost";
                 XCTAssertEqualObjects(uuidAddEventOne, uuidAddEventTwo);
                 XCTAssertEqualObjects(uuidAddEventOne, uuidAddEventFour);
                 XCTAssertNotEqualObjects(uuidAddEventOne, uuidAddEventFive);
-                XCTAssertEqualObjects(sessionId0, uuidAddEventOne);
-                XCTAssertEqualObjects(sessionId1, uuidAddEventFour);
-                XCTAssertEqualObjects(sessionId2, uuidAddEventFive);
+                XCTAssertNil(sessionId0);
+                XCTAssertEqualObjects(sessionId1, uuidAddEventOne);
+                XCTAssertEqualObjects(sessionId2, uuidAddEventFour);
+                XCTAssertEqualObjects(sessionId3, uuidAddEventFive);
+                XCTAssertNil(sessionId4);
             }];
 }
 
