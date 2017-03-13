@@ -373,6 +373,10 @@ static long sessionTimeoutMilli = -1;
     self.sessionId = nil;
 }
 
+- (NSString *)getSessionId {
+    return self.sessionId;
+}
+
 + (void)startSession {
     if (!session) {
         session = [Session new];

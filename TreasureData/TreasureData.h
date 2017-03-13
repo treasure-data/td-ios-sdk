@@ -81,6 +81,8 @@
 
 - (void)endSession:(NSString*)table database:(NSString*)database;
 
+- (NSString *)getSessionId;
+
 + (void)startSession;
 
 + (void)endSession;
