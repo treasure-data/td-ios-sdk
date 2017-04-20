@@ -1,5 +1,10 @@
 # Change Log
 
+## Version 0.1.24
+_2017-04-20_
+
+* Call `onSuccess` of `uploadEventsWithCallback` even when buffered data is empty
+
 ## Version 0.1.23
 _2017-03-13_
 
