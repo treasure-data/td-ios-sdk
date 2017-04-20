@@ -650,4 +650,16 @@ static NSString *END_POINT = @"http://localhost";
     self.isFinished = true;
 }
 
+- (void)testOnSuccessIsCalledEvenWhenDataIsEmpty {
+    [self.td uploadEventsWithCallback:^() {
+        XCTAssertTrue(true);
+        self.isFinished = true;
+    }
+                              onError:^(NSString* errorCode, NSString* message) {
+                                  XCTAssertTrue(false);
+                                  self.isFinished = true;
+                              }
+     ];
+}
+
 @end
