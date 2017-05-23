@@ -1,7 +1,7 @@
-TreasureData iOS SDK
+Treasure Data iOS SDK
 ===============
 
-iOS SDK for [Treasure Data](http://www.treasuredata.com/). With this SDK, you can import the events on your applications into TreasureData easily. This library supports iOS 5 or later.
+iOS SDK for [Treasure Data](http://www.treasuredata.com/). With this SDK, you can import the events on your applications into Treasure Data easily. This library supports iOS 5 or later.
 
 Also, there is a more modern alternative SDK written in Swift [https://github.com/recruit-lifestyle/TreasureDataSDK](https://github.com/recruit-lifestyle/TreasureDataSDK).
 
@@ -62,7 +62,10 @@ We recommend to use a write-only API key for the SDK. To obtain one, please:
 3. Insert your password under the 'API Keys' panel;
 4. In the bottom part of the panel, under 'Write-Only API keys', either copy the API key or click on 'Generate New' and copy the new API key.
 
-### Add events to local buffer
+### Add a event to local buffer
+
+To add a event to local buffer, you can call `TreasureData`'s `addEvent` or `addEventWithCallback` API.
+
 
 ```
 - (IBAction)clickButton:(id)sender {
@@ -79,24 +82,23 @@ We recommend to use a write-only API key for the SDK. To obtain one, please:
                     onError:^(NSString* errorCode, NSString* message) {
                         NSLog(@"addEvent: error. errorCode=%@, message=%@", errorCode, message);
                     }];
-}
-```
-Or, simply call `addEvent` method instead of `addEventWithCallback`.
-
-```
-    [[TreasureData sharedInstance] addEvent:@{
-                       @"name": @"boo bar",
-                       @"age": @42,
-                       @"comment": @"hello world"
-                   }
-                   database:@"testdb"
-                      table:@"demotbl"];
+                    
+    // Or, simply...
+    //   [[TreasureData sharedInstance] addEvent:@{
+    //                     @"name": @"boo bar",
+    //                     @"age": @42,
+    //                     @"comment": @"hello world"
+    //                 }
+    //                 database:@"testdb"
+    //                    table:@"demotbl"];
 ```
 
 
 Specify the database and table to which you want to import the events.
 
 ### Upload buffered events to TreasureData
+
+To upload events buffered events to Treasure Data, you can call `TreasureData`'s `uploadEvents` or `uploadEventsWithCallback` API.
 
 ```
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -105,6 +107,7 @@ Specify the database and table to which you want to import the events.
 		bgTask = UIBackgroundTaskInvalid;
 	}];
 
+    // You can call this API to uplaod buffered events whenever you want.
 	[[TreasureData sharedInstance] uploadEventsWithCallback:^() {
 			[application endBackgroundTask:bgTask];
 			bgTask = UIBackgroundTaskInvalid;
@@ -114,17 +117,27 @@ Specify the database and table to which you want to import the events.
 			bgTask = UIBackgroundTaskInvalid;
 		}
 	];
-}
-```
-Or, simply call `uploadEvents` method instead of `uploadEventsWithCallback`.
 
-```
-    [[TreasureData sharedInstance] uploadEvents];
+    // Or, simply...
+    //  [[TreasureData sharedInstance] uploadEvents];
 
 ```
 
-The sent events are going to be buffered for a few minutes before they get sent and imported into TreasureData storage.
+It depends on the characteristic of your application when to upload and how often to upload buffered events. But we recommend the followings at least as good timings to upload.
 
+- When the current screen is closing or moving to background
+- When closing the application
+
+The sent events is going to be buffered for a few minutes before they get imported into Treasure Data storage.
+
+### Retry uploading and deduplication
+
+This SDK imports events in exactly once style with the combination of these features.
+
+- This SDK keeps buffered events with adding unique keys and retries to upload them until confirming the events are uploaded and stored on server side (at least once)
+- The server side remembers the unique keys of all events within the past 1 hours by default and prevents duplicated imports (at most once)
+
+As for the deduplication window is 1 hour by default, so it's important not to keep buffered events more than 1 hour to avoid duplicated events.
 
 ### Start/End session
 
