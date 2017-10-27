@@ -387,3 +387,9 @@ If you want to use server side upload timestamp not only client device time that
 ## Usage in Swift
 
 See this example project (https://github.com/treasure-data/td-ios-sdk/tree/master/TreasureDataExampleSwift) for details.
+
+## Xcode Compatibility
+
+The current version has been built and tested with Xcode v8.2.
+
+At the moment, Xcode v9 or later is **not supported**.
