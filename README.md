@@ -62,9 +62,9 @@ We recommend to use a write-only API key for the SDK. To obtain one, please:
 3. Insert your password under the 'API Keys' panel;
 4. In the bottom part of the panel, under 'Write-Only API keys', either copy the API key or click on 'Generate New' and copy the new API key.
 
-### Add a event to local buffer
+### Add an event to local buffer
 
-To add a event to local buffer, you can call `TreasureData`'s `addEvent` or `addEventWithCallback` API.
+To add an event to local buffer, you can call `TreasureData`'s `addEvent` or `addEventWithCallback` API.
 
 
 ```
