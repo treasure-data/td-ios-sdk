@@ -108,6 +108,10 @@ static NSString *defaultAppEventDatabase = @"td_ios_app";
                 return nil;
             }
             self.client.enableRetryUploading = configuration.shouldRetryUploading;
+
+            if (configuration.autoTrackLifecycleEvents) {
+                [self observeLifecycleEvents];
+            }
         } else {
             KCLog(@"%@", [@"Config violations:\n"
                           stringByAppendingString:[[configuration violations] componentsJoinedByString:@"\n"]]);
@@ -329,6 +333,44 @@ static NSString *defaultAppEventDatabase = @"td_ios_app";
 
 - (void)uploadEvents {
     [self uploadEventsWithCallback:nil onError:nil];
+}
+
+#pragma mark - Auto tracking
+
+- (void)observeLifecycleEvents {
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc addObserver:self selector:@selector(handleAppDidLaunching:) name:@"UIApplicationDidFinishLaunchingNotification" object:nil];
+}
+
+- (void) handleAppDidLaunching:(NSNotification *)notification
+{
+    NSString *currentVersion = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
+    NSString *currentBuild = [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
+    NSString *previousVersion = [[NSUserDefaults standardUserDefaults] stringForKey:TDTrackedAppVersionKey];
+    NSString *previousBuild = [[NSUserDefaults standardUserDefaults] stringForKey:TDTrackedAppBuildKey];
+
+    if ([[TreasureData sharedInstance] isFirstRun]) {
+        [[TreasureData sharedInstance] clearFirstRun];
+        [self addEvent:@{ @"event": @"App Installed",
+                          @"version": currentVersion,
+                          @"build": currentBuild}
+              database:self.configuration.defaultDatabase
+                 table:self.configuration.defaultTable];
+    } else if (![previousVersion isEqualToString:currentVersion]) {
+        [self addEvent:@{ @"event": @"App Updated",
+                          @"previous_version": previousVersion,
+                          @"previous_build": previousBuild,
+                          @"version": currentVersion,
+                          @"build": currentBuild}
+              database:self.configuration.defaultDatabase
+                 table:self.configuration.defaultTable];
+    }
+    [self addEvent:@{ @"event": @"App Opened", @"version": currentVersion, @"build": currentBuild }
+          database:self.configuration.defaultDatabase
+             table:self.configuration.defaultTable];
+
+    [[NSUserDefaults standardUserDefaults] setObject:currentVersion forKey:TDTrackedAppVersionKey];
+    [[NSUserDefaults standardUserDefaults] setObject:currentBuild forKey:TDTrackedAppBuildKey];
 }
 
 #pragma mark - Persisted states

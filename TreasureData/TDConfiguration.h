@@ -26,6 +26,7 @@
 @property (nonatomic, assign) BOOL enableServerSideUploadTimestamp;
 @property (nonatomic, strong, nullable) NSString *serverTimestampColumn;
 
+@property (nonatomic, assign) BOOL autoTrackLifecycleEvents;
 
 - (BOOL)isValid;
 - (NSArray<NSString *> * _Nonnull)violations;
