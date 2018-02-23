@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		1F68EE6328E24A445D660A51 /* libPods-TreasureDataTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E0DB92B1F49BBC30A854EB53 /* libPods-TreasureDataTests.a */; };
+		20B08C752021E2D800C12679 /* TDConfiguration.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 20B08C742021E28200C12679 /* TDConfiguration.h */; };
+		20B1DA22203F0A3E0092737E /* TDConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 20B1DA21203F0A3E0092737E /* TDConfiguration.m */; };
 		6B351A76194ABF0F001CBAAD /* Deflate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B351A75194ABF0F001CBAAD /* Deflate.m */; };
 		6B738092192A09160097D56E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B738091192A09160097D56E /* Foundation.framework */; };
 		6B738097192A09160097D56E /* TreasureData.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6B738096192A09160097D56E /* TreasureData.h */; };
@@ -41,10 +43,11 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		6B73808C192A09160097D56E /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				20B08C752021E2D800C12679 /* TDConfiguration.h in CopyFiles */,
 				6B758E4E1C00C59A00D597F8 /* TDClient.h in CopyFiles */,
 				6B738097192A09160097D56E /* TreasureData.h in CopyFiles */,
 			);
@@ -54,6 +57,8 @@
 
 /* Begin PBXFileReference section */
 		11FADA7F69E6E148978C0F7C /* libPods-TreasureData.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TreasureData.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		20B08C742021E28200C12679 /* TDConfiguration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TDConfiguration.h; sourceTree = "<group>"; };
+		20B1DA21203F0A3E0092737E /* TDConfiguration.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TDConfiguration.m; sourceTree = "<group>"; };
 		27C46146494E527DCE7A92A1 /* Pods-TreasureData-TreasureDataTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureData-TreasureDataTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureData-TreasureDataTests/Pods-TreasureData-TreasureDataTests.debug.xcconfig"; sourceTree = "<group>"; };
 		361BA221499EFE17CB2E88D1 /* Pods-Common-TreasureDataTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Common-TreasureDataTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Common-TreasureDataTests/Pods-Common-TreasureDataTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4D4265C575E11B5930549F10 /* Pods-Common-TreasureData.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Common-TreasureData.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Common-TreasureData/Pods-Common-TreasureData.debug.xcconfig"; sourceTree = "<group>"; };
@@ -158,6 +163,8 @@
 				6B351A75194ABF0F001CBAAD /* Deflate.m */,
 				6B738096192A09160097D56E /* TreasureData.h */,
 				6B738098192A09160097D56E /* TreasureData.m */,
+				20B08C742021E28200C12679 /* TDConfiguration.h */,
+				20B1DA21203F0A3E0092737E /* TDConfiguration.m */,
 				6B738094192A09160097D56E /* Supporting Files */,
 				6BF8C9321A3E9B76005B1804 /* TDClient.h */,
 				6BF8C9331A3E9B76005B1804 /* TDClient.m */,
@@ -262,6 +269,11 @@
 			attributes = {
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "___FULLUSERNAME___";
+				TargetAttributes = {
+					6B73809D192A09160097D56E = {
+						LastSwiftMigration = 0920;
+					};
+				};
 			};
 			buildConfigurationList = 6B738089192A09160097D56E /* Build configuration list for PBXProject "TreasureData" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -329,13 +341,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TreasureDataTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		60BA478A76FC90AEF22FE6A4 /* [CP] Check Pods Manifest.lock */ = {
@@ -344,13 +359,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TreasureData-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		9EBA1F044C24E6A640CAF055 /* [CP] Copy Pods Resources */ = {
@@ -376,6 +394,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6BB5A9D41D1A86EF0006A534 /* Session.m in Sources */,
+				20B1DA22203F0A3E0092737E /* TDConfiguration.m in Sources */,
 				6BF8C9341A3E9B76005B1804 /* TDClient.m in Sources */,
 				6B738099192A09160097D56E /* TreasureData.m in Sources */,
 				6B351A76194ABF0F001CBAAD /* Deflate.m in Sources */,
@@ -523,6 +542,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C672A66407ACBC0B49C815A4 /* Pods-TreasureDataTests.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -535,8 +555,12 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "TreasureDataTests/TreasureDataTests-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "TreasureDataTests/TreasureDataTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Debug;
@@ -545,6 +569,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 644A82FEB7ABBA6EEE825324 /* Pods-TreasureDataTests.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -553,8 +578,11 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TreasureData/TreasureData-Prefix.pch";
 				INFOPLIST_FILE = "TreasureDataTests/TreasureDataTests-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "TreasureDataTests/TreasureDataTests-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
