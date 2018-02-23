@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "TreasureData.h"
+#import "TDConfiguration.h"
 
 @implementation AppDelegate
 
@@ -15,34 +16,26 @@
 {
     [TreasureData enableLogging];
     // [TreasureData initializeApiEndpoint:@"https://in.ybi.idcfcloud.net"];
-    [TreasureData initializeEncryptionKey:@"hello world"];
-    [TreasureData initializeWithApiKey:@"your_api_key"];
-    [[TreasureData sharedInstance] setDefaultDatabase:@"testdb"];
-    [[TreasureData sharedInstance] enableAutoAppendUniqId];
-    [[TreasureData sharedInstance] enableAutoAppendRecordUUID];
-    [[TreasureData sharedInstance] enableAutoAppendModelInformation];
-    [[TreasureData sharedInstance] enableAutoAppendAppInformation];
-    [[TreasureData sharedInstance] enableAutoAppendLocaleInformation];
-    // [[TreasureData sharedInstance] disableRetryUploading];
-    [[TreasureData sharedInstance] enableServerSideUploadTimestamp: @"server_upload_time"];
-    
-    if ([[TreasureData sharedInstance] isFirstRun]) {
-        [[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"installed" }
-                                                   database:@"testdb"
-                                                      table:@"demotbl"
-                                                  onSuccess:^(){
-                                                      [[TreasureData sharedInstance] uploadEventsWithCallback:^() {
-                                                          [[TreasureData sharedInstance] clearFirstRun];
-                                                      }
-                                                                                                      onError:^(NSString* errorCode, NSString* message) {
-                                                                                                          NSLog(@"uploadEvents: error. errorCode=%@, message=%@", errorCode, message);
-                                                                                                      }
-                                                       ];
-                                                  }
-                                                    onError:^(NSString* errorCode, NSString* message) {
-                                                        NSLog(@"addEvent: error. errorCode=%@, message=%@", errorCode, message);
-                                                    }];
-    }
+
+    TDConfiguration *configuration = [TDConfiguration new];
+
+    configuration.encryptionKey = @"hello world";
+
+    configuration.endpoint = @"https://in.treasuredata.com";
+    configuration.apiKey = @"your_api_key";
+
+    configuration.defaultDatabase = @"huy";
+    configuration.defaultTable = @"mobile";
+    configuration.autoAppendUniqId = true;
+    configuration.autoAppendRecordUUID = true;
+    configuration.autoAppendModelInformation = true;
+    configuration.autoAppendAppInformation = true;
+    configuration.autoAppendLocaleInformation = true;
+    configuration.serverTimestampColumn = @"server_upload_time";
+
+    [TreasureData config:configuration];
+    [TreasureData startSession];
+
     return YES;
 }
 

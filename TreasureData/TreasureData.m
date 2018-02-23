@@ -11,6 +11,7 @@
 #import "math.h"
 #import "TDClient.h"
 #import "Session.h"
+#import "TDConfiguration.h"
 
 static bool isTraceLoggingEnabled = false;
 static bool isEventCompressionEnabled = true;
@@ -40,6 +41,9 @@ static NSString *sessionEventEnd = @"end";
 static Session *session = nil;
 static long sessionTimeoutMilli = -1;
 
+static NSString *defaultAppEventTable = @"main";
+static NSString *defaultAppEventDatabase = @"td_ios_app";
+
 @interface TreasureData ()
 @property BOOL autoAppendUniqId;
 @property BOOL autoAppendModelInformation;
@@ -49,10 +53,16 @@ static long sessionTimeoutMilli = -1;
 @property BOOL serverSideUploadTimestamp;
 @property NSString *serverSideUploadTimestampColumn;
 @property NSString *autoAppendRecordUUIDColumn;
+
+@property (nonatomic) TDConfiguration *configuration;
 @end
 
 @implementation TreasureData
-- (id)initWithApiKey:(NSString *)apiKey {
+
+#pragma mark - Initialization
+
+- (id)initWithApiKey:(NSString *)apiKey
+{
     self = [self init];
 
     if (self) {
@@ -82,6 +92,36 @@ static long sessionTimeoutMilli = -1;
     return self;
 }
 
+- (id)initWithConfiguration:(TDConfiguration *)configuration
+{
+    if (self = [super init]) {
+        if ([configuration isValid]) {
+            self.configuration = configuration;
+            // static members
+            defaultApiEndpoint = configuration.endpoint;
+            defaultAppEventDatabase = configuration.defaultDatabase;
+
+            [TDClient initializeEncryptionKey:configuration.encryptionKey];
+            self.client = [[TDClient alloc] initWithApiKey:configuration.apiKey apiEndpoint:configuration.endpoint];
+            if (!self.client) {
+                KCLog(@"Failed to initialize client");
+                return nil;
+            }
+            self.client.enableRetryUploading = configuration.shouldRetryUploading;
+
+            if (configuration.autoTrackLifecycleEvents) {
+                [self observeLifecycleEvents];
+            }
+        } else {
+            KCLog(@"%@", [@"Config violations:\n"
+                          stringByAppendingString:[[configuration violations] componentsJoinedByString:@"\n"]]);
+            return nil;
+        }
+    }
+    return self;
+}
+
+#pragma mark - Event tracking
 
 - (void)event:(NSDictionary *)record table:(NSString *)table {
     [self addEvent:record table:table];
@@ -92,7 +132,7 @@ static long sessionTimeoutMilli = -1;
 }
 
 - (void)addEvent:(NSDictionary *)record table:(NSString *)table {
-    [self addEvent:record database:self.defaultDatabase table:table];
+    [self addEvent:record database:self.configuration.defaultDatabase table:table];
 }
 
 - (void)addEvent:(NSDictionary *)record database:(NSString *)database table:(NSString *)table {
@@ -113,25 +153,25 @@ static long sessionTimeoutMilli = -1;
                 }
             }
             else {
-                if (self.autoAppendUniqId) {
+                if (self.configuration.autoAppendUniqId) {
                     record = [self appendUniqId:record];
                 }
-                if (self.autoAppendRecordUUIDColumn) {
+                if (self.configuration.autoAppendRecordUUIDColumn) {
                     record = [self appendRecordUUID:record];
                 }
-                if (self.autoAppendModelInformation) {
+                if (self.configuration.autoAppendModelInformation) {
                     record = [self appendModelInformation:record];
                 }
                 if (session || self.sessionId) {
                     record = [self appendSessionId:record];
                 }
-                if (self.serverSideUploadTimestamp) {
+                if (self.configuration.enableServerSideUploadTimestamp) {
                     record = [self appendServerSideUploadTimestamp:record];
                 }
-                if (self.autoAppendAppInformation) {
+                if (self.configuration.autoAppendAppInformation) {
                     record = [self appendAppInformation:record];
                 }
-                if (self.autoAppendLocaleInformation) {
+                if (self.configuration.autoAppendLocaleInformation) {
                     record = [self appendLocaleInformation:record];
                 }
 
@@ -157,7 +197,7 @@ static long sessionTimeoutMilli = -1;
 }
 
 - (void)addEventWithCallback:(NSDictionary *)record table:(NSString *)table onSuccess:(void (^)())onSuccess onError:(void (^)(NSString*, NSString*))onError {
-    [self addEventWithCallback:record database:self.defaultDatabase table:table onSuccess:onSuccess onError:onError];
+    [self addEventWithCallback:record database:self.configuration.defaultDatabase table:table onSuccess:onSuccess onError:onError];
 }
 
 - (NSString*)getUUID {
@@ -295,6 +335,118 @@ static long sessionTimeoutMilli = -1;
     [self uploadEventsWithCallback:nil onError:nil];
 }
 
+#pragma mark - Auto tracking
+
+- (void)observeLifecycleEvents {
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc addObserver:self selector:@selector(handleAppDidLaunching:) name:@"UIApplicationDidFinishLaunchingNotification" object:nil];
+}
+
+- (void) handleAppDidLaunching:(NSNotification *)notification
+{
+    NSString *currentVersion = [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"];
+    NSString *currentBuild = [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];
+    NSString *previousVersion = [[NSUserDefaults standardUserDefaults] stringForKey:TDTrackedAppVersionKey];
+    NSString *previousBuild = [[NSUserDefaults standardUserDefaults] stringForKey:TDTrackedAppBuildKey];
+
+    if ([[TreasureData sharedInstance] isFirstRun]) {
+        [[TreasureData sharedInstance] clearFirstRun];
+        [self addEvent:@{ @"event": @"App Installed",
+                          @"version": currentVersion,
+                          @"build": currentBuild}
+              database:self.configuration.defaultDatabase
+                 table:self.configuration.defaultTable];
+    } else if (![previousVersion isEqualToString:currentVersion]) {
+        [self addEvent:@{ @"event": @"App Updated",
+                          @"previous_version": previousVersion,
+                          @"previous_build": previousBuild,
+                          @"version": currentVersion,
+                          @"build": currentBuild}
+              database:self.configuration.defaultDatabase
+                 table:self.configuration.defaultTable];
+    }
+    [self addEvent:@{ @"event": @"App Opened", @"version": currentVersion, @"build": currentBuild }
+          database:self.configuration.defaultDatabase
+             table:self.configuration.defaultTable];
+
+    [[NSUserDefaults standardUserDefaults] setObject:currentVersion forKey:TDTrackedAppVersionKey];
+    [[NSUserDefaults standardUserDefaults] setObject:currentBuild forKey:TDTrackedAppBuildKey];
+}
+
+#pragma mark - Persisted states
+
+- (BOOL)isFirstRun {
+    NSInteger state = [[NSUserDefaults standardUserDefaults] integerForKey:storageKeyOfFirstRun];
+    return state == 0;
+}
+
+- (void)clearFirstRun {
+    [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:storageKeyOfFirstRun];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)initializeFirstRun {
+    [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:storageKeyOfFirstRun];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+#pragma mark - Session
+
+- (void)startSession:(NSString*)table {
+    [self startSession:table database:self.configuration.defaultDatabase];
+}
+
+- (void)startSession:(NSString*)table database:(NSString*)database {
+    self.sessionId = [[NSUUID UUID] UUIDString];
+    [self addEvent:@{keyOfSessionEvent: sessionEventStart} database:database table:table];
+}
+
+- (void)endSession:(NSString*)table {
+    [self endSession:table database:self.configuration.defaultDatabase];
+}
+
+- (void)endSession:(NSString*)table database:(NSString*)database {
+    [self addEvent:@{keyOfSessionEvent: sessionEventEnd} database:database table:table];
+    self.sessionId = nil;
+}
+
+- (NSString *)getSessionId {
+    return self.sessionId;
+}
+
++ (void)startSession {
+    if (!session) {
+        session = [Session new];
+        if (sessionTimeoutMilli > 0) {
+            session.sessionPendingMillis = sessionTimeoutMilli;
+        }
+    }
+    [session start];
+}
+
++ (void)endSession {
+    if (session) {
+        [session finish];
+    }
+}
+
++ (NSString*)getSessionId {
+    if (!session) {
+        return nil;
+    }
+    return [session getId];
+}
+
+// Only for test
++ (void)resetSession {
+    session = nil;
+}
+
++ (void)setSessionTimeoutMilli:(long)to {
+    sessionTimeoutMilli = to;
+}
+
+#pragma mark - Old settings
 
 - (void)setApiEndpoint:(NSString*)endpoint {
     self.client.apiEndpoint = endpoint;
@@ -340,75 +492,6 @@ static long sessionTimeoutMilli = -1;
     self.client.enableRetryUploading = true;
 }
 
-- (BOOL)isFirstRun {
-    NSInteger state = [[NSUserDefaults standardUserDefaults] integerForKey:storageKeyOfFirstRun];
-    return state == 0;
-}
-
-- (void)clearFirstRun {
-    [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:storageKeyOfFirstRun];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-- (void)initializeFirstRun {
-    [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:storageKeyOfFirstRun];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-- (void)startSession:(NSString*)table {
-    [self startSession:table database:self.defaultDatabase];
-}
-
-- (void)startSession:(NSString*)table database:(NSString*)database {
-    self.sessionId = [[NSUUID UUID] UUIDString];
-    [self addEvent:@{keyOfSessionEvent: sessionEventStart} database:database table:table];
-}
-
-- (void)endSession:(NSString*)table {
-    [self endSession:table database:self.defaultDatabase];
-}
-
-- (void)endSession:(NSString*)table database:(NSString*)database {
-    [self addEvent:@{keyOfSessionEvent: sessionEventEnd} database:database table:table];
-    self.sessionId = nil;
-}
-
-- (NSString *)getSessionId {
-    return self.sessionId;
-}
-
-+ (void)startSession {
-    if (!session) {
-        session = [Session new];
-        if (sessionTimeoutMilli > 0) {
-            session.sessionPendingMillis = sessionTimeoutMilli;
-        }
-    }
-    [session start];
-}
-
-+ (void)endSession {
-    if (session) {
-        [session finish];
-    }
-}
-
-+ (NSString*)getSessionId {
-    if (!session) {
-        return nil;
-    }
-    return [session getId];
-}
-
-// Only for test
-+ (void)resetSession {
-    session = nil;
-}
-
-+ (void)setSessionTimeoutMilli:(long)to {
-    sessionTimeoutMilli = to;
-}
-
 - (void)enableServerSideUploadTimestamp {
     self.serverSideUploadTimestamp = TRUE;
     self.serverSideUploadTimestampColumn = nil;
@@ -432,6 +515,7 @@ static long sessionTimeoutMilli = -1;
     self.autoAppendRecordUUIDColumn = @"record_uuid";
 }
 
+
 - (void)enableAutoAppendRecordUUID: (NSString*)columnName {
     if (!columnName) {
         NSLog(@"columnName shouldn't be nil");
@@ -444,6 +528,13 @@ static long sessionTimeoutMilli = -1;
     self.autoAppendRecordUUIDColumn = nil;
 }
 
++ (void)config:(TDConfiguration *)configuration {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[self alloc] initWithConfiguration:configuration];
+    });
+}
+
 + (void)initializeWithApiKey:(NSString *)apiKey {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -454,7 +545,6 @@ static long sessionTimeoutMilli = -1;
 + (void)initializeEncryptionKey:(NSString*)encryptionKey {
     [TDClient initializeEncryptionKey:encryptionKey];
 }
-
 
 + (instancetype)sharedInstance {
     NSAssert(sharedInstance, @"%@ sharedInstance called before withSecret", self);
@@ -488,6 +578,12 @@ static long sessionTimeoutMilli = -1;
 + (void)enableTraceLogging {
     isTraceLoggingEnabled = true;
 }
+
+#pragma mark - Auto Capturing
+
+NSString *const TDTrackedAppVersionKey = @"TDTrackedAppVersion";
+NSString *const TDTrackedAppBuildKey = @"TDTrackedAppBuild";
+
 
 @end
 
