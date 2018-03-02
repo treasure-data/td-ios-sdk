@@ -91,7 +91,6 @@ static NSString *END_POINT = @"http://localhost";
 - (void)setUp
 {
     [self initializeTD];
-    [self.td disableAutoTrack];
     [TreasureData setSessionTimeoutMilli:-1];
     [super setUp];
 }
@@ -680,8 +679,6 @@ static NSString *END_POINT = @"http://localhost";
 
 - (void)testAutoTrackEventFirstLaunch {
     @try {
-        // Auto Track is enabled by default, but was explicitly disabled by test setUp()
-        [self.td enableAutoTrackToTable:@"mobile_events"];
         [self.td initializeFirstRun];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
                                                             object:@"first"];
@@ -694,8 +691,6 @@ static NSString *END_POINT = @"http://localhost";
 }
 
 - (void)testAutoTrackEventSubsequentLaunches {
-    // Auto Track is enabled by default, but was explicitly disabled by test setUp()
-    [self.td enableAutoTrackToTable:@"mobile_events"];
     [self.td clearFirstRun];
     [[NSUserDefaults standardUserDefaults] setObject:@"0.0.1" forKey:TD_USER_DEFAULTS_KEY_TRACKED_APP_VERSION];
     [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:TD_USER_EFAULTS_KEY_TRACKED_APP_BUILD];
