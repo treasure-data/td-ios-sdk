@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 #import "TreasureData.h"
 #import "TDClient.h"
+#import "Constants.h"
 
 static NSString *END_POINT = @"http://localhost";
 
@@ -46,15 +47,20 @@ static NSString *END_POINT = @"http://localhost";
 @end
 
 @interface MyTreasureData : TreasureData
+
+@property (nonatomic, strong) NSMutableArray<NSDictionary<NSString*,id> *> *capturedEvents;
+
 @end
 
 @implementation MyTreasureData
+
 - (id)initWithApiKey:(NSString *)apiKey {
     self = [super initWithApiKey:apiKey];
     MyTDClient *myClient = [[MyTDClient alloc] initWithApiKey:apiKey apiEndpoint:END_POINT];
     self.client = myClient;
     MySession *session = [[MySession alloc] init];
     self.client.session = session;
+    self.capturedEvents = [NSMutableArray new];
     return self;
 }
 
@@ -65,6 +71,12 @@ static NSString *END_POINT = @"http://localhost";
 - (NSString*)getBuildNumber {
     return @"42";
 }
+
+- (void)addEventWithCallback:(NSDictionary *)record database:(NSString *)database table:(NSString *)table onSuccess:(void (^)())onSuccess onError:(void (^)(NSString*, NSString*))onError {
+    [self.capturedEvents addObject:record];
+    [super addEventWithCallback:record database:database table:table onSuccess:onSuccess onError:onError];
+}
+
 @end
 
 @interface TreasureDataTests : XCTestCase
@@ -79,6 +91,7 @@ static NSString *END_POINT = @"http://localhost";
 - (void)setUp
 {
     [self initializeTD];
+    [self.td disableAutoTrack];
     [TreasureData setSessionTimeoutMilli:-1];
     [super setUp];
 }
@@ -98,6 +111,7 @@ static NSString *END_POINT = @"http://localhost";
     do {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.2]];
     } while (!self.isFinished);
+    [[NSNotificationCenter defaultCenter] removeObserver:self.td];
     [super tearDown];
 }
 
@@ -660,6 +674,58 @@ static NSString *END_POINT = @"http://localhost";
                                   self.isFinished = true;
                               }
      ];
+}
+
+#pragma mark - Auto Tracking
+
+- (void)testAutoTrackEventFirstLaunch {
+    @try {
+        // Auto Track is enabled by default, but was explicitly disabled by test setUp()
+        [self.td enableAutoTrackToTable:@"mobile_events"];
+        [self.td initializeFirstRun];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
+                                                            object:@"first"];
+        [self assertEventCount:2];
+        [self assertHasCapturedEvent:TD_EVENT_APP_INSTALLED];
+        [self assertHasCapturedEvent:TD_EVENT_APP_OPENED];
+    } @finally {
+        self.isFinished = true;
+    }
+}
+
+- (void)testAutoTrackEventSubsequentLaunches {
+    // Auto Track is enabled by default, but was explicitly disabled by test setUp()
+    [self.td enableAutoTrackToTable:@"mobile_events"];
+    [self.td clearFirstRun];
+    [[NSUserDefaults standardUserDefaults] setObject:@"0.0.1" forKey:TD_USER_DEFAULTS_KEY_TRACKED_APP_VERSION];
+    [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:TD_USER_EFAULTS_KEY_TRACKED_APP_BUILD];
+
+    @try {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
+                                                            object:@"subsequent"];
+        [self assertEventCount:2];
+        [self assertHasCapturedEvent:TD_EVENT_APP_UPDATED];
+        [self assertHasCapturedEvent:TD_EVENT_APP_OPENED];
+    } @finally {
+        self.isFinished = true;
+    }
+}
+
+#pragma mark - Assertions
+
+- (void)assertHasCapturedEvent:(NSString *)eventName {
+    NSArray<NSDictionary<NSString *,id> *> *events = self.td.capturedEvents;
+    for (int i = 0; i < events.count; i++) {
+        if ([[events objectAtIndex:i][TD_COLUMN_EVENT] isEqualToString:eventName]) {
+            return;
+        }
+    }
+    @throw [NSString stringWithFormat:@"Event \"%@\" has never been captured!", eventName];
+}
+
+- (void)assertEventCount:(NSUInteger)eventNumber
+{
+    XCTAssertEqual(self.td.capturedEvents.count, eventNumber);
 }
 
 @end

@@ -11,6 +11,8 @@
 #import "math.h"
 #import "TDClient.h"
 #import "Session.h"
+#import "TDUtils.h"
+#import "Constants.h"
 
 static bool isTraceLoggingEnabled = false;
 static bool isEventCompressionEnabled = true;
@@ -40,6 +42,9 @@ static NSString *sessionEventEnd = @"end";
 static Session *session = nil;
 static long sessionTimeoutMilli = -1;
 
+static NSString *const DefaultAutoTrackDatabase = @"td_app_lifecycle_event";
+static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
+
 @interface TreasureData ()
 @property BOOL autoAppendUniqId;
 @property BOOL autoAppendModelInformation;
@@ -49,6 +54,10 @@ static long sessionTimeoutMilli = -1;
 @property BOOL serverSideUploadTimestamp;
 @property NSString *serverSideUploadTimestampColumn;
 @property NSString *autoAppendRecordUUIDColumn;
+
+@property (nonatomic, assign) BOOL isAutoTrackEnabled;
+@property (nonatomic, strong) NSString *autoTrackDatabase;
+@property (nonatomic, strong) NSString *autoTrackTable;
 @end
 
 @implementation TreasureData
@@ -70,6 +79,7 @@ static long sessionTimeoutMilli = -1;
          *      the parent client's project ids.
          *
          */
+        self.isAutoTrackEnabled = YES;
         NSString *endpoint = defaultApiEndpoint ? defaultApiEndpoint : @"https://in.treasuredata.com";
         self.client = [[TDClient alloc] initWithApiKey:apiKey apiEndpoint:endpoint];
         if (self.client) {
@@ -78,6 +88,7 @@ static long sessionTimeoutMilli = -1;
         else {
             KCLog(@"Failed to initialize client");
         }
+        [self observeLifecycleEvents];
     }
     return self;
 }
@@ -488,6 +499,77 @@ static long sessionTimeoutMilli = -1;
 + (void)enableTraceLogging {
     isTraceLoggingEnabled = true;
 }
+
+#pragma mark - Auto Tracking
+
+- (void)enableAutoTrackToDatabase:(NSString *)database table:(NSString *)table
+{
+    self.isAutoTrackEnabled = YES;
+    self.autoTrackDatabase = database;
+    self.autoTrackTable = table;
+}
+
+- (void)enableAutoTrackToTable:(NSString *)table
+{
+    self.isAutoTrackEnabled = YES;
+    self.autoTrackTable = table;
+}
+
+- (void)disableAutoTrack
+{
+    self.isAutoTrackEnabled = NO;
+}
+
+- (void)observeLifecycleEvents {
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc addObserver:self selector:@selector(handleAppDidLaunching:) name:@"UIApplicationDidFinishLaunchingNotification" object:nil];
+}
+
+- (void)handleAppDidLaunching:(NSNotification *)notification
+{
+    if (self.isAutoTrackEnabled) {
+        NSString *targetDatabase = [TDUtils requireNonBlank:self.autoTrackDatabase
+                                                defaultValue:DefaultAutoTrackDatabase
+                                                     message:[NSString
+                                                              stringWithFormat:@"WARN: \"autoTrackDatabase\" is not set. \"%@\" will be used as the default database.",
+                                                              DefaultAutoTrackDatabase]];
+        NSString *targetTable = [TDUtils requireNonBlank:self.autoTrackTable
+                                             defaultValue:DefaultAutoTrackTable
+                                                  message:[NSString
+                                                           stringWithFormat:@"WARN: \"autoTrackTable\" is not set. \"%@\" will be used as the default table.",
+                                                           DefaultAutoTrackTable]];
+
+        NSString *currentVersion = [self getAppVersion];
+        NSString *currentBuild = [self getBuildNumber];
+
+        NSString *previousVersion = [[NSUserDefaults standardUserDefaults] stringForKey:TD_USER_DEFAULTS_KEY_TRACKED_APP_VERSION];
+        NSString *previousBuild = [[NSUserDefaults standardUserDefaults] stringForKey:TD_USER_EFAULTS_KEY_TRACKED_APP_BUILD];
+
+        if ([self isFirstRun]) {
+            [self clearFirstRun];
+            [self addEvent:@{TD_COLUMN_EVENT: TD_EVENT_APP_INSTALLED,
+                             @"version": currentVersion,
+                             @"build": currentBuild}
+                  database:targetDatabase
+                     table:targetTable];
+        } else if (![previousVersion isEqualToString:currentVersion]) {
+            [self addEvent:@{TD_COLUMN_EVENT: TD_EVENT_APP_UPDATED,
+                             @"previous_version": previousVersion,
+                             @"previous_build": previousBuild,
+                             @"version": currentVersion,
+                             @"build": currentBuild}
+                  database:targetDatabase
+                     table:targetTable];
+        }
+        [self addEvent:@{TD_COLUMN_EVENT: TD_EVENT_APP_OPENED, @"version": currentVersion, @"build": currentBuild }
+              database:targetDatabase
+                 table:targetTable];
+
+        [[NSUserDefaults standardUserDefaults] setObject:currentVersion forKey:TD_USER_DEFAULTS_KEY_TRACKED_APP_VERSION];
+        [[NSUserDefaults standardUserDefaults] setObject:currentBuild forKey:TD_USER_EFAULTS_KEY_TRACKED_APP_BUILD];
+    }
+}
+
 
 @end
 
