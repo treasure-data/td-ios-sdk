@@ -121,7 +121,7 @@
 
 #pragma mark - Auto Tracking
 
-- (void)enableAutoTrackWithDatabase:(NSString *_Nonnull)database table:(NSString *_Nonnull)table;
+- (void)enableAutoTrackToDatabase:(NSString *_Nonnull)database table:(NSString *_Nonnull)table;
 
 - (void)enableAutoTrackToTable:(NSString *_Nonnull)table;
 
