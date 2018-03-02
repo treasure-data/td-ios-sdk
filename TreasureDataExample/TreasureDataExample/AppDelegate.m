@@ -26,23 +26,9 @@
     // [[TreasureData sharedInstance] disableRetryUploading];
     [[TreasureData sharedInstance] enableServerSideUploadTimestamp: @"server_upload_time"];
     
-    if ([[TreasureData sharedInstance] isFirstRun]) {
-        [[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"installed" }
-                                                   database:@"testdb"
-                                                      table:@"demotbl"
-                                                  onSuccess:^(){
-                                                      [[TreasureData sharedInstance] uploadEventsWithCallback:^() {
-                                                          [[TreasureData sharedInstance] clearFirstRun];
-                                                      }
-                                                                                                      onError:^(NSString* errorCode, NSString* message) {
-                                                                                                          NSLog(@"uploadEvents: error. errorCode=%@, message=%@", errorCode, message);
-                                                                                                      }
-                                                       ];
-                                                  }
-                                                    onError:^(NSString* errorCode, NSString* message) {
-                                                        NSLog(@"addEvent: error. errorCode=%@, message=%@", errorCode, message);
-                                                    }];
-    }
+    // Auto Tracking is enabled by default using "td_ios_event" as target table if not be set explicitly
+    [[TreasureData sharedInstance] enableAutoTrackToTable:@"auto_tracked_events"];
+
     return YES;
 }
 
