@@ -243,7 +243,7 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
 }
 
 - (NSString *)getTrackedBuildNumber {
-    return [[NSUserDefaults standardUserDefaults] stringForKey:TD_USER_EFAULTS_KEY_TRACKED_APP_BUILD];
+    return [[NSUserDefaults standardUserDefaults] stringForKey:TD_USER_DEFAULTS_KEY_TRACKED_APP_BUILD];
 }
 
 
@@ -573,7 +573,7 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
                  table:targetTable];
 
         [[NSUserDefaults standardUserDefaults] setObject:currentVersion forKey:TD_USER_DEFAULTS_KEY_TRACKED_APP_VERSION];
-        [[NSUserDefaults standardUserDefaults] setObject:currentBuild forKey:TD_USER_EFAULTS_KEY_TRACKED_APP_BUILD];
+        [[NSUserDefaults standardUserDefaults] setObject:currentBuild forKey:TD_USER_DEFAULTS_KEY_TRACKED_APP_BUILD];
     }
 }
 

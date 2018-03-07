@@ -12,5 +12,4 @@
 #define TD_EVENT_APP_UPDATED @"td_ios_app_updated"
 
 #define TD_USER_DEFAULTS_KEY_TRACKED_APP_VERSION @"TDTrackedAppVersion"
-#define TD_USER_EFAULTS_KEY_TRACKED_APP_BUILD @"TDTrackedAppBuild"
-
+#define TD_USER_DEFAULTS_KEY_TRACKED_APP_BUILD @"TDTrackedAppBuild"
