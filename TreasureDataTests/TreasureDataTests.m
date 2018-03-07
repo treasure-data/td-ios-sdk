@@ -49,10 +49,22 @@ static NSString *END_POINT = @"http://localhost";
 @interface MyTreasureData : TreasureData
 
 @property (nonatomic, strong) NSMutableArray<NSDictionary<NSString*,id> *> *capturedEvents;
+@property (nonatomic, assign) NSString *mockedTrackedAppVersion;
+@property (nonatomic, assign) NSString *mockedTrackedBuildNumber;
 
 @end
 
 @implementation MyTreasureData
+
+- (void)mockTrackedAppVersion:(NSString *)version {
+    self.mockedTrackedAppVersion = version;
+}
+
+- (void)mockTrackedBuildNumber:(NSString *)buildNumber {
+    self.mockedTrackedBuildNumber = buildNumber;
+}
+
+#pragma mark - Overrides
 
 - (id)initWithApiKey:(NSString *)apiKey {
     self = [super initWithApiKey:apiKey];
@@ -72,12 +84,22 @@ static NSString *END_POINT = @"http://localhost";
     return @"42";
 }
 
+- (NSString *)getTrackedAppVersion {
+    return self.mockedTrackedAppVersion;
+}
+
+- (NSString *)getTrackedBuildNumber {
+    return self.mockedTrackedBuildNumber;
+}
+
 - (void)addEventWithCallback:(NSDictionary *)record database:(NSString *)database table:(NSString *)table onSuccess:(void (^)())onSuccess onError:(void (^)(NSString*, NSString*))onError {
     [self.capturedEvents addObject:record];
     [super addEventWithCallback:record database:database table:table onSuccess:onSuccess onError:onError];
 }
 
 @end
+
+#pragma mark -
 
 @interface TreasureDataTests : XCTestCase
 @property bool isFinished;
@@ -677,11 +699,22 @@ static NSString *END_POINT = @"http://localhost";
 
 #pragma mark - Auto Tracking
 
-- (void)testAutoTrackEventFirstLaunch {
+- (void)testAutoTrackAppOpened {
     @try {
-        [self.td initializeFirstRun];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
-                                                            object:@"first"];
+                                                            object:nil];
+        [self assertHasCapturedEvent:TD_EVENT_APP_OPENED];
+    } @finally {
+        self.isFinished = true;
+    }
+}
+
+- (void)testAutoTrackAppInstalled {
+    @try {
+        [self.td mockTrackedAppVersion:nil];
+        [self.td mockTrackedBuildNumber:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
+                                                            object:nil];
         [self assertEventCount:2];
         [self assertHasCapturedEvent:TD_EVENT_APP_INSTALLED];
         [self assertHasCapturedEvent:TD_EVENT_APP_OPENED];
@@ -690,14 +723,14 @@ static NSString *END_POINT = @"http://localhost";
     }
 }
 
-- (void)testAutoTrackEventSubsequentLaunches {
-    [self.td clearFirstRun];
-    [[NSUserDefaults standardUserDefaults] setObject:@"0.0.1" forKey:TD_USER_DEFAULTS_KEY_TRACKED_APP_VERSION];
-    [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:TD_USER_EFAULTS_KEY_TRACKED_APP_BUILD];
-
+- (void)testAutoTrackEventUpdated {
+    // Previous installed version
+    [self.td mockTrackedAppVersion:@"0.0.1"];
+    [self.td mockTrackedBuildNumber:@"1"];
+    // Current version is overriden by `MyTreasureData`
     @try {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
-                                                            object:@"subsequent"];
+                                                            object:nil];
         [self assertEventCount:2];
         [self assertHasCapturedEvent:TD_EVENT_APP_UPDATED];
         [self assertHasCapturedEvent:TD_EVENT_APP_OPENED];

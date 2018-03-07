@@ -238,6 +238,15 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
     return [infoDict objectForKey:@"CFBundleVersion"];
 }
 
+- (NSString *)getTrackedAppVersion {
+    return [[NSUserDefaults standardUserDefaults] stringForKey:TD_USER_DEFAULTS_KEY_TRACKED_APP_VERSION];
+}
+
+- (NSString *)getTrackedBuildNumber {
+    return [[NSUserDefaults standardUserDefaults] stringForKey:TD_USER_EFAULTS_KEY_TRACKED_APP_BUILD];
+}
+
+
 - (NSDictionary*)appendLocaleInformation:(NSDictionary *)origRecord {
     NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
     NSLocale *locale = [NSLocale currentLocale];
@@ -541,12 +550,10 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
 
         NSString *currentVersion = [self getAppVersion];
         NSString *currentBuild = [self getBuildNumber];
+        NSString *previousVersion = [self getTrackedAppVersion];
+        NSString *previousBuild = [self getTrackedBuildNumber];
 
-        NSString *previousVersion = [[NSUserDefaults standardUserDefaults] stringForKey:TD_USER_DEFAULTS_KEY_TRACKED_APP_VERSION];
-        NSString *previousBuild = [[NSUserDefaults standardUserDefaults] stringForKey:TD_USER_EFAULTS_KEY_TRACKED_APP_BUILD];
-
-        if ([self isFirstRun]) {
-            [self clearFirstRun];
+        if (!previousVersion) {
             [self addEvent:@{TD_COLUMN_EVENT: TD_EVENT_APP_INSTALLED,
                              @"version": currentVersion,
                              @"build": currentBuild}
