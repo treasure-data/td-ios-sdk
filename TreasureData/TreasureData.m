@@ -512,14 +512,13 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
 
 #pragma mark - Auto Tracking
 
-- (void)setAutoTrackDatabase:(NSString *)database table:(NSString *)table
+- (void)enableAutoTrackToDatabase:(NSString *)database table:(NSString *)table
 {
     self.isAutoTrackEnabled = YES;
-    self.autoTrackDatabase = database;
-    self.autoTrackTable = table;
+    self.autoTrackDatabase = table;
 }
 
-- (void)setAutoTrackTable:(NSString *)table
+- (void)enableAutoTrackToTable:(NSString *)table
 {
     self.isAutoTrackEnabled = YES;
     self.autoTrackTable = table;

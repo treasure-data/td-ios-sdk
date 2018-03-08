@@ -27,7 +27,7 @@
     [[TreasureData sharedInstance] enableServerSideUploadTimestamp: @"server_upload_time"];
     
     // Auto Tracking is enabled by default using "td_app_lifecycle_event" as target table if not be set explicitly
-    [[TreasureData sharedInstance] setAutoTrackTable:@"auto_tracked_events"];
+    [[TreasureData sharedInstance] enableAutoTrackToTable:@"auto_tracked_events"];
 
     return YES;
 }
