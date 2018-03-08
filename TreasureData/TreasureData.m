@@ -42,7 +42,8 @@ static NSString *sessionEventEnd = @"end";
 static Session *session = nil;
 static long sessionTimeoutMilli = -1;
 
-static NSString *const DefaultAutoTrackDatabase = @"td_app_lifecycle_event";
+// DefaultAutoTrackDatabase is only be prefered in case TreasureData#defaultDatabase is nil
+static NSString *const DefaultAutoTrackDatabase = @"td_event";
 static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
 
 @interface TreasureData ()
@@ -511,14 +512,14 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
 
 #pragma mark - Auto Tracking
 
-- (void)enableAutoTrackToDatabase:(NSString *)database table:(NSString *)table
+- (void)setAutoTrackDatabase:(NSString *)database table:(NSString *)table
 {
     self.isAutoTrackEnabled = YES;
     self.autoTrackDatabase = database;
     self.autoTrackTable = table;
 }
 
-- (void)enableAutoTrackToTable:(NSString *)table
+- (void)setAutoTrackTable:(NSString *)table
 {
     self.isAutoTrackEnabled = YES;
     self.autoTrackTable = table;
@@ -537,15 +538,19 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
 - (void)handleAppDidLaunching:(NSNotification *)notification
 {
     if (self.isAutoTrackEnabled) {
-        NSString *targetDatabase = [TDUtils requireNonBlank:self.autoTrackDatabase
-                                                defaultValue:DefaultAutoTrackDatabase
-                                                     message:[NSString
-                                                              stringWithFormat:@"WARN: \"autoTrackDatabase\" is not set. \"%@\" will be used as the default database.",
-                                                              DefaultAutoTrackDatabase]];
+        NSString *targetDatabase;
+        if (self.autoTrackDatabase) {
+            targetDatabase = self.autoTrackDatabase;
+        } else if (self.defaultDatabase) {
+            targetDatabase = self.defaultDatabase;
+        } else {
+            NSLog(@"WARN: Neither defaultDatabase nor autoTrackDabase was set. \"%@\" will be used as the target database." , DefaultAutoTrackDatabase);
+            targetDatabase = DefaultAutoTrackDatabase;
+        }
         NSString *targetTable = [TDUtils requireNonBlank:self.autoTrackTable
                                              defaultValue:DefaultAutoTrackTable
                                                   message:[NSString
-                                                           stringWithFormat:@"WARN: \"autoTrackTable\" is not set. \"%@\" will be used as the default table.",
+                                                           stringWithFormat:@"WARN: autoTrackTable was not set. \"%@\" will be used as the target table.",
                                                            DefaultAutoTrackTable]];
 
         NSString *currentVersion = [self getAppVersion];
