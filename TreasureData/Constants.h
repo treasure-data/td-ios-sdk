@@ -7,9 +7,9 @@
 //
 
 #define TD_COLUMN_EVENT @"td_ios_event"
-#define TD_EVENT_APP_OPENED @"td_ios_app_opened"
-#define TD_EVENT_APP_INSTALLED @"td_ios_app_installed"
-#define TD_EVENT_APP_UPDATED @"td_ios_app_updated"
+#define TD_EVENT_APP_OPENED @"TD_iOS_APP_OPEN"
+#define TD_EVENT_APP_INSTALLED @"TD_iOS_APP_INSTALL"
+#define TD_EVENT_APP_UPDATED @"TD_iOS_APP_UPDATE"
 
 #define TD_USER_DEFAULTS_KEY_TRACKED_APP_VERSION @"TDTrackedAppVersion"
 #define TD_USER_DEFAULTS_KEY_TRACKED_APP_BUILD @"TDTrackedAppBuild"
