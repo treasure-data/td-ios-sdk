@@ -31,6 +31,8 @@ static NSString *keyOfOsVer = @"td_os_ver";
 static NSString *keyOfOsType = @"td_os_type";
 static NSString *keyOfAppVer = @"td_app_ver";
 static NSString *keyOfAppVerNum = @"td_app_ver_num";
+static NSString *keyOfPreviousAppVer = @"td_app_previous_ver";
+static NSString *keyOfPreviousAppVerNum = @"td_app_previous_ver_num";
 static NSString *keyOfLocaleCountry = @"td_locale_country";
 static NSString *keyOfLocaleLang = @"td_locale_lang";
 static NSString *keyOfSessionId = @"td_session_id";
@@ -557,22 +559,25 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
         NSString *previousVersion = [self getTrackedAppVersion];
         NSString *previousBuild = [self getTrackedBuildNumber];
 
+        // For lifecycle event, application's version and build number is always attached regardless of the autoAppendAppInformation setting
         if (!previousVersion) {
             [self addEvent:@{TD_COLUMN_EVENT: TD_EVENT_APP_INSTALLED,
-                             @"version": currentVersion,
-                             @"build": currentBuild}
+                             keyOfAppVer: currentVersion,
+                             keyOfAppVerNum: currentBuild}
                   database:targetDatabase
                      table:targetTable];
         } else if (![previousVersion isEqualToString:currentVersion]) {
             [self addEvent:@{TD_COLUMN_EVENT: TD_EVENT_APP_UPDATED,
-                             @"previous_version": previousVersion,
-                             @"previous_build": previousBuild,
-                             @"version": currentVersion,
-                             @"build": currentBuild}
+                             keyOfPreviousAppVer: previousVersion,
+                             keyOfPreviousAppVerNum: previousBuild,
+                             keyOfAppVer: currentVersion,
+                             keyOfAppVerNum: currentBuild}
                   database:targetDatabase
                      table:targetTable];
         }
-        [self addEvent:@{TD_COLUMN_EVENT: TD_EVENT_APP_OPENED, @"version": currentVersion, @"build": currentBuild }
+        [self addEvent:@{TD_COLUMN_EVENT: TD_EVENT_APP_OPENED,
+                         keyOfAppVer: currentVersion,
+                         keyOfAppVerNum: currentBuild }
               database:targetDatabase
                  table:targetTable];
 
