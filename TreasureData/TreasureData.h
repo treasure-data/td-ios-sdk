@@ -118,4 +118,13 @@
 + (void)enableTraceLogging;
 
 + (void)initializeEncryptionKey:(NSString*)encryptionKey;
+
+#pragma mark - Auto Tracking
+
+- (void)enableAutoTrackToDatabase:(NSString *_Nonnull)database table:(NSString *_Nonnull)table;
+
+- (void)enableAutoTrackToTable:(NSString *_Nonnull)table;
+
+- (void)disableAutoTrack;
+
 @end

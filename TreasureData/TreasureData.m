@@ -11,6 +11,8 @@
 #import "math.h"
 #import "TDClient.h"
 #import "Session.h"
+#import "TDUtils.h"
+#import "Constants.h"
 
 static bool isTraceLoggingEnabled = false;
 static bool isEventCompressionEnabled = true;
@@ -29,6 +31,8 @@ static NSString *keyOfOsVer = @"td_os_ver";
 static NSString *keyOfOsType = @"td_os_type";
 static NSString *keyOfAppVer = @"td_app_ver";
 static NSString *keyOfAppVerNum = @"td_app_ver_num";
+static NSString *keyOfPreviousAppVer = @"td_app_previous_ver";
+static NSString *keyOfPreviousAppVerNum = @"td_app_previous_ver_num";
 static NSString *keyOfLocaleCountry = @"td_locale_country";
 static NSString *keyOfLocaleLang = @"td_locale_lang";
 static NSString *keyOfSessionId = @"td_session_id";
@@ -40,6 +44,10 @@ static NSString *sessionEventEnd = @"end";
 static Session *session = nil;
 static long sessionTimeoutMilli = -1;
 
+// DefaultAutoTrackDatabase is only be prefered in case TreasureData#defaultDatabase is nil
+static NSString *const DefaultAutoTrackDatabase = @"td_event";
+static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
+
 @interface TreasureData ()
 @property BOOL autoAppendUniqId;
 @property BOOL autoAppendModelInformation;
@@ -49,6 +57,10 @@ static long sessionTimeoutMilli = -1;
 @property BOOL serverSideUploadTimestamp;
 @property NSString *serverSideUploadTimestampColumn;
 @property NSString *autoAppendRecordUUIDColumn;
+
+@property (nonatomic, assign) BOOL isAutoTrackEnabled;
+@property (nonatomic, strong) NSString *autoTrackDatabase;
+@property (nonatomic, strong) NSString *autoTrackTable;
 @end
 
 @implementation TreasureData
@@ -70,6 +82,7 @@ static long sessionTimeoutMilli = -1;
          *      the parent client's project ids.
          *
          */
+        self.isAutoTrackEnabled = YES;
         NSString *endpoint = defaultApiEndpoint ? defaultApiEndpoint : @"https://in.treasuredata.com";
         self.client = [[TDClient alloc] initWithApiKey:apiKey apiEndpoint:endpoint];
         if (self.client) {
@@ -78,6 +91,7 @@ static long sessionTimeoutMilli = -1;
         else {
             KCLog(@"Failed to initialize client");
         }
+        [self observeLifecycleEvents];
     }
     return self;
 }
@@ -226,6 +240,15 @@ static long sessionTimeoutMilli = -1;
     NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
     return [infoDict objectForKey:@"CFBundleVersion"];
 }
+
+- (NSString *)getTrackedAppVersion {
+    return [[NSUserDefaults standardUserDefaults] stringForKey:TD_USER_DEFAULTS_KEY_TRACKED_APP_VERSION];
+}
+
+- (NSString *)getTrackedBuildNumber {
+    return [[NSUserDefaults standardUserDefaults] stringForKey:TD_USER_DEFAULTS_KEY_TRACKED_APP_BUILD];
+}
+
 
 - (NSDictionary*)appendLocaleInformation:(NSDictionary *)origRecord {
     NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
@@ -488,6 +511,81 @@ static long sessionTimeoutMilli = -1;
 + (void)enableTraceLogging {
     isTraceLoggingEnabled = true;
 }
+
+#pragma mark - Auto Tracking
+
+- (void)enableAutoTrackToDatabase:(NSString *)database table:(NSString *)table
+{
+    self.isAutoTrackEnabled = YES;
+    self.autoTrackDatabase = table;
+}
+
+- (void)enableAutoTrackToTable:(NSString *)table
+{
+    self.isAutoTrackEnabled = YES;
+    self.autoTrackTable = table;
+}
+
+- (void)disableAutoTrack
+{
+    self.isAutoTrackEnabled = NO;
+}
+
+- (void)observeLifecycleEvents {
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc addObserver:self selector:@selector(handleAppDidLaunching:) name:@"UIApplicationDidFinishLaunchingNotification" object:nil];
+}
+
+- (void)handleAppDidLaunching:(NSNotification *)notification
+{
+    if (self.isAutoTrackEnabled) {
+        NSString *targetDatabase;
+        if (self.autoTrackDatabase) {
+            targetDatabase = self.autoTrackDatabase;
+        } else if (self.defaultDatabase) {
+            targetDatabase = self.defaultDatabase;
+        } else {
+            NSLog(@"WARN: Neither defaultDatabase nor autoTrackDabase was set. \"%@\" will be used as the target database." , DefaultAutoTrackDatabase);
+            targetDatabase = DefaultAutoTrackDatabase;
+        }
+        NSString *targetTable = [TDUtils requireNonBlank:self.autoTrackTable
+                                             defaultValue:DefaultAutoTrackTable
+                                                  message:[NSString
+                                                           stringWithFormat:@"WARN: autoTrackTable was not set. \"%@\" will be used as the target table.",
+                                                           DefaultAutoTrackTable]];
+
+        NSString *currentVersion = [self getAppVersion];
+        NSString *currentBuild = [self getBuildNumber];
+        NSString *previousVersion = [self getTrackedAppVersion];
+        NSString *previousBuild = [self getTrackedBuildNumber];
+
+        // For lifecycle event, application's version and build number is always attached regardless of the autoAppendAppInformation setting
+        if (!previousVersion) {
+            [self addEvent:@{TD_COLUMN_EVENT: TD_EVENT_APP_INSTALLED,
+                             keyOfAppVer: currentVersion,
+                             keyOfAppVerNum: currentBuild}
+                  database:targetDatabase
+                     table:targetTable];
+        } else if (![previousVersion isEqualToString:currentVersion]) {
+            [self addEvent:@{TD_COLUMN_EVENT: TD_EVENT_APP_UPDATED,
+                             keyOfPreviousAppVer: previousVersion,
+                             keyOfPreviousAppVerNum: previousBuild,
+                             keyOfAppVer: currentVersion,
+                             keyOfAppVerNum: currentBuild}
+                  database:targetDatabase
+                     table:targetTable];
+        }
+        [self addEvent:@{TD_COLUMN_EVENT: TD_EVENT_APP_OPENED,
+                         keyOfAppVer: currentVersion,
+                         keyOfAppVerNum: currentBuild }
+              database:targetDatabase
+                 table:targetTable];
+
+        [[NSUserDefaults standardUserDefaults] setObject:currentVersion forKey:TD_USER_DEFAULTS_KEY_TRACKED_APP_VERSION];
+        [[NSUserDefaults standardUserDefaults] setObject:currentBuild forKey:TD_USER_DEFAULTS_KEY_TRACKED_APP_BUILD];
+    }
+}
+
 
 @end
 
