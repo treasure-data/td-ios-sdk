@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 #import "TreasureData.h"
 #import "TDClient.h"
+#import "Constants.h"
 
 static NSString *END_POINT = @"http://localhost";
 
@@ -46,15 +47,32 @@ static NSString *END_POINT = @"http://localhost";
 @end
 
 @interface MyTreasureData : TreasureData
+
+@property (nonatomic, strong) NSMutableArray<NSDictionary<NSString*,id> *> *capturedEvents;
+@property (nonatomic, assign) NSString *mockedTrackedAppVersion;
+@property (nonatomic, assign) NSString *mockedTrackedBuildNumber;
+
 @end
 
 @implementation MyTreasureData
+
+- (void)mockTrackedAppVersion:(NSString *)version {
+    self.mockedTrackedAppVersion = version;
+}
+
+- (void)mockTrackedBuildNumber:(NSString *)buildNumber {
+    self.mockedTrackedBuildNumber = buildNumber;
+}
+
+#pragma mark - Overrides
+
 - (id)initWithApiKey:(NSString *)apiKey {
     self = [super initWithApiKey:apiKey];
     MyTDClient *myClient = [[MyTDClient alloc] initWithApiKey:apiKey apiEndpoint:END_POINT];
     self.client = myClient;
     MySession *session = [[MySession alloc] init];
     self.client.session = session;
+    self.capturedEvents = [NSMutableArray new];
     return self;
 }
 
@@ -65,7 +83,23 @@ static NSString *END_POINT = @"http://localhost";
 - (NSString*)getBuildNumber {
     return @"42";
 }
+
+- (NSString *)getTrackedAppVersion {
+    return self.mockedTrackedAppVersion;
+}
+
+- (NSString *)getTrackedBuildNumber {
+    return self.mockedTrackedBuildNumber;
+}
+
+- (void)addEventWithCallback:(NSDictionary *)record database:(NSString *)database table:(NSString *)table onSuccess:(void (^)())onSuccess onError:(void (^)(NSString*, NSString*))onError {
+    [self.capturedEvents addObject:record];
+    [super addEventWithCallback:record database:database table:table onSuccess:onSuccess onError:onError];
+}
+
 @end
+
+#pragma mark -
 
 @interface TreasureDataTests : XCTestCase
 @property bool isFinished;
@@ -98,6 +132,7 @@ static NSString *END_POINT = @"http://localhost";
     do {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.2]];
     } while (!self.isFinished);
+    [[NSNotificationCenter defaultCenter] removeObserver:self.td];
     [super tearDown];
 }
 
@@ -660,6 +695,65 @@ static NSString *END_POINT = @"http://localhost";
                                   self.isFinished = true;
                               }
      ];
+}
+
+#pragma mark - Auto Tracking
+
+- (void)testAutoTrackAppOpened {
+    @try {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
+                                                            object:nil];
+        [self assertHasCapturedEvent:TD_EVENT_APP_OPENED];
+    } @finally {
+        self.isFinished = true;
+    }
+}
+
+- (void)testAutoTrackAppInstalled {
+    @try {
+        [self.td mockTrackedAppVersion:nil];
+        [self.td mockTrackedBuildNumber:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
+                                                            object:nil];
+        [self assertEventCount:2];
+        [self assertHasCapturedEvent:TD_EVENT_APP_INSTALLED];
+        [self assertHasCapturedEvent:TD_EVENT_APP_OPENED];
+    } @finally {
+        self.isFinished = true;
+    }
+}
+
+- (void)testAutoTrackEventUpdated {
+    // Previous installed version
+    [self.td mockTrackedAppVersion:@"0.0.1"];
+    [self.td mockTrackedBuildNumber:@"1"];
+    // Current version is overriden by `MyTreasureData`
+    @try {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
+                                                            object:nil];
+        [self assertEventCount:2];
+        [self assertHasCapturedEvent:TD_EVENT_APP_UPDATED];
+        [self assertHasCapturedEvent:TD_EVENT_APP_OPENED];
+    } @finally {
+        self.isFinished = true;
+    }
+}
+
+#pragma mark - Assertions
+
+- (void)assertHasCapturedEvent:(NSString *)eventName {
+    NSArray<NSDictionary<NSString *,id> *> *events = self.td.capturedEvents;
+    for (int i = 0; i < events.count; i++) {
+        if ([[events objectAtIndex:i][TD_COLUMN_EVENT] isEqualToString:eventName]) {
+            return;
+        }
+    }
+    @throw [NSString stringWithFormat:@"Event \"%@\" has never been captured!", eventName];
+}
+
+- (void)assertEventCount:(NSUInteger)eventNumber
+{
+    XCTAssertEqual(self.td.capturedEvents.count, eventNumber);
 }
 
 @end

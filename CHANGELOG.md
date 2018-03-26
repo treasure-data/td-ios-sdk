@@ -1,5 +1,10 @@
 # Change Log
 
+## Version 0.1.25
+_2018-03-26_
+
+* Add automated event tracking functionality
+
 ## Version 0.1.24
 _2017-04-20_
 
