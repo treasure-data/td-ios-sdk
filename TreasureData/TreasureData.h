@@ -33,15 +33,15 @@
 
 - (void)addEvent:(NSDictionary *)record table:(NSString *)table;
 
-- (void)addEventWithCallback:(NSDictionary *)record database:(NSString *)database table:(NSString *)table onSuccess:(void (^)())onSuccess onError:(void (^)(NSString*, NSString*))onError;
+- (void)addEventWithCallback:(NSDictionary *)record database:(NSString *)database table:(NSString *)table onSuccess:(void (^)(void))onSuccess onError:(void (^)(NSString*, NSString*))onError;
 
-- (void)addEventWithCallback:(NSDictionary *)record table:(NSString *)table onSuccess:(void (^)())onSuccess onError:(void (^)(NSString*, NSString*))onError;
+- (void)addEventWithCallback:(NSDictionary *)record table:(NSString *)table onSuccess:(void (^)(void))onSuccess onError:(void (^)(NSString*, NSString*))onError;
 
-- (void)uploadWithBlock:(void (^)())block DEPRECATED_ATTRIBUTE;
+- (void)uploadWithBlock:(void (^)(void))block DEPRECATED_ATTRIBUTE;
 
-- (void)uploadEventsWithBlock:(void (^)())block DEPRECATED_ATTRIBUTE;
+- (void)uploadEventsWithBlock:(void (^)(void))block DEPRECATED_ATTRIBUTE;
 
-- (void)uploadEventsWithCallback:(void (^)())onSuccess onError:(void (^)(NSString*, NSString*))onError;
+- (void)uploadEventsWithCallback:(void (^)(void))onSuccess onError:(void (^)(NSString*, NSString*))onError;
 
 - (void)uploadEvents;
 
