@@ -263,7 +263,7 @@ static NSString *END_POINT = @"http://localhost";
 
 - (void)testSingleEventWithDefaultDatabase {
     [self baseTesting:^() {
-        [self.td setDefaultDatabase:@"db_"];
+        self.td.defaultDatabase = @"db_";
         [self setupDefaultExpectedResponseBody: @{@"db_.tbl":@[@{@"success":@"true"}]}];
         [self.td addEvent:@{@"name":@"foobar"} table:@"tbl"];
     }
@@ -449,7 +449,7 @@ static NSString *END_POINT = @"http://localhost";
     __block NSString *sessionId3;
 
     [self baseTesting:^() {
-        [self.td setDefaultDatabase:@"db_"];
+        self.td.defaultDatabase = @"db_";
         [self setupDefaultExpectedResponseBody: @{@"db_.tbl":@[@{@"success":@"true"}, @{@"success":@"true"}, @{@"success":@"true"}, @{@"success":@"true"}]}];
         sessionId0 = [self.td getSessionId];
         [self.td startSession:@"tbl"];
@@ -524,7 +524,7 @@ static NSString *END_POINT = @"http://localhost";
 
 - (void)testSessionIdWithInstanceSessionShouldBeChanged {
     [self baseTesting:^() {
-        [self.td setDefaultDatabase:@"db_"];
+        self.td.defaultDatabase = @"db_";
         [self setupDefaultExpectedResponseBody: @{@"db_.tbl":@[@{@"success":@"true"}, @{@"success":@"true"}, @{@"success":@"true"}, @{@"success":@"true"}]}];
         [self.td startSession:@"tbl"];
         [self.td endSession:@"tbl" database:@"db_"];
@@ -559,7 +559,7 @@ static NSString *END_POINT = @"http://localhost";
     
     [self baseTesting:^() {
         [TreasureData setSessionTimeoutMilli:500];
-        [self.td setDefaultDatabase:@"db_"];
+        self.td.defaultDatabase = @"db_";
         [self setupDefaultExpectedResponseBody: @{@"db_.tbl":@[@{@"success":@"true"}, @{@"success":@"true"}, @{@"success":@"true"}, @{@"success":@"true"}, @{@"success":@"true"}]}];
         sessionId0 = [TreasureData getSessionId];
         [TreasureData startSession];
