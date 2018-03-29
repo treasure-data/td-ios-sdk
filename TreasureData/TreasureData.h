@@ -11,41 +11,40 @@
 
 @interface TreasureData : NSObject
 
-@property(nonatomic, strong) TDClient *client;
+@property(nonatomic, strong) TDClient * _Nullable client;
 
-@property(nonatomic, strong) NSString *defaultDatabase;
+@property(nonatomic, strong) NSString * _Nullable defaultDatabase;
 
-+ (void)initializeWithApiKey:(NSString *)apiKey;
++ (void)initializeWithApiKey:(NSString * _Nonnull)apiKey;
 
-+ (instancetype)sharedInstance;
+// Can not be null after initializeWithApiKey: has been called.
++ (instancetype _Nonnull)sharedInstance;
 
-+ (void)initializeApiEndpoint:(NSString *)apiEndpoint;
++ (void)initializeApiEndpoint:(NSString * _Nullable)apiEndpoint;
 
-- (id)initWithApiKey:(NSString *)apiKey;
+- (id _Nonnull)initWithApiKey:(NSString * _Nonnull)apiKey;
 
-- (void)setDefaultDatabase:(NSString*)defaultDatabase;
+- (void)event:(NSDictionary * _Nonnull)record database:(NSString * _Nonnull)database table:(NSString * _Nonnull)table DEPRECATED_ATTRIBUTE;
 
-- (void)event:(NSDictionary *)record database:(NSString *)database table:(NSString *)table DEPRECATED_ATTRIBUTE;
+- (void)event:(NSDictionary * _Nonnull)record table:(NSString * _Nonnull)table DEPRECATED_ATTRIBUTE;
 
-- (void)event:(NSDictionary *)record table:(NSString *)table DEPRECATED_ATTRIBUTE;
+- (void)addEvent:(NSDictionary * _Nonnull)record database:(NSString * _Nonnull)database table:(NSString * _Nonnull)table;
 
-- (void)addEvent:(NSDictionary *)record database:(NSString *)database table:(NSString *)table;
+- (void)addEvent:(NSDictionary * _Nonnull)record table:(NSString * _Nonnull)table;
 
-- (void)addEvent:(NSDictionary *)record table:(NSString *)table;
+- (void)addEventWithCallback:(NSDictionary * _Nonnull)record database:(NSString * _Nonnull)database table:(NSString * _Nonnull)table onSuccess:(void (^ _Nullable)(void))onSuccess onError:(void (^ _Nullable)(NSString* _Nonnull, NSString* _Nullable))onError;
 
-- (void)addEventWithCallback:(NSDictionary *)record database:(NSString *)database table:(NSString *)table onSuccess:(void (^)(void))onSuccess onError:(void (^)(NSString*, NSString*))onError;
+- (void)addEventWithCallback:(NSDictionary * _Nonnull)record table:(NSString * _Nonnull)table onSuccess:(void (^ _Nullable)(void))onSuccess onError:(void (^ _Nullable)(NSString* _Nonnull, NSString* _Nullable))onError;
 
-- (void)addEventWithCallback:(NSDictionary *)record table:(NSString *)table onSuccess:(void (^)(void))onSuccess onError:(void (^)(NSString*, NSString*))onError;
+- (void)uploadWithBlock:(void (^ _Nonnull)(void))block DEPRECATED_ATTRIBUTE;
 
-- (void)uploadWithBlock:(void (^)(void))block DEPRECATED_ATTRIBUTE;
+- (void)uploadEventsWithBlock:(void (^ _Nonnull)(void))block DEPRECATED_ATTRIBUTE;
 
-- (void)uploadEventsWithBlock:(void (^)(void))block DEPRECATED_ATTRIBUTE;
-
-- (void)uploadEventsWithCallback:(void (^)(void))onSuccess onError:(void (^)(NSString*, NSString*))onError;
+- (void)uploadEventsWithCallback:(void (^ _Nullable)(void))onSuccess onError:(void (^ _Nullable)(NSString* _Nonnull, NSString* _Nullable))onError;
 
 - (void)uploadEvents;
 
-- (void)setApiEndpoint:(NSString*)endpoint DEPRECATED_ATTRIBUTE;
+- (void)setApiEndpoint:(NSString* _Nonnull)endpoint DEPRECATED_ATTRIBUTE;
 
 - (void)disableAutoAppendUniqId;
 
@@ -73,21 +72,21 @@
 
 - (void)initializeFirstRun;     // Only for test
 
-- (void)startSession:(NSString*)table;
+- (void)startSession:(NSString* _Nonnull)table;
 
-- (void)startSession:(NSString*)table database:(NSString*)database;
+- (void)startSession:(NSString* _Nonnull)table database:(NSString* _Nonnull)database;
 
-- (void)endSession:(NSString*)table;
+- (void)endSession:(NSString* _Nonnull)table;
 
-- (void)endSession:(NSString*)table database:(NSString*)database;
+- (void)endSession:(NSString* _Nonnull)table database:(NSString* _Nonnull)database;
 
-- (NSString *)getSessionId;
+- (NSString * _Nullable)getSessionId;
 
 + (void)startSession;
 
 + (void)endSession;
 
-+ (NSString*)getSessionId;
++ (NSString* _Nullable)getSessionId;
 
 + (void)resetSession;       // Only for test
 
@@ -95,13 +94,13 @@
 
 - (void)enableServerSideUploadTimestamp;
 
-- (void)enableServerSideUploadTimestamp: (NSString*)columnName;
+- (void)enableServerSideUploadTimestamp: (NSString* _Nonnull)columnName;
 
 - (void)disableServerSideUploadTimestamp;
 
 - (void)enableAutoAppendRecordUUID;
 
-- (void)enableAutoAppendRecordUUID: (NSString*)columnName;
+- (void)enableAutoAppendRecordUUID: (NSString* _Nonnull)columnName;
 
 - (void)disableAutoAppendRecordUUID;
 
@@ -117,13 +116,13 @@
 
 + (void)enableTraceLogging;
 
-+ (void)initializeEncryptionKey:(NSString*)encryptionKey;
++ (void)initializeEncryptionKey:(NSString* _Nullable)encryptionKey;
 
 #pragma mark - Auto Tracking
 
-- (void)enableAutoTrackToDatabase:(NSString *_Nonnull)database table:(NSString *_Nonnull)table;
+- (void)enableAutoTrackToDatabase:(NSString * _Nonnull)database table:(NSString * _Nonnull)table;
 
-- (void)enableAutoTrackToTable:(NSString *_Nonnull)table;
+- (void)enableAutoTrackToTable:(NSString * _Nonnull)table;
 
 - (void)disableAutoTrack;
 
