@@ -113,7 +113,7 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
     [self addEventWithCallback:record database:database table:table onSuccess:nil onError:nil];
 }
 
-- (void)addEventWithCallback:(NSDictionary *)record database:(NSString *)database table:(NSString *)table onSuccess:(void (^)())onSuccess onError:(void (^)(NSString*, NSString*))onError {
+- (void)addEventWithCallback:(NSDictionary *)record database:(NSString *)database table:(NSString *)table onSuccess:(void (^)(void))onSuccess onError:(void (^)(NSString*, NSString*))onError {
     if (self.client) {
         if (database && table) {
             NSError *error = nil;
@@ -170,7 +170,7 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
     }
 }
 
-- (void)addEventWithCallback:(NSDictionary *)record table:(NSString *)table onSuccess:(void (^)())onSuccess onError:(void (^)(NSString*, NSString*))onError {
+- (void)addEventWithCallback:(NSDictionary *)record table:(NSString *)table onSuccess:(void (^)(void))onSuccess onError:(void (^)(NSString*, NSString*))onError {
     [self addEventWithCallback:record database:self.defaultDatabase table:table onSuccess:onSuccess onError:onError];
 }
 
@@ -287,11 +287,11 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
     return record;
 }
 
-- (void)uploadWithBlock:(void (^)())block {
+- (void)uploadWithBlock:(void (^)(void))block {
     [self uploadEventsWithBlock:block];
 }
 
-- (void)uploadEventsWithBlock:(void (^)())block {
+- (void)uploadEventsWithBlock:(void (^)(void))block {
     if (self.client) {
         [self.client uploadWithFinishedBlock:block];
     }
@@ -300,7 +300,7 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
     }
 }
 
-- (void)uploadEventsWithCallback:(void (^)())onSuccess onError:(void (^)(NSString*, NSString*))onError {
+- (void)uploadEventsWithCallback:(void (^)(void))onSuccess onError:(void (^)(NSString*, NSString*))onError {
     if (self.client) {
         self.client.enableEventCompression = isEventCompressionEnabled;
         [self.client uploadWithCallbacks:onSuccess onError:onError];

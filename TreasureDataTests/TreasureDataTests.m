@@ -92,7 +92,7 @@ static NSString *END_POINT = @"http://localhost";
     return self.mockedTrackedBuildNumber;
 }
 
-- (void)addEventWithCallback:(NSDictionary *)record database:(NSString *)database table:(NSString *)table onSuccess:(void (^)())onSuccess onError:(void (^)(NSString*, NSString*))onError {
+- (void)addEventWithCallback:(NSDictionary *)record database:(NSString *)database table:(NSString *)table onSuccess:(void (^)(void))onSuccess onError:(void (^)(NSString*, NSString*))onError {
     [self.capturedEvents addObject:record];
     [super addEventWithCallback:record database:database table:table onSuccess:onSuccess onError:onError];
 }
@@ -161,7 +161,7 @@ static NSString *END_POINT = @"http://localhost";
     assertion(ev);
 }
 
-- (void)baseTesting:(void(^)())setup onSuccess:(void(^)(void))onSuccess onError:(void(^)(NSString*, NSString*))onError {
+- (void)baseTesting:(void(^)(void))setup onSuccess:(void(^)(void))onSuccess onError:(void(^)(NSString*, NSString*))onError {
     NSString *url = self.client.apiEndpoint;
     XCTAssertEqualObjects(@"http://localhost", url);
 
@@ -172,7 +172,7 @@ static NSString *END_POINT = @"http://localhost";
     [self.td uploadEventsWithCallback:onSuccess onError:onError];
 }
 
-- (void)baseTesting:(void(^)())setup assertion:(void(^)(NSDictionary*))assert {
+- (void)baseTesting:(void(^)(void))setup assertion:(void(^)(NSDictionary*))assert {
     [self baseTesting:setup onSuccess:^(){
         [self assertRequest:assert];
         self.isFinished = true;
@@ -184,7 +184,7 @@ static NSString *END_POINT = @"http://localhost";
                               }];
 }
 
-- (void)baseTestingError:(void(^)())setup assertion:(void(^)(NSString*))assertion {
+- (void)baseTestingError:(void(^)(void))setup assertion:(void(^)(NSString*))assertion {
     [self baseTesting:setup onSuccess:^(){
         XCTAssertTrue(false);
         self.isFinished = true;
