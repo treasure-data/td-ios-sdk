@@ -391,5 +391,3 @@ See this example project (https://github.com/treasure-data/td-ios-sdk/tree/maste
 ## Xcode Compatibility
 
 The current version has been built and tested with XCode v9.2.
-
-At the moment, Xcode v9 or later is **not supported**.
