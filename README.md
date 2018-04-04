@@ -1,7 +1,7 @@
 Treasure Data iOS SDK
 ===============
 
-iOS SDK for [Treasure Data](http://www.treasuredata.com/). With this SDK, you can import the events on your applications into Treasure Data easily. This library supports iOS 5 or later.
+iOS SDK for [Treasure Data](http://www.treasuredata.com/). With this SDK, you can import the events on your applications into Treasure Data easily. This library supports iOS 7 and later.
 
 Also, there is a more modern alternative SDK written in Swift [https://github.com/recruit-lifestyle/TreasureDataSDK](https://github.com/recruit-lifestyle/TreasureDataSDK).
 
@@ -390,6 +390,4 @@ See this example project (https://github.com/treasure-data/td-ios-sdk/tree/maste
 
 ## Xcode Compatibility
 
-The current version has been built and tested with Xcode v8.2.
-
-At the moment, Xcode v9 or later is **not supported**.
+The current version has been built and tested with XCode v9.2.
