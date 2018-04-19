@@ -120,10 +120,41 @@
 
 #pragma mark - Auto Tracking
 
-- (void)enableAutoTrackToDatabase:(NSString * _Nonnull)database table:(NSString * _Nonnull)table;
+- (void)enableAppLifecycleEventsTrackingWithTable:(NSString * _Nonnull)table;
 
-- (void)enableAutoTrackToTable:(NSString * _Nonnull)table;
+- (void)disableAppLifecycleEventsTracking;
 
-- (void)disableAutoTrack;
+- (BOOL)isAppLifecycleEventsTrackingEnabled;
+
+#pragma mark - GDCR Compliance (Right To Be Forgotten)
+
+/*!
+ * Block all the custom events collection (all events except the automatically tracked app lifecycle events)
+ * all the current locally buffered events will be purged and not recoverable.
+ * This is a persistent settings and has highest precedence, so unless being unblocked with `unblockCustomEvents`,
+ * all your tracked events with `addEvent` will be discarded. (Note that the app lifecycle events will still tracked,
+ * call `blockAppLifecyleEvents` to effectively disable all the event collections.
+ * This feature is supposed to be used for your users to opt-out of the tracking, a requirement for GDPR compliance.
+ */
+- (void)blockCustomEvents;
+
+/// Permanently re-enable custom events collection if previously disabled
+- (void)unblockCustomEvents;
+
+/// Whether the custom events collection is blocked or not
+- (BOOL)isCustomEventsBlocked;
+
+/*!
+ * Opposes to `enableAppLifecycleEventsTrackingWithTable`, this is a persistent settings, and has a higher precedence.
+ *
+ * Same as `blockCustomEvent`, this is supposed to be called for your users to opt-out of the tracking.
+ */
+- (void)blockAppLifecycleEvents;
+
+/// Permanently re-enable event collection if previously disabled
+- (void)unblockAppLifecycleEvents;
+
+/// Whether the app lifecycle events being automatically collected or not
+- (BOOL)isAppLifecycleEventsBlocked;
 
 @end

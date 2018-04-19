@@ -58,7 +58,7 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
 @property NSString *serverSideUploadTimestampColumn;
 @property NSString *autoAppendRecordUUIDColumn;
 
-@property (nonatomic, assign) BOOL isAutoTrackEnabled;
+@property (nonatomic, assign) BOOL isAppLifecycleEventsTrackingEnabled;
 @property (nonatomic, strong) NSString *autoTrackDatabase;
 @property (nonatomic, strong) NSString *autoTrackTable;
 @end
@@ -82,7 +82,7 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
          *      the parent client's project ids.
          *
          */
-        self.isAutoTrackEnabled = YES;
+        self.isAppLifecycleEventsTrackingEnabled = NO;
         NSString *endpoint = defaultApiEndpoint ? defaultApiEndpoint : @"https://in.treasuredata.com";
         self.client = [[TDClient alloc] initWithApiKey:apiKey apiEndpoint:endpoint];
         if (self.client) {
@@ -114,6 +114,8 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
 }
 
 - (void)addEventWithCallback:(NSDictionary *)record database:(NSString *)database table:(NSString *)table onSuccess:(void (^)(void))onSuccess onError:(void (^)(NSString*, NSString*))onError {
+    if ([TDUtils isCustomEvent:record] && [self isCustomEventsBlocked]) return;
+    if ([TDUtils isAppLifecycleEvent:record] && [self isAppLifecycleEventsBlocked]) return;
     if (self.client) {
         if (database && table) {
             NSError *error = nil;
@@ -514,22 +516,16 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
 
 #pragma mark - Auto Tracking
 
-- (void)enableAutoTrackToDatabase:(NSString *)database table:(NSString *)table
-{
-    self.isAutoTrackEnabled = YES;
-    self.autoTrackDatabase = table;
-}
-
-- (void)enableAutoTrackToTable:(NSString *)table
-{
-    self.isAutoTrackEnabled = YES;
+- (void)enableAppLifecycleEventsTrackingWithTable:(NSString *)table {
+    self.isAppLifecycleEventsTrackingEnabled = YES;
     self.autoTrackTable = table;
 }
 
-- (void)disableAutoTrack
-{
-    self.isAutoTrackEnabled = NO;
+- (void)disableAppLifecycleEventsTracking {
+    self.isAppLifecycleEventsTrackingEnabled = NO;
 }
+
+#pragma mark -
 
 - (void)observeLifecycleEvents {
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
@@ -538,7 +534,7 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
 
 - (void)handleAppDidLaunching:(NSNotification *)notification
 {
-    if (self.isAutoTrackEnabled) {
+    if ([self isAppLifecycleEventsTrackingEnabled]) {
         NSString *targetDatabase;
         if (self.autoTrackDatabase) {
             targetDatabase = self.autoTrackDatabase;
@@ -584,6 +580,33 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
         [[NSUserDefaults standardUserDefaults] setObject:currentVersion forKey:TD_USER_DEFAULTS_KEY_TRACKED_APP_VERSION];
         [[NSUserDefaults standardUserDefaults] setObject:currentBuild forKey:TD_USER_DEFAULTS_KEY_TRACKED_APP_BUILD];
     }
+}
+
+
+#pragma mark - GDPR Compliance (Right To Be Forgotten)
+
+- (void)blockCustomEvents {
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_BLOCKED];
+}
+
+- (void)unblockCustomEvents {
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_BLOCKED];
+}
+
+- (BOOL)isCustomEventsBlocked {
+    return [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_BLOCKED];
+}
+
+- (void)blockAppLifecycleEvents {
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_BLOCKED];
+}
+
+- (void)unblockAppLifecycleEvents {
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_BLOCKED];
+}
+
+- (BOOL)isAppLifecycleEventsBlocked {
+    return [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_BLOCKED];
 }
 
 

@@ -10,4 +10,8 @@
 
 + (NSString *)requireNonBlank:(NSString *)str defaultValue:(NSString *)defaultStr message:(NSString *)message;
 
++ (BOOL)isAppLifecycleEvent:(NSDictionary *)event;
+
++ (BOOL)isCustomEvent:(NSDictionary *)event;
+
 @end
