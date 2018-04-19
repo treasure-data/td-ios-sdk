@@ -3,21 +3,25 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 48;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		20B1861B2085DABD00B1A488 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 20B1861A2085DABC00B1A488 /* Assets.xcassets */; };
+		20F4C4C120855AF90049E1C7 /* TreasureDataExample.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F4C4C020855AF90049E1C7 /* TreasureDataExample.m */; };
 		6B14FEE61D3624DA00E9C3AF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B14FEE51D3624DA00E9C3AF /* main.m */; };
 		6B14FEE91D3624DA00E9C3AF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B14FEE81D3624DA00E9C3AF /* AppDelegate.m */; };
 		6B14FEEC1D3624DA00E9C3AF /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B14FEEB1D3624DA00E9C3AF /* ViewController.m */; };
 		6B14FEEF1D3624DA00E9C3AF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B14FEED1D3624DA00E9C3AF /* Main.storyboard */; };
-		6B14FEF11D3624DA00E9C3AF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6B14FEF01D3624DA00E9C3AF /* Assets.xcassets */; };
 		6B14FEF41D3624DA00E9C3AF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B14FEF21D3624DA00E9C3AF /* LaunchScreen.storyboard */; };
 		ACC8A425266E84EF5E9033F4 /* libPods-TreasureDataExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5DD3B4DAFF3BD9DE0273623 /* libPods-TreasureDataExample.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0EE6C1C60442438D3CE887F3 /* Pods-TreasureDataExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureDataExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureDataExample/Pods-TreasureDataExample.release.xcconfig"; sourceTree = "<group>"; };
+		20B1861A2085DABC00B1A488 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		20F4C4BF20855AE80049E1C7 /* TreasureDataExample.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TreasureDataExample.h; sourceTree = "<group>"; };
+		20F4C4C020855AF90049E1C7 /* TreasureDataExample.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TreasureDataExample.m; sourceTree = "<group>"; };
 		6B14FEE11D3624DA00E9C3AF /* TreasureDataExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TreasureDataExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B14FEE51D3624DA00E9C3AF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6B14FEE71D3624DA00E9C3AF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -25,7 +29,6 @@
 		6B14FEEA1D3624DA00E9C3AF /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		6B14FEEB1D3624DA00E9C3AF /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		6B14FEEE1D3624DA00E9C3AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		6B14FEF01D3624DA00E9C3AF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6B14FEF31D3624DA00E9C3AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6B14FEF51D3624DA00E9C3AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D756E6DA689C821E31575BDE /* Pods-TreasureDataExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureDataExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureDataExample/Pods-TreasureDataExample.debug.xcconfig"; sourceTree = "<group>"; };
@@ -73,12 +76,14 @@
 		6B14FEE31D3624DA00E9C3AF /* TreasureDataExample */ = {
 			isa = PBXGroup;
 			children = (
+				20F4C4BF20855AE80049E1C7 /* TreasureDataExample.h */,
+				20F4C4C020855AF90049E1C7 /* TreasureDataExample.m */,
 				6B14FEE71D3624DA00E9C3AF /* AppDelegate.h */,
 				6B14FEE81D3624DA00E9C3AF /* AppDelegate.m */,
 				6B14FEEA1D3624DA00E9C3AF /* ViewController.h */,
 				6B14FEEB1D3624DA00E9C3AF /* ViewController.m */,
+				20B1861A2085DABC00B1A488 /* Assets.xcassets */,
 				6B14FEED1D3624DA00E9C3AF /* Main.storyboard */,
-				6B14FEF01D3624DA00E9C3AF /* Assets.xcassets */,
 				6B14FEF21D3624DA00E9C3AF /* LaunchScreen.storyboard */,
 				6B14FEF51D3624DA00E9C3AF /* Info.plist */,
 				6B14FEE41D3624DA00E9C3AF /* Supporting Files */,
@@ -137,11 +142,16 @@
 				TargetAttributes = {
 					6B14FEE01D3624DA00E9C3AF = {
 						CreatedOnToolsVersion = 7.3.1;
+						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
 			buildConfigurationList = 6B14FEDC1D3624DA00E9C3AF /* Build configuration list for PBXProject "TreasureDataExample" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -164,7 +174,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6B14FEF41D3624DA00E9C3AF /* LaunchScreen.storyboard in Resources */,
-				6B14FEF11D3624DA00E9C3AF /* Assets.xcassets in Resources */,
+				20B1861B2085DABD00B1A488 /* Assets.xcassets in Resources */,
 				6B14FEEF1D3624DA00E9C3AF /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -228,6 +238,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6B14FEEC1D3624DA00E9C3AF /* ViewController.m in Sources */,
+				20F4C4C120855AF90049E1C7 /* TreasureDataExample.m in Sources */,
 				6B14FEE91D3624DA00E9C3AF /* AppDelegate.m in Sources */,
 				6B14FEE61D3624DA00E9C3AF /* main.m in Sources */,
 			);
@@ -300,7 +311,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -347,7 +358,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -360,10 +371,11 @@
 			baseConfigurationReference = D756E6DA689C821E31575BDE /* Pods-TreasureDataExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = U5YLXH98R7;
 				INFOPLIST_FILE = TreasureDataExample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.treasuredata.TreasureDataExample;
+				PRODUCT_BUNDLE_IDENTIFIER = com.huylenq.tdtest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -373,10 +385,11 @@
 			baseConfigurationReference = 0EE6C1C60442438D3CE887F3 /* Pods-TreasureDataExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = U5YLXH98R7;
 				INFOPLIST_FILE = TreasureDataExample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.treasuredata.TreasureDataExample;
+				PRODUCT_BUNDLE_IDENTIFIER = com.huylenq.tdtest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
