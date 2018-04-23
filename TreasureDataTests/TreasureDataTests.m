@@ -10,6 +10,7 @@
 #import "TreasureData.h"
 #import "TDClient.h"
 #import "Constants.h"
+#import "TDUtils.h"
 
 static NSString *END_POINT = @"http://localhost";
 
@@ -92,9 +93,22 @@ static NSString *END_POINT = @"http://localhost";
     return self.mockedTrackedBuildNumber;
 }
 
-- (void)addEventWithCallback:(NSDictionary *)record database:(NSString *)database table:(NSString *)table onSuccess:(void (^)(void))onSuccess onError:(void (^)(NSString*, NSString*))onError {
-    [self.capturedEvents addObject:record];
-    [super addEventWithCallback:record database:database table:table onSuccess:onSuccess onError:onError];
+- (NSDictionary *)addEventWithCallback:(NSDictionary *)record
+                    database:(NSString *)database
+                       table:(NSString *)table
+                   onSuccess:(void (^)(void))onSuccess
+                     onError:(void (^)(NSString*, NSString*))onError {
+    NSDictionary *added = [super addEventWithCallback:record database:database table:table onSuccess:onSuccess onError:onError];
+    if (added) {
+        [self.capturedEvents addObject:added];
+    }
+    return added;
+}
+
+- (void)uploadEventsWithCallback:(void (^ _Nullable)(void))onSuccess
+                         onError:(void (^ _Nullable)(NSString* _Nonnull, NSString* _Nullable))onError {
+    [self.capturedEvents removeAllObjects];
+    [super uploadEventsWithCallback:onSuccess onError:onError];
 }
 
 @end
@@ -123,6 +137,12 @@ static NSString *END_POINT = @"http://localhost";
     self.client = (MyTDClient*)self.td.client;
     self.session = (MySession*)self.td.client.session;
     [[MyTDClient getEventStore] deleteAllEvents];
+    
+    [self.td allowCustomEvent];
+    [self.td allowAppLifecycleEvent];
+    // Cleanup audit events so it won't mess with the assertion
+    [self.td.capturedEvents removeAllObjects];
+
     [MyTreasureData disableEventCompression];
     [MyTreasureData resetSession];
 }
@@ -703,7 +723,7 @@ static NSString *END_POINT = @"http://localhost";
     @try {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
                                                             object:nil];
-        [self assertHasCapturedEvent:TD_EVENT_APP_OPENED];
+        [self assertHasCapturedEventType:TD_EVENT_APP_OPENED];
     } @finally {
         self.isFinished = true;
     }
@@ -716,8 +736,8 @@ static NSString *END_POINT = @"http://localhost";
         [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
                                                             object:nil];
         [self assertEventCount:2];
-        [self assertHasCapturedEvent:TD_EVENT_APP_INSTALLED];
-        [self assertHasCapturedEvent:TD_EVENT_APP_OPENED];
+        [self assertHasCapturedEventType:TD_EVENT_APP_INSTALLED];
+        [self assertHasCapturedEventType:TD_EVENT_APP_OPENED];
     } @finally {
         self.isFinished = true;
     }
@@ -732,23 +752,94 @@ static NSString *END_POINT = @"http://localhost";
         [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
                                                             object:nil];
         [self assertEventCount:2];
-        [self assertHasCapturedEvent:TD_EVENT_APP_UPDATED];
-        [self assertHasCapturedEvent:TD_EVENT_APP_OPENED];
+        [self assertHasCapturedEventType:TD_EVENT_APP_UPDATED];
+        [self assertHasCapturedEventType:TD_EVENT_APP_OPENED];
     } @finally {
         self.isFinished = true;
     }
 }
 
+#pragma mark - GDPR Compliancy
+
+- (void)testToggleAllowCustomEvent {
+    [self.td disallowCustomEvent];
+
+    // An audit event should have been recorded
+    [self assertEventCount:1];
+    [self assertHasCapturedEventClass:TD_EVENT_AUDIT_TRACKING];
+    [self.td uploadEvents];
+    // All events are supposed to be flushed
+    [self assertEventCount:0];
+
+    BOOL added = [self.td addEvent:[NSDictionary dictionary] table:@"somewhere"];
+    
+    // Expect no events were recorded
+    XCTAssertFalse(added);
+    [self assertEventCount:0];
+
+    self.isFinished = true;
+}
+
+- (void)testToggleAllowAppLifecycleEvent {
+    [self.td disallowAppLifecycleEvent];
+    
+    // An audit event should have been recorded
+    [self assertEventCount:1];
+    [self assertHasCapturedEventClass:TD_EVENT_AUDIT_TRACKING];
+    [self.td uploadEvents];
+    
+    // All events are supposed to be flushed
+    [self assertEventCount:0];
+    
+    // Normally this would trigger the TD_EVENT_APP_OPENED event
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
+                                                        object:nil];
+    
+    // Expect no events were recorded
+    [self assertEventCount:0];
+    
+    self.isFinished = true;
+}
+
+- (void)testResetUniqId {
+    [self.td setDefaultDatabase:@"somedb"];
+    [self.td enableAutoAppendUniqId];
+    [self.td addEvent:[NSDictionary dictionary] table:@"somewhere"];
+    NSDictionary *sampleEvent= self.td.capturedEvents[0];
+    NSString* uuid = sampleEvent[@"td_uuid"];
+    
+    [self.td uploadEvents];
+    [self.td resetUniqId];
+    [self.td uploadEvents];
+    [self.td addEvent:[NSDictionary dictionary] table:@"somewhere"];
+    NSDictionary *sampleEventAfterReset= self.td.capturedEvents[0];
+    NSString* uuidAfterReset = sampleEventAfterReset[@"td_uuid"];
+    
+    XCTAssertNotEqual(uuid, uuidAfterReset);
+    
+    self.isFinished = true;
+}
+
 #pragma mark - Assertions
 
-- (void)assertHasCapturedEvent:(NSString *)eventName {
+- (void)assertHasCapturedEventType:(NSString *)eventType {
     NSArray<NSDictionary<NSString *,id> *> *events = self.td.capturedEvents;
     for (int i = 0; i < events.count; i++) {
-        if ([[events objectAtIndex:i][TD_COLUMN_EVENT] isEqualToString:eventName]) {
+        if ([[events objectAtIndex:i][TD_COLUMN_EVENT] isEqualToString:eventType]) {
             return;
         }
     }
-    @throw [NSString stringWithFormat:@"Event \"%@\" has never been captured!", eventName];
+    @throw [NSString stringWithFormat:@"Event type: \"%@\" has never been captured!", eventType];
+}
+
+- (void)assertHasCapturedEventClass:(NSString *)eventType {
+    NSArray<NSDictionary<NSString *,id> *> *events = self.td.capturedEvents;
+    for (int i = 0; i < events.count; i++) {
+        if ([TDUtils isAuditEvent:[events objectAtIndex:i]]) {
+            return;
+        }
+    }
+    @throw [NSString stringWithFormat:@"Event class: \"%@\" has never been captured!", eventType];
 }
 
 - (void)assertEventCount:(NSUInteger)eventNumber
