@@ -8,7 +8,10 @@
 
 #import "TDUtils.h"
 
-static NSString *const TD_EVENT_KEY_PRIVATE_AUTO_TRACKED_EVENT_TYPE = @"__is_auto_tracked_event";
+static NSString *const TDEventClassKey = @"__td_event_class";
+static NSString *const TDEventClassCustom = @"custom";
+static NSString *const TDEventClassAppLifecycle = @"app_lifecycle";
+static NSString *const TDEventClassAudit = @"audit";
 
 @implementation TDUtils
 
@@ -22,18 +25,37 @@ static NSString *const TD_EVENT_KEY_PRIVATE_AUTO_TRACKED_EVENT_TYPE = @"__is_aut
     }
 }
 
-+ (NSDictionary *)markAsBuiltinEvent:(NSDictionary *)event {
-    NSDictionary *augmentedEvent = [NSMutableDictionary dictionaryWithDictionary:event];
-    [augmentedEvent setValue:@YES forKey:@""];
-    return [NSDictionary dictionaryWithDictionary:augmentedEvent];
++ (NSDictionary *)makAsAppLifecycleEvent:(NSDictionary *)event {
+    NSMutableDictionary *appLifecycleEvent = [NSMutableDictionary dictionaryWithDictionary:event];
+    appLifecycleEvent[TDEventClassKey] = TDEventClassAppLifecycle;
+    return [NSDictionary dictionaryWithDictionary:appLifecycleEvent];
 }
 
+
++ (NSDictionary *)markAsAuditEvent:(NSDictionary *)event {
+    NSMutableDictionary *auditEvent = [NSMutableDictionary dictionaryWithDictionary:event];
+    auditEvent[TDEventClassKey] = TDEventClassAudit;
+    return [NSDictionary dictionaryWithDictionary:auditEvent];
+}
+
++ (NSDictionary *)markAsCustomEvent:(NSDictionary *)event {
+    NSMutableDictionary *auditEvent = [NSMutableDictionary dictionaryWithDictionary:event];
+    auditEvent[TDEventClassKey] = TDEventClassCustom;
+    return [NSDictionary dictionaryWithDictionary:auditEvent];
+}
+
+
 + (BOOL)isAppLifecycleEvent:(NSDictionary *)event {
-    return [[event objectForKey:TD_EVENT_KEY_PRIVATE_AUTO_TRACKED_EVENT_TYPE] boolValue];
+    return [event[TDEventClassKey] isEqualToString:TDEventClassAppLifecycle];
+}
+
++ (BOOL)isAuditEvent:(NSDictionary *)event {
+    return [event[TDEventClassKey] isEqualToString:TDEventClassAudit];
 }
 
 + (BOOL)isCustomEvent:(NSDictionary *)event {
-    return ![TDUtils isAppLifecycleEvent:event];
+    return event[TDEventClassKey] == nil
+            || [event[TDEventClassKey] isEqualToString:TDEventClassCustom];
 }
 
 @end

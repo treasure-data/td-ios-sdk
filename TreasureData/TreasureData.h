@@ -136,25 +136,25 @@
  * call `blockAppLifecyleEvents` to effectively disable all the event collections.
  * This feature is supposed to be used for your users to opt-out of the tracking, a requirement for GDPR compliance.
  */
-- (void)blockCustomEvents;
+- (void)allowCustomEvent;
 
 /// Permanently re-enable custom events collection if previously disabled
-- (void)unblockCustomEvents;
+- (void)disallowCustomEvent;
 
 /// Whether the custom events collection is blocked or not
-- (BOOL)isCustomEventsBlocked;
+- (BOOL)isCustomEventAllowed;
 
 /*!
  * Opposes to `enableAppLifecycleEventsTrackingWithTable`, this is a persistent settings, and has a higher precedence.
  *
  * Same as `blockCustomEvent`, this is supposed to be called for your users to opt-out of the tracking.
  */
-- (void)blockAppLifecycleEvents;
+- (void)allowAppLifecycleEvent;
 
 /// Permanently re-enable event collection if previously disabled
-- (void)unblockAppLifecycleEvents;
+- (void)disallowAppLifecycleEvent;
 
 /// Whether the app lifecycle events being automatically collected or not
-- (BOOL)isAppLifecycleEventsBlocked;
+- (BOOL)isAppLifecycleEventAllowed;
 
 @end

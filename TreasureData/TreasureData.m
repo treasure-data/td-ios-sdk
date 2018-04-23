@@ -49,6 +49,7 @@ static NSString *const DefaultAutoTrackDatabase = @"td_event";
 static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
 
 @interface TreasureData ()
+
 @property BOOL autoAppendUniqId;
 @property BOOL autoAppendModelInformation;
 @property BOOL autoAppendAppInformation;
@@ -61,6 +62,10 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
 @property (nonatomic, assign) BOOL isAppLifecycleEventsTrackingEnabled;
 @property (nonatomic, strong) NSString *autoTrackDatabase;
 @property (nonatomic, strong) NSString *autoTrackTable;
+
+@property (nonatomic, assign, getter=isCustomEventAllowed) BOOL customEventAllowed;
+@property (nonatomic, assign, getter=isAppLifecycleEventAllowed) BOOL appLifecycleEventAllowed;
+
 @end
 
 @implementation TreasureData
@@ -83,11 +88,13 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
          *
          */
         self.isAppLifecycleEventsTrackingEnabled = NO;
+        self.customEventAllowed = [[[NSUserDefaults standardUserDefaults] objectForKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ALLOWED] boolValue];
+        self.appLifecycleEventAllowed = [[[NSUserDefaults standardUserDefaults] objectForKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ALLOWED] boolValue];
         NSString *endpoint = defaultApiEndpoint ? defaultApiEndpoint : @"https://in.treasuredata.com";
         self.client = [[TDClient alloc] initWithApiKey:apiKey apiEndpoint:endpoint];
         if (self.client) {
 
-        }
+        /**/}
         else {
             KCLog(@"Failed to initialize client");
         }
@@ -114,8 +121,8 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
 }
 
 - (void)addEventWithCallback:(NSDictionary *)record database:(NSString *)database table:(NSString *)table onSuccess:(void (^)(void))onSuccess onError:(void (^)(NSString*, NSString*))onError {
-    if ([TDUtils isCustomEvent:record] && [self isCustomEventsBlocked]) return;
-    if ([TDUtils isAppLifecycleEvent:record] && [self isAppLifecycleEventsBlocked]) return;
+    if ([TDUtils isCustomEvent:record] && ![self isCustomEventAllowed]) return;
+    if ([TDUtils isAppLifecycleEvent:record] && ![self isAppLifecycleEventAllowed]) return;
     if (self.client) {
         if (database && table) {
             NSError *error = nil;
@@ -585,30 +592,25 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
 
 #pragma mark - GDPR Compliance (Right To Be Forgotten)
 
-- (void)blockCustomEvents {
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_BLOCKED];
+- (void)allowCustomEvent {
+    self.customEventAllowed = YES;
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ALLOWED];
 }
 
-- (void)unblockCustomEvents {
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_BLOCKED];
+- (void)disallowCustomEvent {
+    self.customEventAllowed = NO;
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ALLOWED];
 }
 
-- (BOOL)isCustomEventsBlocked {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_BLOCKED];
+- (void)allowAppLifecycleEvent {
+    self.appLifecycleEventAllowed = YES;
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ALLOWED];
 }
 
-- (void)blockAppLifecycleEvents {
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_BLOCKED];
+- (void)disallowAppLifecycleEvent {
+    self.appLifecycleEventAllowed = NO;
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ALLOWED];
 }
-
-- (void)unblockAppLifecycleEvents {
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_BLOCKED];
-}
-
-- (BOOL)isAppLifecycleEventsBlocked {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_BLOCKED];
-}
-
 
 @end
 
