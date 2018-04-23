@@ -31,7 +31,7 @@
     [self autoEventSwitchChanged:self.autoEventSwitch];
     [self.targetTableField setText:@"mobile_events"];
     [self.autoTrackTableField setText:@"auto_tracked_mobile_events"];
-    [[TreasureData sharedInstance] enableAppLifecycleEventsTrackingWithTable:@"auto_tracked_events"];
+    [[TreasureData sharedInstance] setTreasureDataTable:@"td_builtin_events"];
 }
 
 - (void)didReceiveMemoryWarning {
