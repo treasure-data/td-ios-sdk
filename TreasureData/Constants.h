@@ -18,3 +18,5 @@
 
 #define TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ALLOWED @"TDCustomEventsBlocked"
 #define TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ALLOWED @"TDAppLifecycleEventsBlocked"
+
+#define TD_ERROR_CUSTOM_EVENT_UNALLOWED @"custom_event_unallowed"

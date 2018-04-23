@@ -64,8 +64,8 @@
     }
 }
 
-- (IBAction)addEvent:(id)sender {
-    [ViewController shiftButton:self.addEventButton toState:kButtonStatePending withTitle:@"Adding Event..."];
+- (IBAction)addEvent:(id)addEventButton {
+    [ViewController shiftButton:addEventButton toState:kButtonStatePending withTitle:@"Adding Event..."];
 
     if (self.isDirty) {
         self.isDirty = NO;
@@ -83,37 +83,58 @@
      table:self.targetTableField.text
      onSuccess:^(){
          dispatch_async(dispatch_get_main_queue(), ^{
-             [ViewController shiftButton:self.addEventButton toState:kButtonStateSuccess withTitle:@"Add Event Success!"];
+             [ViewController shiftButton:addEventButton toState:kButtonStateSuccess withTitle:@"Add Event Success!"];
              [NSTimer scheduledTimerWithTimeInterval:1.0 repeats:NO block:^(NSTimer *timer) {
-                 [ViewController shiftButton:self.addEventButton toState:kButtonStateNormal withTitle:@"Add Test Event"];
+                 [ViewController shiftButton:addEventButton toState:kButtonStateNormal withTitle:@"Add Test Event"];
              }];
          });
      }
      onError:^(NSString* errorCode, NSString* message) {
          NSLog(@"addEvent: error. errorCode=%@, message=%@", errorCode, message);
-     }
-     ];
+         dispatch_async(dispatch_get_main_queue(), ^{
+             NSString *text = [errorCode isEqualToString:@"custom_event_unallowed"] ? @"Add Event Denied!" : @"Add Event Error!";
+             [ViewController shiftButton:addEventButton toState:kButtonStateFailed withTitle:text];
+             [NSTimer scheduledTimerWithTimeInterval:1.0 repeats:NO block:^(NSTimer *timer) {
+                 [ViewController shiftButton:addEventButton toState:kButtonStateNormal withTitle:@"Add Test Event"];
+             }];
+         });
+     }];
 }
 
-- (IBAction)uploadEvents:(id)sender {
-    [ViewController shiftButton:self.uploadButton toState:kButtonStatePending withTitle:@"Uploading Event..."];
+- (IBAction)uploadEvents:(id)uploadButton {
+    [ViewController shiftButton:uploadButton toState:kButtonStatePending withTitle:@"Uploading Events..."];
     [[TreasureData sharedInstance] uploadEventsWithCallback:^(){
         NSLog(@"uploadEvents: success");
         dispatch_async(dispatch_get_main_queue(), ^{
-            [ViewController shiftButton:self.uploadButton toState:kButtonStateSuccess withTitle:@"Upload Event Success!"];
+            [ViewController shiftButton:uploadButton toState:kButtonStateSuccess withTitle:@"Upload Events Success!"];
             [NSTimer scheduledTimerWithTimeInterval:1.5 repeats:NO block:^(NSTimer* timer) {
-                [ViewController shiftButton:self.uploadButton toState:kButtonStateNormal withTitle:@"Upload Events"];
+                [ViewController shiftButton:uploadButton toState:kButtonStateNormal withTitle:@"Upload Events"];
             }];
         });
     } onError:^(NSString* errorCode, NSString* message) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [ViewController shiftButton:uploadButton toState:kButtonStateFailed withTitle:@"Upload Events Error!"];
+            [NSTimer scheduledTimerWithTimeInterval:1.5 repeats:NO block:^(NSTimer* timer) {
+                [ViewController shiftButton:uploadButton toState:kButtonStateNormal withTitle:@"Upload Events"];
+            }];
+        });
         NSLog(@"uploadEvents: error. errorCode=%@, message=%@", errorCode, message);
+    }];
+}
+
+- (IBAction)resetDeviceUniqueID:(id)sender {
+    [[TreasureData sharedInstance] resetUniqId];
+    [ViewController shiftButton:sender toState:kButtonStateSuccess withTitle:@"Reset Device Unique ID"];
+    [NSTimer scheduledTimerWithTimeInterval:1 repeats:NO block:^(NSTimer* timer) {
+        [ViewController shiftButton:sender toState:kButtonStateNormal withTitle:@"Reset Device Unique ID"];
     }];
 }
 
 typedef enum {
     kButtonStateNormal,
     kButtonStatePending,
-    kButtonStateSuccess
+    kButtonStateSuccess,
+    kButtonStateFailed
 } ButtonState;
 
 + (void)shiftButton:(UIButton *)button toState:(ButtonState)state withTitle:(NSString *)title {
@@ -122,6 +143,11 @@ typedef enum {
         case kButtonStateSuccess:
             [button setTitleColor:[UIColor colorWithRed:39/255.0 green:174/255.0 blue:96/255.0 alpha:1.0] forState:UIControlStateNormal];
             button.userInteractionEnabled = NO;
+            break;
+        case kButtonStateFailed:
+            // rgb(231, 76, 60)
+            [button setTitleColor:[UIColor colorWithRed:231/255.0 green:76/255.0 blue:60/255.0 alpha:1.0] forState:UIControlStateNormal];
+            button.userInteractionEnabled = YES;
             break;
         case kButtonStatePending:
             [button setTitleColor:[UIColor colorWithRed:243/255.0 green:156/255.0 blue:18/255.0 alpha:1.0] forState:UIControlStateNormal];

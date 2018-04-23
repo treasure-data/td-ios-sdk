@@ -357,8 +357,31 @@
                                         </tableViewCellContentView>
                                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="4gd-0W-l0u">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="Psk-Sx-5nT">
                                         <rect key="frame" x="0.0" y="569.5" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Psk-Sx-5nT" id="Rbx-zH-sfN">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lNj-Qp-PFr">
+                                                    <rect key="frame" x="0.0" y="6" width="375" height="30"/>
+                                                    <state key="normal" title="Upload Events"/>
+                                                    <connections>
+                                                        <action selector="uploadEvents:" destination="vgE-gp-ZtG" eventType="touchUpInside" id="nwp-Ml-zac"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="lNj-Qp-PFr" firstAttribute="centerY" secondItem="Rbx-zH-sfN" secondAttribute="centerY" id="H1b-Om-Avd"/>
+                                                <constraint firstAttribute="trailing" secondItem="lNj-Qp-PFr" secondAttribute="trailing" id="RCk-Eu-5ma"/>
+                                                <constraint firstItem="lNj-Qp-PFr" firstAttribute="leading" secondItem="Rbx-zH-sfN" secondAttribute="leading" id="XQd-eg-8DN"/>
+                                                <constraint firstItem="lNj-Qp-PFr" firstAttribute="centerX" secondItem="Rbx-zH-sfN" secondAttribute="centerX" id="q8Z-NG-L8a"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="4gd-0W-l0u">
+                                        <rect key="frame" x="0.0" y="613.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="4gd-0W-l0u" id="Ky9-fU-gu5">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
@@ -366,9 +389,9 @@
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hDv-Ru-qWK">
                                                     <rect key="frame" x="0.0" y="6" width="375" height="30"/>
-                                                    <state key="normal" title="Upload Events"/>
+                                                    <state key="normal" title="Reset Device Unique ID"/>
                                                     <connections>
-                                                        <action selector="uploadEvents:" destination="vgE-gp-ZtG" eventType="touchUpInside" id="JU9-T5-r5v"/>
+                                                        <action selector="resetDeviceUniqueID:" destination="vgE-gp-ZtG" eventType="touchUpInside" id="FRz-cd-AI0"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -390,7 +413,6 @@
                     </tableView>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
-                        <outlet property="addEventButton" destination="Ya0-Km-wTJ" id="ksl-Pc-CEA"/>
                         <outlet property="apiEndpointField" destination="LTb-DE-GWH" id="zrd-Yp-2Zw"/>
                         <outlet property="apiKeyField" destination="Ndh-VC-HrS" id="kfO-Xj-nbm"/>
                         <outlet property="appLifecycleEventToggleLabel" destination="ydC-Vx-LVJ" id="ZG6-FR-tzT"/>
@@ -400,7 +422,6 @@
                         <outlet property="eventCollectingSwitch" destination="JTW-pQ-cdc" id="JaL-Ef-fn1"/>
                         <outlet property="targetDatabaseField" destination="sND-qi-6Yz" id="CQ5-Qz-S4I"/>
                         <outlet property="targetTableField" destination="vDu-dR-yNu" id="74k-vI-xq6"/>
-                        <outlet property="uploadButton" destination="hDv-Ru-qWK" id="R2K-EL-pgE"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CfC-PW-9XH" userLabel="First Responder" sceneMemberID="firstResponder"/>

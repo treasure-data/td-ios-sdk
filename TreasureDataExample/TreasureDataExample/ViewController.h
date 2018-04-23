@@ -14,8 +14,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *apiKeyField;
 @property (weak, nonatomic) IBOutlet UITextField *targetDatabaseField;
 @property (weak, nonatomic) IBOutlet UITextField *targetTableField;
-@property (weak, nonatomic) IBOutlet UIButton *addEventButton;
-@property (weak, nonatomic) IBOutlet UIButton *uploadButton;
 @property (weak, nonatomic) IBOutlet UITextField *autoTrackTableField;
 
 @property (weak, nonatomic) IBOutlet UILabel *customEventToggleLabel;
@@ -29,5 +27,6 @@
 
 - (IBAction)addEvent:(id)sender;
 - (IBAction)uploadEvents:(id)sender;
+- (IBAction)resetDeviceUniqueID:(id)sender;
 
 @end
