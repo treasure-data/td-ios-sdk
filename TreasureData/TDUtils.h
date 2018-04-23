@@ -10,8 +10,17 @@
 
 + (NSString *)requireNonBlank:(NSString *)str defaultValue:(NSString *)defaultStr message:(NSString *)message;
 
++ (NSDictionary *)makAsAppLifecycleEvent:(NSDictionary *)event;
+
++ (NSDictionary *)markAsAuditEvent:(NSDictionary *)event;
+
++ (NSDictionary *)markAsCustomEvent:(NSDictionary *)event;
+
++ (BOOL)isAuditEvent:(NSDictionary *)event;
+
 + (BOOL)isAppLifecycleEvent:(NSDictionary *)event;
 
 + (BOOL)isCustomEvent:(NSDictionary *)event;
+
 
 @end

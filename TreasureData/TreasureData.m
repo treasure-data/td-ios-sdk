@@ -60,8 +60,8 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
 @property NSString *autoAppendRecordUUIDColumn;
 
 @property (nonatomic, assign) BOOL isAppLifecycleEventsTrackingEnabled;
-@property (nonatomic, strong) NSString *autoTrackDatabase;
-@property (nonatomic, strong) NSString *autoTrackTable;
+@property (nonatomic, copy) NSString *autoTrackDatabase;
+@property (nonatomic, copy) NSString *autoTrackTable;
 
 @property (nonatomic, assign, getter=isCustomEventAllowed) BOOL customEventAllowed;
 @property (nonatomic, assign, getter=isAppLifecycleEventAllowed) BOOL appLifecycleEventAllowed;
@@ -69,6 +69,9 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
 @end
 
 @implementation TreasureData
+
+NSString *_UUID;
+
 - (id)initWithApiKey:(NSString *)apiKey {
     self = [self init];
 
@@ -87,7 +90,6 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
          *      the parent client's project ids.
          *
          */
-        self.isAppLifecycleEventsTrackingEnabled = NO;
         self.customEventAllowed = [[[NSUserDefaults standardUserDefaults] objectForKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ALLOWED] boolValue];
         self.appLifecycleEventAllowed = [[[NSUserDefaults standardUserDefaults] objectForKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ALLOWED] boolValue];
         NSString *endpoint = defaultApiEndpoint ? defaultApiEndpoint : @"https://in.treasuredata.com";
@@ -104,25 +106,25 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
 }
 
 
-- (void)event:(NSDictionary *)record table:(NSString *)table {
-    [self addEvent:record table:table];
+- (NSDictionary *)event:(NSDictionary *)record table:(NSString *)table {
+    return [self addEvent:record table:table];
 }
 
-- (void)event:(NSDictionary *)record database:(NSString *)database table:(NSString *)table {
-    [self addEvent:record database:database table:table];
+- (NSDictionary *)event:(NSDictionary *)record database:(NSString *)database table:(NSString *)table {
+    return [self addEvent:record database:database table:table];
 }
 
-- (void)addEvent:(NSDictionary *)record table:(NSString *)table {
-    [self addEvent:record database:self.defaultDatabase table:table];
+- (NSDictionary *)addEvent:(NSDictionary *)record table:(NSString *)table {
+    return [self addEvent:record database:self.defaultDatabase table:table];
 }
 
-- (void)addEvent:(NSDictionary *)record database:(NSString *)database table:(NSString *)table {
-    [self addEventWithCallback:record database:database table:table onSuccess:nil onError:nil];
+- (NSDictionary *)addEvent:(NSDictionary *)record database:(NSString *)database table:(NSString *)table {
+    return [self addEventWithCallback:record database:database table:table onSuccess:nil onError:nil];
 }
 
-- (void)addEventWithCallback:(NSDictionary *)record database:(NSString *)database table:(NSString *)table onSuccess:(void (^)(void))onSuccess onError:(void (^)(NSString*, NSString*))onError {
-    if ([TDUtils isCustomEvent:record] && ![self isCustomEventAllowed]) return;
-    if ([TDUtils isAppLifecycleEvent:record] && ![self isAppLifecycleEventAllowed]) return;
+- (NSDictionary *)addEventWithCallback:(NSDictionary *)record database:(NSString *)database table:(NSString *)table onSuccess:(void (^)(void))onSuccess onError:(void (^)(NSString*, NSString*))onError {
+    if ([TDUtils isCustomEvent:record] && ![self isCustomEventAllowed]) return nil;
+    if ([TDUtils isAppLifecycleEvent:record] && ![self isAppLifecycleEventAllowed]) nil;
     if (self.client) {
         if (database && table) {
             NSError *error = nil;
@@ -160,6 +162,7 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
 
                 NSString *tag = [NSString stringWithFormat:@"%@.%@", database, table];
                 [self.client addEventWithCallbacks:record toEventCollection:tag onSuccess:onSuccess onError:onError];
+                return [NSDictionary dictionaryWithDictionary:record];
             }
         }
         else {
@@ -168,6 +171,7 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
             if (onError) {
                 onError(ERROR_CODE_INVALID_PARAM, errMsg);
             }
+            return nil;
         }
     }
     else {
@@ -177,6 +181,7 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
             onError(ERROR_CODE_INIT_ERROR, errMsg);
         }
     }
+    return nil;
 }
 
 - (void)addEventWithCallback:(NSDictionary *)record table:(NSString *)table onSuccess:(void (^)(void))onSuccess onError:(void (^)(NSString*, NSString*))onError {
@@ -184,19 +189,14 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
 }
 
 - (NSString*)getUUID {
-    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-    NSString *uuid = [ud stringForKey:storageKeyOfUuid];
-    if (!uuid) {
-        if (!NSClassFromString(@"NSUUID")) {
-            uuid = @"";
-        }
-        else {
-            uuid = [[NSUUID UUID] UUIDString];
-        }
-        [ud setObject:uuid forKey:storageKeyOfUuid];
-        [ud synchronize];
+    if (_UUID == nil) {
+        _UUID = [[NSUserDefaults standardUserDefaults] stringForKey:storageKeyOfUuid];
     }
-    return uuid;
+    if (_UUID == nil) {
+        _UUID = [[NSUUID UUID] UUIDString];
+        [[NSUserDefaults standardUserDefaults] setObject:_UUID forKey:storageKeyOfUuid];
+    }
+    return _UUID;
 }
 
 - (NSDictionary*)appendUniqId:(NSDictionary *)origRecord {
@@ -521,17 +521,6 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
     isTraceLoggingEnabled = true;
 }
 
-#pragma mark - Auto Tracking
-
-- (void)enableAppLifecycleEventsTrackingWithTable:(NSString *)table {
-    self.isAppLifecycleEventsTrackingEnabled = YES;
-    self.autoTrackTable = table;
-}
-
-- (void)disableAppLifecycleEventsTracking {
-    self.isAppLifecycleEventsTrackingEnabled = NO;
-}
-
 #pragma mark -
 
 - (void)observeLifecycleEvents {
@@ -595,21 +584,46 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
 - (void)allowCustomEvent {
     self.customEventAllowed = YES;
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ALLOWED];
+    [self addEvent:[TDUtils markAsAuditEvent: @{
+                    TD_COLUMN_EVENT: TD_EVENT_AUDIT_TRACKING,
+                    TD_COLUMN_AUDIT_TYPE: @"allow_custom_event"}]
+             table:self.treasureDataTable];
 }
 
 - (void)disallowCustomEvent {
     self.customEventAllowed = NO;
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ALLOWED];
+    [self addEvent:[TDUtils markAsAuditEvent:@{
+                    TD_COLUMN_EVENT: TD_EVENT_AUDIT_TRACKING,
+                    TD_COLUMN_AUDIT_TYPE: @"disallow_custom_event"}]
+             table:self.treasureDataTable];
 }
 
 - (void)allowAppLifecycleEvent {
     self.appLifecycleEventAllowed = YES;
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ALLOWED];
+    [self addEvent:[TDUtils markAsAuditEvent:@{
+                    TD_COLUMN_EVENT: TD_EVENT_AUDIT_TRACKING,
+                    TD_COLUMN_AUDIT_TYPE: @"allow_app_lifecycle_event"}]
+             table:self.treasureDataTable];
 }
 
 - (void)disallowAppLifecycleEvent {
     self.appLifecycleEventAllowed = NO;
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ALLOWED];
+    [self addEvent:[TDUtils markAsAuditEvent:@{
+                    TD_COLUMN_EVENT: TD_EVENT_AUDIT_TRACKING,
+                    TD_COLUMN_AUDIT_TYPE: @"disallow_app_lifecycle_event"}]
+             table:self.treasureDataTable];
+}
+
+- (void)resetUniqId {
+    _UUID = [[NSUUID UUID] UUIDString];
+    [[NSUserDefaults standardUserDefaults] setObject:_UUID forKey:storageKeyOfUuid];
+    [self addEvent:[TDUtils markAsAuditEvent:@{
+                    TD_COLUMN_EVENT: TD_EVENT_AUDIT_TRACKING,
+                    TD_COLUMN_AUDIT_TYPE: @"forget_device_uuid"}]
+             table:self.treasureDataTable];
 }
 
 @end

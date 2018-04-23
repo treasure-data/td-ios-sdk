@@ -53,6 +53,7 @@ static NSString *const TDEventClassAudit = @"audit";
     return [event[TDEventClassKey] isEqualToString:TDEventClassAudit];
 }
 
+/// Either the `TDEventClassKey` ("__td_event_class") is "custom" or absence
 + (BOOL)isCustomEvent:(NSDictionary *)event {
     return event[TDEventClassKey] == nil
             || [event[TDEventClassKey] isEqualToString:TDEventClassCustom];

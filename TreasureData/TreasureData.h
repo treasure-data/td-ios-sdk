@@ -15,6 +15,11 @@
 
 @property(nonatomic, strong) NSString * _Nullable defaultDatabase;
 
+/*!
+ * Special table to store TreasureData built-in events: application lifecycle events, audit events
+ */
+@property(nonatomic, copy) NSString * _Nullable treasureDataTable;
+
 + (void)initializeWithApiKey:(NSString * _Nonnull)apiKey;
 
 // Can not be null after initializeWithApiKey: has been called.
@@ -24,17 +29,17 @@
 
 - (id _Nonnull)initWithApiKey:(NSString * _Nonnull)apiKey;
 
-- (void)event:(NSDictionary * _Nonnull)record database:(NSString * _Nonnull)database table:(NSString * _Nonnull)table DEPRECATED_ATTRIBUTE;
+- (BOOL)event:(NSDictionary * _Nonnull)record database:(NSString * _Nonnull)database table:(NSString * _Nonnull)table DEPRECATED_ATTRIBUTE;
 
-- (void)event:(NSDictionary * _Nonnull)record table:(NSString * _Nonnull)table DEPRECATED_ATTRIBUTE;
+- (BOOL)event:(NSDictionary * _Nonnull)record table:(NSString * _Nonnull)table DEPRECATED_ATTRIBUTE;
 
-- (void)addEvent:(NSDictionary * _Nonnull)record database:(NSString * _Nonnull)database table:(NSString * _Nonnull)table;
+- (NSDictionary *)addEvent:(NSDictionary * _Nonnull)record database:(NSString * _Nonnull)database table:(NSString * _Nonnull)table;
 
-- (void)addEvent:(NSDictionary * _Nonnull)record table:(NSString * _Nonnull)table;
+- (NSDictionary *)addEvent:(NSDictionary * _Nonnull)record table:(NSString * _Nonnull)table;
 
-- (void)addEventWithCallback:(NSDictionary * _Nonnull)record database:(NSString * _Nonnull)database table:(NSString * _Nonnull)table onSuccess:(void (^ _Nullable)(void))onSuccess onError:(void (^ _Nullable)(NSString* _Nonnull, NSString* _Nullable))onError;
+- (NSDictionary *)addEventWithCallback:(NSDictionary * _Nonnull)record database:(NSString * _Nonnull)database table:(NSString * _Nonnull)table onSuccess:(void (^ _Nullable)(void))onSuccess onError:(void (^ _Nullable)(NSString* _Nonnull, NSString* _Nullable))onError;
 
-- (void)addEventWithCallback:(NSDictionary * _Nonnull)record table:(NSString * _Nonnull)table onSuccess:(void (^ _Nullable)(void))onSuccess onError:(void (^ _Nullable)(NSString* _Nonnull, NSString* _Nullable))onError;
+- (NSDictionary *)addEventWithCallback:(NSDictionary * _Nonnull)record table:(NSString * _Nonnull)table onSuccess:(void (^ _Nullable)(void))onSuccess onError:(void (^ _Nullable)(NSString* _Nonnull, NSString* _Nullable))onError;
 
 - (void)uploadWithBlock:(void (^ _Nonnull)(void))block DEPRECATED_ATTRIBUTE;
 
@@ -120,11 +125,11 @@
 
 #pragma mark - Auto Tracking
 
-- (void)enableAppLifecycleEventsTrackingWithTable:(NSString * _Nonnull)table;
+// - (void)enableAppLifecycleEventsTrackingWithTable:(NSString * _Nonnull)table;
 
-- (void)disableAppLifecycleEventsTracking;
+// - (void)disableAppLifecycleEventsTracking;
 
-- (BOOL)isAppLifecycleEventsTrackingEnabled;
+// - (BOOL)isAppLifecycleEventsTrackingEnabled;
 
 #pragma mark - GDCR Compliance (Right To Be Forgotten)
 
@@ -133,15 +138,19 @@
  * all the current locally buffered events will be purged and not recoverable.
  * This is a persistent settings and has highest precedence, so unless being unblocked with `unblockCustomEvents`,
  * all your tracked events with `addEvent` will be discarded. (Note that the app lifecycle events will still tracked,
- * call `blockAppLifecyleEvents` to effectively disable all the event collections.
+ * call `disallowAppLifecyelEvent` to effectively disable all the event collections.
+ * Note: `onSuccess` callback will be invoked incase of
  * This feature is supposed to be used for your users to opt-out of the tracking, a requirement for GDPR compliance.
  */
-- (void)allowCustomEvent;
-
-/// Permanently re-enable custom events collection if previously disabled
 - (void)disallowCustomEvent;
 
-/// Whether the custom events collection is blocked or not
+/// Re-enable custom events collection if previously disabled
+- (void)allowCustomEvent;
+
+/*!
+ * Whether the custom events collection is allowed or not
+ * This is a persistent setting, able to set through `allowCustomEvent` or `disallowCustomEvent`
+ */
 - (BOOL)isCustomEventAllowed;
 
 /*!
@@ -154,7 +163,16 @@
 /// Permanently re-enable event collection if previously disabled
 - (void)disallowAppLifecycleEvent;
 
-/// Whether the app lifecycle events being automatically collected or not
+/*!
+ * Whether the app lifecycle events collection is allowed or not
+ * This is a persistent setting, able to set through `allowAppLifecycleEvent` or `disallowAppLifecycleEvent`
+ */
 - (BOOL)isAppLifecycleEventAllowed;
+
+/*!
+ * Permanently reset the appended "td_uuid" to a different value.
+ * Note: this won't reset the current buffered events before this call
+ */
+- (void)resetUniqId;
 
 @end
