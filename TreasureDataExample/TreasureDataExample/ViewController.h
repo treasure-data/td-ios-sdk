@@ -18,6 +18,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *uploadButton;
 @property (weak, nonatomic) IBOutlet UITextField *autoTrackTableField;
 
+@property (weak, nonatomic) IBOutlet UILabel *customEventToggleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *appLifecycleEventToggleLabel;
 @property (weak, nonatomic) IBOutlet UISwitch *eventCollectingSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *autoEventSwitch;
 

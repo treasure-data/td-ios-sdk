@@ -24,12 +24,11 @@
     [self.apiEndpointField setText:TreasureData.sharedInstance.client.apiEndpoint];
     [self.apiKeyField setText:TreasureData.sharedInstance.client.apiKey];
     [self.targetDatabaseField setText:TreasureData.sharedInstance.defaultDatabase];
-    [self.eventCollectingSwitch setOn:![[TreasureData sharedInstance] isCustomEventsBlocked]];
-    [self.autoEventSwitch setOn:![[TreasureData sharedInstance] isAppLifecycleEventsBlocked]];
+    [self.eventCollectingSwitch setOn:[[TreasureData sharedInstance] isCustomEventAllowed]];
+    [self.autoEventSwitch setOn:[[TreasureData sharedInstance] isAppLifecycleEventAllowed]];
     [self.autoTrackTableField setText:[[NSUserDefaults standardUserDefaults] stringForKey:@"TDAutoTrackingEnabled"]];
-    self.eventCollectingSwitch.onTintColor = [UIColor colorWithRed:231/255.0 green:76/255.0 blue:60/255.0 alpha:1.0];
-    self.autoEventSwitch.onTintColor = [UIColor colorWithRed:231/255.0 green:76/255.0 blue:60/255.0 alpha:1.0];
-
+    [self eventCollectingSwitchChanged:self.eventCollectingSwitch];
+    [self autoEventSwitchChanged:self.autoEventSwitch];
     [self.targetTableField setText:@"mobile_events"];
     [self.autoTrackTableField setText:@"auto_tracked_mobile_events"];
     [[TreasureData sharedInstance] enableAppLifecycleEventsTrackingWithTable:@"auto_tracked_events"];
@@ -47,19 +46,21 @@
 
 - (IBAction)eventCollectingSwitchChanged:(UISwitch *)sender {
     if ([sender isOn]) {
-        NSLog(@"unblockCustomEvents");
-        [[TreasureData sharedInstance] unblockCustomEvents];
+        self.customEventToggleLabel.text = @"Custom Events Allowed";
+        [[TreasureData sharedInstance] allowCustomEvent];
     } else {
-        NSLog(@"blockCustomEvents");
-        [[TreasureData sharedInstance] blockCustomEvents];
+        self.customEventToggleLabel.text = @"Custom Events Unallowed";
+        [[TreasureData sharedInstance] disallowCustomEvent];
     }
 }
 
 - (IBAction)autoEventSwitchChanged:(id)sender {
     if ([sender isOn]) {
-        [[TreasureData sharedInstance] unblockAppLifecycleEvents];
+        self.appLifecycleEventToggleLabel.text = @"App Lifecycle Events Allowed";
+        [[TreasureData sharedInstance] allowAppLifecycleEvent];
     } else {
-        [[TreasureData sharedInstance] blockAppLifecycleEvents];
+        self.appLifecycleEventToggleLabel.text = @"App Lifecycle Events Unallowed";
+        [[TreasureData sharedInstance] disallowAppLifecycleEvent];
     }
 }
 

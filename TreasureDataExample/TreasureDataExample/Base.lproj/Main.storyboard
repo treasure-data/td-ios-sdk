@@ -203,7 +203,7 @@
                                                 <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hez-HI-oRf" userLabel="TargetTable">
                                                     <rect key="frame" x="14" y="0.0" width="351" height="43.5"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AutoTrack Table" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vap-At-Omf" userLabel="Label">
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TD Table" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vap-At-Omf" userLabel="Label">
                                                             <rect key="frame" x="0.0" y="0.0" width="110" height="43.5"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="110" id="YbT-xq-6cu"/>
@@ -246,20 +246,20 @@
                                                 <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vUQ-Rb-ZyG" userLabel="APIEndpoint">
                                                     <rect key="frame" x="14" y="0.0" width="351" height="43.5"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Block Custom Events" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JiH-FB-deg" userLabel="Label">
-                                                            <rect key="frame" x="0.0" y="0.0" width="150" height="43.5"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Custom Events Unallowed" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JiH-FB-deg" userLabel="Label">
+                                                            <rect key="frame" x="0.0" y="0.0" width="200" height="43.5"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="width" constant="150" id="z0l-Hg-30b"/>
+                                                                <constraint firstAttribute="width" constant="200" id="z0l-Hg-30b"/>
                                                             </constraints>
                                                             <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="12"/>
                                                             <color key="textColor" red="0.37055522200000002" green="0.37056469920000001" blue="0.37055957319999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CZ2-Vm-89E">
-                                                            <rect key="frame" x="150" y="0.0" width="201" height="43.5"/>
+                                                            <rect key="frame" x="200" y="0.0" width="151" height="43.5"/>
                                                             <subviews>
                                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JTW-pQ-cdc">
-                                                                    <rect key="frame" x="142" y="6.5" width="51" height="31"/>
+                                                                    <rect key="frame" x="92" y="6.5" width="51" height="31"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <connections>
                                                                         <action selector="eventCollectingSwitchChanged:" destination="vgE-gp-ZtG" eventType="valueChanged" id="WYY-kj-yTx"/>
@@ -293,20 +293,20 @@
                                                 <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2qx-Xd-cr8" userLabel="APIKey">
                                                     <rect key="frame" x="14" y="0.0" width="351" height="43.5"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Block AutoTrack Events" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ydC-Vx-LVJ" userLabel="Label">
-                                                            <rect key="frame" x="0.0" y="0.0" width="150" height="43.5"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="App Lifecycle Events Unallowed" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ydC-Vx-LVJ" userLabel="Label">
+                                                            <rect key="frame" x="0.0" y="0.0" width="200" height="43.5"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="width" constant="150" id="qNV-Gk-LgW"/>
+                                                                <constraint firstAttribute="width" constant="200" id="qNV-Gk-LgW"/>
                                                             </constraints>
                                                             <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="12"/>
                                                             <color key="textColor" red="0.37055522200000002" green="0.37056469920000001" blue="0.37055957319999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rZp-4a-WNJ">
-                                                            <rect key="frame" x="150" y="0.0" width="201" height="43.5"/>
+                                                            <rect key="frame" x="200" y="0.0" width="151" height="43.5"/>
                                                             <subviews>
                                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z3L-Xe-pCl">
-                                                                    <rect key="frame" x="142" y="6.5" width="51" height="31"/>
+                                                                    <rect key="frame" x="92" y="6.5" width="51" height="31"/>
                                                                     <connections>
                                                                         <action selector="autoEventSwitchChanged:" destination="vgE-gp-ZtG" eventType="valueChanged" id="vVw-DW-5Gt"/>
                                                                     </connections>
@@ -393,8 +393,10 @@
                         <outlet property="addEventButton" destination="Ya0-Km-wTJ" id="ksl-Pc-CEA"/>
                         <outlet property="apiEndpointField" destination="LTb-DE-GWH" id="zrd-Yp-2Zw"/>
                         <outlet property="apiKeyField" destination="Ndh-VC-HrS" id="kfO-Xj-nbm"/>
+                        <outlet property="appLifecycleEventToggleLabel" destination="ydC-Vx-LVJ" id="ZG6-FR-tzT"/>
                         <outlet property="autoEventSwitch" destination="z3L-Xe-pCl" id="gYF-L8-BB2"/>
                         <outlet property="autoTrackTableField" destination="2wf-Zf-119" id="Mq7-wx-6BZ"/>
+                        <outlet property="customEventToggleLabel" destination="JiH-FB-deg" id="p5v-sP-6VO"/>
                         <outlet property="eventCollectingSwitch" destination="JTW-pQ-cdc" id="JaL-Ef-fn1"/>
                         <outlet property="targetDatabaseField" destination="sND-qi-6Yz" id="CQ5-Qz-S4I"/>
                         <outlet property="targetTableField" destination="vDu-dR-yNu" id="74k-vI-xq6"/>
