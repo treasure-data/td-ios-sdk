@@ -13,7 +13,8 @@
 
 @interface ViewController ()
 
-@property (assign, nonatomic) BOOL isDirty;
+@property (nonatomic, assign) BOOL isFormDirty;
+@property (nonatomic, copy) NSString *targetTable;
 
 @end
 
@@ -40,8 +41,7 @@
 }
 
 - (IBAction)formChanged:(UITextField *)sender {
-    NSLog(@"Detect form changed");
-    self.isDirty = YES;
+    self.isFormDirty = YES;
 }
 
 - (IBAction)eventCollectingSwitchChanged:(UISwitch *)sender {
@@ -67,13 +67,7 @@
 - (IBAction)addEvent:(id)addEventButton {
     [ViewController shiftButton:addEventButton toState:kButtonStatePending withTitle:@"Adding Event..."];
 
-    if (self.isDirty) {
-        self.isDirty = NO;
-        [TreasureDataExample
-         setupTreasureDataWithEndpoint:self.apiEndpointField.text
-         apiKey:self.apiKeyField.text
-         database:self.targetDatabaseField.text];
-    }
+    [self updateClientIfFormChanged];
 
     [[TreasureData sharedInstance]
      addEventWithCallback:@{
@@ -103,6 +97,9 @@
 
 - (IBAction)uploadEvents:(id)uploadButton {
     [ViewController shiftButton:uploadButton toState:kButtonStatePending withTitle:@"Uploading Events..."];
+
+    [self updateClientIfFormChanged];
+
     [[TreasureData sharedInstance] uploadEventsWithCallback:^(){
         NSLog(@"uploadEvents: success");
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -128,6 +125,17 @@
     [NSTimer scheduledTimerWithTimeInterval:1 repeats:NO block:^(NSTimer* timer) {
         [ViewController shiftButton:sender toState:kButtonStateNormal withTitle:@"Reset Device Unique ID"];
     }];
+}
+
+- (void)updateClientIfFormChanged {
+    if (self.isFormDirty) {
+        self.isFormDirty = NO;
+        [[[TreasureData sharedInstance] client] setApiKey:self.apiKeyField.text];
+        [[[TreasureData sharedInstance] client] setApiEndpoint:self.apiEndpointField.text];
+        [[TreasureData sharedInstance] setDefaultDatabase:self.targetDatabaseField.text];
+        [[TreasureData sharedInstance] setTreasureDataTable:self.autoTrackTableField.text];
+        self.targetTable = self.targetTableField.text;
+    }
 }
 
 typedef enum {

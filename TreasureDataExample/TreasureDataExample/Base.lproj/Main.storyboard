@@ -56,13 +56,13 @@
                                                             <color key="textColor" red="0.37055522200000002" green="0.37056469920000001" blue="0.37055957319999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="API Endpoint" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LTb-DE-GWH" userLabel="Field">
+                                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="API Endpoint" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="LTb-DE-GWH" userLabel="Field">
                                                             <rect key="frame" x="110" y="0.0" width="241" height="43.5"/>
                                                             <nil key="textColor"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                             <textInputTraits key="textInputTraits"/>
                                                             <connections>
-                                                                <action selector="formChanged:" destination="vgE-gp-ZtG" eventType="editingDidEnd" id="dID-jZ-8zY"/>
+                                                                <action selector="formChanged:" destination="vgE-gp-ZtG" eventType="editingChanged" id="vn4-Iy-LYT"/>
                                                             </connections>
                                                         </textField>
                                                     </subviews>
@@ -95,13 +95,13 @@
                                                             <color key="textColor" red="0.37055522200000002" green="0.37056469920000001" blue="0.37055957319999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="API Key" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ndh-VC-HrS" userLabel="Field">
+                                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="API Key" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Ndh-VC-HrS" userLabel="Field">
                                                             <rect key="frame" x="110" y="0.0" width="241" height="43.5"/>
                                                             <nil key="textColor"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                             <textInputTraits key="textInputTraits"/>
                                                             <connections>
-                                                                <action selector="formChanged:" destination="vgE-gp-ZtG" eventType="editingDidEnd" id="ax5-iT-xcd"/>
+                                                                <action selector="formChanged:" destination="vgE-gp-ZtG" eventType="editingChanged" id="jen-H2-upZ"/>
                                                             </connections>
                                                         </textField>
                                                     </subviews>
@@ -134,13 +134,13 @@
                                                             <color key="textColor" red="0.37055522200000002" green="0.37056469920000001" blue="0.37055957319999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Target Database" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sND-qi-6Yz" userLabel="Field">
+                                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Target Database" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="sND-qi-6Yz" userLabel="Field">
                                                             <rect key="frame" x="110" y="0.0" width="241" height="43.5"/>
                                                             <nil key="textColor"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                             <textInputTraits key="textInputTraits"/>
                                                             <connections>
-                                                                <action selector="formChanged:" destination="vgE-gp-ZtG" eventType="editingDidEnd" id="YzM-ls-5pN"/>
+                                                                <action selector="formChanged:" destination="vgE-gp-ZtG" eventType="editingChanged" id="5iU-cB-TPD"/>
                                                             </connections>
                                                         </textField>
                                                     </subviews>
@@ -173,13 +173,13 @@
                                                             <color key="textColor" red="0.37055522200000002" green="0.37056469920000001" blue="0.37055957319999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Target Table" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vDu-dR-yNu" userLabel="Field">
+                                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Target Table" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="vDu-dR-yNu" userLabel="Field">
                                                             <rect key="frame" x="110" y="0.0" width="241" height="43.5"/>
                                                             <nil key="textColor"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                             <textInputTraits key="textInputTraits"/>
                                                             <connections>
-                                                                <action selector="formChanged:" destination="vgE-gp-ZtG" eventType="editingDidEnd" id="XHd-xe-eFm"/>
+                                                                <action selector="formChanged:" destination="vgE-gp-ZtG" eventType="editingChanged" id="3uI-S2-Fah"/>
                                                             </connections>
                                                         </textField>
                                                     </subviews>
@@ -212,13 +212,13 @@
                                                             <color key="textColor" red="0.37055522200000002" green="0.37056469920000001" blue="0.37055957319999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Target Table" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2wf-Zf-119" userLabel="Field">
+                                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Target Table" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="2wf-Zf-119" userLabel="Field">
                                                             <rect key="frame" x="110" y="0.0" width="241" height="43.5"/>
                                                             <nil key="textColor"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                             <textInputTraits key="textInputTraits"/>
                                                             <connections>
-                                                                <action selector="formChanged:" destination="vgE-gp-ZtG" eventType="editingDidEnd" id="CFW-ld-ETW"/>
+                                                                <action selector="formChanged:" destination="vgE-gp-ZtG" eventType="editingChanged" id="q8V-ql-CQg"/>
                                                             </connections>
                                                         </textField>
                                                     </subviews>
