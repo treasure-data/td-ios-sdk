@@ -50,7 +50,7 @@
         self.customEventToggleLabel.text = @"Custom Events Allowed";
         [[TreasureData sharedInstance] allowCustomEvent];
     } else {
-        self.customEventToggleLabel.text = @"Custom Events Unallowed";
+        self.customEventToggleLabel.text = @"Custom Events Disallowed";
         [[TreasureData sharedInstance] disallowCustomEvent];
     }
 }
@@ -60,7 +60,7 @@
         self.appLifecycleEventToggleLabel.text = @"App Lifecycle Events Allowed";
         [[TreasureData sharedInstance] allowAppLifecycleEvent];
     } else {
-        self.appLifecycleEventToggleLabel.text = @"App Lifecycle Events Unallowed";
+        self.appLifecycleEventToggleLabel.text = @"App Lifecycle Events Disallowed";
         [[TreasureData sharedInstance] disallowAppLifecycleEvent];
     }
 }
