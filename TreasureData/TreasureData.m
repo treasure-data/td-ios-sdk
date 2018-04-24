@@ -59,7 +59,6 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
 @property NSString *serverSideUploadTimestampColumn;
 @property NSString *autoAppendRecordUUIDColumn;
 
-@property (nonatomic, assign) BOOL isAppLifecycleEventsTrackingEnabled;
 @property (nonatomic, copy) NSString *autoTrackDatabase;
 @property (nonatomic, copy) NSString *autoTrackTable;
 
@@ -535,7 +534,7 @@ NSString *_UUID;
 
 - (void)handleAppDidLaunching:(NSNotification *)notification
 {
-    if ([self isAppLifecycleEventsTrackingEnabled]) {
+    if ([self isAppLifecycleEventAllowed]) {
         NSString *targetDatabase;
         if (self.autoTrackDatabase) {
             targetDatabase = self.autoTrackDatabase;
