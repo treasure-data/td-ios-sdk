@@ -25,7 +25,7 @@ static NSString *const TDEventClassAudit = @"audit";
     }
 }
 
-+ (NSDictionary *)makAsAppLifecycleEvent:(NSDictionary *)event {
++ (NSDictionary *)markAsAppLifecycleEvent:(NSDictionary *)event {
     NSMutableDictionary *appLifecycleEvent = [NSMutableDictionary dictionaryWithDictionary:event];
     appLifecycleEvent[TDEventClassKey] = TDEventClassAppLifecycle;
     return [NSDictionary dictionaryWithDictionary:appLifecycleEvent];

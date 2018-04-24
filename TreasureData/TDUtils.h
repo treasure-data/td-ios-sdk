@@ -10,7 +10,7 @@
 
 + (NSString *)requireNonBlank:(NSString *)str defaultValue:(NSString *)defaultStr message:(NSString *)message;
 
-+ (NSDictionary *)makAsAppLifecycleEvent:(NSDictionary *)event;
++ (NSDictionary *)markAsAppLifecycleEvent:(NSDictionary *)event;
 
 + (NSDictionary *)markAsAuditEvent:(NSDictionary *)event;
 
