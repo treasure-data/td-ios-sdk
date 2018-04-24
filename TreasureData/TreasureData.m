@@ -106,12 +106,12 @@ NSString *_UUID;
 }
 
 
-- (NSDictionary *)event:(NSDictionary *)record table:(NSString *)table {
-    return [self addEvent:record table:table];
+- (void)event:(NSDictionary *)record table:(NSString *)table {
+    [self addEvent:record table:table];
 }
 
-- (NSDictionary *)event:(NSDictionary *)record database:(NSString *)database table:(NSString *)table {
-    return [self addEvent:record database:database table:table];
+- (void)event:(NSDictionary *)record database:(NSString *)database table:(NSString *)table {
+    [self addEvent:record database:database table:table];
 }
 
 - (NSDictionary *)addEvent:(NSDictionary *)record table:(NSString *)table {
