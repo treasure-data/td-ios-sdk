@@ -22,6 +22,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.targetTable = @"mobile_events";
     [self.apiEndpointField setText:TreasureData.sharedInstance.client.apiEndpoint];
     [self.apiKeyField setText:TreasureData.sharedInstance.client.apiKey];
     [self.targetDatabaseField setText:TreasureData.sharedInstance.defaultDatabase];
@@ -30,7 +31,7 @@
     [self.autoTrackTableField setText:[[NSUserDefaults standardUserDefaults] stringForKey:@"TDAutoTrackingEnabled"]];
     [self eventCollectingSwitchChanged:self.eventCollectingSwitch];
     [self autoEventSwitchChanged:self.autoEventSwitch];
-    [self.targetTableField setText:@"mobile_events"];
+    [self.targetTableField setText:self.targetTable];
     [self.autoTrackTableField setText:@"auto_tracked_mobile_events"];
     [[TreasureData sharedInstance] setTreasureDataTable:@"td_builtin_events"];
 }
