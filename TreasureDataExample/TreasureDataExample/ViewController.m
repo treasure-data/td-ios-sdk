@@ -74,7 +74,7 @@
                             @"name": @"komamitsu",
                             @"age": @99
                             }
-     table:self.targetTableField.text
+     table:self.targetTable
      onSuccess:^(){
          dispatch_async(dispatch_get_main_queue(), ^{
              [ViewController shiftButton:addEventButton toState:kButtonStateSuccess withTitle:@"Add Event Success!"];
