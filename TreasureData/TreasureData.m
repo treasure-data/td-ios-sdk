@@ -124,9 +124,11 @@ NSString *_UUID;
 
 - (NSDictionary *)addEventWithCallback:(NSDictionary *)record database:(NSString *)database table:(NSString *)table onSuccess:(void (^)(void))onSuccess onError:(void (^)(NSString*, NSString*))onError {
     if ([TDUtils isCustomEvent:record] && ![self isCustomEventAllowed]) {
-        onError(TD_ERROR_CUSTOM_EVENT_UNALLOWED,
-                @"You have configured to deny tracking custom events. This is a persistent setting, it will unharmfully drop the any custom events called through `addEvent...` methods family.");
-        return nil;
+        if (onError) {
+            onError(TD_ERROR_CUSTOM_EVENT_UNALLOWED,
+                    @"You have configured to deny tracking custom events. This is a persistent setting, it will unharmfully drop the any custom events called through `addEvent...` methods family.");
+            return nil;
+        }
     }
     // App Lifecyle unallowing is silent
     if ([TDUtils isAppLifecycleEvent:record] && ![self isAppLifecycleEventAllowed]) nil;
