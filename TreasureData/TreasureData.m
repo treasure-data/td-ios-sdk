@@ -91,6 +91,7 @@ NSString *_UUID;
          */
         self.customEventAllowed = [[[NSUserDefaults standardUserDefaults] objectForKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ALLOWED] boolValue];
         self.appLifecycleEventAllowed = [[[NSUserDefaults standardUserDefaults] objectForKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ALLOWED] boolValue];
+        self.treasureDataTable = @"td_ios";
         NSString *endpoint = defaultApiEndpoint ? defaultApiEndpoint : @"https://in.treasuredata.com";
         self.client = [[TDClient alloc] initWithApiKey:apiKey apiEndpoint:endpoint];
         if (self.client) {
