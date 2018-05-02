@@ -762,7 +762,6 @@ static NSString *END_POINT = @"http://localhost";
 - (void)testToggleAllowCustomEvent {
     @try {
         [self.td disallowCustomEvent];
-        [self.td uploadEvents];
         // All events are supposed to be flushed
         [self assertEventCount:0];
         id added = [self.td addEvent:[NSDictionary dictionary] table:@"somewhere"];
@@ -777,7 +776,6 @@ static NSString *END_POINT = @"http://localhost";
 - (void)testToggleAllowAppLifecycleEvent {
     @try {
         [self.td disallowAppLifecycleEvent];
-        [self.td uploadEvents];
         // All events are supposed to be flushed
         [self assertEventCount:0];
         // Normally this would trigger the TD_EVENT_APP_OPENED event
