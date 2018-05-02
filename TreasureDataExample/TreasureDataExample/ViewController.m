@@ -48,20 +48,20 @@
 - (IBAction)eventCollectingSwitchChanged:(UISwitch *)sender {
     if ([sender isOn]) {
         self.customEventToggleLabel.text = @"Custom Events Allowed";
-        [[TreasureData sharedInstance] allowCustomEvent];
+        [[TreasureData sharedInstance] enableCustomEvents];
     } else {
         self.customEventToggleLabel.text = @"Custom Events Disallowed";
-        [[TreasureData sharedInstance] disallowCustomEvent];
+        [[TreasureData sharedInstance] enableCustomEvents];
     }
 }
 
 - (IBAction)autoEventSwitchChanged:(id)sender {
     if ([sender isOn]) {
         self.appLifecycleEventToggleLabel.text = @"App Lifecycle Events Allowed";
-        [[TreasureData sharedInstance] allowAppLifecycleEvent];
+        [[TreasureData sharedInstance] enableAppLifecycleEvents];
     } else {
         self.appLifecycleEventToggleLabel.text = @"App Lifecycle Events Disallowed";
-        [[TreasureData sharedInstance] disallowAppLifecycleEvent];
+        [[TreasureData sharedInstance] disableAppLifecycleEvents];
     }
 }
 
