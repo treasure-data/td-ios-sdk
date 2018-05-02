@@ -44,10 +44,6 @@ static NSString *sessionEventEnd = @"end";
 static Session *session = nil;
 static long sessionTimeoutMilli = -1;
 
-// DefaultAutoTrackDatabase is only be prefered in case TreasureData#defaultDatabase is nil
-static NSString *const DefaultAutoTrackDatabase = @"td_event";
-static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
-
 @interface TreasureData ()
 
 @property BOOL autoAppendUniqId;
@@ -59,15 +55,15 @@ static NSString *const DefaultAutoTrackTable = @"td_app_lifecycle_event";
 @property NSString *serverSideUploadTimestampColumn;
 @property NSString *autoAppendRecordUUIDColumn;
 
-@property (nonatomic, copy) NSString *autoTrackDatabase;
-@property (nonatomic, copy) NSString *autoTrackTable;
-
 @property (nonatomic, assign, getter=isCustomEventAllowed) BOOL customEventAllowed;
 @property (nonatomic, assign, getter=isAppLifecycleEventAllowed) BOOL appLifecycleEventAllowed;
 
 @end
 
 @implementation TreasureData
+
+static NSString *const DefaultTreasureDataDatabase = @"td";
+static NSString *const DefaultTreasureDataTable = @"td_ios";
 
 NSString *_UUID;
 
@@ -89,8 +85,17 @@ NSString *_UUID;
          *      the parent client's project ids.
          *
          */
-        self.customEventAllowed = [[[NSUserDefaults standardUserDefaults] objectForKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ALLOWED] boolValue];
-        self.appLifecycleEventAllowed = [[[NSUserDefaults standardUserDefaults] objectForKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ALLOWED] boolValue];
+
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ALLOWED] != nil) {
+            self.customEventAllowed = [[NSUserDefaults standardUserDefaults] objectForKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ALLOWED];
+        } else {
+            // Unless being explicitly disabled, custom events are allowed
+            self.customEventAllowed = YES;
+        }
+
+        // Unlike custom events, app lifecycle events must be explicitly enabled
+        self.appLifecycleEventAllowed = [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ALLOWED];
+
         self.treasureDataTable = @"td_ios";
         NSString *endpoint = defaultApiEndpoint ? defaultApiEndpoint : @"https://in.treasuredata.com";
         self.client = [[TDClient alloc] initWithApiKey:apiKey apiEndpoint:endpoint];
@@ -126,12 +131,15 @@ NSString *_UUID;
     if ([TDUtils isCustomEvent:record] && ![self isCustomEventAllowed]) {
         if (onError) {
             onError(TD_ERROR_CUSTOM_EVENT_UNALLOWED,
-                    @"You have configured to deny tracking custom events. This is a persistent setting, it will unharmfully drop the any custom events called through `addEvent...` methods family.");
-            return nil;
+                    @"You configured to deny tracking of custom events. This is a persistent setting, it will unharmfully drop the any custom events called through `addEvent...` methods family.");
         }
+        return nil;
+
     }
-    // App Lifecyle unallowing is silent
-    if ([TDUtils isAppLifecycleEvent:record] && ![self isAppLifecycleEventAllowed]) nil;
+    // App Lifecyle events denying is silent
+    if ([TDUtils isAppLifecycleEvent:record] && ![self isAppLifecycleEventAllowed]) {
+        return nil;
+    }
     if (self.client) {
         if (database && table) {
             NSError *error = nil;
@@ -538,21 +546,16 @@ NSString *_UUID;
 - (void)handleAppDidLaunching:(NSNotification *)notification
 {
     if ([self isAppLifecycleEventAllowed]) {
-        NSString *targetDatabase;
-        if (self.autoTrackDatabase) {
-            targetDatabase = self.autoTrackDatabase;
-        } else if (self.defaultDatabase) {
-            targetDatabase = self.defaultDatabase;
-        } else {
-            NSLog(@"WARN: Neither defaultDatabase nor autoTrackDabase was set. \"%@\" will be used as the target database." , DefaultAutoTrackDatabase);
-            targetDatabase = DefaultAutoTrackDatabase;
-        }
-        NSString *targetTable = [TDUtils requireNonBlank:self.autoTrackTable
-                                             defaultValue:DefaultAutoTrackTable
+        NSString *targetDatabase = [TDUtils requireNonBlank:self.defaultDatabase
+                                            defaultValue:DefaultTreasureDataDatabase
+                                                 message:[NSString
+                                                          stringWithFormat:@"WARN: defaultDatabase was not set. \"%@\" will be used as the target database.",
+                                                          DefaultTreasureDataDatabase]];
+        NSString *targetTable = [TDUtils requireNonBlank:self.treasureDataTable
+                                             defaultValue:DefaultTreasureDataTable
                                                   message:[NSString
-                                                           stringWithFormat:@"WARN: autoTrackTable was not set. \"%@\" will be used as the target table.",
-                                                           DefaultAutoTrackTable]];
-
+                                                           stringWithFormat:@"WARN: treasureDataTable was not set. \"%@\" will be used as the target table.",
+                                                           DefaultTreasureDataTable]];
         NSString *currentVersion = [self getAppVersion];
         NSString *currentBuild = [self getBuildNumber];
         NSString *previousVersion = [self getTrackedAppVersion];

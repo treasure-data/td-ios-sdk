@@ -134,12 +134,10 @@ static NSString *END_POINT = @"http://localhost";
 - (void)initializeTD {
     self.td = [[MyTreasureData alloc] initWithApiKey:@"dummy_apikey"];
     [self.td initializeFirstRun];
+    [self.td setDefaultDatabase:@"my_database"];
     self.client = (MyTDClient*)self.td.client;
     self.session = (MySession*)self.td.client.session;
     [[MyTDClient getEventStore] deleteAllEvents];
-    
-    [self.td allowCustomEvent];
-    [self.td allowAppLifecycleEvent];
     // Cleanup audit events so it won't mess with the assertion
     [self.td.capturedEvents removeAllObjects];
 
@@ -324,6 +322,8 @@ static NSString *END_POINT = @"http://localhost";
 - (void)testSetDefaultApiEndpoint {
     [TreasureData initializeApiEndpoint:@"https://another.apiendpoint.xyz"];
     [TreasureData initializeWithApiKey:@"hello_apikey"];
+    // Avoid it to trigger app lifecycle listener without some of the expectations (app's version) being mocked.
+    [[NSNotificationCenter defaultCenter] removeObserver:[TreasureData sharedInstance]];
     NSString *url = [TreasureData sharedInstance].client.apiEndpoint;
     XCTAssertTrue([url isEqualToString:@"https://another.apiendpoint.xyz"]);
     self.isFinished = true;
@@ -676,8 +676,7 @@ static NSString *END_POINT = @"http://localhost";
     [self.td addEventWithCallback:@{@"name":@"foobar"}
                      database:@"DB_"
                         table:@"tbl"
-                    onSuccess:^() {
-                    }
+                    onSuccess:^() {}
                       onError:^(NSString* errorCode, NSString* message) {
                           result = errorCode;
                       }];
@@ -720,19 +719,18 @@ static NSString *END_POINT = @"http://localhost";
 #pragma mark - Auto Tracking
 
 - (void)testAutoTrackAppOpened {
-    @try {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
+    [self.td allowAppLifecycleEvent];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
                                                             object:nil];
-        [self assertHasCapturedEventType:TD_EVENT_APP_OPENED];
-    } @finally {
-        self.isFinished = true;
-    }
+    [self assertHasCapturedEventType:TD_EVENT_APP_OPENED];
+    self.isFinished = true;
 }
 
 - (void)testAutoTrackAppInstalled {
     @try {
         [self.td mockTrackedAppVersion:nil];
         [self.td mockTrackedBuildNumber:nil];
+        [self.td allowAppLifecycleEvent];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
                                                             object:nil];
         [self assertEventCount:2];
@@ -762,43 +760,34 @@ static NSString *END_POINT = @"http://localhost";
 #pragma mark - GDPR Compliancy
 
 - (void)testToggleAllowCustomEvent {
-    [self.td disallowCustomEvent];
-
-    // An audit event should have been recorded
-    [self assertEventCount:1];
-    [self assertHasCapturedEventClass:TD_EVENT_AUDIT_TRACKING];
-    [self.td uploadEvents];
-    // All events are supposed to be flushed
-    [self assertEventCount:0];
-
-    BOOL added = [self.td addEvent:[NSDictionary dictionary] table:@"somewhere"];
-    
-    // Expect no events were recorded
-    XCTAssertFalse(added);
-    [self assertEventCount:0];
-
-    self.isFinished = true;
+    @try {
+        [self.td disallowCustomEvent];
+        [self.td uploadEvents];
+        // All events are supposed to be flushed
+        [self assertEventCount:0];
+        id added = [self.td addEvent:[NSDictionary dictionary] table:@"somewhere"];
+        // Expect no events were recorded
+        XCTAssertNil(added);
+        [self assertEventCount:0];
+    } @finally {
+        self.isFinished = true;
+    }
 }
 
 - (void)testToggleAllowAppLifecycleEvent {
-    [self.td disallowAppLifecycleEvent];
-    
-    // An audit event should have been recorded
-    [self assertEventCount:1];
-    [self assertHasCapturedEventClass:TD_EVENT_AUDIT_TRACKING];
-    [self.td uploadEvents];
-    
-    // All events are supposed to be flushed
-    [self assertEventCount:0];
-    
-    // Normally this would trigger the TD_EVENT_APP_OPENED event
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
-                                                        object:nil];
-    
-    // Expect no events were recorded
-    [self assertEventCount:0];
-    
-    self.isFinished = true;
+    @try {
+        [self.td disallowAppLifecycleEvent];
+        [self.td uploadEvents];
+        // All events are supposed to be flushed
+        [self assertEventCount:0];
+        // Normally this would trigger the TD_EVENT_APP_OPENED event
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
+                                                            object:nil];
+        // Expect no events were recorded
+        [self assertEventCount:0];
+    } @finally {
+        self.isFinished = true;
+    }
 }
 
 - (void)testResetUniqId {
@@ -818,6 +807,14 @@ static NSString *END_POINT = @"http://localhost";
     XCTAssertNotEqual(uuid, uuidAfterReset);
     
     self.isFinished = true;
+}
+
+// By default, without any explicit configuration, the SDK should
+// collecting minimal metadata as possible
+- (void)testMinimalCollectingByDefault {
+    NSDictionary *decoratedEvent = [self.td addEvent:@{@"testKey": @"testVal"} table:@"my_table"];
+    XCTAssertEqual([decoratedEvent count], 1);
+    self.isFinished = YES;
 }
 
 #pragma mark - Assertions
