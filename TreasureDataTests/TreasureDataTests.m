@@ -719,7 +719,7 @@ static NSString *END_POINT = @"http://localhost";
 #pragma mark - Auto Tracking
 
 - (void)testAutoTrackAppOpened {
-    [self.td allowAppLifecycleEvent];
+    [self.td enableAppLifecycleEvents];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
                                                             object:nil];
     [self assertHasCapturedEventType:TD_EVENT_APP_OPENED];
@@ -730,7 +730,7 @@ static NSString *END_POINT = @"http://localhost";
     @try {
         [self.td mockTrackedAppVersion:nil];
         [self.td mockTrackedBuildNumber:nil];
-        [self.td allowAppLifecycleEvent];
+        [self.td enableAppLifecycleEvents];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
                                                             object:nil];
         [self assertEventCount:2];
@@ -761,7 +761,7 @@ static NSString *END_POINT = @"http://localhost";
 
 - (void)testToggleAllowCustomEvent {
     @try {
-        [self.td disallowCustomEvent];
+        [self.td disableCustomEvents];
         // All events are supposed to be flushed
         [self assertEventCount:0];
         id added = [self.td addEvent:[NSDictionary dictionary] table:@"somewhere"];
@@ -775,7 +775,7 @@ static NSString *END_POINT = @"http://localhost";
 
 - (void)testToggleAllowAppLifecycleEvent {
     @try {
-        [self.td disallowAppLifecycleEvent];
+        [self.td disableAppLifecycleEvents];
         // All events are supposed to be flushed
         [self assertEventCount:0];
         // Normally this would trigger the TD_EVENT_APP_OPENED event

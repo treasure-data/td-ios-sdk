@@ -142,10 +142,10 @@
  * Note: `onSuccess` callback will be invoked incase of
  * This feature is supposed to be used for your users to opt-out of the tracking, a requirement for GDPR compliance.
  */
-- (void)disallowCustomEvent;
+- (void)disableCustomEvents;
 
 /// Re-enable custom events collection if previously disabled
-- (void)allowCustomEvent;
+- (void)enableCustomEvents;
 
 /*!
  * Whether the custom events collection is allowed or not
@@ -158,10 +158,10 @@
  *
  * Same as `blockCustomEvent`, this is supposed to be called for your users to opt-out of the tracking.
  */
-- (void)allowAppLifecycleEvent;
+- (void)enableAppLifecycleEvents;
 
 /// Permanently re-enable event collection if previously disabled
-- (void)disallowAppLifecycleEvent;
+- (void)disableAppLifecycleEvents;
 
 /*!
  * Whether the app lifecycle events collection is allowed or not

@@ -86,15 +86,15 @@ NSString *_UUID;
          *
          */
 
-        if ([[NSUserDefaults standardUserDefaults] objectForKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ALLOWED] != nil) {
-            self.customEventAllowed = [[NSUserDefaults standardUserDefaults] objectForKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ALLOWED];
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ENABLED] != nil) {
+            self.customEventAllowed = [[NSUserDefaults standardUserDefaults] objectForKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ENABLED];
         } else {
             // Unless being explicitly disabled, custom events are allowed
             self.customEventAllowed = YES;
         }
 
         // Unlike custom events, app lifecycle events must be explicitly enabled
-        self.appLifecycleEventAllowed = [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ALLOWED];
+        self.appLifecycleEventAllowed = [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ENABLED];
 
         self.treasureDataTable = @"td_ios";
         NSString *endpoint = defaultApiEndpoint ? defaultApiEndpoint : @"https://in.treasuredata.com";
@@ -591,25 +591,25 @@ NSString *_UUID;
 
 #pragma mark - GDPR Compliance (Right To Be Forgotten)
 
-- (void)allowCustomEvent {
+- (void)enableCustomEvents {
     self.customEventAllowed = YES;
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ALLOWED];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ENABLED];
 }
 
-- (void)disallowCustomEvent {
+- (void)disableCustomEvents {
     self.customEventAllowed = NO;
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ALLOWED];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ENABLED];
     [self uploadEvents];
 }
 
-- (void)allowAppLifecycleEvent {
+- (void)enableAppLifecycleEvents {
     self.appLifecycleEventAllowed = YES;
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ALLOWED];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ENABLED];
 }
 
-- (void)disallowAppLifecycleEvent {
+- (void)disableAppLifecycleEvents {
     self.appLifecycleEventAllowed = NO;
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ALLOWED];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ENABLED];
     [self uploadEvents];
 }
 
