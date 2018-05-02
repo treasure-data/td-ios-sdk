@@ -591,37 +591,21 @@ NSString *_UUID;
 - (void)allowCustomEvent {
     self.customEventAllowed = YES;
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ALLOWED];
-    [self addEvent:[TDUtils markAsAuditEvent: @{
-                    TD_COLUMN_EVENT: TD_EVENT_AUDIT_TRACKING,
-                    TD_COLUMN_AUDIT_TYPE: @"allow_custom_event"}]
-             table:self.treasureDataTable];
 }
 
 - (void)disallowCustomEvent {
     self.customEventAllowed = NO;
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ALLOWED];
-    [self addEvent:[TDUtils markAsAuditEvent:@{
-                    TD_COLUMN_EVENT: TD_EVENT_AUDIT_TRACKING,
-                    TD_COLUMN_AUDIT_TYPE: @"disallow_custom_event"}]
-             table:self.treasureDataTable];
 }
 
 - (void)allowAppLifecycleEvent {
     self.appLifecycleEventAllowed = YES;
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ALLOWED];
-    [self addEvent:[TDUtils markAsAuditEvent:@{
-                    TD_COLUMN_EVENT: TD_EVENT_AUDIT_TRACKING,
-                    TD_COLUMN_AUDIT_TYPE: @"allow_app_lifecycle_event"}]
-             table:self.treasureDataTable];
 }
 
 - (void)disallowAppLifecycleEvent {
     self.appLifecycleEventAllowed = NO;
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ALLOWED];
-    [self addEvent:[TDUtils markAsAuditEvent:@{
-                    TD_COLUMN_EVENT: TD_EVENT_AUDIT_TRACKING,
-                    TD_COLUMN_AUDIT_TYPE: @"disallow_app_lifecycle_event"}]
-             table:self.treasureDataTable];
 }
 
 - (void)resetUniqId {
