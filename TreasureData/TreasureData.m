@@ -591,12 +591,12 @@ NSString *_UUID;
 
 #pragma mark - GDPR Compliance (Right To Be Forgotten)
 
-- (void)enableCustomEvents {
+- (void)enableTrackingCustomEvent {
     self.customEventAllowed = YES;
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ENABLED];
 }
 
-- (void)disableCustomEvents {
+- (void)disableCustomEvent {
     self.customEventAllowed = NO;
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ENABLED];
 }

@@ -134,22 +134,21 @@
 #pragma mark - GDCR Compliance (Right To Be Forgotten)
 
 /*!
- * Block all the custom events collection (all events except the automatically tracked app lifecycle events)
- * all the current locally buffered events will be purged and not recoverable.
- * This is a persistent settings and has highest precedence, so unless being unblocked with `unblockCustomEvents`,
+ * Disable all the custom events collection (all events except the automatically tracked app lifecycle events)
+ * This is a persistent setting so unless being re-enable with `enableCustomEvents`,
  * all your tracked events with `addEvent` will be discarded. (Note that the app lifecycle events will still tracked,
- * call `disallowAppLifecyelEvent` to effectively disable all the event collections.
+ * call `disableAppLifecycleEvents` to effectively disable all the event collections.
  * Note: `onSuccess` callback will be invoked incase of
  * This feature is supposed to be used for your users to opt-out of the tracking, a requirement for GDPR compliance.
  */
-- (void)disableCustomEvents;
+- (void)disableCustomEvent;
 
 /// Re-enable custom events collection if previously disabled
-- (void)enableCustomEvents;
+- (void)enableTrackingCustomEvent;
 
 /*!
  * Whether the custom events collection is allowed or not
- * This is a persistent setting, able to set through `allowCustomEvent` or `disallowCustomEvent`
+ * This is a persistent setting, able to set through `enableCustomEvents` or `disableCustomEvents`
  */
 - (BOOL)isCustomEventEnabled;
 
@@ -165,7 +164,7 @@
 
 /*!
  * Whether the app lifecycle events collection is allowed or not
- * This is a persistent setting, able to set through `allowAppLifecycleEvent` or `disallowAppLifecycleEvent`
+ * This is a persistent setting, able to set through `enableAppLifecycleEvent` or `disableAppLifecycleEvent`
  */
 - (BOOL)isAppLifecycleEventEnabled;
 

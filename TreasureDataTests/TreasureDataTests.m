@@ -761,7 +761,7 @@ static NSString *END_POINT = @"http://localhost";
 
 - (void)testToggleAllowCustomEvent {
     @try {
-        [self.td disableCustomEvents];
+        [self.td disableCustomEvent];
         [self.td uploadEvents];
         // All events are supposed to be flushed
         [self assertEventCount:0];
