@@ -26,8 +26,8 @@
     [self.apiEndpointField setText:TreasureData.sharedInstance.client.apiEndpoint];
     [self.apiKeyField setText:TreasureData.sharedInstance.client.apiKey];
     [self.targetDatabaseField setText:TreasureData.sharedInstance.defaultDatabase];
-    [self.eventCollectingSwitch setOn:[[TreasureData sharedInstance] isCustomEventAllowed]];
-    [self.autoEventSwitch setOn:[[TreasureData sharedInstance] isAppLifecycleEventAllowed]];
+    [self.eventCollectingSwitch setOn:[[TreasureData sharedInstance] isCustomEventEnabled]];
+    [self.autoEventSwitch setOn:[[TreasureData sharedInstance] isAppLifecycleEventEnabled]];
     [self.autoTrackTableField setText:[[NSUserDefaults standardUserDefaults] stringForKey:@"TDAutoTrackingEnabled"]];
     [self eventCollectingSwitchChanged:self.eventCollectingSwitch];
     [self autoEventSwitchChanged:self.autoEventSwitch];

@@ -599,7 +599,6 @@ NSString *_UUID;
 - (void)disableCustomEvents {
     self.customEventAllowed = NO;
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ENABLED];
-    [self uploadEvents];
 }
 
 - (void)enableAppLifecycleEvents {
@@ -610,7 +609,6 @@ NSString *_UUID;
 - (void)disableAppLifecycleEvents {
     self.appLifecycleEventAllowed = NO;
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ENABLED];
-    [self uploadEvents];
 }
 
 - (void)resetUniqId {

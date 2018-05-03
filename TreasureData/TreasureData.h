@@ -151,7 +151,7 @@
  * Whether the custom events collection is allowed or not
  * This is a persistent setting, able to set through `allowCustomEvent` or `disallowCustomEvent`
  */
-- (BOOL)isCustomEventAllowed;
+- (BOOL)isCustomEventEnabled;
 
 /*!
  * Opposes to `enableAppLifecycleEventsTrackingWithTable`, this is a persistent settings, and has a higher precedence.
@@ -167,7 +167,7 @@
  * Whether the app lifecycle events collection is allowed or not
  * This is a persistent setting, able to set through `allowAppLifecycleEvent` or `disallowAppLifecycleEvent`
  */
-- (BOOL)isAppLifecycleEventAllowed;
+- (BOOL)isAppLifecycleEventEnabled;
 
 /*!
  * Permanently reset the appended "td_uuid" to a different value.
