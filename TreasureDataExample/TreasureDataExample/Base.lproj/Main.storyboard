@@ -246,7 +246,7 @@
                                                 <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vUQ-Rb-ZyG" userLabel="APIEndpoint">
                                                     <rect key="frame" x="14" y="0.0" width="351" height="43.5"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Custom Events Allowed" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JiH-FB-deg" userLabel="Label">
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Custom Events Enabled" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JiH-FB-deg" userLabel="Label">
                                                             <rect key="frame" x="0.0" y="0.0" width="200" height="43.5"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="200" id="z0l-Hg-30b"/>
@@ -293,7 +293,7 @@
                                                 <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2qx-Xd-cr8" userLabel="APIKey">
                                                     <rect key="frame" x="14" y="0.0" width="351" height="43.5"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="App Lifecycle Events Allowed" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ydC-Vx-LVJ" userLabel="Label">
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="App Lifecycle Events Enabled" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ydC-Vx-LVJ" userLabel="Label">
                                                             <rect key="frame" x="0.0" y="0.0" width="200" height="43.5"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="200" id="qNV-Gk-LgW"/>

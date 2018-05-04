@@ -55,8 +55,8 @@ static long sessionTimeoutMilli = -1;
 @property NSString *serverSideUploadTimestampColumn;
 @property NSString *autoAppendRecordUUIDColumn;
 
-@property (nonatomic, assign, getter=isCustomEventAllowed) BOOL customEventAllowed;
-@property (nonatomic, assign, getter=isAppLifecycleEventAllowed) BOOL appLifecycleEventAllowed;
+@property (nonatomic, assign, getter=isCustomEventEnabled) BOOL customEventEnabled;
+@property (nonatomic, assign, getter=isAppLifecycleEventEnabled) BOOL appLifecycleEventEnabled;
 
 @end
 
@@ -87,14 +87,14 @@ NSString *_UUID;
          */
 
         if ([[NSUserDefaults standardUserDefaults] objectForKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ENABLED] != nil) {
-            self.customEventAllowed = [[NSUserDefaults standardUserDefaults] objectForKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ENABLED];
+            self.customEventEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ENABLED];
         } else {
             // Unless being explicitly disabled, custom events are allowed
-            self.customEventAllowed = YES;
+            self.customEventEnabled = NO;
         }
 
         // Unlike custom events, app lifecycle events must be explicitly enabled
-        self.appLifecycleEventAllowed = [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ENABLED];
+        self.appLifecycleEventEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ENABLED];
 
         self.treasureDataTable = @"td_ios";
         NSString *endpoint = defaultApiEndpoint ? defaultApiEndpoint : @"https://in.treasuredata.com";
@@ -128,7 +128,7 @@ NSString *_UUID;
 }
 
 - (NSDictionary *)addEventWithCallback:(NSDictionary *)record database:(NSString *)database table:(NSString *)table onSuccess:(void (^)(void))onSuccess onError:(void (^)(NSString*, NSString*))onError {
-    if ([TDUtils isCustomEvent:record] && ![self isCustomEventAllowed]) {
+    if ([TDUtils isCustomEvent:record] && ![self isCustomEventEnabled]) {
         if (onError) {
             onError(TD_ERROR_CUSTOM_EVENT_UNALLOWED,
                     @"You configured to deny tracking of custom events. This is a persistent setting, it will unharmfully drop the any custom events called through `addEvent...` methods family.");
@@ -137,7 +137,7 @@ NSString *_UUID;
 
     }
     // App Lifecyle events denying is silent
-    if ([TDUtils isAppLifecycleEvent:record] && ![self isAppLifecycleEventAllowed]) {
+    if ([TDUtils isAppLifecycleEvent:record] && ![self isAppLifecycleEventEnabled]) {
         return nil;
     }
     if (self.client) {
@@ -545,7 +545,7 @@ NSString *_UUID;
 
 - (void)handleAppDidLaunching:(NSNotification *)notification
 {
-    if ([self isAppLifecycleEventAllowed]) {
+    if ([self isAppLifecycleEventEnabled]) {
         NSString *targetDatabase = [TDUtils requireNonBlank:self.defaultDatabase
                                             defaultValue:DefaultTreasureDataDatabase
                                                  message:[NSString
@@ -591,23 +591,23 @@ NSString *_UUID;
 
 #pragma mark - GDPR Compliance (Right To Be Forgotten)
 
-- (void)enableTrackingCustomEvent {
-    self.customEventAllowed = YES;
+- (void)enableCustomEvent {
+    self.customEventEnabled = YES;
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ENABLED];
 }
 
 - (void)disableCustomEvent {
-    self.customEventAllowed = NO;
+    self.customEventEnabled = NO;
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ENABLED];
 }
 
 - (void)enableAppLifecycleEvents {
-    self.appLifecycleEventAllowed = YES;
+    self.appLifecycleEventEnabled = YES;
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ENABLED];
 }
 
 - (void)disableAppLifecycleEvents {
-    self.appLifecycleEventAllowed = NO;
+    self.appLifecycleEventEnabled = NO;
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ENABLED];
 }
 

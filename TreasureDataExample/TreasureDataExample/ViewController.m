@@ -22,6 +22,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    // This is just for this example app, we just happen to want it to be disabled by default
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"TDCustomEventsEnabled"] == nil) {
+        [[TreasureData sharedInstance] disableCustomEvent];
+    }
     self.targetTable = @"mobile_events";
     [self.apiEndpointField setText:TreasureData.sharedInstance.client.apiEndpoint];
     [self.apiKeyField setText:TreasureData.sharedInstance.client.apiKey];
@@ -47,20 +51,20 @@
 
 - (IBAction)eventCollectingSwitchChanged:(UISwitch *)sender {
     if ([sender isOn]) {
-        self.customEventToggleLabel.text = @"Custom Events Allowed";
-        [[TreasureData sharedInstance] enableCustomEvents];
+        self.customEventToggleLabel.text = @"Custom Events Enabled";
+        [[TreasureData sharedInstance] enableCustomEvent];
     } else {
-        self.customEventToggleLabel.text = @"Custom Events Disallowed";
-        [[TreasureData sharedInstance] enableCustomEvents];
+        self.customEventToggleLabel.text = @"Custom Events Disabled";
+        [[TreasureData sharedInstance] disableCustomEvent];
     }
 }
 
 - (IBAction)autoEventSwitchChanged:(id)sender {
     if ([sender isOn]) {
-        self.appLifecycleEventToggleLabel.text = @"App Lifecycle Events Allowed";
+        self.appLifecycleEventToggleLabel.text = @"App Lifecycle Events Enabled";
         [[TreasureData sharedInstance] enableAppLifecycleEvents];
     } else {
-        self.appLifecycleEventToggleLabel.text = @"App Lifecycle Events Disallowed";
+        self.appLifecycleEventToggleLabel.text = @"App Lifecycle Events Disabled";
         [[TreasureData sharedInstance] disableAppLifecycleEvents];
     }
 }

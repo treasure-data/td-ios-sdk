@@ -144,7 +144,7 @@
 - (void)disableCustomEvent;
 
 /// Re-enable custom events collection if previously disabled
-- (void)enableTrackingCustomEvent;
+- (void)enableCustomEvent;
 
 /*!
  * Whether the custom events collection is allowed or not
