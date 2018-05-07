@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 0.1.26
+* Support GDPR compliancy
+
+- Permanently opt-in/opt-out tracking on the device through `disableCustomEvents` & `disableAppLifecycleEvents`.
+- Added `resetUniqId` to de-identify the device on subsequent events.
+
 ## Version 0.1.25
 _2018-03-26_
 

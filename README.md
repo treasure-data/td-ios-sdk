@@ -369,6 +369,17 @@ If you want to use server side upload timestamp not only client device time that
 	[TreasureData disableLogging];
 ```
 
+## GDPR Compliance
+
+Though it's all up to you to define what to track and respect user's choices and rights of privacy, TreasureData SDK does expose some functionalities to conveniently stop events tracking entirely without having to resort to a bunch of if-else statements:
+
+```
+    [[TreasureData sharedInstance] disableCustomEvents]        // Opt-out of your own events
+    [[TreasureData sharedInstance] disableAppLifecycleEvents]  // Opt-out of TD generated events
+```
+
+These settings are saved persistently across app launches. And certainly, users could opt back in through `enableCustomEvents` or `disableAppLifecycleEvents`. We also provide `resetUniqId` to de-identify the device on subsequent events.
+
 ## Troubleshooting
 
 #### With "Data Protection" enabled, TD iOS SDK occasionally crashes
