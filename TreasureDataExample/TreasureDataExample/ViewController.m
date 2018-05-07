@@ -22,10 +22,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // This is just for this example app, we just happen to want it to be disabled by default
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"TDCustomEventsEnabled"] == nil) {
-        [[TreasureData sharedInstance] disableCustomEvent];
-    }
     self.targetTable = @"mobile_events";
     [self.apiEndpointField setText:TreasureData.sharedInstance.client.apiEndpoint];
     [self.apiKeyField setText:TreasureData.sharedInstance.client.apiKey];

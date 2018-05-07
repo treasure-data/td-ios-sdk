@@ -90,7 +90,7 @@ NSString *_UUID;
             self.customEventEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ENABLED];
         } else {
             // Unless being explicitly disabled, custom events are allowed
-            self.customEventEnabled = NO;
+            self.customEventEnabled = YES;
         }
 
         // Unlike custom events, app lifecycle events must be explicitly enabled
