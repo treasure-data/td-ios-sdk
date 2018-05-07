@@ -55,8 +55,8 @@ static long sessionTimeoutMilli = -1;
 @property NSString *serverSideUploadTimestampColumn;
 @property NSString *autoAppendRecordUUIDColumn;
 
-@property (nonatomic, assign, getter=isCustomEventEnabled) BOOL customEventEnabled;
-@property (nonatomic, assign, getter=isAppLifecycleEventEnabled) BOOL appLifecycleEventEnabled;
+@property (nonatomic, assign, getter=areCustomEventsEnabled) BOOL customEventEnabled;
+@property (nonatomic, assign, getter=areAppLifecycleEventsEnabled) BOOL appLifecycleEventEnabled;
 
 @end
 
@@ -128,7 +128,7 @@ NSString *_UUID;
 }
 
 - (NSDictionary *)addEventWithCallback:(NSDictionary *)record database:(NSString *)database table:(NSString *)table onSuccess:(void (^)(void))onSuccess onError:(void (^)(NSString*, NSString*))onError {
-    if ([TDUtils isCustomEvent:record] && ![self isCustomEventEnabled]) {
+    if ([TDUtils isCustomEvent:record] && ![self areCustomEventsEnabled]) {
         if (onError) {
             onError(TD_ERROR_CUSTOM_EVENT_UNALLOWED,
                     @"You configured to deny tracking of custom events. This is a persistent setting, it will unharmfully drop the any custom events called through `addEvent...` methods family.");
@@ -137,7 +137,7 @@ NSString *_UUID;
 
     }
     // App Lifecyle events denying is silent
-    if ([TDUtils isAppLifecycleEvent:record] && ![self isAppLifecycleEventEnabled]) {
+    if ([TDUtils isAppLifecycleEvent:record] && ![self areAppLifecycleEventsEnabled]) {
         return nil;
     }
     if (self.client) {
@@ -545,7 +545,7 @@ NSString *_UUID;
 
 - (void)handleAppDidLaunching:(NSNotification *)notification
 {
-    if ([self isAppLifecycleEventEnabled]) {
+    if ([self areAppLifecycleEventsEnabled]) {
         NSString *targetDatabase = [TDUtils requireNonBlank:self.defaultDatabase
                                             defaultValue:DefaultTreasureDataDatabase
                                                  message:[NSString
@@ -591,12 +591,12 @@ NSString *_UUID;
 
 #pragma mark - GDPR Compliance (Right To Be Forgotten)
 
-- (void)enableCustomEvent {
+- (void)enableCustomEvents {
     self.customEventEnabled = YES;
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ENABLED];
 }
 
-- (void)disableCustomEvent {
+- (void)disableCustomEvents {
     self.customEventEnabled = NO;
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ENABLED];
 }

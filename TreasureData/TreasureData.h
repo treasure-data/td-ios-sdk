@@ -141,16 +141,16 @@
  * Note: `onSuccess` callback will be invoked incase of
  * This feature is supposed to be used for your users to opt-out of the tracking, a requirement for GDPR compliance.
  */
-- (void)disableCustomEvent;
+- (void)disableCustomEvents;
 
 /// Re-enable custom events collection if previously disabled
-- (void)enableCustomEvent;
+- (void)enableCustomEvents;
 
 /*!
  * Whether the custom events collection is allowed or not
  * This is a persistent setting, able to set through `enableCustomEvents` or `disableCustomEvents`
  */
-- (BOOL)isCustomEventEnabled;
+- (BOOL)areCustomEventsEnabled;
 
 /*!
  * Opposes to `enableAppLifecycleEventsTrackingWithTable`, this is a persistent settings, and has a higher precedence.
@@ -166,7 +166,7 @@
  * Whether the app lifecycle events collection is allowed or not
  * This is a persistent setting, able to set through `enableAppLifecycleEvent` or `disableAppLifecycleEvent`
  */
-- (BOOL)isAppLifecycleEventEnabled;
+- (BOOL)areAppLifecycleEventsEnabled;
 
 /*!
  * Permanently reset the appended "td_uuid" to a different value.

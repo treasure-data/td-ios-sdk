@@ -26,8 +26,8 @@
     [self.apiEndpointField setText:TreasureData.sharedInstance.client.apiEndpoint];
     [self.apiKeyField setText:TreasureData.sharedInstance.client.apiKey];
     [self.targetDatabaseField setText:TreasureData.sharedInstance.defaultDatabase];
-    [self.eventCollectingSwitch setOn:[[TreasureData sharedInstance] isCustomEventEnabled]];
-    [self.autoEventSwitch setOn:[[TreasureData sharedInstance] isAppLifecycleEventEnabled]];
+    [self.eventCollectingSwitch setOn:[[TreasureData sharedInstance] areCustomEventsEnabled]];
+    [self.autoEventSwitch setOn:[[TreasureData sharedInstance] areAppLifecycleEventsEnabled]];
     [self.autoTrackTableField setText:[[NSUserDefaults standardUserDefaults] stringForKey:@"TDAutoTrackingEnabled"]];
     [self eventCollectingSwitchChanged:self.eventCollectingSwitch];
     [self autoEventSwitchChanged:self.autoEventSwitch];
@@ -48,10 +48,10 @@
 - (IBAction)eventCollectingSwitchChanged:(UISwitch *)sender {
     if ([sender isOn]) {
         self.customEventToggleLabel.text = @"Custom Events Enabled";
-        [[TreasureData sharedInstance] enableCustomEvent];
+        [[TreasureData sharedInstance] enableCustomEvents];
     } else {
         self.customEventToggleLabel.text = @"Custom Events Disabled";
-        [[TreasureData sharedInstance] disableCustomEvent];
+        [[TreasureData sharedInstance] disableCustomEvents];
     }
 }
 
