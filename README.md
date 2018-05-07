@@ -378,7 +378,7 @@ Though it's all up to you to define what to track and respect user's choices and
     [[TreasureData sharedInstance] disableAppLifecycleEvents]  // Opt-out of TD generated events
 ```
 
-These settings are saved persistently across app launches. And certainly, users could opt back in through `enableCustomEvents` or `disableAppLifecycleEvents`. We also provide `resetUniqId` to de-identify the device on subsequent events.
+These settings are saved persistently across app launches. And for sure, users could opt back in through `enableCustomEvents` or `disableAppLifecycleEvents`. We also provide `resetUniqId` to de-identify the device on subsequent events.
 
 ## Troubleshooting
 

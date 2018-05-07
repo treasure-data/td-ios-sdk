@@ -147,20 +147,18 @@
 - (void)enableCustomEvents;
 
 /*!
- * Whether the custom events collection is allowed or not
- * This is a persistent setting, able to set through `enableCustomEvents` or `disableCustomEvents`
+ * Whether the custom events collection is allowed or not.
+ * This is a persistent setting, which is able to set via `enableCustomEvents` or `disableCustomEvents`
  */
 - (BOOL)areCustomEventsEnabled;
 
 /*!
- * Opposes to `enableAppLifecycleEventsTrackingWithTable`, this is a persistent settings, and has a higher precedence.
- *
- * Same as `blockCustomEvent`, this is supposed to be called for your users to opt-out of the tracking.
+ * Same as `disableCustomEvents`, this is supposed to be called for your users to opt-out of the automatic tracking.
  */
-- (void)enableAppLifecycleEvents;
+- (void)disableAppLifecycleEvents;
 
 /// Permanently re-enable event collection if previously disabled
-- (void)disableAppLifecycleEvents;
+- (void)enableAppLifecycleEvents;
 
 /*!
  * Whether the app lifecycle events collection is allowed or not
