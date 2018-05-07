@@ -138,7 +138,7 @@
  * This is a persistent setting so unless being re-enable with `enableCustomEvents`,
  * all your tracked events with `addEvent` will be discarded. (Note that the app lifecycle events will still tracked,
  * call `disableAppLifecycleEvents` to effectively disable all the event collections.
- * Note: `onSuccess` callback will be invoked incase of
+ * Note: `onSuccess` calback of `addEvent...`  will still be invoked, but the return of `addEvent...` will be nil.
  * This feature is supposed to be used for your users to opt-out of the tracking, a requirement for GDPR compliance.
  */
 - (void)disableCustomEvents;
