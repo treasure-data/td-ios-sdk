@@ -140,6 +140,7 @@ NSString *_UUID;
     if ([TDUtils isAppLifecycleEvent:record] && ![self areAppLifecycleEventsEnabled]) {
         return nil;
     }
+    record = [TDUtils stripNonEventData:record];
     if (self.client) {
         if (database && table) {
             NSError *error = nil;
@@ -563,23 +564,26 @@ NSString *_UUID;
 
         // For lifecycle event, application's version and build number is always attached regardless of the autoAppendAppInformation setting
         if (!previousVersion) {
-            [self addEvent:@{TD_COLUMN_EVENT: TD_EVENT_APP_INSTALLED,
-                             keyOfAppVer: currentVersion,
-                             keyOfAppVerNum: currentBuild}
+            [self addEvent:[TDUtils markAsAppLifecycleEvent:
+                            @{TD_COLUMN_EVENT: TD_EVENT_APP_INSTALLED,
+                              keyOfAppVer: currentVersion,
+                              keyOfAppVerNum: currentBuild}]
                   database:targetDatabase
                      table:targetTable];
         } else if (![previousVersion isEqualToString:currentVersion]) {
-            [self addEvent:@{TD_COLUMN_EVENT: TD_EVENT_APP_UPDATED,
-                             keyOfPreviousAppVer: previousVersion,
-                             keyOfPreviousAppVerNum: previousBuild,
-                             keyOfAppVer: currentVersion,
-                             keyOfAppVerNum: currentBuild}
+            [self addEvent:[TDUtils markAsAppLifecycleEvent:
+                            @{TD_COLUMN_EVENT: TD_EVENT_APP_UPDATED,
+                              keyOfPreviousAppVer: previousVersion,
+                              keyOfPreviousAppVerNum: previousBuild,
+                              keyOfAppVer: currentVersion,
+                              keyOfAppVerNum: currentBuild}]
                   database:targetDatabase
                      table:targetTable];
         }
-        [self addEvent:@{TD_COLUMN_EVENT: TD_EVENT_APP_OPENED,
-                         keyOfAppVer: currentVersion,
-                         keyOfAppVerNum: currentBuild }
+        [self addEvent:[TDUtils markAsAppLifecycleEvent:
+                        @{TD_COLUMN_EVENT: TD_EVENT_APP_OPENED,
+                          keyOfAppVer: currentVersion,
+                          keyOfAppVerNum: currentBuild}]
               database:targetDatabase
                  table:targetTable];
 

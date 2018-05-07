@@ -8,15 +8,11 @@
 
 #import "TDUtils.h"
 
-static NSString *const TDEventClassKey = @"__td_event_class";
-static NSString *const TDEventClassCustom = @"custom";
-static NSString *const TDEventClassAppLifecycle = @"app_lifecycle";
-static NSString *const TDEventClassAudit = @"audit";
-
 @implementation TDUtils
 
-+ (NSString *)requireNonBlank:(NSString *)str defaultValue:(NSString *)defaultStr message:(NSString *)message
-{
++ (NSString *)requireNonBlank:(NSString *)str
+                 defaultValue:(NSString *)defaultStr
+                      message:(NSString *)message {
     if ([str length] == 0) {
         NSLog(@"%@", message);
         return defaultStr;
@@ -57,6 +53,12 @@ static NSString *const TDEventClassAudit = @"audit";
 + (BOOL)isCustomEvent:(NSDictionary *)event {
     return event[TDEventClassKey] == nil
             || [event[TDEventClassKey] isEqualToString:TDEventClassCustom];
+}
+
++ (NSDictionary *)stripNonEventData:(NSDictionary *)event {
+    NSMutableDictionary *result = [NSMutableDictionary dictionaryWithDictionary:event];
+    [result removeObjectForKey:TDEventClassKey];
+    return [NSDictionary dictionaryWithDictionary:result];
 }
 
 @end

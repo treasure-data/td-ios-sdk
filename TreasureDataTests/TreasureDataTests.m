@@ -140,7 +140,6 @@ static NSString *END_POINT = @"http://localhost";
     [[MyTDClient getEventStore] deleteAllEvents];
     // Cleanup audit events so it won't mess with the assertion
     [self.td.capturedEvents removeAllObjects];
-
     [MyTreasureData disableEventCompression];
     [MyTreasureData resetSession];
 }
@@ -814,6 +813,19 @@ static NSString *END_POINT = @"http://localhost";
 - (void)testMinimalCollectingByDefault {
     NSDictionary *decoratedEvent = [self.td addEvent:@{@"testKey": @"testVal"} table:@"my_table"];
     XCTAssertEqual([decoratedEvent count], 1);
+    self.isFinished = YES;
+}
+
+// Some metadata such as `__td_event_class` are automatically added,
+// which is the SDK implementation details and irrelavant on the service side.
+// We should making sure we don't accidentally included those on the final events
+- (void)testAddedEventShouldNotHaveTheNonEventDataAdded {
+    [self.td enableCustomEvents];
+    // Although actually, custom events won't be marked with __td_event_class,
+    // if the key is absence, then it is treated as custom events
+    NSDictionary *myEvent = [TDUtils markAsCustomEvent:@{@"mykey": @"myvalue"}];
+    NSDictionary *event = [self.td addEvent:myEvent table:@"somewhere"];
+    XCTAssertNil([event objectForKey:TDEventClassKey]);
     self.isFinished = YES;
 }
 
