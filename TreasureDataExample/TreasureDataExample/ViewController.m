@@ -119,7 +119,7 @@
 
 - (IBAction)resetDeviceUniqueID:(id)sender {
     [[TreasureData sharedInstance] resetUniqId];
-    [ViewController shiftButton:sender toState:kButtonStateSuccess withTitle:@"Reset Device Unique ID"];
+    [ViewController shiftButton:sender toState:kButtonStateSuccess withTitle:@"Device Unique ID is Reset!"];
     [NSTimer scheduledTimerWithTimeInterval:1 repeats:NO block:^(NSTimer* timer) {
         [ViewController shiftButton:sender toState:kButtonStateNormal withTitle:@"Reset Device Unique ID"];
     }];
