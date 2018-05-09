@@ -164,7 +164,7 @@
                                                 <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CMa-6a-eh8" userLabel="TargetTable">
                                                     <rect key="frame" x="14" y="0.0" width="351" height="43.5"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Table" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gx5-Rt-TYb" userLabel="Label">
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Test Table" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gx5-Rt-TYb" userLabel="Label">
                                                             <rect key="frame" x="0.0" y="0.0" width="110" height="43.5"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="110" id="UL3-YX-Pmq"/>
@@ -203,7 +203,7 @@
                                                 <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hez-HI-oRf" userLabel="TargetTable">
                                                     <rect key="frame" x="14" y="0.0" width="351" height="43.5"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TD Table" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vap-At-Omf" userLabel="Label">
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Default Table" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vap-At-Omf" userLabel="Label">
                                                             <rect key="frame" x="0.0" y="0.0" width="110" height="43.5"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="110" id="YbT-xq-6cu"/>
@@ -262,7 +262,7 @@
                                                                     <rect key="frame" x="92" y="6.5" width="51" height="31"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <connections>
-                                                                        <action selector="eventCollectingSwitchChanged:" destination="vgE-gp-ZtG" eventType="valueChanged" id="WYY-kj-yTx"/>
+                                                                        <action selector="customEventSwitchChanged:" destination="vgE-gp-ZtG" eventType="valueChanged" id="WYY-kj-yTx"/>
                                                                     </connections>
                                                                 </switch>
                                                             </subviews>
@@ -308,7 +308,7 @@
                                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z3L-Xe-pCl">
                                                                     <rect key="frame" x="92" y="6.5" width="51" height="31"/>
                                                                     <connections>
-                                                                        <action selector="autoEventSwitchChanged:" destination="vgE-gp-ZtG" eventType="valueChanged" id="vVw-DW-5Gt"/>
+                                                                        <action selector="appLifecycleEventSwitchChanged:" destination="vgE-gp-ZtG" eventType="valueChanged" id="vVw-DW-5Gt"/>
                                                                     </connections>
                                                                 </switch>
                                                             </subviews>
@@ -415,11 +415,11 @@
                     <connections>
                         <outlet property="apiEndpointField" destination="LTb-DE-GWH" id="zrd-Yp-2Zw"/>
                         <outlet property="apiKeyField" destination="Ndh-VC-HrS" id="kfO-Xj-nbm"/>
+                        <outlet property="appLifecycleEventSwitch" destination="z3L-Xe-pCl" id="gYF-L8-BB2"/>
                         <outlet property="appLifecycleEventToggleLabel" destination="ydC-Vx-LVJ" id="ZG6-FR-tzT"/>
-                        <outlet property="autoEventSwitch" destination="z3L-Xe-pCl" id="gYF-L8-BB2"/>
-                        <outlet property="autoTrackTableField" destination="2wf-Zf-119" id="Mq7-wx-6BZ"/>
+                        <outlet property="customEventSwitch" destination="JTW-pQ-cdc" id="JaL-Ef-fn1"/>
                         <outlet property="customEventToggleLabel" destination="JiH-FB-deg" id="p5v-sP-6VO"/>
-                        <outlet property="eventCollectingSwitch" destination="JTW-pQ-cdc" id="JaL-Ef-fn1"/>
+                        <outlet property="defaultTableField" destination="2wf-Zf-119" id="Mq7-wx-6BZ"/>
                         <outlet property="targetDatabaseField" destination="sND-qi-6Yz" id="CQ5-Qz-S4I"/>
                         <outlet property="targetTableField" destination="vDu-dR-yNu" id="74k-vI-xq6"/>
                     </connections>

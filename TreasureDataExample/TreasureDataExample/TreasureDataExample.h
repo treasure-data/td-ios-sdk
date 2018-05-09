@@ -8,7 +8,7 @@
 
 @interface TreasureDataExample : NSObject
 
-@property (nonatomic, copy) NSString *testTable;
+@property (nonatomic, strong) NSString *testTable;
 
 + (void)setupTreasureData;
 

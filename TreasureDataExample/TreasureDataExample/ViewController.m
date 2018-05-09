@@ -24,13 +24,13 @@
     [self.apiEndpointField setText:TreasureData.sharedInstance.client.apiEndpoint];
     [self.apiKeyField setText:TreasureData.sharedInstance.client.apiKey];
     [self.targetDatabaseField setText:TreasureData.sharedInstance.defaultDatabase];
-    [self.eventCollectingSwitch setOn:[[TreasureData sharedInstance] isCustomEventEnabled]];
-    [self.autoEventSwitch setOn:[[TreasureData sharedInstance] isAppLifecycleEventEnabled]];
-    [self.autoTrackTableField setText:[[NSUserDefaults standardUserDefaults] stringForKey:@"TDAutoTrackingEnabled"]];
-    [self eventCollectingSwitchChanged:self.eventCollectingSwitch];
-    [self autoEventSwitchChanged:self.autoEventSwitch];
+    [self.customEventSwitch setOn:[[TreasureData sharedInstance] isCustomEventEnabled]];
+    [self.appLifecycleEventSwitch setOn:[[TreasureData sharedInstance] isAppLifecycleEventEnabled]];
+    [self.defaultTableField setText:[[TreasureData sharedInstance] defaultTable]];
+    [self customEventSwitchChanged:self.customEventSwitch];
+    [self appLifecycleEventSwitchChanged:self.appLifecycleEventSwitch];
     [self.targetTableField setText:[TreasureDataExample testTable]];
-    [self.autoTrackTableField setText:@"auto_tracked_mobile_events"];
+    [self.defaultTableField setText:@"auto_tracked_mobile_events"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -42,7 +42,7 @@
     self.isFormDirty = YES;
 }
 
-- (IBAction)eventCollectingSwitchChanged:(UISwitch *)sender {
+- (IBAction)customEventSwitchChanged:(UISwitch *)sender {
     if ([sender isOn]) {
         self.customEventToggleLabel.text = @"Custom Events Enabled";
         [[TreasureData sharedInstance] enableCustomEvent];
@@ -52,10 +52,10 @@
     }
 }
 
-- (IBAction)autoEventSwitchChanged:(id)sender {
+- (IBAction)appLifecycleEventSwitchChanged:(id)sender {
     if ([sender isOn]) {
         self.appLifecycleEventToggleLabel.text = @"App Lifecycle Events Enabled";
-        [[TreasureData sharedInstance] enableAppLifecycleEvent:self.autoTrackTableField.text];
+        [[TreasureData sharedInstance] enableAppLifecycleEvent];
     } else {
         self.appLifecycleEventToggleLabel.text = @"App Lifecycle Events Disabled";
         [[TreasureData sharedInstance] disableAppLifecycleEvent];
@@ -131,7 +131,8 @@
         [[[TreasureData sharedInstance] client] setApiKey:self.apiKeyField.text];
         [[[TreasureData sharedInstance] client] setApiEndpoint:self.apiEndpointField.text];
         [[TreasureData sharedInstance] setDefaultDatabase:self.targetDatabaseField.text];
-        [[TreasureData sharedInstance] enableAppLifecycleEvent:self.autoTrackTableField.text];
+        [[TreasureData sharedInstance] setDefaultTable:self.targetTableField.text];
+        [[TreasureData sharedInstance] enableAppLifecycleEvent];
         [TreasureDataExample setTestTable:self.targetTableField.text];
     }
 }
