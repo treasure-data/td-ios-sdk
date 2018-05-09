@@ -8,7 +8,12 @@
 
 @interface TreasureDataExample : NSObject
 
-+ (void)setupTreasureDataWithEndpoint:(NSString *)endpoint
-                               apiKey:(NSString *)apiKey
-                             database:(NSString *)database;
+@property (nonatomic, copy) NSString *testTable;
+
++ (void)setupTreasureData;
+
++ (NSString *)testTable;
+
++ (void)setTestTable:(NSString *)table;
+
 @end

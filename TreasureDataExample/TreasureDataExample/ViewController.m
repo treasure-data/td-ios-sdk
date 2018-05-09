@@ -14,7 +14,6 @@
 @interface ViewController ()
 
 @property (nonatomic, assign) BOOL isFormDirty;
-@property (nonatomic, copy) NSString *targetTable;
 
 @end
 
@@ -22,18 +21,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.targetTable = @"mobile_events";
     [self.apiEndpointField setText:TreasureData.sharedInstance.client.apiEndpoint];
     [self.apiKeyField setText:TreasureData.sharedInstance.client.apiKey];
     [self.targetDatabaseField setText:TreasureData.sharedInstance.defaultDatabase];
-    [self.eventCollectingSwitch setOn:[[TreasureData sharedInstance] areCustomEventsEnabled]];
-    [self.autoEventSwitch setOn:[[TreasureData sharedInstance] areAppLifecycleEventsEnabled]];
+    [self.eventCollectingSwitch setOn:[[TreasureData sharedInstance] isCustomEventEnabled]];
+    [self.autoEventSwitch setOn:[[TreasureData sharedInstance] isAppLifecycleEventEnabled]];
     [self.autoTrackTableField setText:[[NSUserDefaults standardUserDefaults] stringForKey:@"TDAutoTrackingEnabled"]];
     [self eventCollectingSwitchChanged:self.eventCollectingSwitch];
     [self autoEventSwitchChanged:self.autoEventSwitch];
-    [self.targetTableField setText:self.targetTable];
+    [self.targetTableField setText:[TreasureDataExample testTable]];
     [self.autoTrackTableField setText:@"auto_tracked_mobile_events"];
-    [[TreasureData sharedInstance] setTreasureDataTable:@"td_builtin_events"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -48,20 +45,20 @@
 - (IBAction)eventCollectingSwitchChanged:(UISwitch *)sender {
     if ([sender isOn]) {
         self.customEventToggleLabel.text = @"Custom Events Enabled";
-        [[TreasureData sharedInstance] enableCustomEvents];
+        [[TreasureData sharedInstance] enableCustomEvent];
     } else {
         self.customEventToggleLabel.text = @"Custom Events Disabled";
-        [[TreasureData sharedInstance] disableCustomEvents];
+        [[TreasureData sharedInstance] disableCustomEvent];
     }
 }
 
 - (IBAction)autoEventSwitchChanged:(id)sender {
     if ([sender isOn]) {
         self.appLifecycleEventToggleLabel.text = @"App Lifecycle Events Enabled";
-        [[TreasureData sharedInstance] enableAppLifecycleEvents];
+        [[TreasureData sharedInstance] enableAppLifecycleEvent:self.autoTrackTableField.text];
     } else {
         self.appLifecycleEventToggleLabel.text = @"App Lifecycle Events Disabled";
-        [[TreasureData sharedInstance] disableAppLifecycleEvents];
+        [[TreasureData sharedInstance] disableAppLifecycleEvent];
     }
 }
 
@@ -75,7 +72,7 @@
                             @"name": @"komamitsu",
                             @"age": @99
                             }
-     table:self.targetTable
+     table:[TreasureDataExample testTable]
      onSuccess:^(){
          dispatch_async(dispatch_get_main_queue(), ^{
              [ViewController shiftButton:addEventButton toState:kButtonStateSuccess withTitle:@"Add Event Success!"];
@@ -134,8 +131,8 @@
         [[[TreasureData sharedInstance] client] setApiKey:self.apiKeyField.text];
         [[[TreasureData sharedInstance] client] setApiEndpoint:self.apiEndpointField.text];
         [[TreasureData sharedInstance] setDefaultDatabase:self.targetDatabaseField.text];
-        [[TreasureData sharedInstance] setTreasureDataTable:self.autoTrackTableField.text];
-        self.targetTable = self.targetTableField.text;
+        [[TreasureData sharedInstance] enableAppLifecycleEvent:self.autoTrackTableField.text];
+        [TreasureDataExample setTestTable:self.targetTableField.text];
     }
 }
 

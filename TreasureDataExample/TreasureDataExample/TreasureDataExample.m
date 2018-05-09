@@ -13,22 +13,29 @@
 
 @implementation TreasureDataExample
 
-+(void)setupTreasureDataWithEndpoint:(NSString *)endpoint
-                              apiKey:(NSString *)apiKey
-                            database:(NSString *)database {
+static NSString *testTable;
+
++ (void)setupTreasureData {
     [TreasureData enableLogging];
-    if (endpoint != nil) {
-        [TreasureData initializeApiEndpoint:endpoint];
-    }
-    [TreasureData initializeEncryptionKey:@"hello world"];
-    [TreasureData initializeWithApiKey:apiKey];
-    [[TreasureData sharedInstance] setDefaultDatabase:database];
+    [TreasureData initializeApiEndpoint:@"https://in.treasuredata.com"];
+    [TreasureData initializeEncryptionKey:@"encryption_key"];
+    [TreasureData initializeWithApiKey:@"api_key"];
+    [[TreasureData sharedInstance] setDefaultDatabase:@"your_db"];
     [[TreasureData sharedInstance] enableAutoAppendUniqId];
     [[TreasureData sharedInstance] enableAutoAppendRecordUUID];
     [[TreasureData sharedInstance] enableAutoAppendModelInformation];
     [[TreasureData sharedInstance] enableAutoAppendAppInformation];
     [[TreasureData sharedInstance] enableAutoAppendLocaleInformation];
     [[TreasureData sharedInstance] enableServerSideUploadTimestamp:@"server_upload_time"];
+    [TreasureDataExample setTestTable:@"your_table"];
+}
+
++ (NSString *)testTable {
+    return testTable;
+}
+
++ (void)setTestTable:(NSString *)table {
+    testTable = table;
 }
 
 @end

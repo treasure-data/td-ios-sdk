@@ -14,7 +14,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [TreasureDataExample setupTreasureDataWithEndpoint:nil apiKey:@"your_api_key" database:@"your_db"];
+    [TreasureDataExample setupTreasureData];
     return YES;
 }
 
