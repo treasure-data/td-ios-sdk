@@ -15,11 +15,6 @@
 
 @property(nonatomic, strong) NSString * _Nullable defaultDatabase;
 
-/*!
- * Special table to store TreasureData built-in events: application lifecycle events, audit events
- */
-@property(nonatomic, copy) NSString * _Nullable treasureDataTable;
-
 + (void)initializeWithApiKey:(NSString * _Nonnull)apiKey;
 
 // Can not be null after initializeWithApiKey: has been called.
@@ -141,30 +136,30 @@
  * Note: `onSuccess` calback of `addEvent...`  will still be invoked, but the return of `addEvent...` will be nil.
  * This feature is supposed to be used for your users to opt-out of the tracking, a requirement for GDPR compliance.
  */
-- (void)disableCustomEvents;
+- (void)disableCustomEvent;
 
 /// Re-enable custom events collection if previously disabled
-- (void)enableCustomEvents;
+- (void)enableCustomEvent;
 
 /*!
  * Whether the custom events collection is allowed or not.
  * This is a persistent setting, which is able to set via `enableCustomEvents` or `disableCustomEvents`
  */
-- (BOOL)areCustomEventsEnabled;
+- (BOOL)isCustomEventEnabled;
 
 /*!
  * Same as `disableCustomEvents`, this is supposed to be called for your users to opt-out of the automatic tracking.
  */
-- (void)disableAppLifecycleEvents;
+- (void)disableAppLifecycleEvent;
 
 /// Permanently re-enable event collection if previously disabled
-- (void)enableAppLifecycleEvents;
+- (void)enableAppLifecycleEvent:(NSString *)table;
 
 /*!
  * Whether the app lifecycle events collection is allowed or not
  * This is a persistent setting, able to set through `enableAppLifecycleEvent` or `disableAppLifecycleEvent`
  */
-- (BOOL)areAppLifecycleEventsEnabled;
+- (BOOL)isAppLifecycleEventEnabled;
 
 /*!
  * Permanently reset the appended "td_uuid" to a different value.

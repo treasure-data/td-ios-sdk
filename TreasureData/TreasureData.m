@@ -55,8 +55,7 @@ static long sessionTimeoutMilli = -1;
 @property NSString *serverSideUploadTimestampColumn;
 @property NSString *autoAppendRecordUUIDColumn;
 
-@property (nonatomic, assign, getter=areCustomEventsEnabled) BOOL customEventEnabled;
-@property (nonatomic, assign, getter=areAppLifecycleEventsEnabled) BOOL appLifecycleEventEnabled;
+@property (nonatomic, assign, getter=isCustomEventEnabled) BOOL customEventEnabled;
 
 @end
 
@@ -66,6 +65,7 @@ static NSString *const DefaultTreasureDataDatabase = @"td";
 static NSString *const DefaultTreasureDataTable = @"td_ios";
 
 NSString *_UUID;
+NSString *_appLifecycleEventTable;
 
 - (id)initWithApiKey:(NSString *)apiKey {
     self = [self init];
@@ -94,15 +94,13 @@ NSString *_UUID;
         }
 
         // Unlike custom events, app lifecycle events must be explicitly enabled
-        self.appLifecycleEventEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ENABLED];
+        _appLifecycleEventTable = [[NSUserDefaults standardUserDefaults] stringForKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ENABLED];
 
-        self.treasureDataTable = @"td_ios";
         NSString *endpoint = defaultApiEndpoint ? defaultApiEndpoint : @"https://in.treasuredata.com";
         self.client = [[TDClient alloc] initWithApiKey:apiKey apiEndpoint:endpoint];
         if (self.client) {
 
-        /**/}
-        else {
+        } else {
             KCLog(@"Failed to initialize client");
         }
         [self observeLifecycleEvents];
@@ -128,16 +126,16 @@ NSString *_UUID;
 }
 
 - (NSDictionary *)addEventWithCallback:(NSDictionary *)record database:(NSString *)database table:(NSString *)table onSuccess:(void (^)(void))onSuccess onError:(void (^)(NSString*, NSString*))onError {
-    if ([TDUtils isCustomEvent:record] && ![self areCustomEventsEnabled]) {
+    if ([TDUtils isCustomEvent:record] && ![self isCustomEventEnabled]) {
         if (onError) {
-            onError(TD_ERROR_CUSTOM_EVENT_UNALLOWED,
+            onError(TD_ERROR_CUSTOM_EVENT_DISABLED,
                     @"You configured to deny tracking of custom events. This is a persistent setting, it will unharmfully drop the any custom events called through `addEvent...` methods family.");
         }
         return nil;
 
     }
     // App Lifecyle events denying is silent
-    if ([TDUtils isAppLifecycleEvent:record] && ![self areAppLifecycleEventsEnabled]) {
+    if ([TDUtils isAppLifecycleEvent:record] && ![self isAppLifecycleEventEnabled]) {
         return nil;
     }
     record = [TDUtils stripNonEventData:record];
@@ -546,16 +544,16 @@ NSString *_UUID;
 
 - (void)handleAppDidLaunching:(NSNotification *)notification
 {
-    if ([self areAppLifecycleEventsEnabled]) {
+    if ([self isAppLifecycleEventEnabled]) {
         NSString *targetDatabase = [TDUtils requireNonBlank:self.defaultDatabase
                                             defaultValue:DefaultTreasureDataDatabase
                                                  message:[NSString
                                                           stringWithFormat:@"WARN: defaultDatabase was not set. \"%@\" will be used as the target database.",
                                                           DefaultTreasureDataDatabase]];
-        NSString *targetTable = [TDUtils requireNonBlank:self.treasureDataTable
+        NSString *targetTable = [TDUtils requireNonBlank:_appLifecycleEventTable
                                              defaultValue:DefaultTreasureDataTable
                                                   message:[NSString
-                                                           stringWithFormat:@"WARN: treasureDataTable was not set. \"%@\" will be used as the target table.",
+                                                           stringWithFormat:@"WARN: appLifecycleEventTable was not set. \"%@\" will be used as the target table.",
                                                            DefaultTreasureDataTable]];
         NSString *currentVersion = [self getAppVersion];
         NSString *currentBuild = [self getBuildNumber];
@@ -595,24 +593,28 @@ NSString *_UUID;
 
 #pragma mark - GDPR Compliance (Right To Be Forgotten)
 
-- (void)enableCustomEvents {
+- (void)enableCustomEvent {
     self.customEventEnabled = YES;
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ENABLED];
 }
 
-- (void)disableCustomEvents {
+- (void)disableCustomEvent {
     self.customEventEnabled = NO;
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ENABLED];
 }
 
-- (void)enableAppLifecycleEvents {
-    self.appLifecycleEventEnabled = YES;
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ENABLED];
+- (void)enableAppLifecycleEvent:(NSString *)table {
+    _appLifecycleEventTable = table;
+    [[NSUserDefaults standardUserDefaults] setObject:table forKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ENABLED];
 }
 
-- (void)disableAppLifecycleEvents {
-    self.appLifecycleEventEnabled = NO;
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ENABLED];
+- (void)disableAppLifecycleEvent {
+    _appLifecycleEventTable = nil;
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ENABLED];
+}
+
+- (BOOL)isAppLifecycleEventEnabled {
+    return _appLifecycleEventTable != nil;
 }
 
 - (void)resetUniqId {
@@ -621,7 +623,7 @@ NSString *_UUID;
     [self addEvent:[TDUtils markAsAuditEvent:@{
                     TD_COLUMN_EVENT: TD_EVENT_AUDIT_TRACKING,
                     TD_COLUMN_AUDIT_TYPE: @"forget_device_uuid"}]
-             table:self.treasureDataTable];
+             table: _appLifecycleEventTable];
 }
 
 @end

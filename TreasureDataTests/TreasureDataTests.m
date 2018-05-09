@@ -718,7 +718,7 @@ static NSString *END_POINT = @"http://localhost";
 #pragma mark - Auto Tracking
 
 - (void)testAutoTrackAppOpened {
-    [self.td enableAppLifecycleEvents];
+    [self.td enableAppLifecycleEvent:@"somewhere"];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
                                                             object:nil];
     [self assertHasCapturedEventType:TD_EVENT_APP_OPENED];
@@ -729,7 +729,7 @@ static NSString *END_POINT = @"http://localhost";
     @try {
         [self.td mockTrackedAppVersion:nil];
         [self.td mockTrackedBuildNumber:nil];
-        [self.td enableAppLifecycleEvents];
+        [self.td enableAppLifecycleEvent:@"somewhere"];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
                                                             object:nil];
         [self assertEventCount:2];
@@ -760,7 +760,7 @@ static NSString *END_POINT = @"http://localhost";
 
 - (void)testToggleAllowCustomEvent {
     @try {
-        [self.td disableCustomEvents];
+        [self.td disableCustomEvent];
         [self.td uploadEvents];
         // All events are supposed to be flushed
         [self assertEventCount:0];
@@ -775,7 +775,7 @@ static NSString *END_POINT = @"http://localhost";
 
 - (void)testToggleAllowAppLifecycleEvent {
     @try {
-        [self.td disableAppLifecycleEvents];
+        [self.td disableAppLifecycleEvent];
         [self.td uploadEvents];
         // All events are supposed to be flushed
         [self assertEventCount:0];
@@ -820,7 +820,7 @@ static NSString *END_POINT = @"http://localhost";
 // which is the SDK implementation details and irrelavant on the service side.
 // We should making sure we don't accidentally included those on the final events
 - (void)testAddedEventShouldNotHaveTheNonEventDataAdded {
-    [self.td enableCustomEvents];
+    [self.td enableCustomEvent];
     // Although actually, custom events won't be marked with __td_event_class,
     // if the key is absence, then it is treated as custom events
     NSDictionary *myEvent = [TDUtils markAsCustomEvent:@{@"mykey": @"myvalue"}];
