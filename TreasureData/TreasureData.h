@@ -14,6 +14,7 @@
 @property(nonatomic, strong) TDClient * _Nullable client;
 
 @property(nonatomic, strong) NSString * _Nullable defaultDatabase;
+@property(nonatomic, strong) NSString * _Nullable defaultTable;
 
 + (void)initializeWithApiKey:(NSString * _Nonnull)apiKey;
 
@@ -153,7 +154,7 @@
 - (void)disableAppLifecycleEvent;
 
 /// Permanently re-enable event collection if previously disabled
-- (void)enableAppLifecycleEvent:(NSString *)table;
+- (void)enableAppLifecycleEvent;
 
 /*!
  * Whether the app lifecycle events collection is allowed or not

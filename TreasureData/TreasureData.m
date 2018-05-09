@@ -56,16 +56,16 @@ static long sessionTimeoutMilli = -1;
 @property NSString *autoAppendRecordUUIDColumn;
 
 @property (nonatomic, assign, getter=isCustomEventEnabled) BOOL customEventEnabled;
+@property (nonatomic, assign, getter=isAppLifecycleEventEnabled) BOOL appLifecycleEventEnabled;
 
 @end
 
-@implementation TreasureData
+@implementation TreasureData {
+    NSString *_UUID;
+}
 
 static NSString *const DefaultTreasureDataDatabase = @"td";
 static NSString *const DefaultTreasureDataTable = @"td_ios";
-
-NSString *_UUID;
-NSString *_appLifecycleEventTable;
 
 - (id)initWithApiKey:(NSString *)apiKey {
     self = [self init];
@@ -94,7 +94,7 @@ NSString *_appLifecycleEventTable;
         }
 
         // Unlike custom events, app lifecycle events must be explicitly enabled
-        _appLifecycleEventTable = [[NSUserDefaults standardUserDefaults] stringForKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ENABLED];
+        self.appLifecycleEventEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ENABLED];
 
         NSString *endpoint = defaultApiEndpoint ? defaultApiEndpoint : @"https://in.treasuredata.com";
         self.client = [[TDClient alloc] initWithApiKey:apiKey apiEndpoint:endpoint];
@@ -550,10 +550,10 @@ NSString *_appLifecycleEventTable;
                                                  message:[NSString
                                                           stringWithFormat:@"WARN: defaultDatabase was not set. \"%@\" will be used as the target database.",
                                                           DefaultTreasureDataDatabase]];
-        NSString *targetTable = [TDUtils requireNonBlank:_appLifecycleEventTable
+        NSString *targetTable = [TDUtils requireNonBlank:self.defaultTable
                                              defaultValue:DefaultTreasureDataTable
                                                   message:[NSString
-                                                           stringWithFormat:@"WARN: appLifecycleEventTable was not set. \"%@\" will be used as the target table.",
+                                                           stringWithFormat:@"WARN: defaultTable was not set. \"%@\" will be used as the target table.",
                                                            DefaultTreasureDataTable]];
         NSString *currentVersion = [self getAppVersion];
         NSString *currentBuild = [self getBuildNumber];
@@ -603,18 +603,14 @@ NSString *_appLifecycleEventTable;
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENTS_ENABLED];
 }
 
-- (void)enableAppLifecycleEvent:(NSString *)table {
-    _appLifecycleEventTable = table;
-    [[NSUserDefaults standardUserDefaults] setObject:table forKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ENABLED];
+- (void)enableAppLifecycleEvent {
+    self.appLifecycleEventEnabled = YES;
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ENABLED];
 }
 
 - (void)disableAppLifecycleEvent {
-    _appLifecycleEventTable = nil;
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ENABLED];
-}
-
-- (BOOL)isAppLifecycleEventEnabled {
-    return _appLifecycleEventTable != nil;
+    self.appLifecycleEventEnabled = NO;
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENTS_ENABLED];
 }
 
 - (void)resetUniqId {
@@ -623,7 +619,11 @@ NSString *_appLifecycleEventTable;
     [self addEvent:[TDUtils markAsAuditEvent:@{
                     TD_COLUMN_EVENT: TD_EVENT_AUDIT_TRACKING,
                     TD_COLUMN_AUDIT_TYPE: @"forget_device_uuid"}]
-             table: _appLifecycleEventTable];
+             table: [TDUtils requireNonBlank:self.defaultTable
+                                defaultValue:DefaultTreasureDataTable
+                                     message:[NSString
+                                              stringWithFormat:@"WARN: defaultTable was not set. \"%@\" will be used as the target table.",
+                                              DefaultTreasureDataTable]]];
 }
 
 @end
