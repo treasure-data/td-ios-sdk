@@ -119,21 +119,13 @@
 
 + (void)initializeEncryptionKey:(NSString* _Nullable)encryptionKey;
 
-#pragma mark - Auto Tracking
-
-// - (void)enableAppLifecycleEventsTrackingWithTable:(NSString * _Nonnull)table;
-
-// - (void)disableAppLifecycleEventsTracking;
-
-// - (BOOL)isAppLifecycleEventsTrackingEnabled;
-
 #pragma mark - GDCR Compliance (Right To Be Forgotten)
 
 /*!
  * Disable all the custom events collection (all events except the automatically tracked app lifecycle events)
- * This is a persistent setting so unless being re-enable with `enableCustomEvents`,
+ * This is a persistent setting so unless being re-enable with `enableCustomEvent`,
  * all your tracked events with `addEvent` will be discarded. (Note that the app lifecycle events will still tracked,
- * call `disableAppLifecycleEvents` to effectively disable all the event collections.
+ * call `disableAppLifecycleEvent` to effectively disable all the event collections.
  * Note: `onSuccess` calback of `addEvent...`  will still be invoked, but the return of `addEvent...` will be nil.
  * This feature is supposed to be used for your users to opt-out of the tracking, a requirement for GDPR compliance.
  */
@@ -144,12 +136,12 @@
 
 /*!
  * Whether the custom events collection is allowed or not.
- * This is a persistent setting, which is able to set via `enableCustomEvents` or `disableCustomEvents`
+ * This is a persistent setting, which is able to set via `enableCustomEvent` or `disableCustomEvent`
  */
 - (BOOL)isCustomEventEnabled;
 
 /*!
- * Same as `disableCustomEvents`, this is supposed to be called for your users to opt-out of the automatic tracking.
+ * Same as `disableCustomEvent`, this is supposed to be called for your users to opt-out of the automatic tracking.
  */
 - (void)disableAppLifecycleEvent;
 

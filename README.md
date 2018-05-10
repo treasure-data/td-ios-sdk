@@ -374,8 +374,8 @@ If you want to use server side upload timestamp not only client device time that
 Though it's all up to you to define what to track and respect user's choices and rights of privacy, TreasureData SDK does expose some functionalities to conveniently stop events tracking entirely without having to resort to a bunch of if-else statements:
 
 ```
-    [[TreasureData sharedInstance] disableCustomEvents]        // Opt-out of your own events
-    [[TreasureData sharedInstance] disableAppLifecycleEvents]  // Opt-out of TD generated events
+    [[TreasureData sharedInstance] disableCustomEvent]        // Opt-out of your own events
+    [[TreasureData sharedInstance] disableAppLifecycleEvent]  // Opt-out of TD generated events
 ```
 
 These settings are saved persistently across app launches. And for sure, users could opt back in through `enableCustomEvent` or `enableAppLifecycleEvent`. We also provide `resetUniqId` to reset identification the device on subsequent events.
