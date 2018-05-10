@@ -3,7 +3,7 @@
 //  TreasureData
 //
 //  Created by Mitsunori Komatsu on 6/22/16.
-//  Copyright © 2016 Mitsunori Komatsu. All rights reserved.
+//  Copyright © 2014 Treasure Data. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

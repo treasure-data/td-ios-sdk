@@ -3,7 +3,7 @@
 //  TreasureData
 //
 //  Created by Huy Le on 3/1/18.
-//  Copyright © 2018 Treasure Data. All rights reserved.
+//  Copyright © 2014 Treasure Data. All rights reserved.
 //
 
 #define TD_COLUMN_EVENT @"td_ios_event"
