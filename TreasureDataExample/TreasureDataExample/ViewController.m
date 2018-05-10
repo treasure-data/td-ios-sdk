@@ -30,7 +30,7 @@
     [self customEventSwitchChanged:self.customEventSwitch];
     [self appLifecycleEventSwitchChanged:self.appLifecycleEventSwitch];
     [self.targetTableField setText:[TreasureDataExample testTable]];
-    [self.defaultTableField setText:@"auto_tracked_mobile_events"];
+    [self.defaultTableField setText:[[TreasureData sharedInstance] defaultTable]];
 }
 
 - (void)didReceiveMemoryWarning {

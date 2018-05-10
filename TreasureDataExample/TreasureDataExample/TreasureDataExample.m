@@ -21,13 +21,14 @@ static NSString *testTable;
     [TreasureData initializeEncryptionKey:@"encryption_key"];
     [TreasureData initializeWithApiKey:@"api_key"];
     [[TreasureData sharedInstance] setDefaultDatabase:@"your_db"];
+    [[TreasureData sharedInstance] setDefaultTable:@"default_table"];
+    [TreasureDataExample setTestTable:@"your_table"];
     [[TreasureData sharedInstance] enableAutoAppendUniqId];
     [[TreasureData sharedInstance] enableAutoAppendRecordUUID];
     [[TreasureData sharedInstance] enableAutoAppendModelInformation];
     [[TreasureData sharedInstance] enableAutoAppendAppInformation];
     [[TreasureData sharedInstance] enableAutoAppendLocaleInformation];
     [[TreasureData sharedInstance] enableServerSideUploadTimestamp:@"server_upload_time"];
-    [TreasureDataExample setTestTable:@"your_table"];
 }
 
 + (NSString *)testTable {
