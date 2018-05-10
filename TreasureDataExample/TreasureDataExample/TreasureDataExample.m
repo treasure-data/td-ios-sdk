@@ -21,7 +21,7 @@ static NSString *testTable;
     [TreasureData initializeEncryptionKey:@"encryption_key"];
     [TreasureData initializeWithApiKey:@"api_key"];
     [[TreasureData sharedInstance] setDefaultDatabase:@"your_db"];
-    [[TreasureData sharedInstance] setDefaultTable:@"default_table"];
+    [[TreasureData sharedInstance] setDefaultTable:@"audit_and_app_lifecycles"];
     [TreasureDataExample setTestTable:@"your_table"];
     [[TreasureData sharedInstance] enableAutoAppendUniqId];
     [[TreasureData sharedInstance] enableAutoAppendRecordUUID];
