@@ -14,6 +14,7 @@
 @property(nonatomic, strong) TDClient * _Nullable client;
 
 @property(nonatomic, strong) NSString * _Nullable defaultDatabase;
+@property(nonatomic, strong) NSString * _Nullable defaultTable;
 
 + (void)initializeWithApiKey:(NSString * _Nonnull)apiKey;
 
@@ -28,13 +29,13 @@
 
 - (void)event:(NSDictionary * _Nonnull)record table:(NSString * _Nonnull)table DEPRECATED_ATTRIBUTE;
 
-- (void)addEvent:(NSDictionary * _Nonnull)record database:(NSString * _Nonnull)database table:(NSString * _Nonnull)table;
+- (NSDictionary *)addEvent:(NSDictionary * _Nonnull)record database:(NSString * _Nonnull)database table:(NSString * _Nonnull)table;
 
-- (void)addEvent:(NSDictionary * _Nonnull)record table:(NSString * _Nonnull)table;
+- (NSDictionary *)addEvent:(NSDictionary * _Nonnull)record table:(NSString * _Nonnull)table;
 
-- (void)addEventWithCallback:(NSDictionary * _Nonnull)record database:(NSString * _Nonnull)database table:(NSString * _Nonnull)table onSuccess:(void (^ _Nullable)(void))onSuccess onError:(void (^ _Nullable)(NSString* _Nonnull, NSString* _Nullable))onError;
+- (NSDictionary *)addEventWithCallback:(NSDictionary * _Nonnull)record database:(NSString * _Nonnull)database table:(NSString * _Nonnull)table onSuccess:(void (^ _Nullable)(void))onSuccess onError:(void (^ _Nullable)(NSString* _Nonnull, NSString* _Nullable))onError;
 
-- (void)addEventWithCallback:(NSDictionary * _Nonnull)record table:(NSString * _Nonnull)table onSuccess:(void (^ _Nullable)(void))onSuccess onError:(void (^ _Nullable)(NSString* _Nonnull, NSString* _Nullable))onError;
+- (NSDictionary *)addEventWithCallback:(NSDictionary * _Nonnull)record table:(NSString * _Nonnull)table onSuccess:(void (^ _Nullable)(void))onSuccess onError:(void (^ _Nullable)(NSString* _Nonnull, NSString* _Nullable))onError;
 
 - (void)uploadWithBlock:(void (^ _Nonnull)(void))block DEPRECATED_ATTRIBUTE;
 
@@ -118,12 +119,45 @@
 
 + (void)initializeEncryptionKey:(NSString* _Nullable)encryptionKey;
 
-#pragma mark - Auto Tracking
+#pragma mark - GDCR Compliance (Right To Be Forgotten)
 
-- (void)enableAutoTrackToDatabase:(NSString * _Nonnull)database table:(NSString * _Nonnull)table;
+/*!
+ * Disable all the custom events collection (all events except the automatically tracked app lifecycle events)
+ * This is a persistent setting so unless being re-enable with `enableCustomEvent`,
+ * all your tracked events with `addEvent` will be discarded. (Note that the app lifecycle events will still tracked,
+ * call `disableAppLifecycleEvent` to effectively disable all the event collections.
+ * Note: `onSuccess` calback of `addEvent...`  will still be invoked, but the return of `addEvent...` will be nil.
+ * This feature is supposed to be used for your users to opt-out of the tracking, a requirement for GDPR compliance.
+ */
+- (void)disableCustomEvent;
 
-- (void)enableAutoTrackToTable:(NSString * _Nonnull)table;
+/// Re-enable custom events collection if previously disabled
+- (void)enableCustomEvent;
 
-- (void)disableAutoTrack;
+/*!
+ * Whether the custom events collection is allowed or not.
+ * This is a persistent setting, which is able to set via `enableCustomEvent` or `disableCustomEvent`
+ */
+- (BOOL)isCustomEventEnabled;
+
+/*!
+ * Same as `disableCustomEvent`, this is supposed to be called for your users to opt-out of the automatic tracking.
+ */
+- (void)disableAppLifecycleEvent;
+
+/// Permanently re-enable event collection if previously disabled
+- (void)enableAppLifecycleEvent;
+
+/*!
+ * Whether the app lifecycle events collection is allowed or not
+ * This is a persistent setting, able to set through `enableAppLifecycleEvent` or `disableAppLifecycleEvent`
+ */
+- (BOOL)isAppLifecycleEventEnabled;
+
+/*!
+ * Permanently reset the appended "td_uuid" to a different value.
+ * Note: this won't reset the current buffered events before this call
+ */
+- (void)resetUniqId;
 
 @end

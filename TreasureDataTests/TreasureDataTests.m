@@ -10,6 +10,7 @@
 #import "TreasureData.h"
 #import "TDClient.h"
 #import "Constants.h"
+#import "TDUtils.h"
 
 static NSString *END_POINT = @"http://localhost";
 
@@ -92,9 +93,22 @@ static NSString *END_POINT = @"http://localhost";
     return self.mockedTrackedBuildNumber;
 }
 
-- (void)addEventWithCallback:(NSDictionary *)record database:(NSString *)database table:(NSString *)table onSuccess:(void (^)(void))onSuccess onError:(void (^)(NSString*, NSString*))onError {
-    [self.capturedEvents addObject:record];
-    [super addEventWithCallback:record database:database table:table onSuccess:onSuccess onError:onError];
+- (NSDictionary *)addEventWithCallback:(NSDictionary *)record
+                    database:(NSString *)database
+                       table:(NSString *)table
+                   onSuccess:(void (^)(void))onSuccess
+                     onError:(void (^)(NSString*, NSString*))onError {
+    NSDictionary *added = [super addEventWithCallback:record database:database table:table onSuccess:onSuccess onError:onError];
+    if (added) {
+        [self.capturedEvents addObject:added];
+    }
+    return added;
+}
+
+- (void)uploadEventsWithCallback:(void (^ _Nullable)(void))onSuccess
+                         onError:(void (^ _Nullable)(NSString* _Nonnull, NSString* _Nullable))onError {
+    [self.capturedEvents removeAllObjects];
+    [super uploadEventsWithCallback:onSuccess onError:onError];
 }
 
 @end
@@ -120,9 +134,12 @@ static NSString *END_POINT = @"http://localhost";
 - (void)initializeTD {
     self.td = [[MyTreasureData alloc] initWithApiKey:@"dummy_apikey"];
     [self.td initializeFirstRun];
+    [self.td setDefaultDatabase:@"my_database"];
     self.client = (MyTDClient*)self.td.client;
     self.session = (MySession*)self.td.client.session;
     [[MyTDClient getEventStore] deleteAllEvents];
+    // Cleanup audit events so it won't mess with the assertion
+    [self.td.capturedEvents removeAllObjects];
     [MyTreasureData disableEventCompression];
     [MyTreasureData resetSession];
 }
@@ -304,6 +321,8 @@ static NSString *END_POINT = @"http://localhost";
 - (void)testSetDefaultApiEndpoint {
     [TreasureData initializeApiEndpoint:@"https://another.apiendpoint.xyz"];
     [TreasureData initializeWithApiKey:@"hello_apikey"];
+    // Avoid it to trigger app lifecycle listener without some of the expectations (app's version) being mocked.
+    [[NSNotificationCenter defaultCenter] removeObserver:[TreasureData sharedInstance]];
     NSString *url = [TreasureData sharedInstance].client.apiEndpoint;
     XCTAssertTrue([url isEqualToString:@"https://another.apiendpoint.xyz"]);
     self.isFinished = true;
@@ -656,8 +675,7 @@ static NSString *END_POINT = @"http://localhost";
     [self.td addEventWithCallback:@{@"name":@"foobar"}
                      database:@"DB_"
                         table:@"tbl"
-                    onSuccess:^() {
-                    }
+                    onSuccess:^() {}
                       onError:^(NSString* errorCode, NSString* message) {
                           result = errorCode;
                       }];
@@ -700,24 +718,23 @@ static NSString *END_POINT = @"http://localhost";
 #pragma mark - Auto Tracking
 
 - (void)testAutoTrackAppOpened {
-    @try {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
+    [self.td enableAppLifecycleEvent:@"somewhere"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
                                                             object:nil];
-        [self assertHasCapturedEvent:TD_EVENT_APP_OPENED];
-    } @finally {
-        self.isFinished = true;
-    }
+    [self assertHasCapturedEventType:TD_EVENT_APP_OPENED];
+    self.isFinished = true;
 }
 
 - (void)testAutoTrackAppInstalled {
     @try {
         [self.td mockTrackedAppVersion:nil];
         [self.td mockTrackedBuildNumber:nil];
+        [self.td enableAppLifecycleEvent:@"somewhere"];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
                                                             object:nil];
         [self assertEventCount:2];
-        [self assertHasCapturedEvent:TD_EVENT_APP_INSTALLED];
-        [self assertHasCapturedEvent:TD_EVENT_APP_OPENED];
+        [self assertHasCapturedEventType:TD_EVENT_APP_INSTALLED];
+        [self assertHasCapturedEventType:TD_EVENT_APP_OPENED];
     } @finally {
         self.isFinished = true;
     }
@@ -732,23 +749,106 @@ static NSString *END_POINT = @"http://localhost";
         [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
                                                             object:nil];
         [self assertEventCount:2];
-        [self assertHasCapturedEvent:TD_EVENT_APP_UPDATED];
-        [self assertHasCapturedEvent:TD_EVENT_APP_OPENED];
+        [self assertHasCapturedEventType:TD_EVENT_APP_UPDATED];
+        [self assertHasCapturedEventType:TD_EVENT_APP_OPENED];
     } @finally {
         self.isFinished = true;
     }
 }
 
+#pragma mark - GDPR Compliancy
+
+- (void)testToggleAllowCustomEvent {
+    @try {
+        [self.td disableCustomEvent];
+        [self.td uploadEvents];
+        // All events are supposed to be flushed
+        [self assertEventCount:0];
+        id added = [self.td addEvent:[NSDictionary dictionary] table:@"somewhere"];
+        // Expect no events were recorded
+        XCTAssertNil(added);
+        [self assertEventCount:0];
+    } @finally {
+        self.isFinished = true;
+    }
+}
+
+- (void)testToggleAllowAppLifecycleEvent {
+    @try {
+        [self.td disableAppLifecycleEvent];
+        [self.td uploadEvents];
+        // All events are supposed to be flushed
+        [self assertEventCount:0];
+        // Normally this would trigger the TD_EVENT_APP_OPENED event
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
+                                                            object:nil];
+        // Expect no events were recorded
+        [self assertEventCount:0];
+    } @finally {
+        self.isFinished = true;
+    }
+}
+
+- (void)testResetUniqId {
+    [self.td setDefaultDatabase:@"somedb"];
+    [self.td enableAutoAppendUniqId];
+    [self.td addEvent:[NSDictionary dictionary] table:@"somewhere"];
+    NSDictionary *sampleEvent= self.td.capturedEvents[0];
+    NSString* uuid = sampleEvent[@"td_uuid"];
+    
+    [self.td uploadEvents];
+    [self.td resetUniqId];
+    [self.td uploadEvents];
+    [self.td addEvent:[NSDictionary dictionary] table:@"somewhere"];
+    NSDictionary *sampleEventAfterReset= self.td.capturedEvents[0];
+    NSString* uuidAfterReset = sampleEventAfterReset[@"td_uuid"];
+    
+    XCTAssertNotEqual(uuid, uuidAfterReset);
+    
+    self.isFinished = true;
+}
+
+// By default, without any explicit configuration, the SDK should
+// collecting minimal metadata as possible
+- (void)testMinimalCollectingByDefault {
+    NSDictionary *decoratedEvent = [self.td addEvent:@{@"testKey": @"testVal"} table:@"my_table"];
+    XCTAssertEqual([decoratedEvent count], 1);
+    self.isFinished = YES;
+}
+
+// Some metadata such as `__td_event_class` are automatically added,
+// which is the SDK implementation details and irrelavant on the service side.
+// We should making sure we don't accidentally included those on the final events
+- (void)testAddedEventShouldNotHaveTheNonEventDataAdded {
+    [self.td enableCustomEvent];
+    // Although actually, custom events won't be marked with __td_event_class,
+    // if the key is absence, then it is treated as custom events
+    NSDictionary *myEvent = [TDUtils markAsCustomEvent:@{@"mykey": @"myvalue"}];
+    NSDictionary *event = [self.td addEvent:myEvent table:@"somewhere"];
+    XCTAssertNil([event objectForKey:TDEventClassKey]);
+    self.isFinished = YES;
+}
+
 #pragma mark - Assertions
 
-- (void)assertHasCapturedEvent:(NSString *)eventName {
+- (void)assertHasCapturedEventType:(NSString *)eventType {
     NSArray<NSDictionary<NSString *,id> *> *events = self.td.capturedEvents;
     for (int i = 0; i < events.count; i++) {
-        if ([[events objectAtIndex:i][TD_COLUMN_EVENT] isEqualToString:eventName]) {
+        if ([[events objectAtIndex:i][TD_COLUMN_EVENT] isEqualToString:eventType]) {
             return;
         }
     }
-    @throw [NSString stringWithFormat:@"Event \"%@\" has never been captured!", eventName];
+    @throw [NSString stringWithFormat:@"Event type: \"%@\" has never been captured!", eventType];
+}
+
+- (void)assertHasCapturedEventClass:(NSString *)eventType {
+    NSArray<NSDictionary<NSString *,id> *> *events = self.td.capturedEvents;
+    for (int i = 0; i < events.count; i++) {
+        if ([TDUtils isAuditEvent:[events objectAtIndex:i]]) {
+            return;
+        }
+    }
+    @throw [NSString stringWithFormat:@"Event class: \"%@\" has never been captured!", eventType];
 }
 
 - (void)assertEventCount:(NSUInteger)eventNumber

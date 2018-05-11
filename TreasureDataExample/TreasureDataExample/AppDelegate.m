@@ -8,27 +8,13 @@
 
 #import "AppDelegate.h"
 #import "TreasureData.h"
+#import "TreasureDataExample.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [TreasureData enableLogging];
-    // [TreasureData initializeApiEndpoint:@"https://in.ybi.idcfcloud.net"];
-    [TreasureData initializeEncryptionKey:@"hello world"];
-    [TreasureData initializeWithApiKey:@"your_api_key"];
-    [[TreasureData sharedInstance] setDefaultDatabase:@"testdb"];
-    [[TreasureData sharedInstance] enableAutoAppendUniqId];
-    [[TreasureData sharedInstance] enableAutoAppendRecordUUID];
-    [[TreasureData sharedInstance] enableAutoAppendModelInformation];
-    [[TreasureData sharedInstance] enableAutoAppendAppInformation];
-    [[TreasureData sharedInstance] enableAutoAppendLocaleInformation];
-    // [[TreasureData sharedInstance] disableRetryUploading];
-    [[TreasureData sharedInstance] enableServerSideUploadTimestamp: @"server_upload_time"];
-    
-    // Auto Tracking is enabled by default using "td_app_lifecycle_event" as target table if not be set explicitly
-    [[TreasureData sharedInstance] enableAutoTrackToTable:@"auto_tracked_events"];
-
+    [TreasureDataExample setupTreasureData];
     return YES;
 }
 

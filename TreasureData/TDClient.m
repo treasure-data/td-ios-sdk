@@ -3,7 +3,7 @@
 //  TreasureData
 //
 //  Created by Mitsunori Komatsu on 12/15/14.
-//  Copyright (c) 2014 Mitsunori Komatsu. All rights reserved.
+//  Copyright (c) 2014 Treasure Data Inc. All rights reserved.
 //
 #import <UIKit/UIKit.h>
 #import <CommonCrypto/CommonDigest.h>
