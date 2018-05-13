@@ -34,8 +34,13 @@ desc "Create static libraries for Unity"
 task :unity_package do
   Rake::Task[:build].invoke
   output_file = File.expand_path("../Output/Unity/libTreasureData.a", __FILE__)
-  mkdir_p(File.dirname(output_file))
-  sh "libtool -static -o #{output_file} Output/Release-iphoneos/libKeenClientTD.a Output/Release-iphoneos/libTreasureData.a"
+  source_libs = 'Output/Release-iphoneos'
+  if ENV['universal'] and ENV['universal'] != 'false'
+      source_libs = 'Output/Universal'
+      mkdir_p(source_libs)
+      create_universal_library(source_libs)
+  end
+  sh "libtool -static -o #{output_file} #{source_libs}/libKeenClientTD.a #{source_libs}/libTreasureData.a"
 end
 
 desc "Create package"
