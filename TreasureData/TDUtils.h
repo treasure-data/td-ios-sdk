@@ -29,4 +29,6 @@ static NSString *const TDEventClassAudit = @"audit";
 
 + (NSDictionary *)stripNonEventData:(NSDictionary *)event;
 
++ (BOOL)isRunningWithUnity;
+
 @end
