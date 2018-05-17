@@ -614,7 +614,10 @@ static NSString *const DefaultTreasureDataTable = @"td_ios";
 }
 
 - (void)resetUniqId {
-    [self addEvent:[TDUtils markAsAuditEvent:@{TD_COLUMN_EVENT: TD_EVENT_AUDIT_RESET_UUID}]
+    _UUID = [[NSUUID UUID] UUIDString];
+    [[NSUserDefaults standardUserDefaults] setObject:_UUID forKey:storageKeyOfUuid];
+    NSString *eventTypeColumn = [TDUtils isRunningWithUnity] ? TD_COLUMN_UNITY_EVENT : TD_COLUMN_EVENT;
+    [self addEvent:[TDUtils markAsAuditEvent:@{eventTypeColumn: TD_EVENT_AUDIT_RESET_UUID}]
              table: [TDUtils requireNonBlank:self.defaultTable
                                 defaultValue:DefaultTreasureDataTable
                                      message:[NSString

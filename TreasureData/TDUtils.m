@@ -7,6 +7,7 @@
 //
 
 #import "TDUtils.h"
+#import "Constants.h"
 
 @implementation TDUtils
 
@@ -59,6 +60,10 @@
     NSMutableDictionary *result = [NSMutableDictionary dictionaryWithDictionary:event];
     [result removeObjectForKey:TDEventClassKey];
     return [NSDictionary dictionaryWithDictionary:result];
+}
+
++ (BOOL)isRunningWithUnity {
+    return [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_IS_UNITY];
 }
 
 @end
