@@ -138,10 +138,10 @@ static NSString *END_POINT = @"http://localhost";
     self.client = (MyTDClient*)self.td.client;
     self.session = (MySession*)self.td.client.session;
     [[MyTDClient getEventStore] deleteAllEvents];
-    // Cleanup audit events so it won't mess with the assertion
     [self.td.capturedEvents removeAllObjects];
     [MyTreasureData disableEventCompression];
     [MyTreasureData resetSession];
+    [self.td enableCustomEvent];
 }
 
 - (void)tearDown
@@ -718,7 +718,7 @@ static NSString *END_POINT = @"http://localhost";
 #pragma mark - Auto Tracking
 
 - (void)testAutoTrackAppOpened {
-    [self.td enableAppLifecycleEvent:@"somewhere"];
+    [self.td enableAppLifecycleEvent];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
                                                             object:nil];
     [self assertHasCapturedEventType:TD_EVENT_APP_OPENED];
@@ -729,7 +729,7 @@ static NSString *END_POINT = @"http://localhost";
     @try {
         [self.td mockTrackedAppVersion:nil];
         [self.td mockTrackedBuildNumber:nil];
-        [self.td enableAppLifecycleEvent:@"somewhere"];
+        [self.td enableAppLifecycleEvent];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
                                                             object:nil];
         [self assertEventCount:2];
@@ -790,22 +790,26 @@ static NSString *END_POINT = @"http://localhost";
 }
 
 - (void)testResetUniqId {
-    [self.td setDefaultDatabase:@"somedb"];
-    [self.td enableAutoAppendUniqId];
-    [self.td addEvent:[NSDictionary dictionary] table:@"somewhere"];
-    NSDictionary *sampleEvent= self.td.capturedEvents[0];
-    NSString* uuid = sampleEvent[@"td_uuid"];
-    
-    [self.td uploadEvents];
-    [self.td resetUniqId];
-    [self.td uploadEvents];
-    [self.td addEvent:[NSDictionary dictionary] table:@"somewhere"];
-    NSDictionary *sampleEventAfterReset= self.td.capturedEvents[0];
-    NSString* uuidAfterReset = sampleEventAfterReset[@"td_uuid"];
-    
-    XCTAssertNotEqual(uuid, uuidAfterReset);
-    
-    self.isFinished = true;
+    @try {
+        [self.td setDefaultDatabase:@"somedb"];
+        [self.td enableAutoAppendUniqId];
+        [self.td enableCustomEvent];
+        [self.td addEvent:[NSDictionary dictionary] table:@"somewhere"];
+        NSDictionary *sampleEvent= self.td.capturedEvents[0];
+        NSString* uuid = sampleEvent[@"td_uuid"];
+
+        [self.td uploadEvents];
+        [self.td resetUniqId];
+        [self assertHasCapturedEventType:TD_EVENT_AUDIT_RESET_UUID];
+        [self.td uploadEvents];
+        [self.td addEvent:[NSDictionary dictionary] table:@"somewhere"];
+        NSDictionary *sampleEventAfterReset= self.td.capturedEvents[0];
+        NSString* uuidAfterReset = sampleEventAfterReset[@"td_uuid"];
+
+        XCTAssertNotEqual(uuid, uuidAfterReset);
+    } @finally {
+        self.isFinished = true;
+    }
 }
 
 // By default, without any explicit configuration, the SDK should

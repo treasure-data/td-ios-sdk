@@ -614,16 +614,14 @@ static NSString *const DefaultTreasureDataTable = @"td_ios";
 }
 
 - (void)resetUniqId {
-    _UUID = [[NSUUID UUID] UUIDString];
-    [[NSUserDefaults standardUserDefaults] setObject:_UUID forKey:storageKeyOfUuid];
-    [self addEvent:[TDUtils markAsAuditEvent:@{
-                    TD_COLUMN_EVENT: TD_EVENT_AUDIT_TRACKING,
-                    TD_COLUMN_AUDIT_TYPE: @"forget_device_uuid"}]
+    [self addEvent:[TDUtils markAsAuditEvent:@{TD_COLUMN_EVENT: TD_EVENT_AUDIT_RESET_UUID}]
              table: [TDUtils requireNonBlank:self.defaultTable
                                 defaultValue:DefaultTreasureDataTable
                                      message:[NSString
                                               stringWithFormat:@"WARN: defaultTable was not set. \"%@\" will be used as the target table.",
                                               DefaultTreasureDataTable]]];
+    _UUID = [[NSUUID UUID] UUIDString];
+    [[NSUserDefaults standardUserDefaults] setObject:_UUID forKey:storageKeyOfUuid];
 }
 
 @end
