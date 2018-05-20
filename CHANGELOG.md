@@ -1,10 +1,22 @@
 # Change Log
 
-## Version 0.1.26
+## Version 0.1.27
+_2018-05-21
+
 * Support GDPR compliancy
 
-- Permanently opt-in/opt-out tracking on the device through `disableCustomEvent` & `disableAppLifecycleEvent`.
-- Added `resetUniqId` to de-identify the device on subsequent events.
+- Remove `enableAutoTrackToDatabase:table`.
+- Added `enable/disableCustomEvent` and `enable/disableAppLifecycleEvents`.
+- Added `resetUniqId`.
+
+* Others
+
+- Added `defaultTable` property as the target table for app lifecycles and audit events.
+
+## Version 0.1.26
+_2018-04-05_
+
+- Eliminate some XCode 9 inspection warnings.
 
 ## Version 0.1.25
 _2018-03-26_
