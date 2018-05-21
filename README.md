@@ -20,7 +20,7 @@ $ gem install cocoapods
 Next, add this line in your Podfile.
 
 ```
-pod 'TreasureData-iOS-SDK', '= 0.1.24'
+pod 'TreasureData-iOS-SDK', '= 0.1.27'
 ```
 
 If you use the SDK in Swift, add this line to your Podfile.
@@ -36,7 +36,7 @@ $ pod install
 
 ### Framework
 
-Download [TreasureData.framework](http://cdn.treasuredata.com/sdk/ios/0.1.24/TreasureData-iOS-SDK.framework.zip) and add it and `libz` library into your project.
+Download [TreasureData.framework](http://cdn.treasuredata.com/sdk/ios/0.1.27/TreasureData-iOS-SDK.framework.zip) and add it and `libz` library into your project.
 
 ## Usage in Objective-C
 
@@ -371,14 +371,16 @@ If you want to use server side upload timestamp not only client device time that
 
 ## GDPR Compliance
 
-Though it's all up to you to define what to track and respect user's choices and rights of privacy, TreasureData SDK does expose some functionalities to conveniently stop events tracking entirely without having to resort to a bunch of if-else statements:
+The SDK provide some convenient methods to easily opt-out of tracking the device entirely without having to resort to many cluttered if-else statements:
 
 ```
     [[TreasureData sharedInstance] disableCustomEvent]        // Opt-out of your own events
     [[TreasureData sharedInstance] disableAppLifecycleEvent]  // Opt-out of TD generated events
 ```
 
-These settings are saved persistently across app launches. And for sure, users could opt back in through `enableCustomEvent` or `enableAppLifecycleEvent`. We also provide `resetUniqId` to reset identification the device on subsequent events.
+These can be opted back in by calling `enableCustomEvent` or `enableAppLifecycleEvent`. Note that these settings are saved persistently, so it survives across app launches. Generally these methods should be called when reflecting your user's choice, not on every time initializing the SDK. By default custom events are enabled and app lifecycles events are disabled. 
+
+- Use `resetUniqId` to reset the identification of device on subsequent events. `td_uuid` will be randomized to another value and an extra event is captured with `{"td_ios_event":  "forget_device_id", "td_uuid": <old_uuid>}` to the `defaultTable`.
 
 ## Troubleshooting
 
