@@ -121,20 +121,25 @@ static NSString *const DefaultTreasureDataTable = @"td_ios";
     return [self addEvent:record database:self.defaultDatabase table:table];
 }
 
-- (NSDictionary *)addEvent:(NSDictionary *)record database:(NSString *)database table:(NSString *)table {
+- (NSDictionary *)addEvent:(NSDictionary *)record
+                  database:(NSString *)database
+                     table:(NSString *)table {
     return [self addEventWithCallback:record database:database table:table onSuccess:nil onError:nil];
 }
 
-- (NSDictionary *)addEventWithCallback:(NSDictionary *)record database:(NSString *)database table:(NSString *)table onSuccess:(void (^)(void))onSuccess onError:(void (^)(NSString*, NSString*))onError {
+- (NSDictionary *)addEventWithCallback:(NSDictionary *)record
+                              database:(NSString *)database
+                                 table:(NSString *)table
+                             onSuccess:(SuccessHander)onSuccess
+                               onError:(ErrorHandler)onError {
     if ([TDUtils isCustomEvent:record] && ![self isCustomEventEnabled]) {
         if (onError) {
             onError(TD_ERROR_CUSTOM_EVENT_DISABLED,
                     @"You configured to deny tracking of custom events. This is a persistent setting, it will unharmfully drop the any custom events called through `addEvent...` methods family.");
         }
         return nil;
-
     }
-    // App Lifecyle events denying is silent
+    // App Lifecyle events denial is silent
     if ([TDUtils isAppLifecycleEvent:record] && ![self isAppLifecycleEventEnabled]) {
         return nil;
     }
