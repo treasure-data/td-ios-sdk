@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "TDClient.h"
 
+typedef void (^SuccessHander)(void);
+typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable errorMessage);
+
 @interface TreasureData : NSObject
 
 @property(nonatomic, strong) TDClient * _Nullable client;
@@ -33,15 +36,23 @@
 
 - (NSDictionary *)addEvent:(NSDictionary * _Nonnull)record table:(NSString * _Nonnull)table;
 
-- (NSDictionary *)addEventWithCallback:(NSDictionary * _Nonnull)record database:(NSString * _Nonnull)database table:(NSString * _Nonnull)table onSuccess:(void (^ _Nullable)(void))onSuccess onError:(void (^ _Nullable)(NSString* _Nonnull, NSString* _Nullable))onError;
+- (NSDictionary *)addEventWithCallback:(NSDictionary * _Nonnull)record
+                              database:(NSString * _Nonnull)database
+                                 table:(NSString * _Nonnull)table
+                             onSuccess:(SuccessHander _Nullable)onSuccess
+                               onError:(ErrorHandler _Nullable)onError;
 
-- (NSDictionary *)addEventWithCallback:(NSDictionary * _Nonnull)record table:(NSString * _Nonnull)table onSuccess:(void (^ _Nullable)(void))onSuccess onError:(void (^ _Nullable)(NSString* _Nonnull, NSString* _Nullable))onError;
+- (NSDictionary *)addEventWithCallback:(NSDictionary * _Nonnull)record
+                                 table:(NSString * _Nonnull)table
+                             onSuccess:(SuccessHander _Nullable)onSuccess
+                               onError:(ErrorHandler _Nullable)onError;
 
 - (void)uploadWithBlock:(void (^ _Nonnull)(void))block DEPRECATED_ATTRIBUTE;
 
 - (void)uploadEventsWithBlock:(void (^ _Nonnull)(void))block DEPRECATED_ATTRIBUTE;
 
-- (void)uploadEventsWithCallback:(void (^ _Nullable)(void))onSuccess onError:(void (^ _Nullable)(NSString* _Nonnull, NSString* _Nullable))onError;
+- (void)uploadEventsWithCallback:(SuccessHander _Nullable)onSuccess
+                         onError:(ErrorHandler _Nullable)onError;
 
 - (void)uploadEvents;
 
