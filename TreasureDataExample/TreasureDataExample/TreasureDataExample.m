@@ -17,7 +17,7 @@ static NSString *testTable;
 
 + (void)setupTreasureData {
     [TreasureData enableLogging];
-    [TreasureData initializeApiEndpoint:@"https://in.treasuredata.com"];
+    // [TreasureData initializeApiEndpoint:@"https://specify-other-endpoint-if-needed.com"];
     [TreasureData initializeEncryptionKey:@"encryption_key"];
     [TreasureData initializeWithApiKey:@"api_key"];
     [[TreasureData sharedInstance] setDefaultDatabase:@"your_db"];

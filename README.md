@@ -254,7 +254,7 @@ You can detect if it's the first running or not easily using `isFirstRun` method
 The API endpoint (default: https://in.treasuredata.com) can be modified using `initializeApiEndpoint` class method. For example,
 
 ```
-    [TreasureData initializeApiEndpoint:@"https://in.treasuredata.com"];
+    [TreasureData initializeApiEndpoint:@"https://specifying-another-endpoint.com"];
     [TreasureData initializeWithApiKey:@"your_api_key"];
 ```
 
