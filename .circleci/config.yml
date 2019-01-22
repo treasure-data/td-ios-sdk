@@ -1,0 +1,28 @@
+version: 2
+
+jobs:
+  build:
+    macos:
+      xcode: "10.1.0"
+
+    steps:
+      - checkout
+
+      - run:
+          name: Install CocoaPods
+          command: pod install
+
+      - run: gem install xcpretty --user-install
+
+      - run:
+          name: Tests
+          command: >
+            xcodebuild \
+                    -workspace TreasureData.xcworkspace \
+                    -scheme TreasureData \
+                    -sdk iphonesimulator \
+                    -disable-concurrent-destination-testing \
+                    -destination 'platform=iOS Simulator,name=iPhone 7,OS=12.1' \
+                    -destination 'platform=iOS Simulator,name=iPhone 7,OS=11.2' \
+                    -destination 'platform=iOS Simulator,name=iPhone 7,OS=10.3.1' \
+                    test | xcpretty && exit ${PIPESTATUS[0]}
