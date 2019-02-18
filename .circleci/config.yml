@@ -25,4 +25,5 @@ jobs:
                     -destination 'platform=iOS Simulator,name=iPhone 7,OS=12.1' \
                     -destination 'platform=iOS Simulator,name=iPhone 7,OS=11.2' \
                     -destination 'platform=iOS Simulator,name=iPhone 7,OS=10.3.1' \
+                    TD_DEV_MASTER_KEY=$(TD_DEV_MASTER_KEY)
                     test | xcpretty && exit ${PIPESTATUS[0]}
