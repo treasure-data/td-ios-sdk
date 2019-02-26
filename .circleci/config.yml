@@ -46,6 +46,7 @@ jobs:
 
       - store_artifacts:
           path: ./logs
+          destination: logs
 
       - store_test_results:
           path: ./test_results
