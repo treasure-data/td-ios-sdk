@@ -22,7 +22,7 @@ xcodebuild \
 
 test_status=$?
 
-mv ./build/reports/junit.xml "$3"
+mv ./build/reports/junit.xml "$TEST_RESULTS_FILE"
 
 if [ $test_status -ne 0 ]; then
     exit $test_status
