@@ -26,27 +26,26 @@ jobs:
             - ~/.cocoapods
 
       - run:
-          name: Install additional tools
+          name: Auxiliary setup
           command: |
             gem install xcpretty --user-install
+            HOMEBREW_NO_AUTO_UPDATE=1 brew install gnu-sed
+            mkdir logs test_results
 
       - run:
           name: Tests on iOS 12
-          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 7,OS=12.1' logs_xcbuild_ios_12.txt
-      - store_artifacts:
-          path: logs_xcbuild_ios_12.txt
-          destination: logs_xcbuild_ios_12.txt
+          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 7,OS=12.1' logs/xcbuild_ios_12.log test_results/ios_12.xml
 
       - run:
           name: Tests on iOS 11
-          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 7,OS=11.2' logs_xcbuild_ios_11.txt
-      - store_artifacts:
-          path: logs_xcbuild_ios_11.txt
-          destination: logs_xcbuild_ios_11.txt
+          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 7,OS=11.2' logs/xcbuild_ios_11.log test_results/ios_11.xml
 
       - run:
           name: Tests on iOS 10
-          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 7,OS=10.3.1' logs_xcbuild_ios_10.txt
+          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 7,OS=10.3.1' logs/xcbuild_ios_10.log test_results/ios_10.xml
+
       - store_artifacts:
-          path: logs_xcbuild_ios_10.txt
-          destination: logs_xcbuild_ios_10.txt
+          path: ./logs
+
+      - store_test_results:
+          path: ./test_results

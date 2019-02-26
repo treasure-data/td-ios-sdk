@@ -1,18 +1,31 @@
 #!/usr/bin/env bash
 
-set -eo pipefail
+set -o pipefail
 
-destination="$1"
-log_file="$2"
+DESTINATION="$1"
+LOG_FILE="$2"
+TEST_RESULTS_FILE="$3"
+
+cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")"
 
 xcodebuild \
     -workspace TreasureData.xcworkspace \
     -scheme TreasureData \
     -sdk iphonesimulator \
     -disable-concurrent-destination-testing \
-    -destination "$destination" \
-    TD_DEV_MASTER_KEY=${TD_DEV_MASTER_KEY} \
+    -destination "$DESTINATION" \
+    TD_DEV_MASTER_KEY="$TD_DEV_MASTER_KEY" \
     test \
-    | sed 's/^\(.*TD_DEV_MASTER_KEY[[:space:]]*=[[:space:]]*\)\([[:<:]].*[[:>:]]\)\(.*\)$/\1XXXXXXXXXXX\3/' \
-    | tee "$log_file" \
-    | xcpretty
+    | gsed -u '1,100s/^\(.*TD_DEV_MASTER_KEY\s*=\s*\)\(\b.*\b\)\(.*\)$/\1XXXXXXXXXXX\3/g' \
+    | tee "$LOG_FILE" \
+    | xcpretty --report junit
+
+test_status=$?
+
+mv ./build/reports/junit.xml "$3"
+
+if [ $test_status -ne 0 ]; then
+    exit $test_status
+fi
+
+exit 0
