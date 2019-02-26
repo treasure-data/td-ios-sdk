@@ -69,11 +69,14 @@
 
 /* Begin PBXFileReference section */
 		11FADA7F69E6E148978C0F7C /* libPods-TreasureData.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TreasureData.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		19CFD6BDE2E7D4AC4F0869FF /* Pods-TreasureDataTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureDataTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureDataTests/Pods-TreasureDataTests.release.xcconfig"; sourceTree = "<group>"; };
 		201053E9204858F8009C7EFA /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		2053A39B2047F37F0089A959 /* TDUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDUtils.m; sourceTree = "<group>"; };
 		2053A39D2047F38B0089A959 /* TDUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TDUtils.h; sourceTree = "<group>"; };
 		27C46146494E527DCE7A92A1 /* Pods-TreasureData-TreasureDataTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureData-TreasureDataTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureData-TreasureDataTests/Pods-TreasureData-TreasureDataTests.debug.xcconfig"; sourceTree = "<group>"; };
 		361BA221499EFE17CB2E88D1 /* Pods-Common-TreasureDataTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Common-TreasureDataTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Common-TreasureDataTests/Pods-Common-TreasureDataTests.debug.xcconfig"; sourceTree = "<group>"; };
+		3B4F21DEB3BEAC61738A3481 /* Pods-TreasureData.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureData.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureData/Pods-TreasureData.debug.xcconfig"; sourceTree = "<group>"; };
+		42CA51289C7213A40BD4A2E5 /* Pods-TreasureDataTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureDataTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureDataTests/Pods-TreasureDataTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4D4265C575E11B5930549F10 /* Pods-Common-TreasureData.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Common-TreasureData.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Common-TreasureData/Pods-Common-TreasureData.debug.xcconfig"; sourceTree = "<group>"; };
 		57CFB8AE9EF047FBDE70DEA8 /* Pods-Common-TreasureData.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Common-TreasureData.release.xcconfig"; path = "Pods/Target Support Files/Pods-Common-TreasureData/Pods-Common-TreasureData.release.xcconfig"; sourceTree = "<group>"; };
 		644A82FEB7ABBA6EEE825324 /* Pods-TreasureDataTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureDataTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureDataTests/Pods-TreasureDataTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -103,6 +106,7 @@
 		9F0EF4E7CEE8DA4E298326B9 /* Pods-TreasureData.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureData.release.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureData/Pods-TreasureData.release.xcconfig"; sourceTree = "<group>"; };
 		C672A66407ACBC0B49C815A4 /* Pods-TreasureDataTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureDataTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureDataTests/Pods-TreasureDataTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D4602B9A0FADB71F2C158763 /* Pods-Common-TreasureDataTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Common-TreasureDataTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Common-TreasureDataTests/Pods-Common-TreasureDataTests.release.xcconfig"; sourceTree = "<group>"; };
+		DC74A9280B244A4C25A4F155 /* Pods-TreasureData.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureData.release.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureData/Pods-TreasureData.release.xcconfig"; sourceTree = "<group>"; };
 		E0DB92B1F49BBC30A854EB53 /* libPods-TreasureDataTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TreasureDataTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E52CB7F121FDD6D300062EBA /* TreasureDataTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TreasureDataTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		E52CB7F421FDD78A00062EBA /* TDAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDAPI.swift; sourceTree = "<group>"; };
@@ -159,6 +163,7 @@
 				E5A84B5221FEA35300BC699D /* TestHost */,
 				6B738090192A09160097D56E /* Frameworks */,
 				6B73808F192A09160097D56E /* Products */,
+				F48413E1384BA388BC58FA8C /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -267,6 +272,17 @@
 			path = TestHost;
 			sourceTree = "<group>";
 		};
+		F48413E1384BA388BC58FA8C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				3B4F21DEB3BEAC61738A3481 /* Pods-TreasureData.debug.xcconfig */,
+				DC74A9280B244A4C25A4F155 /* Pods-TreasureData.release.xcconfig */,
+				42CA51289C7213A40BD4A2E5 /* Pods-TreasureDataTests.debug.xcconfig */,
+				19CFD6BDE2E7D4AC4F0869FF /* Pods-TreasureDataTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -278,7 +294,6 @@
 				6B73808A192A09160097D56E /* Sources */,
 				6B73808B192A09160097D56E /* Frameworks */,
 				6B73808C192A09160097D56E /* CopyFiles */,
-				9EBA1F044C24E6A640CAF055 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -297,8 +312,6 @@
 				6B73809A192A09160097D56E /* Sources */,
 				6B73809B192A09160097D56E /* Frameworks */,
 				6B73809C192A09160097D56E /* Resources */,
-				55A58BE0DFF4BC9C1102BCD8 /* [CP] Embed Pods Frameworks */,
-				2E8AFDBC88EE236B7A1B972E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -391,36 +404,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2E8AFDBC88EE236B7A1B972E /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TreasureDataTests/Pods-TreasureDataTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		55A58BE0DFF4BC9C1102BCD8 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TreasureDataTests/Pods-TreasureDataTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		5F62EAC907F3EEA5C1BAB630 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -455,21 +438,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9EBA1F044C24E6A640CAF055 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TreasureData/Pods-TreasureData-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -754,7 +722,7 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = TestHost/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -786,7 +754,7 @@
 				DEVELOPMENT_TEAM = U5YLXH98R7;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = TestHost/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
