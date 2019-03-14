@@ -13,6 +13,7 @@
 #import "Session.h"
 #import "TDUtils.h"
 #import "Constants.h"
+#import "TDIAPObserver.h"
 
 static bool isTraceLoggingEnabled = false;
 static bool isEventCompressionEnabled = true;
@@ -57,11 +58,13 @@ static long sessionTimeoutMilli = -1;
 
 @property (nonatomic, assign, getter=isCustomEventEnabled) BOOL customEventEnabled;
 @property (nonatomic, assign, getter=isAppLifecycleEventEnabled) BOOL appLifecycleEventEnabled;
+@property (nonatomic, assign, getter=isIAPEventEnabled) BOOL iapEventEnabled;
 
 @end
 
 @implementation TreasureData {
-    NSString *_UUID;
+    NSString * _UUID;
+    TDIAPObserver * _iapObserver;
 }
 
 static NSString *const DefaultTreasureDataDatabase = @"td";
@@ -104,6 +107,9 @@ static NSString *const DefaultTreasureDataTable = @"td_ios";
             KCLog(@"Failed to initialize client");
         }
         [self observeLifecycleEvents];
+        if (self.isIAPEventEnabled) {
+            _iapObserver = [[TDIAPObserver alloc] initWithTD:self];
+        }
     }
     return self;
 }
@@ -616,6 +622,24 @@ static NSString *const DefaultTreasureDataTable = @"td_ios";
 - (void)disableAppLifecycleEvent {
     self.appLifecycleEventEnabled = NO;
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENT_ENABLED];
+}
+
+- (void)enableInAppPurchaseEvent {
+    @synchronized (self) {
+        if (!(_iapObserver)) {
+            _iapObserver = [[TDIAPObserver alloc] initWithTD:self];
+        }
+        self.iapEventEnabled = YES;
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:TD_USER_DEFAULTS_KEY_IN_APP_PURCHASE_EVENT_ENABLED];
+    }
+}
+
+- (void)disableInAppPurchaseEvent {
+    @synchronized (self) {
+        _iapObserver = nil;
+        self.iapEventEnabled = NO;
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_IN_APP_PURCHASE_EVENT_ENABLED];
+    }
 }
 
 - (void)resetUniqId {

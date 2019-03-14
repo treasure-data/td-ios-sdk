@@ -6,6 +6,8 @@
 //  Copyright © 2018 Treasure Data. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
 @interface TreasureDataExample : NSObject
 
 @property (nonatomic, strong) NSString *testTable;
@@ -15,5 +17,8 @@
 + (NSString *)testTable;
 
 + (void)setTestTable:(NSString *)table;
+
++ (NSSet<NSString *> *)productIds;
+
 
 @end

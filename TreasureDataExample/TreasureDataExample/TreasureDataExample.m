@@ -29,6 +29,8 @@ static NSString *testTable;
     [[TreasureData sharedInstance] enableAutoAppendAppInformation];
     [[TreasureData sharedInstance] enableAutoAppendLocaleInformation];
     [[TreasureData sharedInstance] enableServerSideUploadTimestamp:@"server_upload_time"];
+    [[TreasureData sharedInstance] enableInAppPurchaseEvent];
+    TreasureData.sharedInstance.client.uploadRetryCount = 1;
 }
 
 + (NSString *)testTable {
@@ -37,6 +39,10 @@ static NSString *testTable;
 
 + (void)setTestTable:(NSString *)table {
     testTable = table;
+}
+
++ (NSSet<NSString *> *)productIds {
+    return [NSSet setWithArray: @[@"your_product_id_1", @"your_product_id_2"]];
 }
 
 @end

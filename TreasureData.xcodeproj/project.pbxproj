@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1950C475078CB233109F7164 /* TDIAPObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 1950C58CA1CFB19470FBD8A5 /* TDIAPObserver.m */; };
 		1F68EE6328E24A445D660A51 /* libPods-TreasureDataTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E0DB92B1F49BBC30A854EB53 /* libPods-TreasureDataTests.a */; };
 		2053A39C2047F37F0089A959 /* TDUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2053A39B2047F37F0089A959 /* TDUtils.m */; };
 		6B351A76194ABF0F001CBAAD /* Deflate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B351A75194ABF0F001CBAAD /* Deflate.m */; };
@@ -55,6 +56,8 @@
 
 /* Begin PBXFileReference section */
 		11FADA7F69E6E148978C0F7C /* libPods-TreasureData.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TreasureData.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1950C0187CC45B51801EF112 /* TDIAPObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TDIAPObserver.h; path = TreasureData/TDIAPObserver.h; sourceTree = "<group>"; };
+		1950C58CA1CFB19470FBD8A5 /* TDIAPObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TDIAPObserver.m; path = TreasureData/TDIAPObserver.m; sourceTree = "<group>"; };
 		201053E9204858F8009C7EFA /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		2053A39B2047F37F0089A959 /* TDUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDUtils.m; sourceTree = "<group>"; };
 		2053A39D2047F38B0089A959 /* TDUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TDUtils.h; sourceTree = "<group>"; };
@@ -214,6 +217,8 @@
 				57CFB8AE9EF047FBDE70DEA8 /* Pods-Common-TreasureData.release.xcconfig */,
 				361BA221499EFE17CB2E88D1 /* Pods-Common-TreasureDataTests.debug.xcconfig */,
 				D4602B9A0FADB71F2C158763 /* Pods-Common-TreasureDataTests.release.xcconfig */,
+				1950C0187CC45B51801EF112 /* TDIAPObserver.h */,
+				1950C58CA1CFB19470FBD8A5 /* TDIAPObserver.m */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -229,7 +234,6 @@
 				6B73808A192A09160097D56E /* Sources */,
 				6B73808B192A09160097D56E /* Frameworks */,
 				6B73808C192A09160097D56E /* CopyFiles */,
-				9EBA1F044C24E6A640CAF055 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -248,8 +252,6 @@
 				6B73809A192A09160097D56E /* Sources */,
 				6B73809B192A09160097D56E /* Frameworks */,
 				6B73809C192A09160097D56E /* Resources */,
-				55A58BE0DFF4BC9C1102BCD8 /* [CP] Embed Pods Frameworks */,
-				2E8AFDBC88EE236B7A1B972E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -300,36 +302,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2E8AFDBC88EE236B7A1B972E /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TreasureDataTests/Pods-TreasureDataTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		55A58BE0DFF4BC9C1102BCD8 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TreasureDataTests/Pods-TreasureDataTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		5F62EAC907F3EEA5C1BAB630 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -366,21 +338,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		9EBA1F044C24E6A640CAF055 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TreasureData/Pods-TreasureData-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -393,6 +350,7 @@
 				2053A39C2047F37F0089A959 /* TDUtils.m in Sources */,
 				6B738099192A09160097D56E /* TreasureData.m in Sources */,
 				6B351A76194ABF0F001CBAAD /* Deflate.m in Sources */,
+				1950C475078CB233109F7164 /* TDIAPObserver.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

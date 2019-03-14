@@ -164,6 +164,10 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
  */
 - (BOOL)isAppLifecycleEventEnabled;
 
+- (void)enableInAppPurchaseEvent;
+- (void)disableInAppPurchaseEvent;
+- (BOOL)isInAppPurchaseEventEnabled;
+
 /*!
  * Permanently reset the appended "td_uuid" to a different value.
  * Note: this won't reset the current buffered events before this call
