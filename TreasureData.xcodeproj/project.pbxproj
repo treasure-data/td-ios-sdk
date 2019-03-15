@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1950C475078CB233109F7164 /* TDIAPObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 1950C58CA1CFB19470FBD8A5 /* TDIAPObserver.m */; };
+		1950CB9871EC3D104BCD112A /* TDIAPObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 1950CA957CA6115F3C3DD018 /* TDIAPObserver.m */; };
 		1F68EE6328E24A445D660A51 /* libPods-TreasureDataTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E0DB92B1F49BBC30A854EB53 /* libPods-TreasureDataTests.a */; };
 		2053A39C2047F37F0089A959 /* TDUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2053A39B2047F37F0089A959 /* TDUtils.m */; };
 		6B351A76194ABF0F001CBAAD /* Deflate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B351A75194ABF0F001CBAAD /* Deflate.m */; };
@@ -56,8 +56,8 @@
 
 /* Begin PBXFileReference section */
 		11FADA7F69E6E148978C0F7C /* libPods-TreasureData.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TreasureData.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1950C0187CC45B51801EF112 /* TDIAPObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TDIAPObserver.h; path = TreasureData/TDIAPObserver.h; sourceTree = "<group>"; };
-		1950C58CA1CFB19470FBD8A5 /* TDIAPObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TDIAPObserver.m; path = TreasureData/TDIAPObserver.m; sourceTree = "<group>"; };
+		1950C4C633D1BEA93C441EFC /* TDIAPObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDIAPObserver.h; sourceTree = "<group>"; };
+		1950CA957CA6115F3C3DD018 /* TDIAPObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDIAPObserver.m; sourceTree = "<group>"; };
 		201053E9204858F8009C7EFA /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		2053A39B2047F37F0089A959 /* TDUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDUtils.m; sourceTree = "<group>"; };
 		2053A39D2047F38B0089A959 /* TDUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TDUtils.h; sourceTree = "<group>"; };
@@ -173,6 +173,8 @@
 				201053E9204858F8009C7EFA /* Constants.h */,
 				6BB5A9D21D1A86CD0006A534 /* Session.h */,
 				6BB5A9D31D1A86EE0006A534 /* Session.m */,
+				1950C4C633D1BEA93C441EFC /* TDIAPObserver.h */,
+				1950CA957CA6115F3C3DD018 /* TDIAPObserver.m */,
 			);
 			path = TreasureData;
 			sourceTree = "<group>";
@@ -217,8 +219,6 @@
 				57CFB8AE9EF047FBDE70DEA8 /* Pods-Common-TreasureData.release.xcconfig */,
 				361BA221499EFE17CB2E88D1 /* Pods-Common-TreasureDataTests.debug.xcconfig */,
 				D4602B9A0FADB71F2C158763 /* Pods-Common-TreasureDataTests.release.xcconfig */,
-				1950C0187CC45B51801EF112 /* TDIAPObserver.h */,
-				1950C58CA1CFB19470FBD8A5 /* TDIAPObserver.m */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -350,7 +350,7 @@
 				2053A39C2047F37F0089A959 /* TDUtils.m in Sources */,
 				6B738099192A09160097D56E /* TreasureData.m in Sources */,
 				6B351A76194ABF0F001CBAAD /* Deflate.m in Sources */,
-				1950C475078CB233109F7164 /* TDIAPObserver.m in Sources */,
+				1950CB9871EC3D104BCD112A /* TDIAPObserver.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

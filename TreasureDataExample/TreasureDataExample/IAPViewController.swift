@@ -50,6 +50,7 @@ class IAPViewController : UITableViewController, SKProductsRequestDelegate, SKPa
     
     func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse)
     {
+        print(">> Received products: \(response.products)")
         self.products = response.products
         (self.view as? UITableView)?.separatorStyle = .singleLine
         indicator.stopAnimating()
