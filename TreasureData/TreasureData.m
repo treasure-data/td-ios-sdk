@@ -58,7 +58,7 @@ static long sessionTimeoutMilli = -1;
 
 @property (nonatomic, assign, getter=isCustomEventEnabled) BOOL customEventEnabled;
 @property (nonatomic, assign, getter=isAppLifecycleEventEnabled) BOOL appLifecycleEventEnabled;
-@property (nonatomic, assign, getter=isIAPEventEnabled) BOOL iapEventEnabled;
+@property (nonatomic, assign, getter=isInAppPurchaseEventEnabled) BOOL inAppPurchaseEnabled;
 
 @end
 
@@ -96,8 +96,9 @@ static NSString *const DefaultTreasureDataTable = @"td_ios";
             self.customEventEnabled = YES;
         }
 
-        // Unlike custom events, app lifecycle events must be explicitly enabled
+        // Unlike custom events, these auto tracked events must be explicitly enabled
         self.appLifecycleEventEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENT_ENABLED];
+        self.inAppPurchaseEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_IN_APP_PURCHASE_EVENT_ENABLED];
 
         NSString *endpoint = defaultApiEndpoint ? defaultApiEndpoint : @"https://in.treasuredata.com";
         self.client = [[TDClient alloc] initWithApiKey:apiKey apiEndpoint:endpoint];
@@ -107,7 +108,7 @@ static NSString *const DefaultTreasureDataTable = @"td_ios";
             KCLog(@"Failed to initialize client");
         }
         [self observeLifecycleEvents];
-        if (self.isIAPEventEnabled) {
+        if (self.isInAppPurchaseEventEnabled) {
             _iapObserver = [[TDIAPObserver alloc] initWithTD:self];
         }
     }
@@ -629,7 +630,7 @@ static NSString *const DefaultTreasureDataTable = @"td_ios";
         if (!(_iapObserver)) {
             _iapObserver = [[TDIAPObserver alloc] initWithTD:self];
         }
-        self.iapEventEnabled = YES;
+        self.inAppPurchaseEnabled = YES;
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:TD_USER_DEFAULTS_KEY_IN_APP_PURCHASE_EVENT_ENABLED];
     }
 }
@@ -637,7 +638,7 @@ static NSString *const DefaultTreasureDataTable = @"td_ios";
 - (void)disableInAppPurchaseEvent {
     @synchronized (self) {
         _iapObserver = nil;
-        self.iapEventEnabled = NO;
+        self.inAppPurchaseEnabled = NO;
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_IN_APP_PURCHASE_EVENT_ENABLED];
     }
 }
