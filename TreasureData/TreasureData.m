@@ -654,5 +654,11 @@ static long sessionTimeoutMilli = -1;
     [[NSUserDefaults standardUserDefaults] setObject:_UUID forKey:storageKeyOfUuid];
 }
 
+#pragma mark - Exposed for testing
+
+- (TDIAPObserver *)iapObserver {
+    return _iapObserver;
+}
+
 @end
 
