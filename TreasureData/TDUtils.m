@@ -41,6 +41,11 @@
     return [NSDictionary dictionaryWithDictionary:auditEvent];
 }
 
++ (NSDictionary *)markAsIAPEvent:(NSDictionary *)event {
+    NSMutableDictionary *iapEvent = [NSMutableDictionary dictionaryWithDictionary:event];
+    iapEvent[TDEventClassKey] = TDEventClassIAP;
+    return [NSDictionary dictionaryWithDictionary:iapEvent];
+}
 
 + (BOOL)isAppLifecycleEvent:(NSDictionary *)event {
     return [event[TDEventClassKey] isEqualToString:TDEventClassAppLifecycle];
@@ -54,6 +59,11 @@
 + (BOOL)isCustomEvent:(NSDictionary *)event {
     return event[TDEventClassKey] == nil
             || [event[TDEventClassKey] isEqualToString:TDEventClassCustom];
+}
+
++ (BOOL)isIAPEvent:(NSDictionary *)event {
+    return event[TDEventClassKey] == nil
+    || [event[TDEventClassKey] isEqualToString:TDEventClassIAP];
 }
 
 + (NSDictionary *)stripNonEventData:(NSDictionary *)event {

@@ -142,8 +142,11 @@ static long sessionTimeoutMilli = -1;
         }
         return nil;
     }
-    // App Lifecyle events denial is silent
+    // Denial of other events rather than custom are silent
     if ([TDUtils isAppLifecycleEvent:record] && ![self isAppLifecycleEventEnabled]) {
+        return nil;
+    }
+    if ([TDUtils isIAPEvent:record] && ![self isInAppPurchaseEventEnabled]) {
         return nil;
     }
     record = [TDUtils stripNonEventData:record];
