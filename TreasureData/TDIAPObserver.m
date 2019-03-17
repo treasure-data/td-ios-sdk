@@ -65,12 +65,12 @@
 
     return [TDUtils
             markAsIAPEvent:@{TD_COLUMN_EVENT: TD_EVENT_IAP_PURCHASED,
-                             @"td_transaction_identifier": transaction.transactionIdentifier,
-                             @"td_transaction_date": transaction.transactionDate,
-                             @"td_product_identifier": transaction.payment.productIdentifier,
-                             @"td_payment_quantity": @(transaction.payment.quantity),
-                             @"td_request_data": requestData != nil ? (id) requestData : [NSNull null],
-                             @"td_application_username": applicationUsername != nil ? (id) applicationUsername : [NSNull null],
+                             @"td_iap_transaction_identifier": transaction.transactionIdentifier,
+                             @"td_iap_transaction_date": transaction.transactionDate,
+                             @"td_iap_product_identifier": transaction.payment.productIdentifier,
+                             @"td_iap_quantity": @(transaction.payment.quantity),
+                             @"td_iap_request_data": requestData != nil ? (id) requestData : [NSNull null],
+                             @"td_iap_application_username": applicationUsername != nil ? (id) applicationUsername : [NSNull null],
                              }];
 }
 
