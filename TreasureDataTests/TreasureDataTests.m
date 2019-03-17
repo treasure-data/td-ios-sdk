@@ -11,6 +11,7 @@
 #import "TDClient.h"
 #import "Constants.h"
 #import "TDUtils.h"
+#import "TDIAPObserver.h"
 
 static NSString *END_POINT = @"http://localhost";
 
@@ -18,6 +19,51 @@ static NSString *END_POINT = @"http://localhost";
 @end
 
 @implementation MyTDClient
+@end
+
+@interface TreasureData (Testing)
+- (TDIAPObserver *)iapObserver;
+@end
+
+@interface TDIAPObserver (Testing)
+- (void)trackTransaction:(SKPaymentTransaction *)transaction;
+@end
+
+@interface SKDummyPayment : SKPayment
+@end
+
+@implementation SKDummyPayment
+
+- (NSString *)productIdentifier {
+    return @"dummy_product_identifier";
+}
+
+- (NSInteger)quantity {
+    return 1;
+}
+
+@end
+
+@interface SKDummyPaymentTransaction : SKPaymentTransaction
+@end
+
+@implementation SKDummyPaymentTransaction
+
+- (SKPaymentTransactionState)transactionState {
+    return SKPaymentTransactionStatePurchased;
+}
+
+- (NSString *)transactionIdentifier {
+    return @"dummy_identifier";
+}
+
+- (NSDate *)transactionDate {
+    return [NSDate new];
+}
+
+- (SKPayment *)payment {
+    return [SKDummyPayment new];
+}
 @end
 
 @interface MySessionDataTask : NSURLSessionDataTask
@@ -833,16 +879,59 @@ static NSString *END_POINT = @"http://localhost";
     self.isFinished = YES;
 }
 
+#pragma mark - In-App Purchase
+
+- (void)testIAPTrackingEnabled {
+    @try {
+        [self.td enableInAppPurchaseEvent];
+        XCTAssertTrue(self.td.isInAppPurchaseEventEnabled);
+        XCTAssertNotNil(self.td.iapObserver);
+    }
+    @finally {
+        self.isFinished = YES;
+    }
+}
+
+- (void)testIAPTrackingDisabled {
+    @try {
+        [self.td disableInAppPurchaseEvent];
+        XCTAssertFalse(self.td.isInAppPurchaseEventEnabled);
+        XCTAssertNil(self.td.iapObserver);
+    }
+    @finally {
+        self.isFinished = YES;
+    }
+}
+
+- (void)testTrackIAPEvent {
+    @try {
+        [self.td enableInAppPurchaseEvent];
+        self.td.defaultTable = @"default_table";
+        TDIAPObserver *iapObserver = [[TDIAPObserver alloc] initWithTD:self.td];
+        SKPaymentTransaction *transaction = [SKDummyPaymentTransaction new];
+        [iapObserver trackTransaction:transaction];
+        [self assertHasCapturedEventType:TD_EVENT_IAP_PURCHASED];
+    }
+    @finally {
+        self.isFinished = YES;
+    }
+}
+
 #pragma mark - Assertions
 
 - (void)assertHasCapturedEventType:(NSString *)eventType {
+    BOOL test = [self hasCapturedEventType:eventType];
+    XCTAssertTrue(test, @"Expected event type has never been captured!");
+}
+
+- (BOOL)hasCapturedEventType:(NSString *)eventType {
     NSArray<NSDictionary<NSString *,id> *> *events = self.td.capturedEvents;
     for (int i = 0; i < events.count; i++) {
         if ([[events objectAtIndex:i][TD_COLUMN_EVENT] isEqualToString:eventType]) {
-            return;
+            return true;
         }
     }
-    @throw [NSString stringWithFormat:@"Event type: \"%@\" has never been captured!", eventType];
+    return false;
 }
 
 - (void)assertHasCapturedEventClass:(NSString *)eventType {
