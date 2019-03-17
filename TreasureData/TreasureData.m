@@ -93,9 +93,8 @@ static long sessionTimeoutMilli = -1;
             self.customEventEnabled = YES;
         }
 
-        // Unlike custom events, these auto tracked events must be explicitly enabled
+        // Unlike custom events, app lifecycle events must be explicitly enabled
         self.appLifecycleEventEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENT_ENABLED];
-        self.inAppPurchaseEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_IN_APP_PURCHASE_EVENT_ENABLED];
 
         NSString *endpoint = defaultApiEndpoint ? defaultApiEndpoint : @"https://in.treasuredata.com";
         self.client = [[TDClient alloc] initWithApiKey:apiKey apiEndpoint:endpoint];
@@ -623,21 +622,13 @@ static long sessionTimeoutMilli = -1;
 }
 
 - (void)enableInAppPurchaseEvent {
-    @synchronized (self) {
-        if (!(_iapObserver)) {
-            _iapObserver = [[TDIAPObserver alloc] initWithTD:self];
-        }
-        self.inAppPurchaseEnabled = YES;
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:TD_USER_DEFAULTS_KEY_IN_APP_PURCHASE_EVENT_ENABLED];
-    }
+    self.inAppPurchaseEnabled = YES;
+    _iapObserver = [[TDIAPObserver alloc] initWithTD:self];
 }
 
 - (void)disableInAppPurchaseEvent {
-    @synchronized (self) {
-        _iapObserver = nil;
-        self.inAppPurchaseEnabled = NO;
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_IN_APP_PURCHASE_EVENT_ENABLED];
-    }
+    self.inAppPurchaseEnabled = NO;
+    _iapObserver = nil;
 }
 
 - (void)resetUniqId {
