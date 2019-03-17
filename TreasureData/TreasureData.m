@@ -67,9 +67,6 @@ static long sessionTimeoutMilli = -1;
     TDIAPObserver * _iapObserver;
 }
 
-static NSString *const DefaultTreasureDataDatabase = @"td";
-static NSString *const DefaultTreasureDataTable = @"td_ios";
-
 - (id)initWithApiKey:(NSString *)apiKey {
     self = [self init];
 
@@ -558,15 +555,15 @@ static NSString *const DefaultTreasureDataTable = @"td_ios";
 {
     if ([self isAppLifecycleEventEnabled]) {
         NSString *targetDatabase = [TDUtils requireNonBlank:self.defaultDatabase
-                                            defaultValue:DefaultTreasureDataDatabase
+                                            defaultValue:TD_DEFAULT_DATABASE
                                                  message:[NSString
-                                                          stringWithFormat:@"WARN: defaultDatabase was not set. \"%@\" will be used as the target database.",
-                                                          DefaultTreasureDataDatabase]];
+                                                          stringWithFormat:@"WARN: defaultDatabase was not set. \"%@\" will be used as the target database for app lifecycle events.",
+                                                          TD_DEFAULT_DATABASE]];
         NSString *targetTable = [TDUtils requireNonBlank:self.defaultTable
-                                             defaultValue:DefaultTreasureDataTable
+                                             defaultValue:TD_DEFAULT_TABLE
                                                   message:[NSString
-                                                           stringWithFormat:@"WARN: defaultTable was not set. \"%@\" will be used as the target table.",
-                                                           DefaultTreasureDataTable]];
+                                                           stringWithFormat:@"WARN: defaultTable was not set. \"%@\" will be used as the target table for app lifecycle events.",
+                                                           TD_DEFAULT_TABLE]];
         NSString *currentVersion = [self getAppVersion];
         NSString *currentBuild = [self getBuildNumber];
         NSString *previousVersion = [self getTrackedAppVersion];
@@ -649,10 +646,10 @@ static NSString *const DefaultTreasureDataTable = @"td_ios";
     NSString *eventTypeColumn = [TDUtils isRunningWithUnity] ? TD_COLUMN_UNITY_EVENT : TD_COLUMN_EVENT;
     [self addEvent:[TDUtils markAsAuditEvent:@{eventTypeColumn: TD_EVENT_AUDIT_RESET_UUID}]
              table: [TDUtils requireNonBlank:self.defaultTable
-                                defaultValue:DefaultTreasureDataTable
+                                defaultValue:TD_DEFAULT_TABLE
                                      message:[NSString
                                               stringWithFormat:@"WARN: defaultTable was not set. \"%@\" will be used as the target table.",
-                                              DefaultTreasureDataTable]]];
+                                              TD_DEFAULT_TABLE]]];
     _UUID = [[NSUUID UUID] UUIDString];
     [[NSUserDefaults standardUserDefaults] setObject:_UUID forKey:storageKeyOfUuid];
 }

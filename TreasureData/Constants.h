@@ -27,3 +27,6 @@
 
 #define TD_ERROR_CUSTOM_EVENT_DISABLED @"custom_event_disabled"
 
+static NSString *const TD_DEFAULT_DATABASE = @"td";
+static NSString *const TD_DEFAULT_TABLE = @"td_ios";
+
