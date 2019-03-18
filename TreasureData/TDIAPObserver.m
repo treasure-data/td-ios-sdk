@@ -12,7 +12,7 @@
 #import "TDUtils.h"
 
 @implementation TDIAPObserver {
-    TreasureData* __weak _td;
+    TreasureData * __weak _td;
 }
 
 - (instancetype)initWithTD:(TreasureData *)td {

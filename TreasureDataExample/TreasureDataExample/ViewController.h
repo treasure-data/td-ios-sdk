@@ -33,4 +33,6 @@
 - (IBAction)uploadEvents:(id)sender;
 - (IBAction)resetDeviceUniqueID:(id)sender;
 
+- (void)updateClientIfFormChanged;
+
 @end
