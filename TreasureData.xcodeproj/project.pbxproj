@@ -270,7 +270,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0920;
-				ORGANIZATIONNAME = "___FULLUSERNAME___";
+				ORGANIZATIONNAME = ___FULLUSERNAME___;
 			};
 			buildConfigurationList = 6B738089192A09160097D56E /* Build configuration list for PBXProject "TreasureData" */;
 			compatibilityVersion = "Xcode 3.2";
