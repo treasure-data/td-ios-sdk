@@ -26,7 +26,7 @@ class IAPViewController : UITableViewController, SKProductsRequestDelegate, SKPa
     }
 
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction])
-    {
+    {  
         for transaction in transactions {
             print(">> Received a transaction \(transactions) - State: \(transaction.transactionState.rawValue)")
             if (transaction.transactionState != .purchasing) {

@@ -30,7 +30,6 @@ static NSString *testTable;
     [[TreasureData sharedInstance] enableAutoAppendLocaleInformation];
     [[TreasureData sharedInstance] enableServerSideUploadTimestamp:@"server_upload_time"];
     [[TreasureData sharedInstance] enableInAppPurchaseEvent];
-    TreasureData.sharedInstance.client.uploadRetryCount = 1;
 }
 
 + (NSString *)testTable {
