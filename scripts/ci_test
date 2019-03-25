@@ -14,9 +14,10 @@ xcodebuild \
     -sdk iphonesimulator \
     -disable-concurrent-destination-testing \
     -destination "$DESTINATION" \
-    TD_DEV_MASTER_KEY="$TD_DEV_MASTER_KEY" \
+    API_ENDPOINT="$API_ENDPOINT" \
+    API_MASTER_KEY="$API_MASTER_KEY" \
     test \
-    | gsed -u '1,100s/^\(.*TD_DEV_MASTER_KEY\s*=\s*\)\(\b.*\b\)\(.*\)$/\1XXXXXXXXXXX\3/g' \
+    | gsed -u '1,100s/^\(.*API_MASTER_KEY\s*=\s*\)\(\b.*\b\)\(.*\)$/\1XXXXXXXXXXX\3/g' \
     | tee "$LOG_FILE" \
     | xcpretty --report junit
 

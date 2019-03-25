@@ -21,8 +21,10 @@ class IntegrationTests: XCTestCase {
     var tempTables: [String] = []
 
     override class func setUp() {
-        apiKey = ProcessInfo.processInfo.environment["TD_DEV_MASTER_KEY"]
-        api = TDAPI.init(endpoint: "https://api-development.treasuredata.com", apiKey: apiKey)
+        apiKey = ProcessInfo.processInfo.environment["API_MASTER_KEY"]
+        apiEndpoint = ProcessInfo.processInfo.environment["API_ENDPOINT"]
+
+        api = TDAPI.init(endpoint: "API_ENDPOINT", apiKey: apiKey)
         if (!(try! api.isDatabaseExist(TargetDatabase))) {
             fatalError("Either the apiKey is invalid or the target database \(TargetDatabase) is not exist!")
         }

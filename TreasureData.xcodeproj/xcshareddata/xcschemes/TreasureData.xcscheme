@@ -50,8 +50,13 @@
       </MacroExpansion>
       <EnvironmentVariables>
          <EnvironmentVariable
-            key = "TD_DEV_MASTER_KEY"
-            value = "$(TD_DEV_MASTER_KEY)"
+            key = "API_MASTER_KEY"
+            value = "$(API_MASTER_KEY)"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "API_ENDPOINT"
+            value = "$(API_ENDPOINT)"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
