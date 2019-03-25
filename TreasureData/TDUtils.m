@@ -62,8 +62,7 @@
 }
 
 + (BOOL)isIAPEvent:(NSDictionary *)event {
-    return event[TDEventClassKey] == nil
-    || [event[TDEventClassKey] isEqualToString:TDEventClassIAP];
+    return [event[TDEventClassKey] isEqualToString:TDEventClassIAP];
 }
 
 + (NSDictionary *)stripNonEventData:(NSDictionary *)event {
