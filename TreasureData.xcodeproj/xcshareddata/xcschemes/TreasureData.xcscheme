@@ -59,6 +59,11 @@
             value = "$(API_ENDPOINT)"
             isEnabled = "YES">
          </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "COLLECTOR_ENDPOINT"
+            value = "$(COLLECTOR_ENDPOINT)"
+            isEnabled = "YES">
+         </EnvironmentVariable>
       </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>

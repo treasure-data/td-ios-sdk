@@ -13,6 +13,7 @@ class IntegrationTests: XCTestCase {
     var sdkClient: TreasureData!
     static var api: TDAPI!
     static var apiKey: String!
+    static var collectorEndpoint: String!
 
     static let TargetDatabase = "ios_it"
     static var sessionPrefix = uuid()
@@ -27,8 +28,13 @@ class IntegrationTests: XCTestCase {
         guard let apiEndpoint = ProcessInfo.processInfo.environment["API_ENDPOINT"] else {
             fatalError("Missing env API_ENDPOINT")
         }
+        guard let collectorEndpoint = ProcessInfo.processInfo.environment["COLLECTOR_ENDPOINT"] else {
+            fatalError("Missing env COLLECTOR_ENDPOINT")
+        }
 
         IntegrationTests.apiKey = apiKey
+        IntegrationTests.collectorEndpoint = collectorEndpoint
+
         api = TDAPI.init(endpoint: apiEndpoint, apiKey: apiKey)
         if (!(try! api.isDatabaseExist(TargetDatabase))) {
             fatalError("Either the apiKey is invalid or the target database \(TargetDatabase) is not exist!")
@@ -40,7 +46,7 @@ class IntegrationTests: XCTestCase {
     }
 
     override func setUp() {
-        TreasureData.initializeApiEndpoint("https://in-development.treasuredata.com")
+        TreasureData.initializeApiEndpoint(IntegrationTests.collectorEndpoint)
         sdkClient = TreasureData(apiKey: IntegrationTests.apiKey)
         sdkClient.defaultDatabase = IntegrationTests.TargetDatabase
         tempTables = []

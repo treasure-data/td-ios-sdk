@@ -14,8 +14,9 @@ xcodebuild \
     -sdk iphonesimulator \
     -disable-concurrent-destination-testing \
     -destination "$DESTINATION" \
-    API_ENDPOINT="$API_ENDPOINT" \
     API_MASTER_KEY="$API_MASTER_KEY" \
+    API_ENDPOINT="$API_ENDPOINT" \
+    COLLECTOR_ENDPOINT="$COLLECTOR_ENDPOINT" \
     test \
     | gsed -u '1,100s/^\(.*API_MASTER_KEY\s*=\s*\)\(\b.*\b\)\(.*\)$/\1XXXXXXXXXXX\3/g' \
     | tee "$LOG_FILE" \
