@@ -2,8 +2,8 @@
 //  AppDelegate.swift
 //  TestHost
 //
-//  Created by Huy TD on 1/28/19.
-//  Copyright © 2019 Huy TD. All rights reserved.
+//  Created by huylenq on 1/28/19.
+//  Copyright © 2019 Arm Treasure Data. All rights reserved.
 //
 
 import UIKit
