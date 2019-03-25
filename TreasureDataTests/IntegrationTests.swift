@@ -124,6 +124,20 @@ class IntegrationTests: XCTestCase {
         }
     }
 
+    func testResetUniqId() {
+        sdkClient.enableCustomEvent()
+        sdkClient.enableAutoAppendUniqId()
+
+        let table = newTempTable()
+        sdkClient.addEvent([:], table: table)
+        sdkClient.resetUniqId()
+        sdkClient.addEvent([:], table: table)
+        sdkClient.uploadEvents()
+
+        let result = try! IntegrationTests.api.stubbornQuery("select td_uuid from \(table) limit 2", database: IntegrationTests.TargetDatabase)
+        XCTAssert(result[0][0] as! String != result[1][0] as! String)
+    }
+
     private func newTempTable() -> String {
         let table: String = "ios_integration_test_" + NSUUID().uuidString.lowercased().replacingOccurrences(of: "-", with: "_")
         tempTables.append(table)
