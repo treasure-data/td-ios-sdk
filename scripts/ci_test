@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -o pipefail
+
+DESTINATION="$1"
+LOG_FILE="$2"
+TEST_RESULTS_FILE="$3"
+
+cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")"
+
+xcodebuild \
+    -workspace TreasureData.xcworkspace \
+    -scheme TreasureData \
+    -sdk iphonesimulator \
+    -disable-concurrent-destination-testing \
+    -destination "$DESTINATION" \
+    API_MASTER_KEY="$API_MASTER_KEY" \
+    API_ENDPOINT="$API_ENDPOINT" \
+    COLLECTOR_ENDPOINT="$COLLECTOR_ENDPOINT" \
+    test \
+    | gsed -u '1,100s/^\(.*API_MASTER_KEY\s*=\s*\)\(\b.*\b\)\(.*\)$/\1XXXXXXXXXXX\3/g' \
+    | tee "$LOG_FILE" \
+    | xcpretty --report junit
+
+test_status=$?
+
+mv ./build/reports/junit.xml "$TEST_RESULTS_FILE"
+
+exit $test_status
