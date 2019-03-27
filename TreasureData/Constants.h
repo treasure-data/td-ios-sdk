@@ -23,7 +23,6 @@
 
 #define TD_USER_DEFAULTS_KEY_CUSTOM_EVENT_ENABLED @"TDCustomEventEnabled"
 #define TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENT_ENABLED @"TDAppLifecycleEventEnabled"
-#define TD_USER_DEFAULTS_KEY_IN_APP_PURCHASE_EVENT_ENABLED @"TDInAppPurchaseEventEnabled"
 
 #define TD_ERROR_CUSTOM_EVENT_DISABLED @"custom_event_disabled"
 
