@@ -10,7 +10,7 @@
 
 @class TreasureData;
 
-@interface TDIAPObserver : NSObject <SKPaymentTransactionObserver>
+@interface TDIAPObserver : NSObject <SKPaymentTransactionObserver, SKProductsRequestDelegate>
 
 @property BOOL enabled;
 

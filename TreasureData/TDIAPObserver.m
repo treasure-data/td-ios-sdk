@@ -11,6 +11,15 @@
 #import "Constants.h"
 #import "TDUtils.h"
 
+@interface TDIAPObserver ()
+
+@property (atomic) NSDictionary<NSString *, SKProduct *> *productsCache;
+
+// Transactions waiting for after full product information is fetched to record
+@property (atomic) NSDictionary<NSString *, NSArray<SKPaymentTransaction *> *> *pendingTransactions;
+
+@end
+
 @implementation TDIAPObserver {
     TreasureData * __weak _td;
 }
@@ -30,31 +39,62 @@
 
 - (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray<SKPaymentTransaction *> *)transactions {
     for (SKPaymentTransaction* transaction in transactions) {
+        // We only track PURCHASED transaction
+        if (transaction.transactionState != SKPaymentTransactionStatePurchased) continue;
         [self trackTransaction:transaction];
     }
 }
 
 - (void)trackTransaction:(SKPaymentTransaction *)transaction {
-    // We only track PURCHASED transaction
-    if (transaction.transactionState != SKPaymentTransactionStatePurchased) return;
+    SKProduct *cachedProduct = _productsCache[transaction.payment.productIdentifier];
+    if (cachedProduct) {
+        [self addTransactionEvent:transaction product:cachedProduct];
+    } else {
+        NSSet *productIDs = [NSSet setWithArray:@[transaction.payment.productIdentifier]];
+        SKProductsRequest *productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:productIDs];
+        productsRequest.delegate = self;
+    }
+}
 
+- (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response {
+    SKProduct *product = response.products[0];  // we always request for a single product
+    NSArray<SKPaymentTransaction *> *transactions = self.pendingTransactions[product.productIdentifier];
+    if (transactions) {
+        // Pop the processing transaction out of the pending ones
+        NSMutableDictionary<NSString *, SKPaymentTransaction *> *remainTransactions = [NSMutableDictionary dictionaryWithDictionary:self.pendingTransactions];
+        [remainTransactions removeObjectForKey:product.productIdentifier];
+        self.pendingTransactions = remainTransactions;
+
+        // Update products cache
+        NSMutableDictionary<NSString *, SKProduct *> *updateProductsCache = [NSMutableDictionary dictionaryWithDictionary:self.productsCache];
+        updateProductsCache[product.productIdentifier] = product;
+        _productsCache = updateProductsCache;
+
+        for (SKPaymentTransaction *transaction in transactions) {
+            [self addTransactionEvent:transaction product:product];
+        }
+    }
+    else {
+        // Another SKProductsRequest could proceed this pending transaction already
+    }
+}
+
+- (void)addTransactionEvent:(SKPaymentTransaction *)transaction product:(SKProduct *)product {
     NSString *targetDatabase = [TDUtils requireNonBlank:_td.defaultDatabase
                                            defaultValue:TD_DEFAULT_DATABASE
                                                 message:[NSString
-                                                         stringWithFormat:@"WARN: defaultDatabase was not set. \"%@\" will be used as the target database for in-app purchase events.",
-                                                         TD_DEFAULT_DATABASE]];
+                                                        stringWithFormat:@"WARN: defaultDatabase was not set. \"%@\" will be used as the target database for in-app purchase events.",
+                                                                         TD_DEFAULT_DATABASE]];
     NSString *targetTable = [TDUtils requireNonBlank:_td.defaultTable
                                         defaultValue:TD_DEFAULT_TABLE
                                              message:[NSString
-                                                      stringWithFormat:@"WARN: defaultTable was not set. \"%@\" will be used as the target table for in-app purchase events.",
-                                                      TD_DEFAULT_TABLE]];
-    
-    [_td addEvent:[TDIAPObserver transactionToEvent:transaction] database:targetDatabase table:targetTable];
+                                                     stringWithFormat:@"WARN: defaultTable was not set. \"%@\" will be used as the target table for in-app purchase events.",
+                                                                      TD_DEFAULT_TABLE]];
+
+    [_td addEvent:[TDIAPObserver transactionToEvent:transaction product:product] database:targetDatabase table:targetTable];
 }
 
-#pragma mark private
-
-+ (NSDictionary *)transactionToEvent:(SKPaymentTransaction *)transaction {
++ (NSDictionary *)transactionToEvent:(SKPaymentTransaction *)transaction product:(SKProduct *)product {
     [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
 
     NSString *requestData = nil;
@@ -64,14 +104,21 @@
     NSString *applicationUsername = transaction.payment.applicationUsername;
 
     return [TDUtils
-            markAsIAPEvent:@{TD_COLUMN_EVENT: TD_EVENT_IAP_PURCHASED,
-                             @"td_iap_transaction_identifier": transaction.transactionIdentifier,
-                             @"td_iap_transaction_date": transaction.transactionDate,
-                             @"td_iap_product_identifier": transaction.payment.productIdentifier,
-                             @"td_iap_quantity": @(transaction.payment.quantity),
-                             @"td_iap_request_data": requestData != nil ? (id) requestData : [NSNull null],
-                             @"td_iap_application_username": applicationUsername != nil ? (id) applicationUsername : [NSNull null],
-                             }];
+            markAsIAPEvent:@{
+                    TD_COLUMN_EVENT: TD_EVENT_IAP_PURCHASED,
+                    @"td_iap_transaction_identifier": transaction.transactionIdentifier,
+                    @"td_iap_transaction_date": transaction.transactionDate,
+                    @"td_iap_product_identifier": transaction.payment.productIdentifier,
+                    @"td_iap_product_price": product.price,
+                    @"td_iap_product_localized_title": product.localizedTitle,
+                    @"td_iap_localized_product_description": product.localizedDescription,
+                    @"td_iap_product_price": product.price,
+                    @"td_iap_product_description": product.description,
+                    @"td_iap_product_price_locale": product.priceLocale,
+                    @"td_iap_quantity": @(transaction.payment.quantity),
+                    @"td_iap_request_data": requestData != nil ? (id) requestData : [NSNull null],
+                    @"td_iap_application_username": applicationUsername != nil ? (id) applicationUsername : [NSNull null],
+            }];
 }
 
 @end
