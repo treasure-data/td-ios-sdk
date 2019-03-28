@@ -127,13 +127,10 @@
                              @"td_iap_product_identifier": transaction.payment.productIdentifier,
                              @"td_iap_product_price": product.price,
                              @"td_iap_product_localized_title": product.localizedTitle,
-                             @"td_iap_localized_product_description": product.localizedDescription,
+                             @"td_iap_product_localized_description": product.localizedDescription,
                              @"td_iap_product_price": product.price,
-                             @"td_iap_product_description": product.description,
-                             @"td_iap_product_currency": currencyCode,
+                             @"td_iap_product_currency_code": currencyCode,
                              @"td_iap_quantity": @(transaction.payment.quantity),
-                             @"td_iap_request_data": requestData != nil ? (id) requestData : [NSNull null],
-                             @"td_iap_application_username": applicationUsername != nil ? (id) applicationUsername : [NSNull null],
                              }];
 }
 
