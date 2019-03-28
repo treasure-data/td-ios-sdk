@@ -111,7 +111,6 @@
     if (transaction.payment.requestData) {
          requestData = [[NSString alloc] initWithData:transaction.payment.requestData encoding:NSUTF8StringEncoding];
     }
-    NSString *applicationUsername = transaction.payment.applicationUsername;
 
     // On earlier versions than iOS 10.0, we leave the currency code empty
     id currencyCode = [NSNull null];
