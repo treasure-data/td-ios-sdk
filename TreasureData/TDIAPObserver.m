@@ -13,12 +13,68 @@
 
 @interface TDIAPObserver ()
 
-@property (atomic) NSDictionary<NSString *, SKProduct *> *productsCache;
+- (void)flushTransactionOfProduct:(SKProduct *)product;
 
-// Transactions waiting for after full product information is fetched to record, keyed by product's ID
+@property (atomic) NSDictionary<NSString *, SKProduct *> *productsCache;
+// Transactions waiting for after full product information is fetched to record, keyed by product ID
 @property (atomic) NSDictionary<NSString *, NSArray<SKPaymentTransaction *> *> *pendingTransactions;
+// Requests for products information, also keyed by product ID
+@property (atomic) NSDictionary<NSString *, NSArray<SKPaymentTransaction *> *> *pendingProductRequesters;
 
 @end
+
+@interface TDProductRequester : NSObject <SKProductsRequestDelegate>
+@end
+
+@implementation TDProductRequester {
+    NSString *_productID;
+    TDIAPObserver * __weak _observer;
+}
+
+- (instancetype)initWithProductIdentifier:(NSString *)productID observer:(TDIAPObserver *)observer {
+    self = [super init];
+    if (self) {
+        _productID = productID;
+        _observer = observer;
+
+        // Retain self
+        NSMutableDictionary *requestHandlers = [NSMutableDictionary dictionaryWithDictionary:_observer.pendingProductRequesters];
+        requestHandlers[productID] = self;
+        _observer.pendingProductRequesters = requestHandlers;
+    }
+    return self;
+}
+
+- (void)start {
+    NSSet *productIDs = [NSSet setWithArray:@[_productID]];
+    SKProductsRequest *productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:productIDs];
+    productsRequest.delegate = self;
+    [productsRequest start];
+    NSLog(@"Done");
+}
+
+- (void)stop {
+    NSMutableDictionary *requestHandlers = [NSMutableDictionary dictionaryWithDictionary:_observer.pendingProductRequesters];
+    requestHandlers[_productID] = nil;
+    _observer.pendingProductRequesters = requestHandlers;
+}
+
+
+- (void)productsRequest:(nonnull SKProductsRequest *)request didReceiveResponse:(nonnull SKProductsResponse *)response {
+    SKProduct *product = response.products[0];  // we always request for a single product
+    [_observer flushTransactionOfProduct:product];
+    [self stop];
+}
+
+- (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
+    // Still flush the transaction with empty product information (except product ID)
+    [_observer flushTransactionOfProduct:nil];
+    [self stop];
+}
+
+
+@end
+
 
 @implementation TDIAPObserver {
     TreasureData * __weak _td;
@@ -41,33 +97,25 @@
     for (SKPaymentTransaction* transaction in transactions) {
         // We only track PURCHASED transaction
         if (transaction.transactionState != SKPaymentTransactionStatePurchased) continue;
-        [self trackTransaction:transaction];
-    }
-}
 
-- (void)trackTransaction:(SKPaymentTransaction *)transaction {
-    NSString *productID = transaction.payment.productIdentifier;
+        NSString *productID = transaction.payment.productIdentifier;
+        SKProduct *cachedProduct = _productsCache[productID];
+        if (cachedProduct) {
+            [self addTransactionEvent:transaction product:cachedProduct];
+        } else {
+            NSMutableDictionary *pendingTransactions = [NSMutableDictionary dictionaryWithDictionary:self.pendingTransactions];
+            if (!pendingTransactions[productID]) {
+                pendingTransactions[productID] = [NSMutableSet new];
+            }
+            [pendingTransactions[productID] addObject:transaction];
+            self.pendingTransactions = [NSDictionary dictionaryWithDictionary:pendingTransactions];
 
-    SKProduct *cachedProduct = _productsCache[productID];
-    if (cachedProduct) {
-        [self addTransactionEvent:transaction product:cachedProduct];
-    } else {
-        NSMutableDictionary *pendingTransactions = [NSMutableDictionary dictionaryWithDictionary:self.pendingTransactions];
-        if (!pendingTransactions[productID]) {
-            pendingTransactions[productID] = [NSMutableSet new];
+            [[[TDProductRequester alloc] initWithProductIdentifier:productID observer:self] start];
         }
-        [pendingTransactions[productID] addObject:transaction];
-        self.pendingTransactions = [NSDictionary dictionaryWithDictionary:pendingTransactions];
-
-        NSSet *productIDs = [NSSet setWithArray:@[transaction.payment.productIdentifier]];
-        SKProductsRequest *productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:productIDs];
-        productsRequest.delegate = self;
-        [productsRequest start];
     }
 }
 
-- (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response {
-    SKProduct *product = response.products[0];  // we always request for a single product
+- (void)flushTransactionOfProduct:(SKProduct *)product {
     NSArray<SKPaymentTransaction *> *transactions = self.pendingTransactions[product.productIdentifier];
     if (transactions) {
         // Pop the processing transaction out of the pending ones
@@ -90,6 +138,7 @@
 }
 
 - (void)addTransactionEvent:(SKPaymentTransaction *)transaction product:(SKProduct *)product {
+    [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
     NSString *targetDatabase = [TDUtils requireNonBlank:_td.defaultDatabase
                                            defaultValue:TD_DEFAULT_DATABASE
                                                 message:[NSString
@@ -105,32 +154,36 @@
 }
 
 + (NSDictionary *)transactionToEvent:(SKPaymentTransaction *)transaction product:(SKProduct *)product {
-    [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+    if (product) {
+        // On earlier versions than iOS 10.0, we leave the currency code empty
+        id currencyCode = [NSNull null];
+        if (@available(iOS 10.0, *)) {
+            currencyCode = product.priceLocale.currencyCode;
+        }
 
-    NSString *requestData = nil;
-    if (transaction.payment.requestData) {
-         requestData = [[NSString alloc] initWithData:transaction.payment.requestData encoding:NSUTF8StringEncoding];
+        return [TDUtils
+                markAsIAPEvent:@{TD_COLUMN_EVENT: TD_EVENT_IAP_PURCHASED,
+                                 @"td_iap_transaction_identifier": transaction.transactionIdentifier,
+                                 @"td_iap_transaction_date": transaction.transactionDate,
+                                 @"td_iap_product_identifier": transaction.payment.productIdentifier,
+                                 @"td_iap_product_price": product.price,
+                                 @"td_iap_product_localized_title": product.localizedTitle,
+                                 @"td_iap_product_localized_description": product.localizedDescription,
+                                 @"td_iap_product_price": product.price,
+                                 @"td_iap_product_currency_code": currencyCode,
+                                 @"td_iap_quantity": @(transaction.payment.quantity),
+                                 }];
+
+    } else {
+        return [TDUtils
+                markAsIAPEvent:@{TD_COLUMN_EVENT: TD_EVENT_IAP_PURCHASED,
+                                 @"td_iap_transaction_identifier": transaction.transactionIdentifier,
+                                 @"td_iap_transaction_date": transaction.transactionDate,
+                                 @"td_iap_product_identifier": transaction.payment.productIdentifier,
+                                 @"td_iap_quantity": @(transaction.payment.quantity),
+                                 }];
+
     }
-
-    // On earlier versions than iOS 10.0, we leave the currency code empty
-    id currencyCode = [NSNull null];
-    if (@available(iOS 10.0, *)) {
-        currencyCode = product.priceLocale.currencyCode;
-    }
-
-    return [TDUtils
-            markAsIAPEvent:@{
-                             TD_COLUMN_EVENT: TD_EVENT_IAP_PURCHASED,
-                             @"td_iap_transaction_identifier": transaction.transactionIdentifier,
-                             @"td_iap_transaction_date": transaction.transactionDate,
-                             @"td_iap_product_identifier": transaction.payment.productIdentifier,
-                             @"td_iap_product_price": product.price,
-                             @"td_iap_product_localized_title": product.localizedTitle,
-                             @"td_iap_product_localized_description": product.localizedDescription,
-                             @"td_iap_product_price": product.price,
-                             @"td_iap_product_currency_code": currencyCode,
-                             @"td_iap_quantity": @(transaction.payment.quantity),
-                             }];
 }
 
 @end
