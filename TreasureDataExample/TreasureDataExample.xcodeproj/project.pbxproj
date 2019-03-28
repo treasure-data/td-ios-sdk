@@ -15,6 +15,7 @@
 		6B14FEEF1D3624DA00E9C3AF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B14FEED1D3624DA00E9C3AF /* Main.storyboard */; };
 		6B14FEF41D3624DA00E9C3AF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B14FEF21D3624DA00E9C3AF /* LaunchScreen.storyboard */; };
 		ACC8A425266E84EF5E9033F4 /* libPods-TreasureDataExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5DD3B4DAFF3BD9DE0273623 /* libPods-TreasureDataExample.a */; };
+		E58437E1224A36D2009F0C7F /* IAPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58437E0224A36D2009F0C7F /* IAPViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,8 @@
 		6B14FEF31D3624DA00E9C3AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6B14FEF51D3624DA00E9C3AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D756E6DA689C821E31575BDE /* Pods-TreasureDataExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureDataExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureDataExample/Pods-TreasureDataExample.debug.xcconfig"; sourceTree = "<group>"; };
+		E58437DF224A36D1009F0C7F /* TreasureDataExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TreasureDataExample-Bridging-Header.h"; sourceTree = "<group>"; };
+		E58437E0224A36D2009F0C7F /* IAPViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAPViewController.swift; sourceTree = "<group>"; };
 		F5DD3B4DAFF3BD9DE0273623 /* libPods-TreasureDataExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TreasureDataExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -81,12 +84,14 @@
 				6B14FEE71D3624DA00E9C3AF /* AppDelegate.h */,
 				6B14FEE81D3624DA00E9C3AF /* AppDelegate.m */,
 				6B14FEEA1D3624DA00E9C3AF /* ViewController.h */,
+				E58437E0224A36D2009F0C7F /* IAPViewController.swift */,
 				6B14FEEB1D3624DA00E9C3AF /* ViewController.m */,
 				20B1861A2085DABC00B1A488 /* Assets.xcassets */,
 				6B14FEED1D3624DA00E9C3AF /* Main.storyboard */,
 				6B14FEF21D3624DA00E9C3AF /* LaunchScreen.storyboard */,
 				6B14FEF51D3624DA00E9C3AF /* Info.plist */,
 				6B14FEE41D3624DA00E9C3AF /* Supporting Files */,
+				E58437DF224A36D1009F0C7F /* TreasureDataExample-Bridging-Header.h */,
 			);
 			path = TreasureDataExample;
 			sourceTree = "<group>";
@@ -140,6 +145,7 @@
 				TargetAttributes = {
 					6B14FEE01D3624DA00E9C3AF = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 1010;
 						SystemCapabilities = {
 							com.apple.Maps.iOS = {
 								enabled = 0;
@@ -153,6 +159,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -207,6 +214,7 @@
 			files = (
 				6B14FEEC1D3624DA00E9C3AF /* ViewController.m in Sources */,
 				20F4C4C120855AF90049E1C7 /* TreasureDataExample.m in Sources */,
+				E58437E1224A36D2009F0C7F /* IAPViewController.swift in Sources */,
 				6B14FEE91D3624DA00E9C3AF /* AppDelegate.m in Sources */,
 				6B14FEE61D3624DA00E9C3AF /* main.m in Sources */,
 			);
@@ -343,12 +351,16 @@
 			baseConfigurationReference = D756E6DA689C821E31575BDE /* Pods-TreasureDataExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = U5YLXH98R7;
 				INFOPLIST_FILE = TreasureDataExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.treasuredata.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "TreasureDataExample/TreasureDataExample-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -357,12 +369,15 @@
 			baseConfigurationReference = 0EE6C1C60442438D3CE887F3 /* Pods-TreasureDataExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = U5YLXH98R7;
 				INFOPLIST_FILE = TreasureDataExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.treasuredata.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "TreasureDataExample/TreasureDataExample-Bridging-Header.h";
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
