@@ -40,7 +40,7 @@
         // Retain self
         NSMutableDictionary *requestHandlers = [NSMutableDictionary dictionaryWithDictionary:_observer.pendingProductRequesters];
         requestHandlers[productID] = self;
-        _observer.pendingProductRequesters = requestHandlers;
+        _observer.pendingProductRequesters = [NSDictionary dictionaryWithDictionary:requestHandlers];
     }
     return self;
 }
@@ -55,7 +55,7 @@
 - (void)stop {
     NSMutableDictionary *requestHandlers = [NSMutableDictionary dictionaryWithDictionary:_observer.pendingProductRequesters];
     requestHandlers[_productID] = nil;
-    _observer.pendingProductRequesters = requestHandlers;
+    _observer.pendingProductRequesters = [NSDictionary dictionaryWithDictionary:requestHandlers];
 }
 
 
