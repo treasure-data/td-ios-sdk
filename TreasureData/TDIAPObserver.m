@@ -162,7 +162,7 @@
         }
 
         return [TDUtils
-                markAsIAPEvent:@{TD_COLUMN_EVENT: TD_EVENT_IAP_PURCHASED,
+                markAsIAPEvent:@{TD_COLUMN_EVENT: TD_EVENT_IAP_PURCHASE,
                                  @"td_iap_transaction_identifier": transaction.transactionIdentifier,
                                  @"td_iap_transaction_date": transaction.transactionDate,
                                  @"td_iap_product_identifier": transaction.payment.productIdentifier,
@@ -176,7 +176,7 @@
 
     } else {
         return [TDUtils
-                markAsIAPEvent:@{TD_COLUMN_EVENT: TD_EVENT_IAP_PURCHASED,
+                markAsIAPEvent:@{TD_COLUMN_EVENT: TD_EVENT_IAP_PURCHASE,
                                  @"td_iap_transaction_identifier": transaction.transactionIdentifier,
                                  @"td_iap_transaction_date": transaction.transactionDate,
                                  @"td_iap_product_identifier": transaction.payment.productIdentifier,
