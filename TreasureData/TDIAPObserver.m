@@ -50,7 +50,6 @@
     SKProductsRequest *productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:productIDs];
     productsRequest.delegate = self;
     [productsRequest start];
-    NSLog(@"Done");
 }
 
 - (void)stop {
