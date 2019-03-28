@@ -26,7 +26,7 @@ static NSString *END_POINT = @"http://localhost";
 @end
 
 @interface TDIAPObserver (Testing)
-- (void)trackTransaction:(SKPaymentTransaction *)transaction;
+- (void)addTransactionEvent:(SKPaymentTransaction *)transaction product:(SKProduct *)product;
 @end
 
 @interface SKDummyPayment : SKPayment
@@ -909,8 +909,8 @@ static NSString *END_POINT = @"http://localhost";
         self.td.defaultTable = @"default_table";
         TDIAPObserver *iapObserver = [[TDIAPObserver alloc] initWithTD:self.td];
         SKPaymentTransaction *transaction = [SKDummyPaymentTransaction new];
-        [iapObserver trackTransaction:transaction];
-        [self assertHasCapturedEventType:TD_EVENT_IAP_PURCHASED];
+        [iapObserver addTransactionEvent:transaction product:nil];
+        [self assertHasCapturedEventType:TD_EVENT_IAP_PURCHASE];
     }
     @finally {
         self.isFinished = YES;
