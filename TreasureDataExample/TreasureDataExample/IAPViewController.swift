@@ -28,7 +28,6 @@ class IAPViewController : UITableViewController, SKProductsRequestDelegate, SKPa
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction])
     {  
         for transaction in transactions {
-            print(">> Received a transaction \(transactions) - State: \(transaction.transactionState.rawValue)")
             if (transaction.transactionState != .purchasing) {
                 queue.finishTransaction(transaction)
             }
@@ -52,7 +51,6 @@ class IAPViewController : UITableViewController, SKProductsRequestDelegate, SKPa
     
     func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse)
     {
-        print(">> Received products: \(response.products)")
         self.products = response.products
         (self.view as? UITableView)?.separatorStyle = .singleLine
         indicator.stopAnimating()
