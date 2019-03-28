@@ -132,7 +132,7 @@
         }
     }
     else {
-        // Another SKProductsRequest could proceed this pending transaction already
+        // Another TDProductRequester might flush transactions of this product already
     }
 }
 
