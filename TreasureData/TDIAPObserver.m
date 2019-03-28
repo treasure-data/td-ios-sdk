@@ -11,6 +11,16 @@
 #import "Constants.h"
 #import "TDUtils.h"
 
+
+@interface TDProductRequester : NSObject <SKProductsRequestDelegate>
+
+- (instancetype)initWithProductIdentifier:(NSString *)productID observer:(TDIAPObserver *)observer;
+- (void)start;
+- (void)stop;
+
+@end
+
+
 @interface TDIAPObserver ()
 
 - (void)flushTransactionOfProduct:(SKProduct *)product;
@@ -22,58 +32,6 @@
 @property (atomic) NSDictionary<NSString *, NSArray<SKPaymentTransaction *> *> *pendingProductRequesters;
 
 @end
-
-@interface TDProductRequester : NSObject <SKProductsRequestDelegate>
-@end
-
-@implementation TDProductRequester {
-    NSString *_productID;
-    TDIAPObserver * __weak _observer;
-}
-
-- (instancetype)initWithProductIdentifier:(NSString *)productID observer:(TDIAPObserver *)observer {
-    self = [super init];
-    if (self) {
-        _productID = productID;
-        _observer = observer;
-
-        // Retain self
-        NSMutableDictionary *requestHandlers = [NSMutableDictionary dictionaryWithDictionary:_observer.pendingProductRequesters];
-        requestHandlers[productID] = self;
-        _observer.pendingProductRequesters = [NSDictionary dictionaryWithDictionary:requestHandlers];
-    }
-    return self;
-}
-
-- (void)start {
-    NSSet *productIDs = [NSSet setWithArray:@[_productID]];
-    SKProductsRequest *productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:productIDs];
-    productsRequest.delegate = self;
-    [productsRequest start];
-}
-
-- (void)stop {
-    NSMutableDictionary *requestHandlers = [NSMutableDictionary dictionaryWithDictionary:_observer.pendingProductRequesters];
-    requestHandlers[_productID] = nil;
-    _observer.pendingProductRequesters = [NSDictionary dictionaryWithDictionary:requestHandlers];
-}
-
-
-- (void)productsRequest:(nonnull SKProductsRequest *)request didReceiveResponse:(nonnull SKProductsResponse *)response {
-    SKProduct *product = response.products[0];  // we always request for a single product
-    [_observer flushTransactionOfProduct:product];
-    [self stop];
-}
-
-- (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
-    // Still flush the transaction with empty product information (except product ID)
-    [_observer flushTransactionOfProduct:nil];
-    [self stop];
-}
-
-
-@end
-
 
 @implementation TDIAPObserver {
     TreasureData * __weak _td;
@@ -183,6 +141,54 @@
                                  }];
 
     }
+}
+
+@end
+
+
+@implementation TDProductRequester {
+    NSString *_productID;
+    TDIAPObserver * __weak _observer;
+}
+
+- (instancetype)initWithProductIdentifier:(NSString *)productID observer:(TDIAPObserver *)observer {
+    self = [super init];
+    if (self) {
+        _productID = productID;
+        _observer = observer;
+
+        // Retain self
+        NSMutableDictionary *requestHandlers = [NSMutableDictionary dictionaryWithDictionary:_observer.pendingProductRequesters];
+        requestHandlers[productID] = self;
+        _observer.pendingProductRequesters = [NSDictionary dictionaryWithDictionary:requestHandlers];
+    }
+    return self;
+}
+
+- (void)start {
+    NSSet *productIDs = [NSSet setWithArray:@[_productID]];
+    SKProductsRequest *productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:productIDs];
+    productsRequest.delegate = self;
+    [productsRequest start];
+}
+
+- (void)stop {
+    NSMutableDictionary *requestHandlers = [NSMutableDictionary dictionaryWithDictionary:_observer.pendingProductRequesters];
+    requestHandlers[_productID] = nil;
+    _observer.pendingProductRequesters = [NSDictionary dictionaryWithDictionary:requestHandlers];
+}
+
+
+- (void)productsRequest:(nonnull SKProductsRequest *)request didReceiveResponse:(nonnull SKProductsResponse *)response {
+    SKProduct *product = response.products[0];  // we always request for a single product
+    [_observer flushTransactionOfProduct:product];
+    [self stop];
+}
+
+- (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
+    // Still flush the transaction with empty product information (except product ID)
+    [_observer flushTransactionOfProduct:nil];
+    [self stop];
 }
 
 @end
