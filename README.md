@@ -369,6 +369,35 @@ If you want to use server side upload timestamp not only client device time that
 	[TreasureData disableLogging];
 ```
 
+### Auto track In-App Purchase event
+
+TreasureData SDK able to automatically track IAP `SKPaymentTransactionStatePurchased` event without having to write your own transaction observer.
+
+
+```
+[[TreasureData sharedInstance] enableInAppPurchaseEvent];
+[[TreasureData sharedInstance] disableInAppPurchaseEvent];
+[[TreasureData sharedInstance] isInAppPurchaseEventEnabled];
+```
+
+This is disabled by default. There is a subtle difference between this and `appLifecycleEvent`, `customEvent`. `appLifecycleEvent` and `customEvent`, for a historical reason, are persistent settings, meaning their statuses are saved across app launches. `inAppPurchaseEvent` behaves like an ordinary object options and are not saved, have you to explicitly enable it when construct a `TreasureData` instance.
+
+An example of a IAP event:
+
+```
+"td_ios_event": "TD_IOS_IN_APP_PURCHASE",
+"td_iap_transaction_identifier": "1000000514091400",
+"td_iap_transaction_date": "2019-03-28T08:44:12+07:00",
+"td_iap_product_identifier": "com.yourcompany.yourapp.yourproduct", ,
+"td_iap_product_price": 0.99,
+"td_iap_product_localized_title": "Your Product Title",
+"td_iap_product_localized_description": "Your Product Description",
+"td_iap_product_currency_code": "USD",  // this is only available on iOS 10 and above
+"td_iap_quantity": 1,
+```
+
+We did a separated `SKProductsRequest` to get full product's information. If the request is failed somehow, fields with "td_iap_product_" prefix will be null. Also note that that the `currency_code` is only available from iOS 10 onwards.
+
 ## GDPR Compliance
 
 The SDK provide some convenient methods to easily opt-out of tracking the device entirely without having to resort to many cluttered if-else statements:
