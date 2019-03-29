@@ -388,12 +388,12 @@ An example of a IAP event:
 "td_ios_event": "TD_IOS_IN_APP_PURCHASE",
 "td_iap_transaction_identifier": "1000000514091400",
 "td_iap_transaction_date": "2019-03-28T08:44:12+07:00",
+"td_iap_quantity": 1,
 "td_iap_product_identifier": "com.yourcompany.yourapp.yourproduct", ,
 "td_iap_product_price": 0.99,
 "td_iap_product_localized_title": "Your Product Title",
 "td_iap_product_localized_description": "Your Product Description",
 "td_iap_product_currency_code": "USD",  // this is only available on iOS 10 and above
-"td_iap_quantity": 1,
 ```
 
 We did a separated `SKProductsRequest` to get full product's information. If the request is failed somehow, fields with "td_iap_product_" prefix will be null. Also note that that the `currency_code` is only available from iOS 10 onwards.
