@@ -10,6 +10,7 @@ static NSString *const TDEventClassKey = @"__td_event_class";
 static NSString *const TDEventClassCustom = @"custom";
 static NSString *const TDEventClassAppLifecycle = @"app_lifecycle";
 static NSString *const TDEventClassAudit = @"audit";
+static NSString *const TDEventClassIAP = @"iap";
 
 @interface TDUtils : NSObject
 
@@ -21,11 +22,15 @@ static NSString *const TDEventClassAudit = @"audit";
 
 + (NSDictionary *)markAsCustomEvent:(NSDictionary *)event;
 
++ (NSDictionary *)markAsIAPEvent:(NSDictionary *)event;
+
 + (BOOL)isAuditEvent:(NSDictionary *)event;
 
 + (BOOL)isAppLifecycleEvent:(NSDictionary *)event;
 
 + (BOOL)isCustomEvent:(NSDictionary *)event;
+
++ (BOOL)isIAPEvent:(NSDictionary *)event;
 
 + (NSDictionary *)stripNonEventData:(NSDictionary *)event;
 

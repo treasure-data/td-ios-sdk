@@ -24,13 +24,18 @@
     [self.apiEndpointField setText:TreasureData.sharedInstance.client.apiEndpoint];
     [self.apiKeyField setText:TreasureData.sharedInstance.client.apiKey];
     [self.targetDatabaseField setText:TreasureData.sharedInstance.defaultDatabase];
-    [self.customEventSwitch setOn:[[TreasureData sharedInstance] isCustomEventEnabled]];
-    [self.appLifecycleEventSwitch setOn:[[TreasureData sharedInstance] isAppLifecycleEventEnabled]];
+
     [self.defaultTableField setText:[[TreasureData sharedInstance] defaultTable]];
-    [self customEventSwitchChanged:self.customEventSwitch];
-    [self appLifecycleEventSwitchChanged:self.appLifecycleEventSwitch];
     [self.targetTableField setText:[TreasureDataExample testTable]];
     [self.defaultTableField setText:[[TreasureData sharedInstance] defaultTable]];
+
+    [self.customEventSwitch setOn:[[TreasureData sharedInstance] isCustomEventEnabled]];
+    [self.appLifecycleEventSwitch setOn:[[TreasureData sharedInstance] isAppLifecycleEventEnabled]];
+    [self.iapEventSwitch setOn:[[TreasureData sharedInstance] isInAppPurchaseEventEnabled]];
+
+    [self customEventSwitchChanged:self.customEventSwitch];
+    [self appLifecycleEventSwitchChanged:self.appLifecycleEventSwitch];
+    [self iapEventSwitchChanged:self.iapEventSwitch];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -58,6 +63,16 @@
         [[TreasureData sharedInstance] enableAppLifecycleEvent];
     } else {
         self.appLifecycleEventToggleLabel.text = @"App Lifecycle Events Disabled";
+        [[TreasureData sharedInstance] disableAppLifecycleEvent];
+    }
+}
+
+- (IBAction)iapEventSwitchChanged:(id)sender {
+    if ([sender isOn]) {
+        self.iapEventToggleLabel.text = @"IAP Events Enabled";
+        [[TreasureData sharedInstance] enableInAppPurchaseEvent];
+    } else {
+        self.iapEventToggleLabel.text = @"IAP Events Disabled";
         [[TreasureData sharedInstance] disableAppLifecycleEvent];
     }
 }
@@ -131,7 +146,7 @@
         [[[TreasureData sharedInstance] client] setApiKey:self.apiKeyField.text];
         [[[TreasureData sharedInstance] client] setApiEndpoint:self.apiEndpointField.text];
         [[TreasureData sharedInstance] setDefaultDatabase:self.targetDatabaseField.text];
-        [[TreasureData sharedInstance] setDefaultTable:self.targetTableField.text];
+        [[TreasureData sharedInstance] setDefaultTable:self.defaultTableField.text];
         [[TreasureData sharedInstance] enableAppLifecycleEvent];
         [TreasureDataExample setTestTable:self.targetTableField.text];
     }

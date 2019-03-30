@@ -13,6 +13,7 @@
 #import "Session.h"
 #import "TDUtils.h"
 #import "Constants.h"
+#import "TDIAPObserver.h"
 
 static bool isTraceLoggingEnabled = false;
 static bool isEventCompressionEnabled = true;
@@ -57,15 +58,14 @@ static long sessionTimeoutMilli = -1;
 
 @property (nonatomic, assign, getter=isCustomEventEnabled) BOOL customEventEnabled;
 @property (nonatomic, assign, getter=isAppLifecycleEventEnabled) BOOL appLifecycleEventEnabled;
+@property (nonatomic, assign, getter=isInAppPurchaseEventEnabled) BOOL inAppPurchaseEnabled;
 
 @end
 
 @implementation TreasureData {
-    NSString *_UUID;
+    NSString * _UUID;
+    TDIAPObserver * _iapObserver;
 }
-
-static NSString *const DefaultTreasureDataDatabase = @"td";
-static NSString *const DefaultTreasureDataTable = @"td_ios";
 
 - (id)initWithApiKey:(NSString *)apiKey {
     self = [self init];
@@ -104,6 +104,9 @@ static NSString *const DefaultTreasureDataTable = @"td_ios";
             KCLog(@"Failed to initialize client");
         }
         [self observeLifecycleEvents];
+        if (self.isInAppPurchaseEventEnabled) {
+            _iapObserver = [[TDIAPObserver alloc] initWithTD:self];
+        }
     }
     return self;
 }
@@ -139,8 +142,11 @@ static NSString *const DefaultTreasureDataTable = @"td_ios";
         }
         return nil;
     }
-    // App Lifecyle events denial is silent
+    // Denial of other events rather than custom are silent
     if ([TDUtils isAppLifecycleEvent:record] && ![self isAppLifecycleEventEnabled]) {
+        return nil;
+    }
+    if ([TDUtils isIAPEvent:record] && ![self isInAppPurchaseEventEnabled]) {
         return nil;
     }
     record = [TDUtils stripNonEventData:record];
@@ -551,15 +557,15 @@ static NSString *const DefaultTreasureDataTable = @"td_ios";
 {
     if ([self isAppLifecycleEventEnabled]) {
         NSString *targetDatabase = [TDUtils requireNonBlank:self.defaultDatabase
-                                            defaultValue:DefaultTreasureDataDatabase
+                                            defaultValue:TD_DEFAULT_DATABASE
                                                  message:[NSString
-                                                          stringWithFormat:@"WARN: defaultDatabase was not set. \"%@\" will be used as the target database.",
-                                                          DefaultTreasureDataDatabase]];
+                                                          stringWithFormat:@"WARN: defaultDatabase was not set. \"%@\" will be used as the target database for app lifecycle events.",
+                                                          TD_DEFAULT_DATABASE]];
         NSString *targetTable = [TDUtils requireNonBlank:self.defaultTable
-                                             defaultValue:DefaultTreasureDataTable
+                                             defaultValue:TD_DEFAULT_TABLE
                                                   message:[NSString
-                                                           stringWithFormat:@"WARN: defaultTable was not set. \"%@\" will be used as the target table.",
-                                                           DefaultTreasureDataTable]];
+                                                           stringWithFormat:@"WARN: defaultTable was not set. \"%@\" will be used as the target table for app lifecycle events.",
+                                                           TD_DEFAULT_TABLE]];
         NSString *currentVersion = [self getAppVersion];
         NSString *currentBuild = [self getBuildNumber];
         NSString *previousVersion = [self getTrackedAppVersion];
@@ -618,18 +624,34 @@ static NSString *const DefaultTreasureDataTable = @"td_ios";
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENT_ENABLED];
 }
 
+- (void)enableInAppPurchaseEvent {
+    self.inAppPurchaseEnabled = YES;
+    _iapObserver = [[TDIAPObserver alloc] initWithTD:self];
+}
+
+- (void)disableInAppPurchaseEvent {
+    self.inAppPurchaseEnabled = NO;
+    _iapObserver = nil;
+}
+
 - (void)resetUniqId {
     _UUID = [[NSUUID UUID] UUIDString];
     [[NSUserDefaults standardUserDefaults] setObject:_UUID forKey:storageKeyOfUuid];
     NSString *eventTypeColumn = [TDUtils isRunningWithUnity] ? TD_COLUMN_UNITY_EVENT : TD_COLUMN_EVENT;
     [self addEvent:[TDUtils markAsAuditEvent:@{eventTypeColumn: TD_EVENT_AUDIT_RESET_UUID}]
              table: [TDUtils requireNonBlank:self.defaultTable
-                                defaultValue:DefaultTreasureDataTable
+                                defaultValue:TD_DEFAULT_TABLE
                                      message:[NSString
                                               stringWithFormat:@"WARN: defaultTable was not set. \"%@\" will be used as the target table.",
-                                              DefaultTreasureDataTable]]];
+                                              TD_DEFAULT_TABLE]]];
     _UUID = [[NSUUID UUID] UUIDString];
     [[NSUserDefaults standardUserDefaults] setObject:_UUID forKey:storageKeyOfUuid];
+}
+
+#pragma mark - Exposed for testing
+
+- (TDIAPObserver *)iapObserver {
+    return _iapObserver;
 }
 
 @end
