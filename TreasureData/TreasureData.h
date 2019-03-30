@@ -32,17 +32,17 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 
 - (void)event:(NSDictionary * _Nonnull)record table:(NSString * _Nonnull)table DEPRECATED_ATTRIBUTE;
 
-- (NSDictionary *)addEvent:(NSDictionary * _Nonnull)record database:(NSString * _Nonnull)database table:(NSString * _Nonnull)table;
+- (NSDictionary *_Nullable)addEvent:(NSDictionary * _Nonnull)record database:(NSString * _Nonnull)database table:(NSString * _Nonnull)table;
 
-- (NSDictionary *)addEvent:(NSDictionary * _Nonnull)record table:(NSString * _Nonnull)table;
+- (NSDictionary *_Nullable)addEvent:(NSDictionary * _Nonnull)record table:(NSString * _Nonnull)table;
 
-- (NSDictionary *)addEventWithCallback:(NSDictionary * _Nonnull)record
+- (NSDictionary *_Nullable)addEventWithCallback:(NSDictionary * _Nonnull)record
                               database:(NSString * _Nonnull)database
                                  table:(NSString * _Nonnull)table
                              onSuccess:(SuccessHander _Nullable)onSuccess
                                onError:(ErrorHandler _Nullable)onError;
 
-- (NSDictionary *)addEventWithCallback:(NSDictionary * _Nonnull)record
+- (NSDictionary *_Nullable)addEventWithCallback:(NSDictionary * _Nonnull)record
                                  table:(NSString * _Nonnull)table
                              onSuccess:(SuccessHander _Nullable)onSuccess
                                onError:(ErrorHandler _Nullable)onError;
