@@ -1,9 +1,9 @@
 PODS:
-  - KeenClientTD (3.2.33):
-    - KeenClientTD/keen_sqlite (= 3.2.33)
-  - KeenClientTD/keen_sqlite (3.2.33)
+  - KeenClientTD (3.2.34):
+    - KeenClientTD/keen_sqlite (= 3.2.34)
+  - KeenClientTD/keen_sqlite (3.2.34)
   - TreasureData-iOS-SDK (0.1.27):
-    - KeenClientTD (= 3.2.33)
+    - KeenClientTD (= 3.2.34)
 
 DEPENDENCIES:
   - TreasureData-iOS-SDK (from `..`)
@@ -17,8 +17,8 @@ EXTERNAL SOURCES:
     :path: ".."
 
 SPEC CHECKSUMS:
-  KeenClientTD: 1faa85dca8fe1cf14a7b5c1a736a4fa9ea42fea7
-  TreasureData-iOS-SDK: 0a7ed30d715ec5c632467860377e3f0d948159b5
+  KeenClientTD: 62b6bfcc42c32e0fa623fafb24739fcfc2edf586
+  TreasureData-iOS-SDK: 8577217fe2f9325dfe89a177629a55f324b76dc7
 
 PODFILE CHECKSUM: 99b35cd9cef5e0ef2908311a9f1b4e428bb2a1fc
 
