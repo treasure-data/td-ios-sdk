@@ -1,5 +1,5 @@
 //
-//  TDClinet.m
+//  TDClient.m
 //  TreasureData
 //
 //  Created by Mitsunori Komatsu on 12/15/14.
