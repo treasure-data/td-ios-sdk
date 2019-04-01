@@ -82,8 +82,6 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 
 - (void)clearFirstRun;
 
-- (void)initializeFirstRun;     // Only for test
-
 - (void)startSession:(NSString* _Nonnull)table;
 
 - (void)startSession:(NSString* _Nonnull)table database:(NSString* _Nonnull)database;
