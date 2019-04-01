@@ -98,8 +98,6 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 
 + (NSString* _Nullable)getSessionId;
 
-+ (void)resetSession;       // Only for test
-
 + (void)setSessionTimeoutMilli:(long)to;
 
 - (void)enableServerSideUploadTimestamp;

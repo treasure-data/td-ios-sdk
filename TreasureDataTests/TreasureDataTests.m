@@ -24,6 +24,7 @@ static NSString *END_POINT = @"http://localhost";
 @interface TreasureData (Testing)
 - (TDIAPObserver *)iapObserver;
 - (void)initializeFirstRun;
++ (void)resetSession;
 @end
 
 @interface TDIAPObserver (Testing)
