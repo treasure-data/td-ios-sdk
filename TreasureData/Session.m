@@ -27,6 +27,7 @@ static int DEFAULT_SESSION_PENDING_MILLIS = 10 * 1000;
     if (!self.id || (self.finishedAt && [self.finishedAt timeIntervalSinceNow] * (-1000) > self.sessionPendingMillis)) {
         self.id = [[NSUUID UUID] UUIDString];
     }
+    // FIXME: is this really intended, start will always reset the finish status?
     self.finishedAt = nil;
 }
 

@@ -10,126 +10,326 @@
 #import "TDClient.h"
 
 typedef void (^SuccessHander)(void);
+
+/**
+ * Generic error handler.
+ *
+ * Known error codes:
+ *
+ *  - `init_error`
+ *  - `invalid_param`
+ *  - `invalid_event`
+ *  - `data_conversion`
+ *  - `storage_error`
+ *  - `network_error`
+ *  - `server_response`
+ */
 typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable errorMessage);
 
+/**
+ * SDK interface entry
+ */
 @interface TreasureData : NSObject
 
+/**
+ * Inner client, automatically initialized. Additional parameters like request retrying could be configured here.
+ */
 @property(nonatomic, strong) TDClient * _Nullable client;
 
+/**
+ * The destination database for events that doesn't specify one, default is "td".
+ */
 @property(nonatomic, strong) NSString * _Nullable defaultDatabase;
+
+/**
+ * The destination table for events that doesn't specify one. Currently this also applied for automatically tracked events (if enabled): app lifecycle, IAP and audits, default is "td_ios".
+ */
 @property(nonatomic, strong) NSString * _Nullable defaultTable;
 
-+ (void)initializeWithApiKey:(NSString * _Nonnull)apiKey;
-
-// Can not be null after initializeWithApiKey: has been called.
-+ (instancetype _Nonnull)sharedInstance;
-
+/**
+ * Assign the target API endpoint, default is "https://in.treasuredata.com".
+ * This have to be call before `initializeWithApiKey(apiKey:)`, otherwise it won't have effect.
+ * @param apiKey for the in effect endpoint (`+[TreasureData initializeApiEndpoint:]`).
+ */
 + (void)initializeApiEndpoint:(NSString * _Nullable)apiEndpoint;
 
+/**
+ * Encrypted the event data in the local persisted buffer.
+ * This should be called only once and prior to any `addEvent...` call.
+ */
++ (void)initializeEncryptionKey:(NSString* _Nullable)encryptionKey;
+
+/**
+ * Initialize `TreasureData.sharedInstance` with the current `apiEndpoint` configured via `+[TreasureData initializeApiEndpoint:]`
+ *
+ * @param apiKey API Key (only requires `write-only`) for the in effect endpoint (`+[TreasureData initializeApiEndpoint:]`).
+ */
++ (void)initializeWithApiKey:(NSString * _Nonnull)apiKey;
+
+/**
+ * The default singleton SDK instance.
+ *
+ * You could create multiple instances that target different endpoints (and of course apiKey, and default database, table, etc.) with `-[TreasureData initWithApiKey:]`,
+ * but mind that `+[TreasureData initializeApiEndpoint:]` is shared have to be called before `-[TreasureData initWithApiKey:]` to be affected.
+ */
++ (instancetype _Nonnull)sharedInstance;
+
+/**
+ * Construct a new `TreasureData` instance.
+ *
+ * @param apiKey for the in effect endpoint (`+[TreasureData initializeApiEndpoint:]`).
+ */
 - (id _Nonnull)initWithApiKey:(NSString * _Nonnull)apiKey;
 
-- (void)event:(NSDictionary * _Nonnull)record database:(NSString * _Nonnull)database table:(NSString * _Nonnull)table DEPRECATED_ATTRIBUTE;
-
-- (void)event:(NSDictionary * _Nonnull)record table:(NSString * _Nonnull)table DEPRECATED_ATTRIBUTE;
-
+/**
+ * Track a new event
+ *
+ * @param record event data
+ * @param database the event's destination database
+ * @param table the event's destination table
+ */
 - (NSDictionary *_Nullable)addEvent:(NSDictionary * _Nonnull)record database:(NSString * _Nonnull)database table:(NSString * _Nonnull)table;
 
+/**
+ * Track a new event targets `+[TreasureData defaultDatabase]`
+ *
+ * @param record event data
+ * @param table the event's destination table
+ */
 - (NSDictionary *_Nullable)addEvent:(NSDictionary * _Nonnull)record table:(NSString * _Nonnull)table;
 
+/**
+ * Track a new event with status handlers.
+ *
+ * Note that `addEvent...` methods doesn't involve network operations,
+ * failures here may indicate misconfigurations causing the event to not be inserted on the local buffer.
+ * For `TreasureData` instances that are purposedly disabled:
+ *
+ * - `-[TreasureData disableCustomEvent]`
+ *
+ * This will silently return `nil` without invoking the `onError` handler.
+ *
+ * @param record event data
+ * @param database the event's destination database
+ * @param table the event's destination table
+ * @param onSuccess called when the event successfuly inserted to the local buffer
+ * @param onError called when the event failed to inserted to the local buffer, perfer `ErrorHandler` for possible error codes
+ */
 - (NSDictionary *_Nullable)addEventWithCallback:(NSDictionary * _Nonnull)record
                               database:(NSString * _Nonnull)database
                                  table:(NSString * _Nonnull)table
                              onSuccess:(SuccessHander _Nullable)onSuccess
                                onError:(ErrorHandler _Nullable)onError;
 
+/**
+ * Same as `-[TreasureData addEventWithCallback:database:table:onSuccess:onError]`, targets the `-[TreasureData defaultDatabase]`.
+ *
+ * @param record event data
+ * @param table the event's destination table
+ * @param onSuccess called when the event successfuly inserted to the local buffer
+ * @param onError called when the event failed to inserted to the local buffer, perfer `ErrorHandler` for possible error codes
+ */
 - (NSDictionary *_Nullable)addEventWithCallback:(NSDictionary * _Nonnull)record
                                  table:(NSString * _Nonnull)table
                              onSuccess:(SuccessHander _Nullable)onSuccess
                                onError:(ErrorHandler _Nullable)onError;
 
-- (void)uploadWithBlock:(void (^ _Nonnull)(void))block DEPRECATED_ATTRIBUTE;
-
-- (void)uploadEventsWithBlock:(void (^ _Nonnull)(void))block DEPRECATED_ATTRIBUTE;
-
+/**
+ * Same as `-[TreasureData addEventWithCallback:database:table:onSuccess:onError]`, targets the `-[TreasureData defaultDatabase]` / `+[TreasureData defaultTable]`.
+ *
+ * @param onSuccess called when the event successfuly uploaded to the configured endpoint. Notes that it doesn't guarantee events to be successfully persisted to the remote database, it only indicates that the server accepted the request (without checking the validity of the events).
+ *
+ * @param onError called when the event failed to inserted to the configured endpoint, perfer `ErrorHandler` for possible error codes
+ */
 - (void)uploadEventsWithCallback:(SuccessHander _Nullable)onSuccess
                          onError:(ErrorHandler _Nullable)onError;
 
+/**
+ * Same as `-[TreasureData uploadEventWithCallback:onError]` but ignores the result status.
+ *
+ * @param record event data
+ */
 - (void)uploadEvents;
 
-- (void)setApiEndpoint:(NSString* _Nonnull)endpoint DEPRECATED_ATTRIBUTE;
+// TODO: should the below methods be changed to flag properties?
 
-- (void)disableAutoAppendUniqId;
-
+/**
+ * Automaticaly append `td_uuid` column for every events. The value is randomly generated and persisted, it is shared across app launches and events. Basically, it is used to prepresent for a unique app installation instance.
+ *
+ * This is disabled by default.
+ */
 - (void)enableAutoAppendUniqId;
 
-- (void)disableAutoAppendModelInformation;
+/**
+ * Disable the auto appended `td_uuid` column.
+ */
+- (void)disableAutoAppendUniqId;
 
+/**
+ * Permanently reset the appended `td_uuid` column to a different value.
+ * Note: this won't reset the current buffered events before this call
+ */
+- (void)resetUniqId;
+
+/**
+ * Disable these auto appended columns:
+ *
+ * - `td_device`, `td_model`: current these share a same value, extracted from `UIDevice.currentDevice.model`. Example: "iPhone", "iPad",...
+ * - `td_os_version`: Extracted from `UIDevice.currentDevice.systemVersion`. Example: "11.4.1", "12.1.4",...
+ * - `td_os_type`: Always "iOS"
+ */
 - (void)enableAutoAppendModelInformation;
 
+/**
+ * Disable the auto appended `td_device`, `td_model`, `td_os_version`, `td_os_type` columns.
+ */
+- (void)disableAutoAppendModelInformation;
+
+/**
+ * Automatically append these columns:
+ *
+ * - `td_app_ver`: extracted from main bundle's `CFBundleShortVersionString` entry
+ * - `td_app_ver_num`: extracted from main bundle's `CFBundleVersion` entry
+ *
+ * This is disabled by default.
+ */
 - (void)enableAutoAppendAppInformation;
 
+/**
+ * Disable these auto appended `td_app_ver` and `td_app_ver_num` column
+ */
 - (void)disableAutoAppendAppInformation;
 
+/**
+ * Automatically append these columns:
+ * - `td_locale_country`: ISO 3166-1's code, extracted from `NSLocale.currentLocale`'s `NSLocaleCountryCode`. Example: "USA", "AUS",...
+ * - `td_locale_language: ISO 639-1's code, extracted from `NSLocal.currentLocal`'s `NSLocaleLanguageCode`. Example: "es", "en",...
+ *
+ * This is disabled by default.
+ */
 - (void)enableAutoAppendLocaleInformation;
 
+/**
+ * Disable the auto appended `td_locale_country` and `td_locale_language` columns.
+ */
 - (void)disableAutoAppendLocaleInformation;
 
-- (void)disableRetryUploading;
+/** Automatically append the time value when the event is received on server.
+ *
+ * This is disabled by default.
+ *
+ * @param columnName The column to write the uploaded time value
+ */
+- (void)enableServerSideUploadTimestamp: (NSString* _Nonnull)columnName;
 
+/**
+ * Automatically append the time when the event is received on server. Disabled by default.
+ *
+ * This is disabled by default.
+ */
+// FIXME: document - which column to be exact?
+- (void)enableServerSideUploadTimestamp;
+
+/**
+ * Disable the uploading time column
+ */
+- (void)disableServerSideUploadTimestamp;
+
+/**
+ * Automatically append a random and unique ID for each event. Disabled by default.
+ *
+ * @param columnName The column to write the ID
+ */
+- (void)enableAutoAppendRecordUUID: (NSString* _Nonnull)columnName;
+
+/**
+ * Same as `-[TreasureData enableAutoAppendRecordUUID:], using "record_uuid" as the column name.
+ */
+- (void)enableAutoAppendRecordUUID;
+
+/**
+ * Disable appending ID for each event.
+ */
+- (void)disableAutoAppendRecordUUID;
+
+/**
+ * Enable retrying on failed uploads. Already enabled by default.
+ */
 - (void)enableRetryUploading;
 
-- (BOOL)isFirstRun;
+/**
+ * Do not attempt to retry on failed uploads.
+ */
+- (void)disableRetryUploading;
 
-- (void)clearFirstRun;
+#pragma mark - Session
 
-- (void)startSession:(NSString* _Nonnull)table;
-
+/**
+ * Start to a new session for this `TreasureData`'s instance
+ 
+ * Every subsequent events tracked from this instance will be appended a same random and unique value to `td_session_id` column. An additional event of `{"td_session_event": "start"} will also be tracked, target the specified table and database.
+ *
+ * @param table Destination table for the `td_session_event`
+ * @param database Destination database for the `td_session_event`
+ */
 - (void)startSession:(NSString* _Nonnull)table database:(NSString* _Nonnull)database;
 
-- (void)endSession:(NSString* _Nonnull)table;
+/**
+ * Same as `-[TreasureData startSession:database]`, using `+[TreasureData defaultDatabase]` as the destination database for `td_session_event`.
+ */
+- (void)startSession:(NSString* _Nonnull)table;
+
+/**
+ * End this `TresureData` instance's session. Track an additional event of `{"td_session_event": "end"}` to the specified database and table.
+ * Note that event if the instance's session is ended, `td_session_event` still could be appended if the static session (`+[TreasureData startSession]`) is in effect.
+ *
+ * @param table Destination table for the `td_session_event`
+ * @param database Destination database for the `td_session_event`
+ */
 
 - (void)endSession:(NSString* _Nonnull)table database:(NSString* _Nonnull)database;
 
+/**
+ * Same as `-[TreasureData endSession]`, using `+[TreasureData defaultDatbase]` as the destination database for `td_session_event`.
+ */
+- (void)endSession:(NSString* _Nonnull)table;
+
+/**
+ * Get this instance's current session ID.
+ */
 - (NSString * _Nullable)getSessionId;
 
+/**
+ * Start a static session that is shared across `TreasureData` instances. Unlike instance's session, there will be no `td_session_event` tracked.
+ */
 + (void)startSession;
 
+/**
+ * End the current static session. Unlike instance's session, there will be no `td_session_event` tracked.
+ */
 + (void)endSession;
 
+/**
+ * Get the current static session ID.
+ */
 + (NSString* _Nullable)getSessionId;
 
+/**
+ * Set the minimal time window that the static session stays alive.
+ *
+ * @param to The session timeout, default is 10 seconds
+ */
 + (void)setSessionTimeoutMilli:(long)to;
 
-- (void)enableServerSideUploadTimestamp;
+#pragma mark - Automatically tracked events
 
-- (void)enableServerSideUploadTimestamp: (NSString* _Nonnull)columnName;
+/**
+ * Re-enable custom events collection if previously disabled
+ */
+- (void)enableCustomEvent;
 
-- (void)disableServerSideUploadTimestamp;
-
-- (void)enableAutoAppendRecordUUID;
-
-- (void)enableAutoAppendRecordUUID: (NSString* _Nonnull)columnName;
-
-- (void)disableAutoAppendRecordUUID;
-
-+ (void)disableEventCompression;
-
-+ (void)enableEventCompression;
-
-+ (void)disableLogging;
-
-+ (void)enableLogging;
-
-+ (void)disableTraceLogging;
-
-+ (void)enableTraceLogging;
-
-+ (void)initializeEncryptionKey:(NSString* _Nullable)encryptionKey;
-
-#pragma mark - GDCR Compliance (Right To Be Forgotten)
-
-/*!
- * Disable all the custom events collection (all events except the automatically tracked app lifecycle events)
+/**
+ * Disable custom events collection (ones that called manually with `addEvent...`).
  * This is a persistent setting so unless being re-enable with `enableCustomEvent`,
  * all your tracked events with `addEvent` will be discarded. (Note that the app lifecycle events will still tracked,
  * call `disableAppLifecycleEvent` to effectively disable all the event collections.
@@ -137,37 +337,103 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
  */
 - (void)disableCustomEvent;
 
-/// Re-enable custom events collection if previously disabled
-- (void)enableCustomEvent;
-
-/*!
+/**
  * Whether the custom events collection is allowed or not.
  * This is a persistent setting, which is able to set via `enableCustomEvent` or `disableCustomEvent`
  */
 - (BOOL)isCustomEventEnabled;
 
-/*!
+
+/**
+ * Enable tracking app lifecycle events. This setting is persited, default is disabled.
+ */
+- (void)enableAppLifecycleEvent;
+
+/**
  * Same as `disableCustomEvent`, this is supposed to be called for your users to opt-out of the automatic tracking.
  */
 - (void)disableAppLifecycleEvent;
 
-/// Permanently re-enable event collection if previously disabled
-- (void)enableAppLifecycleEvent;
-
-/*!
+/**
  * Whether the app lifecycle events collection is allowed or not
  * This is a persistent setting, able to set through `enableAppLifecycleEvent` or `disableAppLifecycleEvent`
  */
 - (BOOL)isAppLifecycleEventEnabled;
 
+/**
+ * Enable tracking `SKPaymentTransactionStatePurchased` event automatically. This is disabled by default. Unlike custom and app lifecycle events, this settings is not persisted.
+ *
+ * An example IAP event record:
+ * ```
+ * "td_ios_event": "TD_IOS_IN_APP_PURCHASE",
+ * "td_iap_transaction_identifier": "1000000514091400",
+ * "td_iap_transaction_date": "2019-03-28T08:44:12+07:00",
+ * "td_iap_quantity": 1,
+ * "td_iap_product_identifier": "com.yourcompany.yourapp.yourproduct", ,
+ * "td_iap_product_price": 0.99,
+ * "td_iap_product_localized_title": "Your Product Title",
+ * "td_iap_product_localized_description": "Your Product Description",
+ * "td_iap_product_currency_code": "USD",  // this is only available on iOS 10 and above
+ */
 - (void)enableInAppPurchaseEvent;
+
+/**
+ * Disable tracking IAP events
+ */
 - (void)disableInAppPurchaseEvent;
+
+/**
+ * Whether this `TreasureData`'s instance tracking IAP events
+ */
 - (BOOL)isInAppPurchaseEventEnabled;
 
-/*!
- * Permanently reset the appended "td_uuid" to a different value.
- * Note: this won't reset the current buffered events before this call
+#pragma mark - Misc.
+
+/**
+ * Event data will be compressed with zlib before uploading to server.
  */
-- (void)resetUniqId;
++ (void)enableEventCompression;
+
+/**
+ * Event data will be uploaded in it's full format.
+ */
++ (void)disableEventCompression;
+
+/**
+ * Enable client logging. Disabled by default.
+ */
++ (void)enableLogging;
+
+/**
+ * Disable client's logging/
+ */
++ (void)disableLogging;
+
+
+// FIXME: what is the real usage for this?
+/**
+ * Enable trace logging
+ */
++ (void)enableTraceLogging;
+
+/**
+ * Disable trace logging
+ */
++ (void)disableTraceLogging;
+
+
+// TODO: consider whether `isFirstRun` (and `clearFirstRun`) are necessary to be exposed
+
+- (BOOL)isFirstRun;
+- (void)clearFirstRun;
+
+#pragma mark - Deprecated
+
+- (void)event:(NSDictionary * _Nonnull)record database:(NSString * _Nonnull)database table:(NSString * _Nonnull)table DEPRECATED_ATTRIBUTE;
+- (void)event:(NSDictionary * _Nonnull)record table:(NSString * _Nonnull)table DEPRECATED_ATTRIBUTE;
+- (void)uploadWithBlock:(void (^ _Nonnull)(void))block DEPRECATED_ATTRIBUTE;
+- (void)uploadEventsWithBlock:(void (^ _Nonnull)(void))block DEPRECATED_ATTRIBUTE;
+- (void)setApiEndpoint:(NSString* _Nonnull)endpoint DEPRECATED_ATTRIBUTE;
+
 
 @end
