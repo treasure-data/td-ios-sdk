@@ -1,3 +1,0 @@
-target 'TreasureDataExample' do
-  pod 'TreasureData-iOS-SDK', :path => '..'
-end

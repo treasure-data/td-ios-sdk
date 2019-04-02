@@ -1,0 +1,187 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/huy/src/td/td-ios-sdk/TreasureData/TDClient.h",
+      "line": 12,
+      "symbol": "TDClient",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huy/src/td/td-ios-sdk/TreasureData/TDClient.h",
+      "line": 13,
+      "symbol": "TDClient.apiKey",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.property",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huy/src/td/td-ios-sdk/TreasureData/TDClient.h",
+      "line": 14,
+      "symbol": "TDClient.apiEndpoint",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.property",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huy/src/td/td-ios-sdk/TreasureData/TDClient.h",
+      "line": 15,
+      "symbol": "TDClient.session",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.property",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huy/src/td/td-ios-sdk/TreasureData/TDClient.h",
+      "line": 16,
+      "symbol": "TDClient.enableEventCompression",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.property",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huy/src/td/td-ios-sdk/TreasureData/TDClient.h",
+      "line": 17,
+      "symbol": "TDClient.uploadRetryIntervalCoeficient",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.property",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huy/src/td/td-ios-sdk/TreasureData/TDClient.h",
+      "line": 18,
+      "symbol": "TDClient.uploadRetryIntervalBase",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.property",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huy/src/td/td-ios-sdk/TreasureData/TDClient.h",
+      "line": 19,
+      "symbol": "TDClient.uploadRetryCount",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.property",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huy/src/td/td-ios-sdk/TreasureData/TDClient.h",
+      "line": 20,
+      "symbol": "TDClient.enableRetryUploading",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.property",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huy/src/td/td-ios-sdk/TreasureData/TDClient.h",
+      "line": 22,
+      "symbol": "TDClient.-initWithApiKey:apiEndpoint:",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huy/src/td/td-ios-sdk/TreasureData/TDClient.h",
+      "line": 24,
+      "symbol": "TDClient.-sendHTTPRequest:retryCounter:completionHandler:",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huy/src/td/td-ios-sdk/TreasureData/TreasureData.h",
+      "line": 12,
+      "symbol": "SuccessHander",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.typedef",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huy/src/td/td-ios-sdk/TreasureData/TreasureData.h",
+      "line": 427,
+      "symbol": "TreasureData.-isFirstRun",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huy/src/td/td-ios-sdk/TreasureData/TreasureData.h",
+      "line": 428,
+      "symbol": "TreasureData.-clearFirstRun",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huy/src/td/td-ios-sdk/TreasureData/TreasureData.h",
+      "line": 432,
+      "symbol": "TreasureData.-event:database:table:",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huy/src/td/td-ios-sdk/TreasureData/TreasureData.h",
+      "line": 433,
+      "symbol": "TreasureData.-event:table:",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huy/src/td/td-ios-sdk/TreasureData/TreasureData.h",
+      "line": 434,
+      "symbol": "TreasureData.-uploadWithBlock:",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huy/src/td/td-ios-sdk/TreasureData/TreasureData.h",
+      "line": 435,
+      "symbol": "TreasureData.-uploadEventsWithBlock:",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huy/src/td/td-ios-sdk/TreasureData/TreasureData.h",
+      "line": 436,
+      "symbol": "TreasureData.-setApiEndpoint:",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huy/src/td/td-ios-sdk/TreasureDataExample/Pods/Headers/Public/KeenClientTD/KIOEventStore.h",
+      "line": 11,
+      "symbol": "KIOEventStore",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huy/src/td/td-ios-sdk/TreasureDataExample/Pods/Headers/Public/KeenClientTD/KIOEventStore.h",
+      "line": 14,
+      "symbol": "KIOEventStore.projectId",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.property",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huy/src/td/td-ios-sdk/TreasureDataExample/Pods/Headers/Public/KeenClientTD/KIOEventStore.h",
+      "line": 16,
+      "symbol": "KIOEventStore.lastErrorMessage",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.property",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huy/src/td/td-ios-sdk/TreasureDataExample/Pods/Headers/Public/KeenClientTD/KIOEventStore.h",
+      "line": 84,
+      "symbol": "KIOEventStore.+initializeEncryptionKey:",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.method.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huy/src/td/td-ios-sdk/TreasureDataExample/Pods/Headers/Public/KeenClientTD/KeenClient.h",
+      "line": 15,
+      "symbol": "KeenGlobalPropertiesBlock",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.typedef",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huy/src/td/td-ios-sdk/TreasureDataExample/Pods/Headers/Public/KeenClientTD/KeenClient.h",
+      "line": 104,
+      "symbol": "KeenClient.-addEventWithCallbacks:toEventCollection:onSuccess:onError:",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/huy/src/td/td-ios-sdk/TreasureDataExample/Pods/Headers/Public/KeenClientTD/KeenClient.h",
+      "line": 108,
+      "symbol": "KeenClient.+initializeEncryptionKey:",
+      "symbol_kind": "sourcekitten.source.lang.objc.decl.method.class",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/huy/src/td/td-ios-sdk"
+}
