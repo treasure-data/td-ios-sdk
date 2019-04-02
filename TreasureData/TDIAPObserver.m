@@ -124,8 +124,8 @@
                                  @"td_iap_transaction_date": transaction.transactionDate,
                                  @"td_iap_product_identifier": transaction.payment.productIdentifier,
                                  @"td_iap_product_price": product.price,
-                                 @"td_iap_product_localized_title": product.localizedTitle,
-                                 @"td_iap_product_localized_description": product.localizedDescription,
+                                 @"td_iap_product_localized_title": product.localizedTitle ?: [NSNull null],
+                                 @"td_iap_product_localized_description": product.localizedDescription ?: [NSNull null],
                                  @"td_iap_product_currency_code": currencyCode,
                                  @"td_iap_quantity": @(transaction.payment.quantity),
                                  }];
