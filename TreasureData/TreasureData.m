@@ -104,9 +104,6 @@ static long sessionTimeoutMilli = -1;
             KCLog(@"Failed to initialize client");
         }
         [self observeLifecycleEvents];
-        if (self.isInAppPurchaseEventEnabled) {
-            _iapObserver = [[TDIAPObserver alloc] initWithTD:self];
-        }
     }
     return self;
 }
@@ -625,8 +622,14 @@ static long sessionTimeoutMilli = -1;
 }
 
 - (void)enableInAppPurchaseEvent {
-    self.inAppPurchaseEnabled = YES;
-    _iapObserver = [[TDIAPObserver alloc] initWithTD:self];
+    if ([TDUtils isStoreKitAvailable]) {
+        self.inAppPurchaseEnabled = YES;
+        if (!_iapObserver) {
+            _iapObserver = [[TDIAPObserver alloc] initWithTD:self];
+        }
+    } else {
+        NSLog(@"WARN: Unable to enable IAP tracking as StoreKit is not available for this application!");
+    }
 }
 
 - (void)disableInAppPurchaseEvent {

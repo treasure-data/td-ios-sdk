@@ -36,4 +36,6 @@ static NSString *const TDEventClassIAP = @"iap";
 
 + (BOOL)isRunningWithUnity;
 
++ (BOOL)isStoreKitAvailable;
+
 @end
