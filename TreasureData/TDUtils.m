@@ -8,6 +8,7 @@
 
 #import "TDUtils.h"
 #import "Constants.h"
+#import "KeenClientTD/KeenClient.h"
 
 @implementation TDUtils
 
@@ -15,7 +16,7 @@
                  defaultValue:(NSString *)defaultStr
                       message:(NSString *)message {
     if ([str length] == 0) {
-        NSLog(@"%@", message);
+        KCLog(@"%@", message);
         return defaultStr;
     } else {
         return str;

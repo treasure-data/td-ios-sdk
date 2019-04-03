@@ -294,7 +294,7 @@ static long sessionTimeoutMilli = -1;
 
 - (NSDictionary*)appendSessionId:(NSDictionary *)origRecord {
     if (session && self.sessionId) {
-        NSLog(@"instance method TreasureData#startSession(String) and static method TreasureData.startSession() are both enabled, but the instance method will be ignored.");
+        KCLog(@"instance method TreasureData#startSession(String) and static method TreasureData.startSession() are both enabled, but the instance method will be ignored.");
     }
 
     NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
@@ -330,7 +330,7 @@ static long sessionTimeoutMilli = -1;
         [self.client uploadWithFinishedBlock:block];
     }
     else {
-        KCLog(@"Client is nil");
+        NSLog(@"ERROR: The TreasureData's client is nil");
     }
 }
 
@@ -340,8 +340,8 @@ static long sessionTimeoutMilli = -1;
         [self.client uploadWithCallbacks:onSuccess onError:onError];
     }
     else {
-        NSString *errMsg = @"Client is nil";
-        KCLog(@"%@", errMsg);
+        NSString *errMsg = @"ERROR: Unable to upload events. TreasureData's client is nil.";
+        NSLog(@"%@", errMsg);
         if (onError) {
             onError(ERROR_CODE_INIT_ERROR, errMsg);
         }
@@ -352,7 +352,6 @@ static long sessionTimeoutMilli = -1;
     [self uploadEventsWithCallback:nil onError:nil];
 }
 
-
 - (void)setApiEndpoint:(NSString*)endpoint {
     self.client.apiEndpoint = endpoint;
 }
@@ -360,6 +359,8 @@ static long sessionTimeoutMilli = -1;
 - (void)disableAutoAppendUniqId {
     self.autoAppendUniqId = false;
 }
+
+// TODO: should the below methods be changed to flag properties?
 
 - (void)enableAutoAppendUniqId {
     self.autoAppendUniqId = true;
@@ -396,6 +397,8 @@ static long sessionTimeoutMilli = -1;
 - (void)enableRetryUploading {
     self.client.enableRetryUploading = true;
 }
+
+// TODO: consider whether it is necessary for `isFirstRun` (and `clearFirstRun`) to be exposed
 
 - (BOOL)isFirstRun {
     NSInteger state = [[NSUserDefaults standardUserDefaults] integerForKey:storageKeyOfFirstRun];
@@ -457,15 +460,11 @@ static long sessionTimeoutMilli = -1;
     return [session getId];
 }
 
-// Only for test
-+ (void)resetSession {
-    session = nil;
-}
-
 + (void)setSessionTimeoutMilli:(long)to {
     sessionTimeoutMilli = to;
 }
 
+// FIXME: document - which column will be used if unspecified?
 - (void)enableServerSideUploadTimestamp {
     self.serverSideUploadTimestamp = TRUE;
     self.serverSideUploadTimestampColumn = nil;
@@ -473,7 +472,7 @@ static long sessionTimeoutMilli = -1;
 
 - (void)enableServerSideUploadTimestamp: (NSString*)columnName {
     if (!columnName) {
-        NSLog(@"columnName shouldn't be nil");
+        KCLog(@"WARN: the specified columnName for server upload timestamp is nil; auto appending server upload timestamp won't be enabled.");
         return;
     }
     self.serverSideUploadTimestamp = TRUE;
@@ -489,9 +488,12 @@ static long sessionTimeoutMilli = -1;
     self.autoAppendRecordUUIDColumn = @"record_uuid";
 }
 
-- (void)enableAutoAppendRecordUUID: (NSString*)columnName {
+- (void)enableAutoAppendRecordUUID:(NSString *)columnName {
     if (!columnName) {
-        NSLog(@"columnName shouldn't be nil");
+        KCLog(@"WARN: the specified columnName for record UUID is nil; auto appending record UUID won't be enabled.");
+        // FIXME:
+        // A more sensible behaviour is using "record_uuid" as the default column name,
+        // but it is a behaviour change, will postpone it for a later release.
         return;
     }
     self.autoAppendRecordUUIDColumn = columnName;
@@ -514,7 +516,7 @@ static long sessionTimeoutMilli = -1;
 
 
 + (instancetype)sharedInstance {
-    NSAssert(sharedInstance, @"%@ sharedInstance called before withSecret", self);
+    NSAssert(sharedInstance, @"%@ sharedInstance is called before [TreasureData initializeWithApiKey:]", self);
     return sharedInstance;
 }
 
@@ -542,6 +544,7 @@ static long sessionTimeoutMilli = -1;
     isTraceLoggingEnabled = false;
 }
 
+// FIXME: what is the real usage for this?
 + (void)enableTraceLogging {
     isTraceLoggingEnabled = true;
 }
@@ -601,8 +604,7 @@ static long sessionTimeoutMilli = -1;
     }
 }
 
-
-#pragma mark - GDPR Compliance (Right To Be Forgotten)
+#pragma mark - GDPR Compliance
 
 - (void)enableCustomEvent {
     self.customEventEnabled = YES;
@@ -649,6 +651,10 @@ static long sessionTimeoutMilli = -1;
 }
 
 #pragma mark - Exposed for testing
+
++ (void)resetSession {
+    session = nil;
+}
 
 - (TDIAPObserver *)iapObserver {
     return _iapObserver;

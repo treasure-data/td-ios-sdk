@@ -171,8 +171,6 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 
 #pragma mark - Events' metadata
 
-// TODO: should the below methods be changed to flag properties?
-
 /**
  * Automaticaly append `td_uuid` column for every events. The value is randomly generated and persisted, it is shared across app launches and events. Basically, it is used to prepresent for a unique app installation instance.
  *
@@ -247,7 +245,6 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
  *
  * This is disabled by default.
  */
-// FIXME: document - which column to be exact?
 - (void)enableServerSideUploadTimestamp;
 
 /**
@@ -433,8 +430,6 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
  */
 + (void)disableLogging;
 
-
-// FIXME: what is the real usage for this?
 /**
  * Enable trace logging
  */
@@ -444,8 +439,6 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
  * Disable trace logging
  */
 + (void)disableTraceLogging;
-
-// TODO: consider whether it is necessary for `isFirstRun` (and `clearFirstRun`) to be exposed
 
 - (BOOL)isFirstRun;
 - (void)clearFirstRun;
