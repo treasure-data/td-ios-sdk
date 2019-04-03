@@ -9,10 +9,13 @@
 #import <Foundation/Foundation.h>
 #import "TDClient.h"
 
+/**
+ * Generic success callback block's definition.
+ */
 typedef void (^SuccessHander)(void);
 
 /**
- * Generic error handler.
+ * Generic error callback block's definition.
  *
  * Known error codes:
  *
@@ -27,12 +30,23 @@ typedef void (^SuccessHander)(void);
 typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable errorMessage);
 
 /**
- * SDK interface entry
+ * The main interface for the SDK. All initialization and configuration (except retry parameters) could be done through here.
+ *
+ * Minimal example:
+ *
+ * ```
+ * [TreasureData initializeWithApiKey:@"<your_write_only_api_key>"];
+ *
+ * [[TreasureData sharedInstance] addEvent:@{@"welcome": @"Hello world"}
+                                  database:@"my_db"
+                                  table:@"my_ios_events"];
+ *
+ * [[TreasureData sharedInstance] uploadEvents];
  */
 @interface TreasureData : NSObject
 
 /**
- * Inner client, automatically initialized. Additional parameters like request retrying could be configured here.
+ * Inner client responsible for uploading events, automatically initialized. Additional parameters like request retrying could be configured here.
  */
 @property(nonatomic, strong) TDClient * _Nullable client;
 
@@ -45,6 +59,8 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
  * The destination table for events that doesn't specify one. Currently this also applied for automatically tracked events (if enabled): app lifecycle, IAP and audits, default is "td_ios".
  */
 @property(nonatomic, strong) NSString * _Nullable defaultTable;
+
+#pragma mark - Initialization
 
 /**
  * Assign the target API endpoint, default is "https://in.treasuredata.com".
@@ -80,6 +96,8 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
  * @param apiKey for the in effect endpoint (`+[TreasureData initializeApiEndpoint:]`).
  */
 - (id _Nonnull)initWithApiKey:(NSString * _Nonnull)apiKey;
+
+#pragma mark - Tracking events
 
 /**
  * Track a new event
@@ -150,6 +168,8 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
  * @param record event data
  */
 - (void)uploadEvents;
+
+#pragma mark - Events' metadata
 
 // TODO: should the below methods be changed to flag properties?
 
@@ -252,16 +272,6 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
  */
 - (void)disableAutoAppendRecordUUID;
 
-/**
- * Enable retrying on failed uploads. Already enabled by default.
- */
-- (void)enableRetryUploading;
-
-/**
- * Do not attempt to retry on failed uploads.
- */
-- (void)disableRetryUploading;
-
 #pragma mark - Session
 
 /**
@@ -275,7 +285,7 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 - (void)startSession:(NSString* _Nonnull)table database:(NSString* _Nonnull)database;
 
 /**
- * Same as `-[TreasureData startSession:database]`, using `+[TreasureData defaultDatabase]` as the destination database for `td_session_event`.
+ * Same as `-[TreasureData startSession:database:]`, using `+[TreasureData defaultDatabase]` as the destination database for `td_session_event`.
  */
 - (void)startSession:(NSString* _Nonnull)table;
 
@@ -390,6 +400,20 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 #pragma mark - Misc.
 
 /**
+ * Enable retrying on failed uploads. Already enabled by default.
+ *
+ * Use `TreasureData.client` for further retry's customization
+ */
+- (void)enableRetryUploading;
+
+/**
+ * Do not attempt to retry on failed uploads.
+ *
+ * Use `TreasureData.client` for further retry's customization
+ */
+- (void)disableRetryUploading;
+
+/**
  * Event data will be compressed with zlib before uploading to server.
  */
 + (void)enableEventCompression;
@@ -421,8 +445,7 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
  */
 + (void)disableTraceLogging;
 
-
-// TODO: consider whether `isFirstRun` (and `clearFirstRun`) are necessary to be exposed
+// TODO: consider whether it is necessary for `isFirstRun` (and `clearFirstRun`) to be exposed
 
 - (BOOL)isFirstRun;
 - (void)clearFirstRun;

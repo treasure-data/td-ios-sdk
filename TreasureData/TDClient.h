@@ -24,6 +24,8 @@
  */
 @property(nonatomic, strong) NSString *apiEndpoint;
 
+#pragma mark - Retry
+
 /**
  * Enable retry if uploading events failed.
  */
