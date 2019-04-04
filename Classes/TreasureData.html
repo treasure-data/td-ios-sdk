@@ -1194,14 +1194,7 @@ Note: this won&rsquo;t reset the current buffered events before this call</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Automatically append the time value when the event is received on server.
- *</p>
-
-<ul>
-<li>This is disabled by default.
-*</li>
-<li>- parameter: columnName The column to write the uploaded time value</li>
-</ul>
+                        <p>Automatically append the time value when the event is received on server. Disabled by default.</p>
 
                       </div>
                       <div class="declaration">
@@ -1216,6 +1209,25 @@ Note: this won&rsquo;t reset the current buffered events before this call</p>
                           <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">enableServerSideUploadTimestamp</span><span class="p">(</span><span class="n">_</span> <span class="nv">columnName</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>columnName</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The column to write the uploaded time value</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
