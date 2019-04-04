@@ -110,7 +110,7 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 - (NSDictionary *_Nullable)addEvent:(NSDictionary * _Nonnull)record database:(NSString * _Nonnull)database table:(NSString * _Nonnull)table;
 
 /**
- * Track a new event targets `+[TreasureData defaultDatabase]`
+ * Track a new event targets `TreasureData.defaultDatabase`
  *
  * @param record event data
  * @param table the event's destination table
@@ -141,7 +141,7 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
                                onError:(ErrorHandler _Nullable)onError;
 
 /**
- * Same as `-[TreasureData addEventWithCallback:database:table:onSuccess:onError]`, targets the `-[TreasureData defaultDatabase]`.
+ * Same as `-[TreasureData addEventWithCallback:database:table:onSuccess:onError]`, targets the `TreasureData.defaultDatabase`.
  *
  * @param record event data
  * @param table the event's destination table
@@ -154,7 +154,7 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
                                onError:(ErrorHandler _Nullable)onError;
 
 /**
- * Same as `-[TreasureData addEventWithCallback:database:table:onSuccess:onError]`, targets the `-[TreasureData defaultDatabase]` / `+[TreasureData defaultTable]`.
+ * Same as `-[TreasureData addEventWithCallback:database:table:onSuccess:onError]`, targets the `TreasureData.defaultDatabase` / `TreasureData.defaultTable`.
  *
  * @param onSuccess get called (on main thread) when the event successfuly uploaded to the configured endpoint. Notes that it doesn't guarantee events to be successfully persisted to the remote database, it only indicates that the server accepted the request (without checking the validity of the events).
  *
@@ -164,7 +164,7 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
                          onError:(ErrorHandler _Nullable)onError;
 
 /**
- * Same as `-[TreasureData uploadEventWithCallback:onError]` but ignores the result status.
+ * Same as `-[TreasureData uploadEventWithCallback:onError:]` but ignores the result status.
  */
 - (void)uploadEvents;
 
@@ -280,7 +280,7 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 - (void)startSession:(NSString* _Nonnull)table database:(NSString* _Nonnull)database;
 
 /**
- * Same as `-[TreasureData startSession:database:]`, using `+[TreasureData defaultDatabase]` as the destination database for `td_session_event`.
+ * Same as `-[TreasureData startSession:database:]`, using `TreasureData.defaultDatabase` as the destination database for `td_session_event`.
  */
 - (void)startSession:(NSString* _Nonnull)table;
 
@@ -295,7 +295,7 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 - (void)endSession:(NSString* _Nonnull)table database:(NSString* _Nonnull)database;
 
 /**
- * Same as `-[TreasureData endSession]`, using `+[TreasureData defaultDatbase]` as the destination database for `td_session_event`.
+ * Same as `-[TreasureData endSession]`, using `TreasureData.defaultDatbase` as the destination database for `td_session_event`.
  */
 - (void)endSession:(NSString* _Nonnull)table;
 
@@ -397,14 +397,14 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 /**
  * Enable retrying on failed uploads. Already enabled by default.
  *
- * Use `TreasureData.client` for further retry's customization
+ * Use `TreasureData.client` for fine tuning retry's configuration
  */
 - (void)enableRetryUploading;
 
 /**
  * Do not attempt to retry on failed uploads.
  *
- * Use `TreasureData.client` for further retry's customization
+ * Use `TreasureData.client` for fine tuning retry's configuration
  */
 - (void)disableRetryUploading;
 
