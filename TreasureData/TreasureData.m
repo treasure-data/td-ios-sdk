@@ -60,6 +60,8 @@ static long sessionTimeoutMilli = -1;
 @property (nonatomic, assign, getter=isAppLifecycleEventEnabled) BOOL appLifecycleEventEnabled;
 @property (nonatomic, assign, getter=isInAppPurchaseEventEnabled) BOOL inAppPurchaseEnabled;
 
+@property (nonatomic, strong) dispatch_queue_t addEventQueue;
+
 @end
 
 @implementation TreasureData {
@@ -107,6 +109,8 @@ static long sessionTimeoutMilli = -1;
         if (self.isInAppPurchaseEventEnabled) {
             _iapObserver = [[TDIAPObserver alloc] initWithTD:self];
         }
+
+        self.addEventQueue = dispatch_queue_create("com.treasuredata.add_event", DISPATCH_QUEUE_SERIAL);
     }
     return self;
 }
@@ -130,87 +134,127 @@ static long sessionTimeoutMilli = -1;
     return [self addEventWithCallback:record database:database table:table onSuccess:nil onError:nil];
 }
 
+- (NSDictionary *)addEventWithCallback:(NSDictionary *)record table:(NSString *)table onSuccess:(void (^)(void))onSuccess onError:(void (^)(NSString*, NSString*))onError {
+    return [self addEventWithCallback:record database:self.defaultDatabase table:table onSuccess:onSuccess onError:onError];
+}
+
+// TOOD: make this (it it's family) async, seldomly the return event record actually get used
 - (NSDictionary *)addEventWithCallback:(NSDictionary *)record
                               database:(NSString *)database
                                  table:(NSString *)table
                              onSuccess:(SuccessHander)onSuccess
                                onError:(ErrorHandler)onError {
-    if ([TDUtils isCustomEvent:record] && ![self isCustomEventEnabled]) {
-        if (onError) {
-            onError(TD_ERROR_CUSTOM_EVENT_DISABLED,
-                    @"You configured to deny tracking of custom events. This is a persistent setting, it will unharmfully drop the any custom events called through `addEvent...` methods family.");
+    NSDictionary __block *event = nil;
+
+    SuccessHander success = ^{
+        if (onSuccess) {
+            if ([NSThread isMainThread]) {
+                onSuccess();
+            } else {
+                dispatch_async(dispatch_get_main_queue(), onSuccess);
+            }
         }
-        return nil;
-    }
-    // Denial of other events rather than custom are silent
-    if ([TDUtils isAppLifecycleEvent:record] && ![self isAppLifecycleEventEnabled]) {
-        return nil;
-    }
-    if ([TDUtils isIAPEvent:record] && ![self isInAppPurchaseEventEnabled]) {
-        return nil;
-    }
-    record = [TDUtils stripNonEventData:record];
-    if (self.client) {
-        if (database && table) {
-            NSError *error = nil;
-            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^[0-9a-z_]{3,255}$" options:0 error:&error];
-            if (!([regex firstMatchInString:database options:0 range:NSMakeRange(0, [database length])] &&
-                  [regex firstMatchInString:table    options:0 range:NSMakeRange(0, [table length])])) {
-                NSString *errMsg = [NSString stringWithFormat:@"database and table need to be consist of lower letters, numbers or '_': database=%@, table=%@", database, table];
-                KCLog(@"%@", errMsg);
-                if (onError) {
-                    onError(ERROR_CODE_INVALID_PARAM, errMsg);
+    };
+    ErrorHandler error = ^void(NSString *errorCode, NSString* errorMessage) {
+        if (onError) {
+            if ([NSThread isMainThread]) {
+                onError(errorCode, errorMessage);
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    onError(errorCode, errorMessage);
+                });
+            }
+        }
+    };
+
+    // Dispatch to a dedicated queue as this may do some potentially intensive calculations.
+    //
+    // For now this doesn't benefit much as it still blocks the caller thread,
+    // we would want to change this to dispatch_async later, as a consequence, the return has to be void.
+    dispatch_sync(self.addEventQueue, ^{
+        @try {
+            if ([TDUtils isCustomEvent:record] && ![self isCustomEventEnabled]) {
+                error(TD_ERROR_CUSTOM_EVENT_DISABLED,
+                            @"You configured to deny tracking of custom events. This is a persistent setting, it will unharmfully drop the any custom events called through `addEvent...` methods family.");
+                return;
+            }
+
+            if ([TDUtils isAppLifecycleEvent:record] && ![self isAppLifecycleEventEnabled]) return;
+            if ([TDUtils isIAPEvent:record] && ![self isInAppPurchaseEventEnabled]) return;
+
+            if (self.client) {
+                if (database && table) {
+                    NSError *formatError = nil;
+                    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^[0-9a-z_]{3,255}$" options:0 error:&formatError];
+                    if (!([regex firstMatchInString:database options:0 range:NSMakeRange(0, [database length])] &&
+                          [regex firstMatchInString:table    options:0 range:NSMakeRange(0, [table length])])) {
+                        NSString *errMsg = [NSString stringWithFormat:@"database and table need to be consist of lower letters, numbers or '_': database=%@, table=%@", database, table];
+                        KCLog(@"%@", errMsg);
+                        if (onError) {
+                            dispatch_async(dispatch_get_main_queue(), ^() {
+                                onError(ERROR_CODE_INVALID_PARAM, errMsg);
+                            });
+                        }
+                    }
+                    else {
+                        NSString *tag = [NSString stringWithFormat:@"%@.%@", database, table];
+                        NSDictionary *enrichedRecord = [self enrichEventRecord:record];
+                        [self.client addEventWithCallbacks:enrichedRecord
+                                         toEventCollection:tag
+                                                 onSuccess:success
+                                                   onError:error];
+                        event = [enrichedRecord copy];
+                        return;
+                    }
+                }
+                else {
+                    NSString *errMsg = [NSString stringWithFormat:@"database or table is nil: database=%@, table=%@", database, table];
+                    KCLog(@"%@", errMsg);
+                    error(ERROR_CODE_INVALID_PARAM, errMsg);
+                    return;
                 }
             }
             else {
-                if (self.autoAppendUniqId) {
-                    record = [self appendUniqId:record];
-                }
-                if (self.autoAppendRecordUUIDColumn) {
-                    record = [self appendRecordUUID:record];
-                }
-                if (self.autoAppendModelInformation) {
-                    record = [self appendModelInformation:record];
-                }
-                if (session || self.sessionId) {
-                    record = [self appendSessionId:record];
-                }
-                if (self.serverSideUploadTimestamp) {
-                    record = [self appendServerSideUploadTimestamp:record];
-                }
-                if (self.autoAppendAppInformation) {
-                    record = [self appendAppInformation:record];
-                }
-                if (self.autoAppendLocaleInformation) {
-                    record = [self appendLocaleInformation:record];
-                }
+                NSString *errMsg = @"ERROR: Unable to add event. TreasureData's client is nil.";
+                NSLog(@"%@", errMsg);
+                error(ERROR_CODE_INVALID_PARAM, errMsg);
+            }
+            return;
+        }
+        @catch (NSException *exception) {
+            NSLog(@"ERROR: Unexpected exception when adding event: %@", exception);
+            error(@"unknown_error", exception.reason);
+        }
+    });
 
-                NSString *tag = [NSString stringWithFormat:@"%@.%@", database, table];
-                [self.client addEventWithCallbacks:record toEventCollection:tag onSuccess:onSuccess onError:onError];
-                return [NSDictionary dictionaryWithDictionary:record];
-            }
-        }
-        else {
-            NSString *errMsg = [NSString stringWithFormat:@"database or table is nil: database=%@, table=%@", database, table];
-            KCLog(@"%@", errMsg);
-            if (onError) {
-                onError(ERROR_CODE_INVALID_PARAM, errMsg);
-            }
-            return nil;
-        }
-    }
-    else {
-        NSString *errMsg = @"Client is nil";
-        KCLog(@"%@", errMsg);
-        if (onError) {
-            onError(ERROR_CODE_INIT_ERROR, errMsg);
-        }
-    }
-    return nil;
+    return event;
 }
 
-- (NSDictionary *)addEventWithCallback:(NSDictionary *)record table:(NSString *)table onSuccess:(void (^)(void))onSuccess onError:(void (^)(NSString*, NSString*))onError {
-    return [self addEventWithCallback:record database:self.defaultDatabase table:table onSuccess:onSuccess onError:onError];
+- (NSDictionary *)enrichEventRecord:(NSDictionary *)origRecord {
+    NSDictionary *enrichedRecord = [TDUtils stripNonEventData:origRecord];
+
+    if (self.autoAppendUniqId) {
+        enrichedRecord = [self appendUniqId:origRecord];
+    }
+    if (self.autoAppendRecordUUIDColumn) {
+        enrichedRecord = [self appendRecordUUID:origRecord];
+    }
+    if (self.autoAppendModelInformation) {
+        enrichedRecord = [self appendModelInformation:origRecord];
+    }
+    if (session || self.sessionId) {
+        enrichedRecord = [self appendSessionId:origRecord];
+    }
+    if (self.serverSideUploadTimestamp) {
+        enrichedRecord = [self appendServerSideUploadTimestamp:origRecord];
+    }
+    if (self.autoAppendAppInformation) {
+        enrichedRecord = [self appendAppInformation:origRecord];
+    }
+    if (self.autoAppendLocaleInformation) {
+        enrichedRecord = [self appendLocaleInformation:origRecord];
+    }
+    return enrichedRecord;
 }
 
 - (NSString*)getUUID {

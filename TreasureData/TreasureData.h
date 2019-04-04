@@ -26,6 +26,7 @@ typedef void (^SuccessHander)(void);
  *  - `storage_error`
  *  - `network_error`
  *  - `server_response`
+ *  - `unknown_error`
  */
 typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable errorMessage);
 
@@ -65,7 +66,7 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 /**
  * Assign the target API endpoint, default is "https://in.treasuredata.com".
  * This have to be call before `initializeWithApiKey(apiKey:)`, otherwise it won't have effect.
- * @param apiKey for the in effect endpoint (`+[TreasureData initializeApiEndpoint:]`).
+ * @param apiEndpoint for the in effect endpoint (`+[TreasureData initializeApiEndpoint:]`).
  */
 + (void)initializeApiEndpoint:(NSString * _Nullable)apiEndpoint;
 
@@ -130,8 +131,8 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
  * @param record event data
  * @param database the event's destination database
  * @param table the event's destination table
- * @param onSuccess called when the event successfuly inserted to the local buffer
- * @param onError called when the event failed to inserted to the local buffer, perfer `ErrorHandler` for possible error codes
+ * @param onSuccess get called (on main thread) when the event successfuly inserted to the local buffer
+ * @param onError get called (on main thread) when the event failed to inserted to the local buffer, perfer `ErrorHandler` for possible error codes
  */
 - (NSDictionary *_Nullable)addEventWithCallback:(NSDictionary * _Nonnull)record
                               database:(NSString * _Nonnull)database
@@ -144,8 +145,8 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
  *
  * @param record event data
  * @param table the event's destination table
- * @param onSuccess called when the event successfuly inserted to the local buffer
- * @param onError called when the event failed to inserted to the local buffer, perfer `ErrorHandler` for possible error codes
+ * @param onSuccess get called (on main thread) when the event successfuly inserted to the local buffer
+ * @param onError get called (on main thread) when the event failed to inserted to the local buffer, perfer `ErrorHandler` for possible error codes
  */
 - (NSDictionary *_Nullable)addEventWithCallback:(NSDictionary * _Nonnull)record
                                  table:(NSString * _Nonnull)table
@@ -155,17 +156,15 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 /**
  * Same as `-[TreasureData addEventWithCallback:database:table:onSuccess:onError]`, targets the `-[TreasureData defaultDatabase]` / `+[TreasureData defaultTable]`.
  *
- * @param onSuccess called when the event successfuly uploaded to the configured endpoint. Notes that it doesn't guarantee events to be successfully persisted to the remote database, it only indicates that the server accepted the request (without checking the validity of the events).
+ * @param onSuccess get called (on main thread) when the event successfuly uploaded to the configured endpoint. Notes that it doesn't guarantee events to be successfully persisted to the remote database, it only indicates that the server accepted the request (without checking the validity of the events).
  *
- * @param onError called when the event failed to inserted to the configured endpoint, perfer `ErrorHandler` for possible error codes
+ * @param onError get called (on main thread) when the event failed to inserted to the configured endpoint, perfer `ErrorHandler` for possible error codes
  */
 - (void)uploadEventsWithCallback:(SuccessHander _Nullable)onSuccess
                          onError:(ErrorHandler _Nullable)onError;
 
 /**
  * Same as `-[TreasureData uploadEventWithCallback:onError]` but ignores the result status.
- *
- * @param record event data
  */
 - (void)uploadEvents;
 
