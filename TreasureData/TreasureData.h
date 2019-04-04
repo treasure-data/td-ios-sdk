@@ -231,9 +231,8 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
  */
 - (void)disableAutoAppendLocaleInformation;
 
-/** Automatically append the time value when the event is received on server.
- *
- * This is disabled by default.
+/**
+ * Automatically append the time value when the event is received on server. Disabled by default.
  *
  * @param columnName The column to write the uploaded time value
  */
