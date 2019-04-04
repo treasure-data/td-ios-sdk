@@ -45,6 +45,14 @@ static NSString *sessionEventEnd = @"end";
 static Session *session = nil;
 static long sessionTimeoutMilli = -1;
 
+@interface TDClient (Internal)
+
+- (void)__enableEventCompression:(BOOL)flag;
+
+- (instancetype)__initWithApiKey:(NSString *)apiKey apiEndpoint:(NSString*)apiEndpoint;
+
+@end
+
 @interface TreasureData ()
 
 @property BOOL autoAppendUniqId;
@@ -99,7 +107,7 @@ static long sessionTimeoutMilli = -1;
         self.appLifecycleEventEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENT_ENABLED];
 
         NSString *endpoint = defaultApiEndpoint ? defaultApiEndpoint : @"https://in.treasuredata.com";
-        self.client = [[TDClient alloc] initWithApiKey:apiKey apiEndpoint:endpoint];
+        self.client = [[TDClient alloc] __initWithApiKey:apiKey apiEndpoint:endpoint];
         if (self.client) {
 
         } else {
@@ -234,25 +242,25 @@ static long sessionTimeoutMilli = -1;
     NSDictionary *enrichedRecord = [TDUtils stripNonEventData:origRecord];
 
     if (self.autoAppendUniqId) {
-        enrichedRecord = [self appendUniqId:origRecord];
+        enrichedRecord = [self appendUniqId:enrichedRecord];
     }
     if (self.autoAppendRecordUUIDColumn) {
-        enrichedRecord = [self appendRecordUUID:origRecord];
+        enrichedRecord = [self appendRecordUUID:enrichedRecord];
     }
     if (self.autoAppendModelInformation) {
-        enrichedRecord = [self appendModelInformation:origRecord];
+        enrichedRecord = [self appendModelInformation:enrichedRecord];
     }
     if (session || self.sessionId) {
-        enrichedRecord = [self appendSessionId:origRecord];
+        enrichedRecord = [self appendSessionId:enrichedRecord];
     }
     if (self.serverSideUploadTimestamp) {
-        enrichedRecord = [self appendServerSideUploadTimestamp:origRecord];
+        enrichedRecord = [self appendServerSideUploadTimestamp:enrichedRecord];
     }
     if (self.autoAppendAppInformation) {
-        enrichedRecord = [self appendAppInformation:origRecord];
+        enrichedRecord = [self appendAppInformation:enrichedRecord];
     }
     if (self.autoAppendLocaleInformation) {
-        enrichedRecord = [self appendLocaleInformation:origRecord];
+        enrichedRecord = [self appendLocaleInformation:enrichedRecord];
     }
     return enrichedRecord;
 }
@@ -380,7 +388,7 @@ static long sessionTimeoutMilli = -1;
 
 - (void)uploadEventsWithCallback:(void (^)(void))onSuccess onError:(void (^)(NSString*, NSString*))onError {
     if (self.client) {
-        self.client.enableEventCompression = isEventCompressionEnabled;
+        [self.client __enableEventCompression:isEventCompressionEnabled];
         [self.client uploadWithCallbacks:onSuccess onError:onError];
     }
     else {
