@@ -3,7 +3,7 @@ version: 2
 jobs:
   build:
     macos:
-      xcode: "10.1.0"
+      xcode: "10.2.0"
 
     steps:
 
@@ -34,11 +34,11 @@ jobs:
 
       - run:
           name: Tests on iOS 12
-          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 7,OS=12.1' logs/xcbuild_ios_12.log test_results/ios_12.xml
+          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 7,OS=12.2' logs/xcbuild_ios_12.log test_results/ios_12.xml
 
       - run:
           name: Tests on iOS 11
-          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 7,OS=11.2' logs/xcbuild_ios_11.log test_results/ios_11.xml
+          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 7,OS=11.4' logs/xcbuild_ios_11.log test_results/ios_11.xml
 
       - run:
           name: Tests on iOS 10
