@@ -40,6 +40,9 @@ Download [TreasureData.framework](http://cdn.treasuredata.com/sdk/ios/0.1.27/Tre
 
 ## Usage in Objective-C
 
+- [Treasure Data's Guide](https://support.treasuredata.com/hc/en-us/articles/360000671667-iOS-SDK) (most parts are overlap with this README)i
+- [API Reference](https://treasure-data.github.io/td-ios-sdk/Classes/TreasureData.html)
+
 ### Import SDK header file
 
 ```
