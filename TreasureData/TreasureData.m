@@ -159,7 +159,7 @@ static long sessionTimeoutMilli = -1;
             if ([NSThread isMainThread]) {
                 onSuccess();
             } else {
-                dispatch_async(dispatch_get_main_queue(), onSuccess);
+                dispatch_sync(dispatch_get_main_queue(), onSuccess);
             }
         }
     };
@@ -168,7 +168,7 @@ static long sessionTimeoutMilli = -1;
             if ([NSThread isMainThread]) {
                 onError(errorCode, errorMessage);
             } else {
-                dispatch_async(dispatch_get_main_queue(), ^{
+                dispatch_sync(dispatch_get_main_queue(), ^{
                     onError(errorCode, errorMessage);
                 });
             }
@@ -198,11 +198,7 @@ static long sessionTimeoutMilli = -1;
                           [regex firstMatchInString:table    options:0 range:NSMakeRange(0, [table length])])) {
                         NSString *errMsg = [NSString stringWithFormat:@"database and table need to be consist of lower letters, numbers or '_': database=%@, table=%@", database, table];
                         KCLog(@"%@", errMsg);
-                        if (onError) {
-                            dispatch_async(dispatch_get_main_queue(), ^() {
-                                onError(ERROR_CODE_INVALID_PARAM, errMsg);
-                            });
-                        }
+                        error(ERROR_CODE_INVALID_PARAM, errMsg);
                     }
                     else {
                         NSString *tag = [NSString stringWithFormat:@"%@.%@", database, table];
