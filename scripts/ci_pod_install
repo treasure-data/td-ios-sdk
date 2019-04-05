@@ -2,14 +2,16 @@
 
 set -e
 
-if [ -d "$HOME/.cocoapods/repos/master" ]; then
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+if [ -d "$SCRIPT_DIR/../Pods" ]; then
     echo Local CocoaPods repo has been restored from cache
     # Not sure if caching for Pods that fetched from CircleCI's S3 is a wise choice,
     # seems like a doubly layered caching.
 else
     curl https://cocoapods-specs.circleci.com/fetch-cocoapods-repo-from-s3.sh | bash -s cf
+    echo "Using $(gem list ^cocoapods$)"
+    pod install
 fi
-
-pod install
 
 exit 0
