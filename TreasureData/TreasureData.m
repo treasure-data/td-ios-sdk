@@ -14,6 +14,7 @@
 #import "TDUtils.h"
 #import "Constants.h"
 #import "TDIAPObserver.h"
+#import "TDClientInternal.h"
 
 static bool isTraceLoggingEnabled = false;
 static bool isEventCompressionEnabled = true;
@@ -44,14 +45,6 @@ static NSString *sessionEventStart = @"start";
 static NSString *sessionEventEnd = @"end";
 static Session *session = nil;
 static long sessionTimeoutMilli = -1;
-
-@interface TDClient (Internal)
-
-- (void)__enableEventCompression:(BOOL)flag;
-
-- (instancetype)__initWithApiKey:(NSString *)apiKey apiEndpoint:(NSString*)apiEndpoint;
-
-@end
 
 @interface TreasureData ()
 

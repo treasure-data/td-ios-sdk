@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 #import "TreasureData.h"
 #import "TDClient.h"
+#import "TDClientInternal.h"
 #import "Constants.h"
 #import "TDUtils.h"
 #import "TDIAPObserver.h"
@@ -117,10 +118,10 @@ static NSString *END_POINT = @"http://localhost";
 
 - (id)initWithApiKey:(NSString *)apiKey {
     self = [super initWithApiKey:apiKey];
-    MyTDClient *myClient = [[MyTDClient alloc] initWithApiKey:apiKey apiEndpoint:END_POINT];
+    MyTDClient *myClient = [[MyTDClient alloc] __initWithApiKey:apiKey apiEndpoint:END_POINT];
     self.client = myClient;
     MySession *session = [[MySession alloc] init];
-    self.client.session = session;
+    [self.client __setSession:session];
     self.capturedEvents = [NSMutableArray new];
     return self;
 }
@@ -184,7 +185,7 @@ static NSString *END_POINT = @"http://localhost";
     [self.td initializeFirstRun];
     [self.td setDefaultDatabase:@"my_database"];
     self.client = (MyTDClient*)self.td.client;
-    self.session = (MySession*)self.td.client.session;
+    self.session = (MySession*)[self.td.client __session];
     [[MyTDClient getEventStore] deleteAllEvents];
     [self.td.capturedEvents removeAllObjects];
     [MyTreasureData disableEventCompression];

@@ -140,4 +140,12 @@ static NSString *version = @"0.1.27";
     _enableEventCompression = flag;
 }
 
+- (NSURLSession *)__session {
+    return _session;
+}
+
+- (void)__setSession:(NSURLSession *)session {
+    _session = session;
+}
+
 @end
