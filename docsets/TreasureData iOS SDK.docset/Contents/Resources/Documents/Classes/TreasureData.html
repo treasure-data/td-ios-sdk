@@ -507,7 +507,7 @@ This should be called only once and prior to any <code>addEvent...</code> call.<
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Track a new event targets <code>+[TreasureData defaultDatabase]</code></p>
+                        <p>Track a new event targets <code><a href="../Classes/TreasureData.html#/c:objc(cs)TreasureData(py)defaultDatabase">TreasureData.defaultDatabase</a></code></p>
 
                       </div>
                       <div class="declaration">
@@ -685,7 +685,7 @@ This should be called only once and prior to any <code>addEvent...</code> call.<
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Same as <code>-[TreasureData addEventWithCallback:database:table:onSuccess:onError]</code>, targets the <code>-[TreasureData defaultDatabase]</code>.</p>
+                        <p>Same as <code>-[TreasureData addEventWithCallback:database:table:onSuccess:onError]</code>, targets the <code><a href="../Classes/TreasureData.html#/c:objc(cs)TreasureData(py)defaultDatabase">TreasureData.defaultDatabase</a></code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -776,7 +776,7 @@ This should be called only once and prior to any <code>addEvent...</code> call.<
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Same as <code>-[TreasureData addEventWithCallback:database:table:onSuccess:onError]</code>, targets the <code>-[TreasureData defaultDatabase]</code> / <code>+[TreasureData defaultTable]</code>.</p>
+                        <p>Same as <code>-[TreasureData addEventWithCallback:database:table:onSuccess:onError]</code>, targets the <code><a href="../Classes/TreasureData.html#/c:objc(cs)TreasureData(py)defaultDatabase">TreasureData.defaultDatabase</a></code> / <code><a href="../Classes/TreasureData.html#/c:objc(cs)TreasureData(py)defaultTable">TreasureData.defaultTable</a></code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -840,7 +840,7 @@ This should be called only once and prior to any <code>addEvent...</code> call.<
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Same as <code>-[TreasureData uploadEventWithCallback:onError]</code> but ignores the result status.</p>
+                        <p>Same as <code>-[TreasureData uploadEventWithCallback:onError:]</code> but ignores the result status.</p>
 
                       </div>
                       <div class="declaration">
@@ -1503,7 +1503,7 @@ Note: this won&rsquo;t reset the current buffered events before this call</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Same as <code><a href="../Classes/TreasureData.html#/c:objc(cs)TreasureData(im)startSession:database:">-[TreasureData startSession:database:]</a></code>, using <code>+[TreasureData defaultDatabase]</code> as the destination database for <code>td_session_event</code>.</p>
+                        <p>Same as <code><a href="../Classes/TreasureData.html#/c:objc(cs)TreasureData(im)startSession:database:">-[TreasureData startSession:database:]</a></code>, using <code><a href="../Classes/TreasureData.html#/c:objc(cs)TreasureData(py)defaultDatabase">TreasureData.defaultDatabase</a></code> as the destination database for <code>td_session_event</code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -1600,7 +1600,7 @@ Note: this won&rsquo;t reset the current buffered events before this call</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Same as <code>-[TreasureData endSession]</code>, using <code>+[TreasureData defaultDatbase]</code> as the destination database for <code>td_session_event</code>.</p>
+                        <p>Same as <code>-[TreasureData endSession]</code>, using <code>TreasureData.defaultDatbase</code> as the destination database for <code>td_session_event</code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -2141,7 +2141,7 @@ This is a persistent setting, able to set through <code>enableAppLifecycleEvent<
                       <div class="abstract">
                         <p>Enable retrying on failed uploads. Already enabled by default.</p>
 
-<p>Use <code><a href="../Classes/TreasureData.html#/c:objc(cs)TreasureData(py)client">TreasureData.client</a></code> for further retry&rsquo;s customization</p>
+<p>Use <code><a href="../Classes/TreasureData.html#/c:objc(cs)TreasureData(py)client">TreasureData.client</a></code> for fine tuning retry&rsquo;s configuration</p>
 
                       </div>
                       <div class="declaration">
@@ -2175,7 +2175,7 @@ This is a persistent setting, able to set through <code>enableAppLifecycleEvent<
                       <div class="abstract">
                         <p>Do not attempt to retry on failed uploads.</p>
 
-<p>Use <code><a href="../Classes/TreasureData.html#/c:objc(cs)TreasureData(py)client">TreasureData.client</a></code> for further retry&rsquo;s customization</p>
+<p>Use <code><a href="../Classes/TreasureData.html#/c:objc(cs)TreasureData(py)client">TreasureData.client</a></code> for fine tuning retry&rsquo;s configuration</p>
 
                       </div>
                       <div class="declaration">
@@ -2646,8 +2646,8 @@ This is a persistent setting, able to set through <code>enableAppLifecycleEvent<
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/treasure-data/td-ios-sdk" target="_blank" rel="external">mitsu and huylenq</a>. All rights reserved. (Last updated: 2019-04-04)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/treasure-data/td-ios-sdk" target="_blank" rel="external">mitsu and huylenq</a>. All rights reserved. (Last updated: 2019-04-06)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>
