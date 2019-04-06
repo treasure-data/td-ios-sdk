@@ -83,6 +83,7 @@ class TDAPI {
             do {
                 return try self.query(query, database: database)
             } catch TDAPIError.queryError {
+                Thread.sleep(forTimeInterval: 10)
                 return try doRetry(query, database: database)
             } catch {
                 fatalError()
