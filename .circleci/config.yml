@@ -51,6 +51,7 @@ jobs:
       - *save_pods_cache
       - run:
           name: Test on iOS 12
+          no_output_timeout: 1800
           command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 7,OS=12.2' logs/xcbuild_ios_12.log test_results/ios_12.xml
       - *store_artifacts
       - *store_test_results
@@ -66,6 +67,7 @@ jobs:
       - *save_pods_cache
       - run:
           name: Test on iOS 10
+          no_output_timeout: 1800
           command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 7,OS=10.3.1' logs/xcbuild_ios_10.log test_results/ios_10.xml
       - *store_artifacts
       - *store_test_results
@@ -82,6 +84,7 @@ jobs:
       - *save_pods_cache
       - run:
           name: Test on iOS 10
+          no_output_timeout: 1800
           command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 7,OS=10.3.1' logs/xcbuild_ios_10.log test_results/ios_10.xml
       - *store_artifacts
       - *store_test_results
