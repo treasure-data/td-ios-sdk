@@ -257,8 +257,8 @@ You can detect if it's the first running or not easily using `isFirstRun` method
 The API endpoint (default: https://in.treasuredata.com) can be modified using `initializeApiEndpoint` class method. For example,
 
 ```
-    [TreasureData initializeApiEndpoint:@"https://specifying-another-endpoint.com"];
-    [TreasureData initializeWithApiKey:@"your_api_key"];
+[TreasureData initializeApiEndpoint:@"https://specifying-another-endpoint.com"];
+[TreasureData initializeWithApiKey:@"your_api_key"];
 ```
 
 ### Encryption key
@@ -266,27 +266,24 @@ The API endpoint (default: https://in.treasuredata.com) can be modified using `i
 If you've set an encryption key via `initializeEncryptionKey` class method, our SDK saves the events data as encrypted when called `addEvent` or `addEventWithCallback` methods.
 
 ```
-    [TreasureData initializeEncryptionKey:@"hello world"];
-        :
-    [[TreasureData sharedInstance] addEventWithCallback: ....];
+[TreasureData initializeEncryptionKey:@"hello world"];
+
+[[TreasureData sharedInstance] addEventWithCallback: ....];
 ```
 
 ### Default database
 
 ```
-    [[TreasureData sharedInstance] setDefaultDatabase:@"testdb"];
-		:
-	[[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"clicked" } table:@"demotbl"]
+[[TreasureData sharedInstance] setDefaultDatabase:@"testdb"];
+
+[[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"clicked" } table:@"demotbl"]
 ```
 
 ### Adding UUID of the device to each event automatically
 UUID of the device will be added to each event automatically if you call `enableAutoAppendUniqId`. This value won't change until the application is uninstalled.
 
 ```
-    [[TreasureData sharedInstance] enableAutoAppendUniqId];
-		:
-	[[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"dragged" }
-												database:@"testdb" table:@"demotbl"];
+[[TreasureData sharedInstance] enableAutoAppendUniqId];
 ```
 
 It outputs the value as a column name `td_uuid`.
@@ -296,12 +293,10 @@ It outputs the value as a column name `td_uuid`.
 UUID will be added to each event record automatically if you call `enableAutoAppendRecordUUID`. Each event has different UUID.
 
 ```
-	[[TreasureData sharedInstance] enableAutoAppendRecordUUID];
-	// If you want to customize the column name, pass it to the API
-	// [[TreasureData sharedInstance] enableAutoAppendRecordUUID:@"my_record_uuid"];
-		:
-	[[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"dragged" }
-												database:@"testdb" table:@"demotbl"];
+[[TreasureData sharedInstance] enableAutoAppendRecordUUID];
+
+// If you want to customize the column name, pass it to the API
+[[TreasureData sharedInstance] enableAutoAppendRecordUUID:@"my_record_uuid"];
 ```
 
 It outputs the value as a column name `record_uuid` by default.
@@ -311,10 +306,7 @@ It outputs the value as a column name `record_uuid` by default.
 Device model infromation will be added to each event automatically if you call `enableAutoAppendModelInformation`.
 
 ```
-    [[TreasureData sharedInstance] enableAutoAppendModelInformation];
-		:
-	[[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"dragged" }
-												database:@"testdb" table:@"demotbl"];
+[[TreasureData sharedInstance] enableAutoAppendModelInformation];
 ```
 
 It outputs the following column names and values:
@@ -329,7 +321,7 @@ It outputs the following column names and values:
 Application version infromation will be added to each event automatically if you call `enableAutoAppendAppInformation`.
 
 ```
-	[[TreasureData sharedInstance] enableAutoAppendAppInformation];
+[[TreasureData sharedInstance] enableAutoAppendAppInformation];
 ```
 
 It outputs the following column names and values:
@@ -342,7 +334,7 @@ It outputs the following column names and values:
 Locale configuration infromation will be added to each event automatically if you call `enableAutoAppendLocaleInformation`.
 
 ```
-    [[TreasureData sharedInstance] enableAutoAppendLocaleInformation];
+[[TreasureData sharedInstance] enableAutoAppendLocaleInformation];
 ```
 
 It outputs the following column names and values:
@@ -355,21 +347,21 @@ It outputs the following column names and values:
 If you want to use server side upload timestamp not only client device time that is recorded when your application calls `addEvent`, use `enableServerSideUploadTimestamp`.
 
 ```
-	// Use server side upload time as `time` column
-	[[TreasureData sharedInstance] enableServerSideUploadTimestamp];
-	
-	// Add server side upload time as a customized column name
-	[[TreasureData sharedInstance] enableServerSideUploadTimestamp:@"server_upload_time"];
+// Use server side upload time as `time` column
+[[TreasureData sharedInstance] enableServerSideUploadTimestamp];
+
+// Add server side upload time as a customized column name
+[[TreasureData sharedInstance] enableServerSideUploadTimestamp:@"server_upload_time"];
 ```
 
 ### Enable/Disable debug log
 
 ```
-	[TreasureData enableLogging];
+[TreasureData enableLogging];
 ```
 
 ```
-	[TreasureData disableLogging];
+[TreasureData disableLogging];
 ```
 
 ### Automatically tracked events
@@ -426,11 +418,11 @@ We will do a separated `SKProductsRequest` to get full product's information. If
 The SDK provide some convenient methods to easily opt-out of tracking the device entirely without having to resort to many cluttered if-else statements:
 
 ```
-    // Opt-out of your own events
-    [[TreasureData sharedInstance] disableCustomEvent];
-    // Opt-out of TD generated events
-    [[TreasureData sharedInstance] disableAppLifecycleEvent];
-    [[TreasureData sharedInstance] disableInAppPurchaseEvent];
+// Opt-out of your own events
+[[TreasureData sharedInstance] disableCustomEvent];
+// Opt-out of TD generated events
+[[TreasureData sharedInstance] disableAppLifecycleEvent];
+[[TreasureData sharedInstance] disableInAppPurchaseEvent];
 ```
 
 These can be opted back in by calling `enableCustomEvent` or `enableAppLifecycleEvent`. Note that these settings are saved persistently, so it survives across app launches. Generally these methods should be called when reflecting your user's choice, not on every time initializing the SDK. By default custom events are enabled and app lifecycles events are disabled. 
