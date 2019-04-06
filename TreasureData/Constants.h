@@ -28,4 +28,3 @@
 
 static NSString *const TD_DEFAULT_DATABASE = @"td";
 static NSString *const TD_DEFAULT_TABLE = @"td_ios";
-

@@ -9,7 +9,7 @@
 #import "Deflate.h"
 
 @implementation Deflate
-+ (NSData *) deflate:(NSData *) src {
++ (NSData *)deflate:(NSData *)src {
     z_stream zlib;
     zlib.zalloc = Z_NULL;
     zlib.zfree = Z_NULL;
@@ -33,7 +33,7 @@
             break;
         }
         else if (status != Z_OK) {
-            NSLog(@"Deflate error");
+            NSLog(@"ERROR: Unable to deflate the data.");
             deflateEnd(&zlib);
             return nil;
         }

@@ -6,6 +6,9 @@
 //  Copyright © 2019 Arm Treasure Data. All rights reserved.
 //
 
+// TODO: We moved most of the operation to a serial dispatch queue,
+// it could be better to lift of some excessive immutable guards to reduce objects' allocation costs.
+
 #import "TDIAPObserver.h"
 #import "TreasureData.h"
 #import "Constants.h"
@@ -25,11 +28,13 @@
 
 - (void)flushTransactionOfProduct:(SKProduct *)product;
 
-@property (atomic) NSDictionary<NSString *, SKProduct *> *productsCache;
+@property (atomic, strong) NSDictionary<NSString *, SKProduct *> *productsCache;
 // Transactions waiting for after full product information is fetched to record, keyed by product ID
-@property (atomic) NSDictionary<NSString *, NSArray<SKPaymentTransaction *> *> *pendingTransactions;
+@property (atomic, strong) NSDictionary<NSString *, NSArray<SKPaymentTransaction *> *> *pendingTransactions;
 // Requests for products information, also keyed by product ID
-@property (atomic) NSDictionary<NSString *, NSArray<SKPaymentTransaction *> *> *pendingProductRequesters;
+@property (atomic, strong) NSDictionary<NSString *, NSArray<SKPaymentTransaction *> *> *pendingProductRequesters;
+
+@property (nonatomic, strong) dispatch_queue_t trackIAPQueue;
 
 @end
 
@@ -38,11 +43,12 @@
 }
 
 - (instancetype)initWithTD:(TreasureData *)td {
-    self = [super init];
-    if (self) {
+    if (self = [super init]) {
         _td = td;
+        self.trackIAPQueue = dispatch_queue_create("com.treasuredata.track_iap_queue", DISPATCH_QUEUE_SERIAL);
+
+        [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
     }
-    [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
     return self;
 }
 
@@ -51,25 +57,32 @@
 }
 
 - (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray<SKPaymentTransaction *> *)transactions {
-    for (SKPaymentTransaction* transaction in transactions) {
-        // We only track PURCHASED transaction
-        if (transaction.transactionState != SKPaymentTransactionStatePurchased) continue;
+    dispatch_async(self.trackIAPQueue, ^{
+        @try {
+            for (SKPaymentTransaction* transaction in transactions) {
+                // We only track PURCHASED transaction
+                if (transaction.transactionState != SKPaymentTransactionStatePurchased) continue;
 
-        NSString *productID = transaction.payment.productIdentifier;
-        SKProduct *cachedProduct = _productsCache[productID];
-        if (cachedProduct) {
-            [self addTransactionEvent:transaction product:cachedProduct];
-        } else {
-            NSMutableDictionary *pendingTransactions = [NSMutableDictionary dictionaryWithDictionary:self.pendingTransactions];
-            if (!pendingTransactions[productID]) {
-                pendingTransactions[productID] = [NSMutableSet new];
+                NSString *productID = transaction.payment.productIdentifier;
+                SKProduct *cachedProduct = self.productsCache[productID];
+                if (cachedProduct) {
+                    [self addTransactionEvent:transaction product:cachedProduct];
+                } else {
+                    NSMutableDictionary *pendingTransactions = [NSMutableDictionary dictionaryWithDictionary:self.pendingTransactions];
+                    if (!pendingTransactions[productID]) {
+                        pendingTransactions[productID] = [NSMutableSet new];
+                    }
+                    [pendingTransactions[productID] addObject:transaction];
+                    self.pendingTransactions = [NSDictionary dictionaryWithDictionary:pendingTransactions];
+
+                    [[[TDProductRequester alloc] initWithProductIdentifier:productID observer:self] start];
+                }
             }
-            [pendingTransactions[productID] addObject:transaction];
-            self.pendingTransactions = [NSDictionary dictionaryWithDictionary:pendingTransactions];
-
-            [[[TDProductRequester alloc] initWithProductIdentifier:productID observer:self] start];
         }
-    }
+        @catch (NSException *exception) {
+            NSLog(@"ERROR: Failed processing an IAP transaction. %@", exception);
+        }
+    });
 }
 
 - (void)flushTransactionOfProduct:(SKProduct *)product {
@@ -179,15 +192,30 @@
 
 
 - (void)productsRequest:(nonnull SKProductsRequest *)request didReceiveResponse:(nonnull SKProductsResponse *)response {
-    SKProduct *product = response.products[0];  // we always request for a single product
-    [_observer flushTransactionOfProduct:product];
-    [self stop];
+    dispatch_async(_observer.trackIAPQueue, ^{
+        @try {
+            SKProduct *product = response.products[0];  // we always request for a single product
+            [self->_observer flushTransactionOfProduct:product];
+            [self stop];
+        }
+        @catch (NSException *exception) {
+            NSLog(@"ERROR: Failed to track IAP transactions.");
+        }
+    });
 }
 
 - (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
-    // Still flush the transaction with empty product information (except product ID)
-    [_observer flushTransactionOfProduct:nil];
-    [self stop];
+    dispatch_async(_observer.trackIAPQueue, ^{
+        @try {
+            KCLog(@"WARN: Unable to fetch a product, some transactions will be tracked without that product information.");
+            // Still flush the transaction with empty product information (except product ID)
+            [self->_observer flushTransactionOfProduct:nil];
+            [self stop];
+        }
+        @catch (NSException *exception) {
+            NSLog(@"ERROR: Failed to track IAP transactions.");
+        }
+    });
 }
 
 @end

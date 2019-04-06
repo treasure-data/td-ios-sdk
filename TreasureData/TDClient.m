@@ -1,10 +1,13 @@
 //
-//  TDClinet.m
+//  TDClient.m
 //  TreasureData
 //
 //  Created by Mitsunori Komatsu on 12/15/14.
 //  Copyright (c) 2014 Treasure Data Inc. All rights reserved.
 //
+
+// TODO: make this an internal class
+
 #import <UIKit/UIKit.h>
 #import <CommonCrypto/CommonDigest.h>
 #import "Deflate.h"
@@ -15,6 +18,10 @@ static NSString *version = @"0.1.27";
 @implementation TDClient
 
 - (id)initWithApiKey:(NSString *)apiKey apiEndpoint:(NSString*)apiEndpoint {
+    return [self __initWithApiKey:apiKey apiEndpoint:apiEndpoint];
+}
+
+- (id)__initWithApiKey:(NSString *)apiKey apiEndpoint:(NSString*)apiEndpoint {
     NSString *projectId = [NSString stringWithFormat:@"_td %@", [self md5:apiKey]];
     self = [self initWithProjectId:projectId andWriteKey:@"dummy_write_key" andReadKey:@"dummy_read_key"];
     self.apiKey = apiKey;
@@ -37,11 +44,11 @@ static NSString *version = @"0.1.27";
     self.uploadRetryIntervalBase = 2;
     self.uploadRetryCount = 5;
     self.enableRetryUploading = true;
-    self.session = [NSURLSession sharedSession];
+    _session = [NSURLSession sharedSession];
     return self;
 }
 
-- (NSString *) md5:(NSString *) input
+- (NSString *)md5:(NSString *)input
 {
     const char *cStr = [input UTF8String];
     unsigned char digest[16];
@@ -66,7 +73,7 @@ static NSString *version = @"0.1.27";
     [request setValue:@"k" forHTTPHeaderField:@"X-TD-Data-Type"];   // means KeenIO data type
     [request setValue:[NSString stringWithFormat:@"TD-iOS-SDK/%@ (%@ %@)", version, [[UIDevice currentDevice] systemName], [[UIDevice currentDevice] systemVersion]] forHTTPHeaderField:@"User-Agent"];
     
-    if (self.enableEventCompression) {
+    if (_enableEventCompression) {
         NSData *compressedData = [Deflate deflate:data];
         if (!compressedData) {
             KCLog(@"Compression failed");
@@ -86,14 +93,20 @@ static NSString *version = @"0.1.27";
     
     [request setHTTPBody:data];
     
-    [self sendHTTPRequest:request retryCounter:0 completionHandler:completionHandler];
+    [self __sendHTTPRequest:request retryCounter:0 completionHandler:completionHandler];
 }
 
-- (void) sendHTTPRequest:(NSURLRequest *)request
+- (void)sendHTTPRequest:(NSURLRequest *)request
+            retryCounter:(int)retryCounter
+       completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler {
+    [self __sendHTTPRequest:request retryCounter:retryCounter completionHandler:completionHandler];
+}
+
+- (void)__sendHTTPRequest:(NSURLRequest *)request
             retryCounter:(int)retryCounter
        completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler {
 
-    NSURLSessionDataTask *dataTask = [self.session
+    NSURLSessionDataTask *dataTask = [_session
                                       dataTaskWithRequest:request
                                       completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
@@ -113,13 +126,26 @@ static NSString *version = @"0.1.27";
             else {
                 double wait = self.uploadRetryIntervalCoeficient * pow(self.uploadRetryIntervalBase, retryCounter);
                 [NSThread sleepForTimeInterval:wait];
-                [self sendHTTPRequest: request
-                             retryCounter: (retryCounter + 1)
-                        completionHandler: completionHandler
+                [self __sendHTTPRequest: request
+                           retryCounter: (retryCounter + 1)
+                      completionHandler: completionHandler
                 ];
             }
         }
     }];
     [dataTask resume];
 }
+
+- (void)__enableEventCompression:(BOOL)flag {
+    _enableEventCompression = flag;
+}
+
+- (NSURLSession *)__session {
+    return _session;
+}
+
+- (void)__setSession:(NSURLSession *)session {
+    _session = session;
+}
+
 @end

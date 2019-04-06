@@ -1,52 +1,95 @@
 version: 2
 
+_defaults:
+
+  - &auxiliary_setup
+    run:
+      name: Auxiliary setup
+      command: |
+        gem install xcpretty --user-install
+        HOMEBREW_NO_AUTO_UPDATE=1 brew install gnu-sed # for ci_test script
+        mkdir logs test_results
+
+  - &restore_pods_cache
+    restore_cache:
+      name: Restore Pods cache
+      keys:
+        - v3-pods-{{ checksum "Podfile.lock" }}
+
+  - &install_pods
+    run:
+      name: Install Pods
+      command: ./scripts/ci_pod_install
+
+  - &save_pods_cache
+    save_cache:
+      name: Saving Pods cache
+      key: v3-pods-{{ checksum "Podfile.lock" }}
+      paths:
+        - Pods
+        - TreasureData.xcworkspace
+
+  - &store_artifacts
+    store_artifacts:
+      path: ./logs
+      destination: logs
+
+  - &store_test_results
+    store_test_results:
+      path: ./test_results
+
 jobs:
-  build:
+
+  test_ios12:
+    macos:
+      xcode: "10.2.0" 
+    steps:
+      - checkout
+      - *auxiliary_setup
+      - *restore_pods_cache
+      - *install_pods
+      - *save_pods_cache
+      - run:
+          name: Test on iOS 12
+          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 7,OS=12.2' logs/xcbuild_ios_12.log test_results/ios_12.xml
+      - *store_artifacts
+      - *store_test_results
+
+  test_ios11:
+    macos:
+      xcode: "10.1.0"
+    steps:
+      - checkout
+      - *auxiliary_setup
+      - *restore_pods_cache
+      - *install_pods
+      - *save_pods_cache
+      - run:
+          name: Test on iOS 10
+          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 7,OS=10.3.1' logs/xcbuild_ios_10.log test_results/ios_10.xml
+      - *store_artifacts
+      - *store_test_results
+
+  test_ios10:
     macos:
       xcode: "10.1.0"
 
     steps:
-
       - checkout
-
-      - restore_cache:
-          name: Restore Pods cache
-          keys:
-            - v2-pods-{{ checksum "Podfile.lock" }}
-
+      - *auxiliary_setup
+      - *restore_pods_cache
+      - *install_pods
+      - *save_pods_cache
       - run:
-          name: Install Pods
-          command: ./scripts/ci_pod_install
-
-      - save_cache:
-          name: Saving Pods cache
-          key: v2-pods-{{ checksum "Podfile.lock" }}
-          paths:
-            - Pods
-            - ~/.cocoapods
-
-      - run:
-          name: Auxiliary setup
-          command: |
-            gem install xcpretty --user-install
-            HOMEBREW_NO_AUTO_UPDATE=1 brew install gnu-sed
-            mkdir logs test_results
-
-      - run:
-          name: Tests on iOS 12
-          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 7,OS=12.1' logs/xcbuild_ios_12.log test_results/ios_12.xml
-
-      - run:
-          name: Tests on iOS 11
-          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 7,OS=11.2' logs/xcbuild_ios_11.log test_results/ios_11.xml
-
-      - run:
-          name: Tests on iOS 10
+          name: Test on iOS 10
           command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 7,OS=10.3.1' logs/xcbuild_ios_10.log test_results/ios_10.xml
+      - *store_artifacts
+      - *store_test_results
 
-      - store_artifacts:
-          path: ./logs
-          destination: logs
-
-      - store_test_results:
-          path: ./test_results
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test_ios12
+      - test_ios11
+      - test_ios10

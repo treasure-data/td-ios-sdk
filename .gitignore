@@ -3,3 +3,4 @@ Pods/
 *.xcworkspace
 xcuserdata
 UserInterfaceState.xcuserstate
+TreasureDataExample/Podfile.lock

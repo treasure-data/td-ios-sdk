@@ -1,0 +1,11 @@
+module: TreasureData iOS SDK
+
+objc: true
+sdk: iphonesimulator
+umbrella_header: TreasureData/TreasureData.h
+include:
+  - TreasureData/TreasureData.h
+  - TreasureData/TDClient.h
+
+framework_root: .
+

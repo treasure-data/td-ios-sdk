@@ -70,9 +70,9 @@
 
 /* Begin PBXFileReference section */
 		11FADA7F69E6E148978C0F7C /* libPods-TreasureData.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TreasureData.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		19CFD6BDE2E7D4AC4F0869FF /* Pods-TreasureDataTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureDataTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureDataTests/Pods-TreasureDataTests.release.xcconfig"; sourceTree = "<group>"; };
 		1950C4C633D1BEA93C441EFC /* TDIAPObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDIAPObserver.h; sourceTree = "<group>"; };
 		1950CA957CA6115F3C3DD018 /* TDIAPObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDIAPObserver.m; sourceTree = "<group>"; };
+		19CFD6BDE2E7D4AC4F0869FF /* Pods-TreasureDataTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureDataTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureDataTests/Pods-TreasureDataTests.release.xcconfig"; sourceTree = "<group>"; };
 		201053E9204858F8009C7EFA /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		2053A39B2047F37F0089A959 /* TDUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDUtils.m; sourceTree = "<group>"; };
 		2053A39D2047F38B0089A959 /* TDUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TDUtils.h; sourceTree = "<group>"; };
@@ -113,6 +113,7 @@
 		E0DB92B1F49BBC30A854EB53 /* libPods-TreasureDataTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TreasureDataTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E52CB7F121FDD6D300062EBA /* TreasureDataTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TreasureDataTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		E52CB7F421FDD78A00062EBA /* TDAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDAPI.swift; sourceTree = "<group>"; };
+		E5701BA5225755C5000FB17F /* TDClientInternal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TDClientInternal.h; sourceTree = "<group>"; };
 		E5A84B5121FEA35300BC699D /* TestHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5A84B5321FEA35300BC699D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E5A84B5521FEA35300BC699D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -203,11 +204,12 @@
 				6B351A75194ABF0F001CBAAD /* Deflate.m */,
 				6B738096192A09160097D56E /* TreasureData.h */,
 				6B738098192A09160097D56E /* TreasureData.m */,
+				E5701BA5225755C5000FB17F /* TDClientInternal.h */,
 				6B738094192A09160097D56E /* Supporting Files */,
 				6BF8C9321A3E9B76005B1804 /* TDClient.h */,
+				6BF8C9331A3E9B76005B1804 /* TDClient.m */,
 				2053A39B2047F37F0089A959 /* TDUtils.m */,
 				2053A39D2047F38B0089A959 /* TDUtils.h */,
-				6BF8C9331A3E9B76005B1804 /* TDClient.m */,
 				201053E9204858F8009C7EFA /* Constants.h */,
 				6BB5A9D21D1A86CD0006A534 /* Session.h */,
 				6BB5A9D31D1A86EE0006A534 /* Session.m */,
@@ -353,23 +355,24 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1010;
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "___FULLUSERNAME___";
 				TargetAttributes = {
 					6B73809D192A09160097D56E = {
-						LastSwiftMigration = 1010;
+						LastSwiftMigration = 1020;
 						TestTargetID = E5A84B5021FEA35300BC699D;
 					};
 					E5A84B5021FEA35300BC699D = {
 						CreatedOnToolsVersion = 10.1;
 						DevelopmentTeam = U5YLXH98R7;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 				};
 			};
 			buildConfigurationList = 6B738089192A09160097D56E /* Build configuration list for PBXProject "TreasureData" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -537,12 +540,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -552,6 +557,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -586,12 +592,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -612,6 +620,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -661,9 +670,8 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TreasureData/TreasureData-Prefix.pch";
@@ -675,6 +683,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.treasuredata.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "TreasureDataTests/TreasureDataTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -691,9 +700,8 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TreasureData/TreasureData-Prefix.pch";
@@ -701,6 +709,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.treasuredata.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "TreasureDataTests/TreasureDataTests-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;

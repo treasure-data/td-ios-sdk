@@ -1,7 +1,7 @@
 Treasure Data iOS SDK
 ===============
 
-iOS SDK for [Treasure Data](http://www.treasuredata.com/). With this SDK, you can import the events on your applications into Treasure Data easily. This library supports iOS 7 and later.
+iOS SDK for [Treasure Data](http://www.treasuredata.com/). With this SDK, you can import the events on your applications into Treasure Data easily. Technically, this library supports iOS 7 and later, but we only execute OS coverage tests for iOS 10, 11 and 12.
 
 Also, there is an alternative SDK written in Swift [https://github.com/recruit-lifestyle/TreasureDataSDK](https://github.com/recruit-lifestyle/TreasureDataSDK). Note, however, that it does not support current GDPR functionality in the mainstream TD SDKs.
 
@@ -39,6 +39,9 @@ $ pod install
 Download [TreasureData.framework](http://cdn.treasuredata.com/sdk/ios/0.1.27/TreasureData-iOS-SDK.framework.zip) and add it and `libz` library into your project.
 
 ## Usage in Objective-C
+
+- [Treasure Data's Guide](https://support.treasuredata.com/hc/en-us/articles/360000671667-iOS-SDK) (most parts are overlap with this README)
+- [API Reference](https://treasure-data.github.io/td-ios-sdk/Classes/TreasureData.html)
 
 ### Import SDK header file
 
@@ -369,18 +372,38 @@ If you want to use server side upload timestamp not only client device time that
 	[TreasureData disableLogging];
 ```
 
-### Auto track In-App Purchase event
+### Automatically tracked events
 
-TreasureData SDK able to automatically track IAP `SKPaymentTransactionStatePurchased` event without having to write your own transaction observer.
+Notes that all of these are **disabled by default*, you have to explicitly enable it for each category.
+
+#### App Lifecycle Events
+
+Could be enabled with:
+
+```
+[[TreasureData sharedInstance] enableAppLifecycleEvent];
+```
+
+There are 3 type of app lifecycle events that are tracked: `TD_IOS_APP_OPEN`, `TD_IOS_APP_INSTALL` and `TD_IOS_APP_UPDATE` (is written to `td_ios_event` column).
+
+Example of a tracked install event:
+
+```
+"td_ios_event" = "TD_IOS_APP_INSTALL";
+"td_app_ver" = "1.1";
+"td_app_ver_num" = 2;
+```
+
+#### In-App Purchase Events
+
+TreasureData SDK is able to automatically track IAP `SKPaymentTransactionStatePurchased` event without having to write your own transaction observer.
 
 
 ```
 [[TreasureData sharedInstance] enableInAppPurchaseEvent];
-[[TreasureData sharedInstance] disableInAppPurchaseEvent];
-[[TreasureData sharedInstance] isInAppPurchaseEventEnabled];
 ```
 
-This is disabled by default. There is a subtle difference between this and `appLifecycleEvent`, `customEvent`. `appLifecycleEvent` and `customEvent`, for a historical reason, are persistent settings, meaning their statuses are saved across app launches. `inAppPurchaseEvent` behaves like an ordinary object options and are not saved, have you to explicitly enable it when construct a `TreasureData` instance.
+This is disabled by default. There is a subtle difference between this and `appLifecycleEvent`, `customEvent`. The other two, for a historical reason, are persistent settings, meaning their statuses are saved across app launches. `inAppPurchaseEvent` behaves like an ordinary object option and is not saved. You have to enable it after initialize your new `TreasureData` instance (probably only the `sharedInstance` with `initializeWithApiKey()`).
 
 An example of a IAP event:
 
@@ -396,15 +419,18 @@ An example of a IAP event:
 "td_iap_product_currency_code": "USD",  // this is only available on iOS 10 and above
 ```
 
-We did a separated `SKProductsRequest` to get full product's information. If the request is failed somehow, fields with "td_iap_product_" prefix will be null. Also note that that the `currency_code` is only available from iOS 10 onwards.
+We will do a separated `SKProductsRequest` to get full product's information. If the request is failed somehow, fields with "td_iap_product_" prefix will be null. Also note that that the `currency_code` is only available from iOS 10 onwards.
 
 ## GDPR Compliance
 
 The SDK provide some convenient methods to easily opt-out of tracking the device entirely without having to resort to many cluttered if-else statements:
 
 ```
-    [[TreasureData sharedInstance] disableCustomEvent]        // Opt-out of your own events
-    [[TreasureData sharedInstance] disableAppLifecycleEvent]  // Opt-out of TD generated events
+    // Opt-out of your own events
+    [[TreasureData sharedInstance] disableCustomEvent];
+    // Opt-out of TD generated events
+    [[TreasureData sharedInstance] disableAppLifecycleEvent];
+    [[TreasureData sharedInstance] disableInAppPurchaseEvent];
 ```
 
 These can be opted back in by calling `enableCustomEvent` or `enableAppLifecycleEvent`. Note that these settings are saved persistently, so it survives across app launches. Generally these methods should be called when reflecting your user's choice, not on every time initializing the SDK. By default custom events are enabled and app lifecycles events are disabled. 
@@ -432,4 +458,4 @@ See this example project (https://github.com/treasure-data/td-ios-sdk/tree/maste
 
 ## Xcode Compatibility
 
-The current version has been built and tested with XCode v9.2.
+The current version has been built and tested with XCode v10.2.
