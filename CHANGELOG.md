@@ -1,7 +1,14 @@
 # Change Log
 
+## Version 0.2.0
+_2018-04-08_
+
+- Added ability to automatically tracking IAP events.
+- Added API reference (https://treasure-data.github.io/td-ios-sdk) 
+- Several inner refactors and code cleanup.
+
 ## Version 0.1.27
-_2018-05-21
+_2018-05-21_
 
 * Support GDPR compliancy
 
