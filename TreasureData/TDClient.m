@@ -13,7 +13,7 @@
 #import "Deflate.h"
 #import "TDClient.h"
 
-static NSString *version = @"0.1.27";
+static NSString *version = @"0.2.0";
 
 @implementation TDClient
 
