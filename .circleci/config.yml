@@ -111,3 +111,4 @@ workflows:
       - test_ios12
       - test_ios11
       - test_ios10
+      - test_ios9
