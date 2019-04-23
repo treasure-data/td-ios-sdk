@@ -6,6 +6,7 @@ _defaults:
     run:
       name: Auxiliary setup
       command: |
+        gem update --system
         gem install xcpretty --user-install
         HOMEBREW_NO_AUTO_UPDATE=1 brew install gnu-sed # for ci_test script
         mkdir logs test_results
