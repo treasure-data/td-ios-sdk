@@ -75,7 +75,6 @@ jobs:
   test_ios10:
     macos:
       xcode: "10.1.0"
-
     steps:
       - checkout
       - *auxiliary_setup
@@ -86,6 +85,22 @@ jobs:
           name: Test on iOS 10
           no_output_timeout: 1800
           command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 7,OS=10.3.1' logs/xcbuild_ios_10.log test_results/ios_10.xml
+      - *store_artifacts
+      - *store_test_results
+
+  test_ios9:
+    macos:
+      xcode: "8.3.3"
+    steps:
+      - checkout
+      - *auxiliary_setup
+      - *restore_pods_cache
+      - *install_pods
+      - *save_pods_cache
+      - run:
+          name: Test on iOS 9
+          no_output_timeout: 1800
+          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 6s,OS=9.3' logs/xcbuild_ios_9.log test_results/ios_9.xml
       - *store_artifacts
       - *store_test_results
 
