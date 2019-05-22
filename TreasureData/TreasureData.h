@@ -392,6 +392,12 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
  */
 - (BOOL)isInAppPurchaseEventEnabled;
 
+#pragma mark - Personalization API
+
+- (void)fetchUserSegments: (nonnull NSArray *)audienceToken
+                     keys: (nullable NSDictionary *)keys
+        completionHandler: (void (^_Nonnull)(NSArray* _Nullable jsonResponse, NSError* _Nullable connectionError)) handler;
+
 #pragma mark - Misc.
 
 /**

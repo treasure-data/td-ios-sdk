@@ -694,6 +694,40 @@ static long sessionTimeoutMilli = -1;
     [[NSUserDefaults standardUserDefaults] setObject:_UUID forKey:storageKeyOfUuid];
 }
 
+#pragma mark - Personalization API
+
+- (void)fetchUserSegments: (nonnull NSArray *)audienceToken
+                     keys: (nullable NSDictionary *)keys
+        completionHandler: (void (^_Nonnull)(NSArray* _Nullable jsonResponse, NSError* _Nullable connectionError)) handler {
+    NSString *audienceString = [NSString
+                                stringWithFormat:@"&token=%@",
+                                [audienceToken componentsJoinedByString: @","]];
+    NSMutableString *keyString = [[NSMutableString alloc] initWithString: @""];
+    for (NSString *key in keys) {
+        [keyString appendFormat:@"&key.%@=%@", key, keys[key]];
+    }
+    NSMutableString *urlString = [NSMutableString stringWithString:_client.apiEndpoint];
+    [urlString appendString:@"/cdp/lookup/collect/segments?version=2"];
+    [urlString appendString:audienceString];
+    [urlString appendString:keyString];
+    
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    [NSURLConnection sendAsynchronousRequest:urlRequest queue:queue completionHandler:^(NSURLResponse * _Nullable response, NSData * _Nullable data, NSError * _Nullable connectionError) {
+        if (connectionError) {
+            handler(nil, connectionError);
+        } else {
+            NSError *jsonError = nil;
+            NSArray *jsonResponse = [NSJSONSerialization
+                                     JSONObjectWithData:data
+                                     options:kNilOptions
+                                     error:&jsonError];
+            handler(jsonResponse, jsonError);
+        }
+    }];
+}
+
 #pragma mark - Exposed for testing
 
 + (void)resetSession {
