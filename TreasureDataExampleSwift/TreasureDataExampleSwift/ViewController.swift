@@ -26,25 +26,25 @@ class ViewController: UIViewController {
     @IBOutlet weak var uploadEvents: UIButton!
 
     @IBAction func touchDownAddEvent(sender: AnyObject) {
-        TreasureData.sharedInstance().addEventWithCallback(
-            ["name": "komamitsu", "age": 99],
+        TreasureData.sharedInstance().addEvent(
+            withCallback: ["name": "komamitsu", "age": 99],
             database: "testdb",
             table: "demotbl",
             onSuccess:{()-> Void in
                 print("addEvent: success")
             },
             onError:{(errorCode, message) -> Void in
-                print("addEvent: error. errorCode=%@, message=%@", errorCode, message)
+                print("addEvent: error. errorCode=%@, message=%@", errorCode, message ?? "")
             }
         )
     }
 
     @IBAction func touchDownUploadEvents(sender: AnyObject) {
-        TreasureData.sharedInstance().uploadEventsWithCallback({
+        TreasureData.sharedInstance().uploadEvents(callback: {
                 print("uploadEvents: success")
             },
             onError: {(errorCode, message) -> Void in
-                print("uploadEvents: error. errorCode=%@, message=%@", errorCode, message)
+                print("uploadEvents: error. errorCode=%@, message=%@", errorCode, message ?? "")
             })
     }
 }
