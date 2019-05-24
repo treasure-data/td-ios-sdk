@@ -698,7 +698,7 @@ static long sessionTimeoutMilli = -1;
 
 - (void)fetchUserSegments: (nonnull NSArray *)audienceToken
                      keys: (nullable NSDictionary *)keys
-        completionHandler: (void (^_Nonnull)(NSArray* _Nullable jsonResponse, NSError* _Nullable connectionError)) handler {
+        completionHandler: (void (^_Nonnull)(NSArray* _Nullable jsonResponse, NSError* _Nullable error)) handler {
     NSString *audienceString = [NSString
                                 stringWithFormat:@"&token=%@",
                                 [audienceToken componentsJoinedByString: @","]];

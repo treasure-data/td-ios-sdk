@@ -396,7 +396,7 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 
 - (void)fetchUserSegments: (nonnull NSArray *)audienceToken
                      keys: (nullable NSDictionary *)keys
-        completionHandler: (void (^_Nonnull)(NSArray* _Nullable jsonResponse, NSError* _Nullable connectionError)) handler;
+        completionHandler: (void (^_Nonnull)(NSArray* _Nullable jsonResponse, NSError* _Nullable error)) handler;
 
 #pragma mark - Misc.
 

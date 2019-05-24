@@ -152,6 +152,15 @@
     }
 }
 
+- (IBAction)fetchUserSegments:(id)sender {
+    [self updateClientIfFormChanged];
+    [[TreasureData sharedInstance] fetchUserSegments: @[@"e894a842-cf42-4df8-9a57-daf22246a040", @"9b3e80e5-5495-4181-86fe-7d6d3f1c34c8"] keys: @{@"user_id": @"TEST08680047", @"td_client_id": @"2dd8cc50-2756-40a1-ae02-6237c481b719"} completionHandler:^(NSArray * _Nullable jsonResponse, NSError * _Nullable error) {
+        NSLog(@"fetchUserSegments jsonResponse: %@", jsonResponse);
+        NSLog(@"fetchUserSegments error: %@", error);
+
+    }];
+}
+
 typedef enum {
     kButtonStateNormal,
     kButtonStatePending,
