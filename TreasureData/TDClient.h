@@ -24,6 +24,18 @@
  */
 @property(nonatomic, strong) NSString *apiEndpoint;
 
+/**
+ * The host to use for the Personalization API
+ * Defaults to https://cdp.in.treasuredata.com
+ *
+ * Possible values:
+ *    AWS East  https://cdp.in.treasuredata.com       https://in.treasuredata.com
+ *    AWS Tokyo https://cdp-tokyo.in.treasuredata.com https://tokyo.in.treasuredata.com
+ *    AWS EU    https://cdp-eu01.in.treasuredata.com  https://eu01.in.treasuredata.com
+ *    IDCF      https://cdp-idcf.in.treasuredata.com  https://idcf.in.treasuredata.com
+ */
+@property(nonatomic, strong) NSString *cdpEndpoint;
+
 #pragma mark - Retry
 
 /**

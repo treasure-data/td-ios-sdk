@@ -17,15 +17,17 @@ static NSString *version = @"0.2.0";
 
 @implementation TDClient
 
+// Deprecated
 - (id)initWithApiKey:(NSString *)apiKey apiEndpoint:(NSString*)apiEndpoint {
-    return [self __initWithApiKey:apiKey apiEndpoint:apiEndpoint];
+    return [self __initWithApiKey:apiKey apiEndpoint:apiEndpoint cdpEndpoint:nil];
 }
 
-- (id)__initWithApiKey:(NSString *)apiKey apiEndpoint:(NSString*)apiEndpoint {
+- (id)__initWithApiKey:(NSString *)apiKey apiEndpoint:(NSString*)apiEndpoint cdpEndpoint:(nullable NSString *)cdpEndpoint {
     NSString *projectId = [NSString stringWithFormat:@"_td %@", [self md5:apiKey]];
     self = [self initWithProjectId:projectId andWriteKey:@"dummy_write_key" andReadKey:@"dummy_read_key"];
     self.apiKey = apiKey;
     self.apiEndpoint = apiEndpoint;
+    self.cdpEndpoint = cdpEndpoint;
     self.globalPropertiesBlock = ^NSDictionary *(NSString *eventCollection) {
         if (!NSClassFromString(@"NSUUID")) {
             return @{};

@@ -11,9 +11,9 @@
 
 - (void)__enableEventCompression:(BOOL)flag;
 
-- (instancetype)__initWithApiKey:(NSString *)apiKey apiEndpoint:(NSString*)apiEndpoint;
+- (nonnull instancetype)__initWithApiKey:(nonnull NSString *)apiKey apiEndpoint:(nonnull NSString*)apiEndpoint cdpEndpoint:(nullable NSString *)cdpEndpoint;
 
-- (NSURLSession *)__session;
-- (void)__setSession:(NSURLSession *)session;
+- (nullable NSURLSession *)__session;
+- (void)__setSession:(nullable NSURLSession *)session;
 
 @end
