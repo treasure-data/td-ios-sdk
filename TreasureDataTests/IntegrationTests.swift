@@ -138,12 +138,15 @@ class IntegrationTests: XCTestCase {
         XCTAssert(result[0][0] as! String != result[1][0] as! String)
     }
     
-    func testFetchUserSegments() {
-        sdkClient.fetchUserSegments(
-            ["e894a842-cf42-4df8-9a57-daf22246a040", "9b3e80e5-5495-4181-86fe-7d6d3f1c34c8"],
-        keys: ["user_id": "TEST08680047", "td_client_id": "2dd8cc50-2756-40a1-ae02-6237c481b719"]) { (jsonResponse, error) in
+    func testFetchUserSegmentsSucceed() {
+        let semaphore = DispatchSemaphore(value: 0)
+        let audienceTokens = ["e894a842-cf42-4df8-9a57-daf22246a040", "9b3e80e5-5495-4181-86fe-7d6d3f1c34c8"]
+        let keys = ["user_id": "TEST08680047", "td_client_id": "2dd8cc50-2756-40a1-ae02-6237c481b719"]
+        sdkClient.fetchUserSegments(audienceTokens, keys: keys) { (jsonResponse, error) in
             XCTAssertTrue(error == nil)
+            let _ = semaphore.signal()
         }
+        _ = semaphore.wait(timeout: .distantFuture)
     }
 
     private func newTempTable() -> String {
