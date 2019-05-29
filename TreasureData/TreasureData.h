@@ -394,8 +394,13 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 
 #pragma mark - Personalization API
 
+/**
+ * Fetch user segments from cdp endpoint. Callback with either a JSON serialized object or an error.
+ * @param audienceToken List of audience tokens. There must be at least one token.
+ * @param keys Key value dictionary with at least user_id and td_client_id are required.
+ */
 - (void)fetchUserSegments: (nonnull NSArray *)audienceToken
-                     keys: (nullable NSDictionary *)keys
+                     keys: (nonnull NSDictionary *)keys
         completionHandler: (void (^_Nonnull)(NSArray* _Nullable jsonResponse, NSError* _Nullable error)) handler;
 
 #pragma mark - Misc.

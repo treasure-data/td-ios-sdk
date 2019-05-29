@@ -46,6 +46,7 @@ static NSString *sessionEventStart = @"start";
 static NSString *sessionEventEnd = @"end";
 static Session *session = nil;
 static long sessionTimeoutMilli = -1;
+static NSString *TreasureDataErrorDomain = @"com.treasuredata";
 
 @interface TreasureData ()
 
@@ -701,7 +702,7 @@ static long sessionTimeoutMilli = -1;
 #pragma mark - Personalization API
 
 - (void)fetchUserSegments: (nonnull NSArray *)audienceToken
-                     keys: (nullable NSDictionary *)keys
+                     keys: (nonnull NSDictionary *)keys
         completionHandler: (void (^_Nonnull)(NSArray* _Nullable jsonResponse, NSError* _Nullable error)) handler {
     NSString *audienceString = [NSString
                                 stringWithFormat:@"&token=%@",
@@ -723,11 +724,28 @@ static long sessionTimeoutMilli = -1;
             handler(nil, connectionError);
         } else {
             NSError *jsonError = nil;
-            NSArray *jsonResponse = [NSJSONSerialization
+            id jsonResponse = [NSJSONSerialization
                                      JSONObjectWithData:data
                                      options:kNilOptions
                                      error:&jsonError];
-            handler(jsonResponse, jsonError);
+            if ([jsonResponse isKindOfClass: [NSArray class]]) {
+                handler((NSArray *)jsonResponse, jsonError);
+            } else if ([jsonResponse isKindOfClass: [NSDictionary class]] && ((NSDictionary *)jsonResponse)[@"error"] != nil) {
+                NSDictionary *errorResponse = (NSDictionary *)jsonResponse;
+                NSDictionary *userInfo = @{
+                   NSLocalizedDescriptionKey: NSLocalizedString(errorResponse[@"error"], nil),
+                   NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorResponse[@"message"], nil)
+                };
+                NSInteger code = [(NSNumber *)errorResponse[@"status"] integerValue];
+                NSError *serverError = [NSError errorWithDomain:TreasureDataErrorDomain code:code userInfo: userInfo];
+                handler(nil, serverError);
+            } else {
+                NSDictionary *userInfo = @{
+                   NSLocalizedDescriptionKey: NSLocalizedString(@"Unrecognizable response format", nil)
+                };
+                NSError *unrecogizaleResponseFormatError = [NSError errorWithDomain:TreasureDataErrorDomain code:-1 userInfo:userInfo];
+                handler(nil, unrecogizaleResponseFormatError);
+            }
         }
     }];
 }
