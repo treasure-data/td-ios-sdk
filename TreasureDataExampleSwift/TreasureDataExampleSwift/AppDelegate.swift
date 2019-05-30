@@ -37,7 +37,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     print("addEvent: error. errorCode=%@, message=%@", errorCode, message ?? "")
             })
         }
-
         return true
     }
 

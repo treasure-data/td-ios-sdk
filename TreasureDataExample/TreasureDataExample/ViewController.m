@@ -23,7 +23,7 @@
     [super viewDidLoad];
     [self.apiEndpointField setText:TreasureData.sharedInstance.client.apiEndpoint];
     [self.apiKeyField setText:TreasureData.sharedInstance.client.apiKey];
-    [self.cdpEndpointField setText:TreasureData.sharedInstance.client.cdpEndpoint];
+    [self.cdpEndpointField setText:TreasureData.sharedInstance.cdpEndpoint];
     [self.targetDatabaseField setText:TreasureData.sharedInstance.defaultDatabase];
 
     [self.defaultTableField setText:[[TreasureData sharedInstance] defaultTable]];
@@ -146,7 +146,7 @@
         self.isFormDirty = NO;
         [[[TreasureData sharedInstance] client] setApiKey:self.apiKeyField.text];
         [[[TreasureData sharedInstance] client] setApiEndpoint:self.apiEndpointField.text];
-        [[[TreasureData sharedInstance] client] setCdpEndpoint:self.cdpEndpointField.text];
+        [[TreasureData sharedInstance] setCdpEndpoint:self.cdpEndpointField.text];
         [[TreasureData sharedInstance] setDefaultDatabase:self.targetDatabaseField.text];
         [[TreasureData sharedInstance] setDefaultTable:self.defaultTableField.text];
         [[TreasureData sharedInstance] enableAppLifecycleEvent];
@@ -156,11 +156,16 @@
 
 - (IBAction)fetchUserSegments:(id)sender {
     [self updateClientIfFormChanged];
-    NSArray *audienceToken = @[@"e894a842-cf42-4df8-9a57-daf22246a040", @"9b3e80e5-5495-4181-86fe-7d6d3f1c34c8"];
+    NSArray *audienceTokens = @[@"e894a842-cf42-4df8-9a57-daf22246a040", @"9b3e80e5-5495-4181-86fe-7d6d3f1c34c8"];
     NSDictionary *keys = @{@"user_id": @"TEST08680047",
                            @"td_client_id": @"2dd8cc50-2756-40a1-ae02-6237c481b719"};
-    [[TreasureData sharedInstance] fetchUserSegments: audienceToken
-                                                keys: keys
+    NSDictionary<TDRequestOptionsKey, id> *options = @{
+       TDRequestOptionsTimeoutIntervalKey: [NSNumber numberWithInteger: 10],
+       TDRequestOptionsCachePolicyKey: [NSNumber numberWithUnsignedInteger: NSURLRequestReloadIgnoringCacheData]
+    };
+    [[TreasureData sharedInstance] fetchUserSegments:audienceTokens
+                                                keys:keys
+                                             options:options
                                    completionHandler:^(NSArray * _Nullable jsonResponse, NSError * _Nullable error) {
         NSLog(@"fetchUserSegments jsonResponse: %@", jsonResponse);
         NSLog(@"fetchUserSegments error: %@", error);

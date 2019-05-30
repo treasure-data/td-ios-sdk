@@ -15,7 +15,6 @@
 #import "Constants.h"
 #import "TDIAPObserver.h"
 #import "TDClientInternal.h"
-#import "TDRequestOptions.h"
 
 static bool isTraceLoggingEnabled = false;
 static bool isEventCompressionEnabled = true;
@@ -700,14 +699,14 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
 
 #pragma mark - Personalization API
 
-- (void)fetchUserSegments: (nonnull NSArray *)audienceToken
-                     keys: (nonnull NSDictionary *)keys
+- (void)fetchUserSegments: (nonnull NSArray<NSString *> *)audienceTokens
+                     keys: (nonnull NSDictionary<NSString *, id> *)keys
                   options: (nullable NSDictionary<TDRequestOptionsKey, id> *)options
         completionHandler: (void (^_Nonnull)(NSArray* _Nullable jsonResponse, NSError* _Nullable error)) handler {
     NSString *cdpEndpoint = self.cdpEndpoint ? self.cdpEndpoint : defaultCdpEndpoint;
     NSString *audienceString = [NSString
                                 stringWithFormat:@"&token=%@",
-                                [audienceToken componentsJoinedByString: @","]];
+                                [audienceTokens componentsJoinedByString: @","]];
     NSMutableString *keyString = [[NSMutableString alloc] initWithString: @""];
     for (NSString *key in keys) {
         [keyString appendFormat:@"&key.%@=%@", key, keys[key]];
@@ -717,21 +716,28 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     [urlString appendString:audienceString];
     [urlString appendString:keyString];
     
+    NSNumber *timeoutNumber = (NSNumber *)options[TDRequestOptionsTimeoutIntervalKey];
+    NSTimeInterval timeout = timeoutNumber ? [timeoutNumber doubleValue] : 60;
+    NSNumber *cachePolicyNumber = (NSNumber *)options[TDRequestOptionsCachePolicyKey];
+    NSURLRequestCachePolicy cachePolicy = cachePolicyNumber ? [cachePolicyNumber unsignedIntegerValue] : NSURLRequestUseProtocolCachePolicy;
     NSURL *url = [NSURL URLWithString:urlString];
-    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url
+                                                cachePolicy:cachePolicy
+                                            timeoutInterval:timeout];
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     [NSURLConnection sendAsynchronousRequest:urlRequest queue:queue completionHandler:^(NSURLResponse * _Nullable response, NSData * _Nullable data, NSError * _Nullable connectionError) {
         if (connectionError) {
             handler(nil, connectionError);
         } else {
             NSError *jsonError = nil;
-            id jsonResponse = [NSJSONSerialization
-                                     JSONObjectWithData:data
-                                     options:kNilOptions
-                                     error:&jsonError];
+            id jsonResponse = [NSJSONSerialization JSONObjectWithData:data
+                                                              options:kNilOptions
+                                                                error:&jsonError];
             if ([jsonResponse isKindOfClass: [NSArray class]]) {
+                // Successful case
                 handler((NSArray *)jsonResponse, jsonError);
             } else if ([jsonResponse isKindOfClass: [NSDictionary class]] && ((NSDictionary *)jsonResponse)[@"error"] != nil) {
+                // Error returned in response
                 NSDictionary *errorResponse = (NSDictionary *)jsonResponse;
                 NSDictionary *userInfo = @{
                    NSLocalizedDescriptionKey: NSLocalizedString(errorResponse[@"error"], nil),
@@ -741,8 +747,10 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
                 NSError *serverError = [NSError errorWithDomain:TreasureDataErrorDomain code:code userInfo: userInfo];
                 handler(nil, serverError);
             } else {
+                // Unrecognizable response format returned
                 NSDictionary *userInfo = @{
-                   NSLocalizedDescriptionKey: NSLocalizedString(@"Unrecognizable response format", nil)
+                   NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid reponse format", nil),
+                   NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Server returned unrecognizable response format", nil)
                 };
                 NSError *unrecogizaleResponseFormatError = [NSError errorWithDomain:TreasureDataErrorDomain code:-1 userInfo:userInfo];
                 handler(nil, unrecogizaleResponseFormatError);

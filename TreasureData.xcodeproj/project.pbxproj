@@ -61,8 +61,8 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				6B758E4E1C00C59A00D597F8 /* TDClient.h in CopyFiles */,
 				6B738097192A09160097D56E /* TreasureData.h in CopyFiles */,
+				6B758E4E1C00C59A00D597F8 /* TDClient.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -110,7 +110,6 @@
 		C672A66407ACBC0B49C815A4 /* Pods-TreasureDataTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureDataTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureDataTests/Pods-TreasureDataTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D4602B9A0FADB71F2C158763 /* Pods-Common-TreasureDataTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Common-TreasureDataTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Common-TreasureDataTests/Pods-Common-TreasureDataTests.release.xcconfig"; sourceTree = "<group>"; };
 		DC74A9280B244A4C25A4F155 /* Pods-TreasureData.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureData.release.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureData/Pods-TreasureData.release.xcconfig"; sourceTree = "<group>"; };
-		DF259EB0229FA63200697319 /* TDRequestOptions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TDRequestOptions.h; sourceTree = "<group>"; };
 		E0DB92B1F49BBC30A854EB53 /* libPods-TreasureDataTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TreasureDataTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E52CB7F121FDD6D300062EBA /* TreasureDataTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TreasureDataTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		E52CB7F421FDD78A00062EBA /* TDAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDAPI.swift; sourceTree = "<group>"; };
@@ -203,14 +202,13 @@
 			children = (
 				6B351A74194ABF0F001CBAAD /* Deflate.h */,
 				6B351A75194ABF0F001CBAAD /* Deflate.m */,
-				DF259EB0229FA63200697319 /* TDRequestOptions.h */,
 				6B738096192A09160097D56E /* TreasureData.h */,
 				6B738098192A09160097D56E /* TreasureData.m */,
 				E5701BA5225755C5000FB17F /* TDClientInternal.h */,
 				6BF8C9321A3E9B76005B1804 /* TDClient.h */,
 				6BF8C9331A3E9B76005B1804 /* TDClient.m */,
-				2053A39B2047F37F0089A959 /* TDUtils.m */,
 				2053A39D2047F38B0089A959 /* TDUtils.h */,
+				2053A39B2047F37F0089A959 /* TDUtils.m */,
 				201053E9204858F8009C7EFA /* Constants.h */,
 				6BB5A9D21D1A86CD0006A534 /* Session.h */,
 				6BB5A9D31D1A86EE0006A534 /* Session.m */,

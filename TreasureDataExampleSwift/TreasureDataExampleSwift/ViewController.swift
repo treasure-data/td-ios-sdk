@@ -47,5 +47,15 @@ class ViewController: UIViewController {
                 print("uploadEvents: error. errorCode=%@, message=%@", errorCode, message ?? "")
             })
     }
+    
+    @IBAction func fetchUserSegments(sender: AnyObject) {
+        let audienceTokens = ["e894a842-cf42-4df8-9a57-daf22246a040", "9b3e80e5-5495-4181-86fe-7d6d3f1c34c8"]
+        let keys = ["user_id": "TEST08680047", "td_client_id": "2dd8cc50-2756-40a1-ae02-6237c481b719"]
+        let options: [TDRequestOptionsKey : Any] = [.timeoutInterval: 10, .cachePolicy: 10];
+        TreasureData.sharedInstance().fetchUserSegments(audienceTokens, keys: keys, options: options) { response, error in
+            print("Response: \(String(describing: response))");
+            print("Error: \(String(describing: error))");
+        }
+    }
 }
 
