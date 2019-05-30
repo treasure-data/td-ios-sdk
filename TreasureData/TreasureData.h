@@ -85,10 +85,10 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
  * Defaults to https://cdp.in.treasuredata.com
  *
  * Possible values:
- *    AWS East  https://cdp.in.treasuredata.com       https://in.treasuredata.com
- *    AWS Tokyo https://cdp-tokyo.in.treasuredata.com https://tokyo.in.treasuredata.com
- *    AWS EU    https://cdp-eu01.in.treasuredata.com  https://eu01.in.treasuredata.com
- *    IDCF      https://cdp-idcf.in.treasuredata.com  https://idcf.in.treasuredata.com
+ *    AWS East  https://cdp.in.treasuredata.com
+ *    AWS Tokyo https://cdp-tokyo.in.treasuredata.com
+ *    AWS EU    https://cdp-eu01.in.treasuredata.com
+ *    IDCF      https://cdp-idcf.in.treasuredata.com
  */
 @property(nonatomic, strong) NSString * _Nullable cdpEndpoint;
 
