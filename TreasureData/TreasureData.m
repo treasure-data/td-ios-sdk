@@ -724,7 +724,7 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url
                                                 cachePolicy:cachePolicy
                                             timeoutInterval:timeout];
-    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    NSOperationQueue *queue = [NSOperationQueue currentQueue];
     [NSURLConnection sendAsynchronousRequest:urlRequest queue:queue completionHandler:^(NSURLResponse * _Nullable response, NSData * _Nullable data, NSError * _Nullable connectionError) {
         if (connectionError) {
             handler(nil, connectionError);
