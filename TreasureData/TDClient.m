@@ -19,15 +19,14 @@ static NSString *version = @"0.2.0";
 
 // Deprecated
 - (id)initWithApiKey:(NSString *)apiKey apiEndpoint:(NSString*)apiEndpoint {
-    return [self __initWithApiKey:apiKey apiEndpoint:apiEndpoint cdpEndpoint:nil];
+    return [self __initWithApiKey:apiKey apiEndpoint:apiEndpoint];
 }
 
-- (id)__initWithApiKey:(NSString *)apiKey apiEndpoint:(NSString*)apiEndpoint cdpEndpoint:(nullable NSString *)cdpEndpoint {
+- (id)__initWithApiKey:(NSString *)apiKey apiEndpoint:(NSString*)apiEndpoint {
     NSString *projectId = [NSString stringWithFormat:@"_td %@", [self md5:apiKey]];
     self = [self initWithProjectId:projectId andWriteKey:@"dummy_write_key" andReadKey:@"dummy_read_key"];
     self.apiKey = apiKey;
     self.apiEndpoint = apiEndpoint;
-    self.cdpEndpoint = cdpEndpoint;
     self.globalPropertiesBlock = ^NSDictionary *(NSString *eventCollection) {
         if (!NSClassFromString(@"NSUUID")) {
             return @{};

@@ -15,13 +15,14 @@
 #import "Constants.h"
 #import "TDIAPObserver.h"
 #import "TDClientInternal.h"
+#import "TDRequestOptions.h"
 
 static bool isTraceLoggingEnabled = false;
 static bool isEventCompressionEnabled = true;
 static TreasureData *sharedInstance = nil;
 static NSString *tableNamePattern = @"[^0-9a-z_]";
 static NSString *defaultApiEndpoint = nil;
-static NSString *defaultCdpEndpoint = nil;
+static NSString *defaultCdpEndpoint = @"https://cdp.in.treasuredata.com";
 static NSString *storageKeyOfUuid = @"td_sdk_uuid";
 static NSString *storageKeyOfFirstRun = @"td_sdk_first_run";
 static NSString *keyOfUuid = @"td_uuid";
@@ -102,10 +103,8 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
         self.appLifecycleEventEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENT_ENABLED];
 
         NSString *endpoint = defaultApiEndpoint ? defaultApiEndpoint : @"https://in.treasuredata.com";
-        NSString *cdpEndpoint = defaultCdpEndpoint ? defaultCdpEndpoint : @"https://cdp.in.treasuredata.com";
         self.client = [[TDClient alloc] __initWithApiKey:apiKey
-                                             apiEndpoint:endpoint
-                                         cdpEndpoint:cdpEndpoint];
+                                             apiEndpoint:endpoint];
         if (self.client) {
 
         } else {
@@ -703,7 +702,9 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
 
 - (void)fetchUserSegments: (nonnull NSArray *)audienceToken
                      keys: (nonnull NSDictionary *)keys
+                  options: (nullable NSDictionary<TDRequestOptionsKey, id> *)options
         completionHandler: (void (^_Nonnull)(NSArray* _Nullable jsonResponse, NSError* _Nullable error)) handler {
+    NSString *cdpEndpoint = self.cdpEndpoint ? self.cdpEndpoint : defaultCdpEndpoint;
     NSString *audienceString = [NSString
                                 stringWithFormat:@"&token=%@",
                                 [audienceToken componentsJoinedByString: @","]];
@@ -711,7 +712,7 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     for (NSString *key in keys) {
         [keyString appendFormat:@"&key.%@=%@", key, keys[key]];
     }
-    NSMutableString *urlString = [NSMutableString stringWithString:_client.cdpEndpoint];
+    NSMutableString *urlString = [NSMutableString stringWithString:cdpEndpoint];
     [urlString appendString:@"/cdp/lookup/collect/segments?version=2"];
     [urlString appendString:audienceString];
     [urlString appendString:keyString];
