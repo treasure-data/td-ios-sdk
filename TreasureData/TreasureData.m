@@ -711,10 +711,11 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     for (NSString *key in keys) {
         [keyString appendFormat:@"&key.%@=%@", key, keys[key]];
     }
-    NSMutableString *urlString = [NSMutableString stringWithString:cdpEndpoint];
-    [urlString appendString:@"/cdp/lookup/collect/segments?version=2"];
-    [urlString appendString:audienceString];
-    [urlString appendString:keyString];
+    NSMutableString *mutableUrlString = [NSMutableString stringWithString:cdpEndpoint];
+    [mutableUrlString appendString:@"/cdp/lookup/collect/segments?version=2"];
+    [mutableUrlString appendString:audienceString];
+    [mutableUrlString appendString:keyString];
+    NSString *urlString = [mutableUrlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
     NSNumber *timeoutNumber = (NSNumber *)options[TDRequestOptionsTimeoutIntervalKey];
     NSTimeInterval timeout = timeoutNumber ? [timeoutNumber doubleValue] : 60;
