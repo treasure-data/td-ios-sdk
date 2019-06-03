@@ -740,8 +740,8 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
                 // Error returned in response
                 NSDictionary *errorResponse = (NSDictionary *)jsonResponse;
                 NSDictionary *userInfo = @{
-                   NSLocalizedDescriptionKey: NSLocalizedString(errorResponse[@"error"], nil),
-                   NSLocalizedFailureReasonErrorKey: NSLocalizedString(errorResponse[@"message"], nil)
+                   NSLocalizedDescriptionKey: errorResponse[@"error"],
+                   NSLocalizedFailureReasonErrorKey: errorResponse[@"message"]
                 };
                 NSInteger code = [(NSNumber *)errorResponse[@"status"] integerValue];
                 NSError *serverError = [NSError errorWithDomain:TreasureDataErrorDomain code:code userInfo: userInfo];
