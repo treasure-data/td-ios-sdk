@@ -413,6 +413,37 @@ An example of a IAP event:
 
 We will do a separated `SKProductsRequest` to get full product's information. If the request is failed somehow, fields with "td_iap_product_" prefix will be null. Also note that that the `currency_code` is only available from iOS 10 onwards.
 
+#### Personalization API
+
+##### fetchUserSegments
+
+This feature is not enabled on accounts by default, please contact support for more information.
+Important! You must set cdpEndpoint property of TreasureData's sharedInstance.
+Usage example:
+```
+// Set cdpEndpoint when initialize TreasureData  
+[[TreasureData sharedInstance] setCdpEnpoint: @"[your cdp endpoint goes here]"]
+
+// Call fetchUserSegments to get user segments as NSArray
+
+NSArray *audienceTokens = @[@"e894a842-cf42-4df8-9a57-daf22246a040", @"9b3e80e5-5495-4181-86fe-7d6d3f1c34c8"];
+NSDictionary *keys = @{
+    @"user_id": @"TEST08680047",
+    @"td_client_id": @"2dd8cc50-2756-40a1-ae02-6237c481b719"};
+NSDictionary<TDRequestOptionsKey, id> *options = @{
+    TDRequestOptionsTimeoutIntervalKey: [NSNumber numberWithInteger: 10],
+    TDRequestOptionsCachePolicyKey: [NSNumber numberWithUnsignedInteger: NSURLRequestReloadIgnoringCacheData]
+};
+[[TreasureData sharedInstance] fetchUserSegments:audienceTokens
+                                            keys:keys
+                                         options:options
+                               completionHandler:^(NSArray * _Nullable jsonResponse, NSError * _Nullable error) {
+   NSLog(@"fetchUserSegments jsonResponse: %@", jsonResponse);
+   NSLog(@"fetchUserSegments error: %@", error);
+}];
+```
+
+
 ## GDPR Compliance
 
 The SDK provide some convenient methods to easily opt-out of tracking the device entirely without having to resort to many cluttered if-else statements:

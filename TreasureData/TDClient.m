@@ -17,6 +17,7 @@ static NSString *version = @"0.2.0";
 
 @implementation TDClient
 
+// Deprecated
 - (id)initWithApiKey:(NSString *)apiKey apiEndpoint:(NSString*)apiEndpoint {
     return [self __initWithApiKey:apiKey apiEndpoint:apiEndpoint];
 }

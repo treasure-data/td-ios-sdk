@@ -12,6 +12,7 @@
 
 @property (weak, nonatomic) IBOutlet UITextField *apiEndpointField;
 @property (weak, nonatomic) IBOutlet UITextField *apiKeyField;
+@property (weak, nonatomic) IBOutlet UITextField *cdpEndpointField;
 @property (weak, nonatomic) IBOutlet UITextField *targetDatabaseField;
 @property (weak, nonatomic) IBOutlet UITextField *targetTableField;
 @property (weak, nonatomic) IBOutlet UITextField *defaultTableField;

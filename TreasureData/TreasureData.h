@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "TDClient.h"
+#import "TDRequestOptionsKey.h"
 
 /**
  * Generic success callback block's definition.
@@ -60,6 +61,18 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
  * The destination table for events that doesn't specify one. Currently this also applied for automatically tracked events (if enabled): app lifecycle, IAP and audits, default is "td_ios".
  */
 @property(nonatomic, strong) NSString * _Nullable defaultTable;
+
+/**
+ * The host to use for the Personalization API
+ * Defaults to https://cdp.in.treasuredata.com
+ *
+ * Possible values:
+ *    AWS East  https://cdp.in.treasuredata.com
+ *    AWS Tokyo https://cdp-tokyo.in.treasuredata.com
+ *    AWS EU    https://cdp-eu01.in.treasuredata.com
+ *    IDCF      https://cdp-idcf.in.treasuredata.com
+ */
+@property(nonatomic, strong) NSString * _Nullable cdpEndpoint;
 
 #pragma mark - Initialization
 
@@ -391,6 +404,25 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
  * Whether this `TreasureData`'s instance tracking IAP events
  */
 - (BOOL)isInAppPurchaseEventEnabled;
+
+#pragma mark - Personalization API
+
+/**
+ * Fetch user segments from cdp endpoint. Callback with either a JSON serialized object or an error.
+ * @discussion This will make a call to shared instance's cdpEndpoint. Make sure you configure cdpEndpoint before using this method
+ * @param audienceTokens List of audience tokens. There must be at least one token.
+ * @param keys Key value dictionary with at least user_id and td_client_id are required.
+ * @param options Request options. For possible options, see TDRequestOptionsKey.
+ * @param handler Completion callback with either JSON object or an error. The callback will be called from the caller's queue, or if there is no queue, default to main queue.
+ * Example @code TreasureData.sharedInstance().fetchUserSegments(audienceTokens, keys: keys, options: options) { response, error in
+    print("Response: \(String(describing: response))");
+    print("Error: \(String(describing: error))");
+ }
+ */
+- (void)fetchUserSegments: (nonnull NSArray<NSString *> *)audienceTokens
+                     keys: (nonnull NSDictionary<NSString *, id> *)keys
+                  options: (nullable NSDictionary<TDRequestOptionsKey, id> *)options
+        completionHandler: (void (^_Nonnull)(NSArray* _Nullable jsonResponse, NSError* _Nullable error)) handler;
 
 #pragma mark - Misc.
 

@@ -15,12 +15,14 @@
 #import "Constants.h"
 #import "TDIAPObserver.h"
 #import "TDClientInternal.h"
+#import "NSString+Helpers.h"
 
 static bool isTraceLoggingEnabled = false;
 static bool isEventCompressionEnabled = true;
 static TreasureData *sharedInstance = nil;
 static NSString *tableNamePattern = @"[^0-9a-z_]";
 static NSString *defaultApiEndpoint = nil;
+static NSString *defaultCdpEndpoint = @"https://cdp.in.treasuredata.com";
 static NSString *storageKeyOfUuid = @"td_sdk_uuid";
 static NSString *storageKeyOfFirstRun = @"td_sdk_first_run";
 static NSString *keyOfUuid = @"td_uuid";
@@ -45,6 +47,7 @@ static NSString *sessionEventStart = @"start";
 static NSString *sessionEventEnd = @"end";
 static Session *session = nil;
 static long sessionTimeoutMilli = -1;
+static NSString *TreasureDataErrorDomain = @"com.treasuredata";
 
 @interface TreasureData ()
 
@@ -100,7 +103,8 @@ static long sessionTimeoutMilli = -1;
         self.appLifecycleEventEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENT_ENABLED];
 
         NSString *endpoint = defaultApiEndpoint ? defaultApiEndpoint : @"https://in.treasuredata.com";
-        self.client = [[TDClient alloc] __initWithApiKey:apiKey apiEndpoint:endpoint];
+        self.client = [[TDClient alloc] __initWithApiKey:apiKey
+                                             apiEndpoint:endpoint];
         if (self.client) {
 
         } else {
@@ -692,6 +696,77 @@ static long sessionTimeoutMilli = -1;
                                               TD_DEFAULT_TABLE]]];
     _UUID = [[NSUUID UUID] UUIDString];
     [[NSUserDefaults standardUserDefaults] setObject:_UUID forKey:storageKeyOfUuid];
+}
+
+#pragma mark - Personalization API
+
+- (void)fetchUserSegments: (nonnull NSArray<NSString *> *)audienceTokens
+                     keys: (nonnull NSDictionary<NSString *, id> *)keys
+                  options: (nullable NSDictionary<TDRequestOptionsKey, id> *)options
+        completionHandler: (void (^_Nonnull)(NSArray* _Nullable jsonResponse, NSError* _Nullable error)) handler {
+    // Construct url
+    NSString *cdpEndpoint = self.cdpEndpoint ? self.cdpEndpoint : defaultCdpEndpoint;
+    NSMutableArray *encodedAudienceTokens = [[NSMutableArray alloc] init];
+    for (NSString *token in audienceTokens) {
+        [encodedAudienceTokens addObject:urlEncode(token)];
+    }
+    NSString *audienceString = [NSString
+                                stringWithFormat:@"&token=%@",
+                                [encodedAudienceTokens componentsJoinedByString: @","]];
+    NSMutableString *keyString = [[NSMutableString alloc] initWithString: @""];
+    for (NSString *key in keys) {
+        [keyString appendFormat:@"&key.%@=%@", urlEncode(key), urlEncode(keys[key])];
+    }
+    NSMutableString *urlString = [NSMutableString stringWithString:cdpEndpoint];
+    [urlString appendString:@"/cdp/lookup/collect/segments?version=2"];
+    [urlString appendString:audienceString];
+    [urlString appendString:keyString];
+    NSURL *url = [NSURL URLWithString:urlString];
+
+    // Construct request
+    NSNumber *timeoutNumber = (NSNumber *)options[TDRequestOptionsTimeoutIntervalKey];
+    NSTimeInterval timeout = timeoutNumber ? [timeoutNumber doubleValue] : 60;
+    NSNumber *cachePolicyNumber = (NSNumber *)options[TDRequestOptionsCachePolicyKey];
+    NSURLRequestCachePolicy cachePolicy = cachePolicyNumber ? [cachePolicyNumber unsignedIntegerValue] : NSURLRequestUseProtocolCachePolicy;
+    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url
+                                                cachePolicy:cachePolicy
+                                            timeoutInterval:timeout];
+    
+    // Call api
+    NSOperationQueue *queue =[NSOperationQueue currentQueue];
+    if (queue == nil) queue = [NSOperationQueue mainQueue];
+    [NSURLConnection sendAsynchronousRequest:urlRequest queue:queue completionHandler:^(NSURLResponse * _Nullable response, NSData * _Nullable data, NSError * _Nullable connectionError) {
+        if (connectionError) {
+            handler(nil, connectionError);
+        } else {
+            NSError *jsonError = nil;
+            id jsonResponse = [NSJSONSerialization JSONObjectWithData:data
+                                                              options:kNilOptions
+                                                                error:&jsonError];
+            if ([jsonResponse isKindOfClass: [NSArray class]]) {
+                // Successful case
+                handler((NSArray *)jsonResponse, jsonError);
+            } else if ([jsonResponse isKindOfClass: [NSDictionary class]] && ((NSDictionary *)jsonResponse)[@"error"] != nil) {
+                // Error returned in response
+                NSDictionary *errorResponse = (NSDictionary *)jsonResponse;
+                NSDictionary *userInfo = @{
+                   NSLocalizedDescriptionKey: errorResponse[@"error"],
+                   NSLocalizedFailureReasonErrorKey: errorResponse[@"message"]
+                };
+                NSInteger code = [(NSNumber *)errorResponse[@"status"] integerValue];
+                NSError *serverError = [NSError errorWithDomain:TreasureDataErrorDomain code:code userInfo: userInfo];
+                handler(nil, serverError);
+            } else {
+                // Unrecognizable response format returned
+                NSDictionary *userInfo = @{
+                   NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid reponse format", nil),
+                   NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Server returned unrecognizable response format", nil)
+                };
+                NSError *unrecogizaleResponseFormatError = [NSError errorWithDomain:TreasureDataErrorDomain code:-1 userInfo:userInfo];
+                handler(nil, unrecogizaleResponseFormatError);
+            }
+        }
+    }];
 }
 
 #pragma mark - Exposed for testing
