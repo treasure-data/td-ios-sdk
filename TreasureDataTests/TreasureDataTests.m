@@ -118,7 +118,7 @@ static NSString *END_POINT = @"http://localhost";
 
 - (id)initWithApiKey:(NSString *)apiKey {
     self = [super initWithApiKey:apiKey];
-    MyTDClient *myClient = [[MyTDClient alloc] __initWithApiKey:apiKey apiEndpoint:END_POINT cdpEndpoint:nil];
+    MyTDClient *myClient = [[MyTDClient alloc] __initWithApiKey:apiKey apiEndpoint:END_POINT];
     self.client = myClient;
     MySession *session = [[MySession alloc] init];
     [self.client __setSession:session];

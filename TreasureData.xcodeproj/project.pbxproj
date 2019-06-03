@@ -23,7 +23,7 @@
 		6B758E4E1C00C59A00D597F8 /* TDClient.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6BF8C9321A3E9B76005B1804 /* TDClient.h */; };
 		6BB5A9D41D1A86EF0006A534 /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BB5A9D31D1A86EE0006A534 /* Session.m */; };
 		6BB5A9D61D1BBFE60006A534 /* SessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BB5A9D51D1BBFE60006A534 /* SessionTests.m */; };
-		6BF8C92D1A3E971D005B1804 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BF8C92C1A3E971D005B1804 /* CoreLocation.framework */; };
+		6BF8C92D1A3E971D005B1804 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BF8C92C1A3E971D005B1804 /* CoreLocation.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		6BF8C92F1A3E972C005B1804 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BF8C92E1A3E972C005B1804 /* Security.framework */; };
 		6BF8C9311A3E977B005B1804 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BF8C9301A3E977B005B1804 /* libz.dylib */; };
 		6BF8C9341A3E9B76005B1804 /* TDClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BF8C9331A3E9B76005B1804 /* TDClient.m */; };
