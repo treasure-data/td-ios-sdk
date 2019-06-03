@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.source_files = 'TreasureData'
   s.library      = 'z'
   s.frameworks   = 'Security', 'StoreKit'
-  s.public_header_files = ["TreasureData/TreasureData.h", "TreasureData/TDClient.h"]
+  s.public_header_files = ["TreasureData/TreasureData.h", "TreasureData/TDClient.h", "TreasureData/TDRequestOptionsKey.h"]
   s.dependency "KeenClientTD", '= 3.2.34'
   s.requires_arc = true
 end
