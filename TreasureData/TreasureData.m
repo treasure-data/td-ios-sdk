@@ -733,7 +733,9 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
                                             timeoutInterval:timeout];
     
     // Call api
-    [NSURLConnection sendAsynchronousRequest:urlRequest queue:[NSOperationQueue currentQueue] completionHandler:^(NSURLResponse * _Nullable response, NSData * _Nullable data, NSError * _Nullable connectionError) {
+    NSOperationQueue *queue =[NSOperationQueue currentQueue];
+    if (queue == nil) queue = [NSOperationQueue mainQueue];
+    [NSURLConnection sendAsynchronousRequest:urlRequest queue:queue completionHandler:^(NSURLResponse * _Nullable response, NSData * _Nullable data, NSError * _Nullable connectionError) {
         if (connectionError) {
             handler(nil, connectionError);
         } else {

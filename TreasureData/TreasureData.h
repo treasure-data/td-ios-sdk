@@ -413,7 +413,7 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
  * @param audienceTokens List of audience tokens. There must be at least one token.
  * @param keys Key value dictionary with at least user_id and td_client_id are required.
  * @param options Request options. For possible options, see TDRequestOptionsKey.
- * @param handler Completion callback with either JSON object or an error.
+ * @param handler Completion callback with either JSON object or an error. The callback will be called from the caller's queue, or if there is no queue, default to main queue.
  * Example @code TreasureData.sharedInstance().fetchUserSegments(audienceTokens, keys: keys, options: options) { response, error in
     print("Response: \(String(describing: response))");
     print("Error: \(String(describing: error))");
