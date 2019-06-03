@@ -15,6 +15,7 @@
 #import "Constants.h"
 #import "TDIAPObserver.h"
 #import "TDClientInternal.h"
+#import "NSString+Helpers.h"
 
 static bool isTraceLoggingEnabled = false;
 static bool isEventCompressionEnabled = true;
@@ -703,30 +704,36 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
                      keys: (nonnull NSDictionary<NSString *, id> *)keys
                   options: (nullable NSDictionary<TDRequestOptionsKey, id> *)options
         completionHandler: (void (^_Nonnull)(NSArray* _Nullable jsonResponse, NSError* _Nullable error)) handler {
+    // Construct url
     NSString *cdpEndpoint = self.cdpEndpoint ? self.cdpEndpoint : defaultCdpEndpoint;
+    NSMutableArray *encodedAudienceTokens = [[NSMutableArray alloc] init];
+    for (NSString *token in audienceTokens) {
+        [encodedAudienceTokens addObject:urlEncode(token)];
+    }
     NSString *audienceString = [NSString
                                 stringWithFormat:@"&token=%@",
-                                [audienceTokens componentsJoinedByString: @","]];
+                                [encodedAudienceTokens componentsJoinedByString: @","]];
     NSMutableString *keyString = [[NSMutableString alloc] initWithString: @""];
     for (NSString *key in keys) {
-        [keyString appendFormat:@"&key.%@=%@", key, keys[key]];
+        [keyString appendFormat:@"&key.%@=%@", urlEncode(key), urlEncode(keys[key])];
     }
-    NSMutableString *mutableUrlString = [NSMutableString stringWithString:cdpEndpoint];
-    [mutableUrlString appendString:@"/cdp/lookup/collect/segments?version=2"];
-    [mutableUrlString appendString:audienceString];
-    [mutableUrlString appendString:keyString];
-    NSString *urlString = [mutableUrlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    
+    NSMutableString *urlString = [NSMutableString stringWithString:cdpEndpoint];
+    [urlString appendString:@"/cdp/lookup/collect/segments?version=2"];
+    [urlString appendString:audienceString];
+    [urlString appendString:keyString];
+    NSURL *url = [NSURL URLWithString:urlString];
+
+    // Construct request
     NSNumber *timeoutNumber = (NSNumber *)options[TDRequestOptionsTimeoutIntervalKey];
     NSTimeInterval timeout = timeoutNumber ? [timeoutNumber doubleValue] : 60;
     NSNumber *cachePolicyNumber = (NSNumber *)options[TDRequestOptionsCachePolicyKey];
     NSURLRequestCachePolicy cachePolicy = cachePolicyNumber ? [cachePolicyNumber unsignedIntegerValue] : NSURLRequestUseProtocolCachePolicy;
-    NSURL *url = [NSURL URLWithString:urlString];
     NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url
                                                 cachePolicy:cachePolicy
                                             timeoutInterval:timeout];
-    NSOperationQueue *queue = [NSOperationQueue currentQueue];
-    [NSURLConnection sendAsynchronousRequest:urlRequest queue:queue completionHandler:^(NSURLResponse * _Nullable response, NSData * _Nullable data, NSError * _Nullable connectionError) {
+    
+    // Call api
+    [NSURLConnection sendAsynchronousRequest:urlRequest queue:[NSOperationQueue currentQueue] completionHandler:^(NSURLResponse * _Nullable response, NSData * _Nullable data, NSError * _Nullable connectionError) {
         if (connectionError) {
             handler(nil, connectionError);
         } else {
