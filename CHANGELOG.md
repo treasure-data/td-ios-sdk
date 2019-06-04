@@ -1,6 +1,6 @@
 # Change Log
 
-## Version 0.3.0-beta1
+## Version 0.3.0-beta2
 _2019-06-04_
 
 - Added support for Personalization API (`fetchUserSegments`).
