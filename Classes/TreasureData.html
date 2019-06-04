@@ -173,6 +173,45 @@
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TreasureData(py)cdpEndpoint"></a>
+                    <a name="//apple_ref/objc/Property/cdpEndpoint" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(py)cdpEndpoint">cdpEndpoint</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The host to use for the Personalization API
+ Defaults to <a href="https://cdp.in.treasuredata.com">https://cdp.in.treasuredata.com</a></p>
+
+<p>Possible values:
+    AWS East  <a href="https://cdp.in.treasuredata.com">https://cdp.in.treasuredata.com</a>
+    AWS Tokyo <a href="https://cdp-tokyo.in.treasuredata.com">https://cdp-tokyo.in.treasuredata.com</a>
+    AWS EU    <a href="https://cdp-eu01.in.treasuredata.com">https://cdp-eu01.in.treasuredata.com</a>
+    IDCF      <a href="https://cdp-idcf.in.treasuredata.com">https://cdp-idcf.in.treasuredata.com</a></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">_Nullable</span> <span class="n">cdpEndpoint</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">cdpEndpoint</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
             <div class="task-group">
@@ -2119,6 +2158,120 @@ This is a persistent setting, able to set through <code>enableAppLifecycleEvent<
             </div>
             <div class="task-group">
               <div class="task-name-container">
+                <a name="/Personalization%20API"></a>
+                <a name="//apple_ref/objc/Section/Personalization API" class="dashAnchor"></a>
+                <a href="#/Personalization%20API">
+                  <h3 class="section-name">Personalization API</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TreasureData(im)fetchUserSegments:keys:options:completionHandler:"></a>
+                    <a name="//apple_ref/objc/Method/-fetchUserSegments:keys:options:completionHandler:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)fetchUserSegments:keys:options:completionHandler:">-fetchUserSegments:keys:options:completionHandler:</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Fetch user segments from cdp endpoint. Callback with either a JSON serialized object or an error.</p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    This will make a call to shared instance&rsquo;s cdpEndpoint. Make sure you configure cdpEndpoint before using this method
+
+</div>
+
+<p><pre> TreasureData.sharedInstance().fetchUserSegments(audienceTokens, keys: keys, options: options) { response, error in
+   print(<q>Response: \(String(describing: response))</q>);
+   print(<q>Error: \(String(describing: error))</q>);
+ }
+ </pre></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">fetchUserSegments</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSArray</span><span class="o">&lt;</span><span class="n">NSString</span> <span class="o">*&gt;</span> <span class="o">*</span><span class="p">)</span><span class="nv">audienceTokens</span>
+                     <span class="nf">keys</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSDictionary</span><span class="o">&lt;</span><span class="n">NSString</span> <span class="o">*</span><span class="p">,</span> <span class="n">id</span><span class="o">&gt;</span> <span class="o">*</span><span class="p">)</span><span class="nv">keys</span>
+                  <span class="nf">options</span><span class="p">:</span>
+                      <span class="p">(</span><span class="n">nullable</span> <span class="n">NSDictionary</span><span class="o">&lt;</span><span class="n">TDRequestOptionsKey</span><span class="p">,</span> <span class="n">id</span><span class="o">&gt;</span> <span class="o">*</span><span class="p">)</span><span class="nv">options</span>
+        <span class="nf">completionHandler</span><span class="p">:</span>
+            <span class="p">(</span><span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="n">_Nonnull</span><span class="p">)(</span><span class="n">NSArray</span> <span class="o">*</span><span class="n">_Nullable</span><span class="p">,</span> <span class="n">NSError</span> <span class="o">*</span><span class="n">_Nullable</span><span class="p">))</span><span class="nv">handler</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">fetchUserSegments</span><span class="p">(</span><span class="n">_</span> <span class="nv">audienceTokens</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="nv">keys</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">],</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">completionHandler</span> <span class="nv">handler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt">Any</span><span class="p">]?,</span> <span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>audienceTokens</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>List of audience tokens. There must be at least one token.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>keys</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Key value dictionary with at least user_id and td_client_id are required.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>options</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Request options. For possible options, see TDRequestOptionsKey.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>handler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Completion callback with either JSON object or an error. The callback will be called from the caller&rsquo;s queue, or if there is no queue, default to main queue.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
                 <a name="/Misc."></a>
                 <a name="//apple_ref/objc/Section/Misc." class="dashAnchor"></a>
                 <a href="#/Misc.">
@@ -2646,7 +2799,7 @@ This is a persistent setting, able to set through <code>enableAppLifecycleEvent<
           </section>
         </section>
         <section id="footer">
-          <p>© 2019 Arm Treasure Data</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/treasure-data/td-ios-sdk" target="_blank" rel="external">mitsu and huylenq</a>. All rights reserved. (Last updated: 2019-06-04)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
