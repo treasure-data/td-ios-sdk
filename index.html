@@ -411,10 +411,8 @@ Usage example:</p>
 
 // Call fetchUserSegments to get user segments as NSArray
 
-NSArray *audienceTokens = @[@"e894a842-cf42-4df8-9a57-daf22246a040", @"9b3e80e5-5495-4181-86fe-7d6d3f1c34c8"];
-NSDictionary *keys = @{
-    @"user_id": @"TEST08680047",
-    @"td_client_id": @"2dd8cc50-2756-40a1-ae02-6237c481b719"};
+NSArray *audienceTokens = @[@"Your Profile API (Audience) Token here"];
+NSDictionary *keys = @{@"your_key": @"your_value"};
 NSDictionary&lt;TDRequestOptionsKey, id&gt; *options = @{
     TDRequestOptionsTimeoutIntervalKey: [NSNumber numberWithInteger: 10],
     TDRequestOptionsCachePolicyKey: [NSNumber numberWithUnsignedInteger: NSURLRequestReloadIgnoringCacheData]
