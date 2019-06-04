@@ -16,49 +16,49 @@
     },
     {
       "file": "/Users/huy/src/td/td-ios-sdk/TreasureData/TreasureData.h",
-      "line": 476,
+      "line": 475,
       "symbol": "TreasureData.-isFirstRun",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/huy/src/td/td-ios-sdk/TreasureData/TreasureData.h",
-      "line": 477,
+      "line": 476,
       "symbol": "TreasureData.-clearFirstRun",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/huy/src/td/td-ios-sdk/TreasureData/TreasureData.h",
-      "line": 481,
+      "line": 480,
       "symbol": "TreasureData.-event:database:table:",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/huy/src/td/td-ios-sdk/TreasureData/TreasureData.h",
-      "line": 482,
+      "line": 481,
       "symbol": "TreasureData.-event:table:",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/huy/src/td/td-ios-sdk/TreasureData/TreasureData.h",
-      "line": 483,
+      "line": 482,
       "symbol": "TreasureData.-uploadWithBlock:",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/huy/src/td/td-ios-sdk/TreasureData/TreasureData.h",
-      "line": 484,
+      "line": 483,
       "symbol": "TreasureData.-uploadEventsWithBlock:",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/huy/src/td/td-ios-sdk/TreasureData/TreasureData.h",
-      "line": 485,
+      "line": 484,
       "symbol": "TreasureData.-setApiEndpoint:",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
       "warning": "undocumented"

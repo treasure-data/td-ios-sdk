@@ -2178,19 +2178,18 @@ This is a persistent setting, able to set through <code>enableAppLifecycleEvent<
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        
-<ul>
-<li>Fetch user segments from cdp endpoint. Callback with either a JSON serialized object or an error.</li>
-<li>@discussion This will make a call to shared instance&rsquo;s cdpEndpoint. Make sure you configure cdpEndpoint before using this method</li>
-<li>- parameter: audienceTokens List of audience tokens. There must be at least one token.</li>
-<li>- parameter: keys Attributes dictionary.</li>
-<li>- parameter: options Request options. For possible options, see TDRequestOptionsKey.</li>
-<li>- parameter: handler Completion callback with either JSON object or an error. The callback will be called from the caller&rsquo;s queue, or if there is no queue, default to main queue.</li>
-<li>Example @code TreasureData.sharedInstance().fetchUserSegments(audienceTokens, keys: keys, options: options) { response, error in
-print(<q>Response: \(String(describing: response))</q>);
-print(<q>Error: \(String(describing: error))</q>);
-}</li>
-</ul>
+                        <p>Fetch user segments from cdp endpoint. Callback with either a JSON serialized object or an error.</p>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    This will make a call to shared instance&rsquo;s cdpEndpoint. Make sure you configure cdpEndpoint before using this method
+
+</div>
+
+<p><pre> TreasureData.sharedInstance().fetchUserSegments(audienceTokens, keys: keys, options: options) { response, error in
+    print(<q>Response: \(String(describing: response))</q>);
+    print(<q>Error: \(String(describing: error))</q>);
+ }
+ </pre></p>
 
                       </div>
                       <div class="declaration">
@@ -2210,6 +2209,61 @@ print(<q>Error: \(String(describing: error))</q>);
                           <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">fetchUserSegments</span><span class="p">(</span><span class="n">_</span> <span class="nv">audienceTokens</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="nv">keys</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">],</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">completionHandler</span> <span class="nv">handler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt">Any</span><span class="p">]?,</span> <span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>audienceTokens</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>List of audience tokens. There must be at least one token.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>keys</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Attributes dictionary.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>options</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Request options. For possible options, see TDRequestOptionsKey.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>handler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Completion callback with either JSON object or an error. The callback will be called from the caller&rsquo;s queue, or if there is no queue, default to main queue.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
