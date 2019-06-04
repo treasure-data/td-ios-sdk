@@ -411,7 +411,7 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
  * Fetch user segments from cdp endpoint. Callback with either a JSON serialized object or an error.
  * @discussion This will make a call to shared instance's cdpEndpoint. Make sure you configure cdpEndpoint before using this method
  * @param audienceTokens List of audience tokens. There must be at least one token.
- * @param keys Key value dictionary with at least user_id and td_client_id are required.
+ * @param keys Attributes dictionary.
  * @param options Request options. For possible options, see TDRequestOptionsKey.
  * @param handler Completion callback with either JSON object or an error. The callback will be called from the caller's queue, or if there is no queue, default to main queue.
  * Example @code TreasureData.sharedInstance().fetchUserSegments(audienceTokens, keys: keys, options: options) { response, error in

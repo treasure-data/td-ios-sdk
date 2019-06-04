@@ -17,6 +17,8 @@ class IntegrationTests: XCTestCase {
 
     static let TargetDatabase = "ios_it"
     static var sessionPrefix = uuid()
+    static var audienceTokens:[String] = []
+    static var userSegmentKeys:[String:String] = [:]
 
     /** Tables used in a single test */
     var tempTables: [String] = []
@@ -31,9 +33,23 @@ class IntegrationTests: XCTestCase {
         guard let collectorEndpoint = ProcessInfo.processInfo.environment["COLLECTOR_ENDPOINT"] else {
             fatalError("Missing env COLLECTOR_ENDPOINT")
         }
-
+        // Syntax: AUDIENCE_TOKENS=token1,token2
+        guard let audienceTokensString = ProcessInfo.processInfo.environment["AUDIENCE_TOKENS"] else {
+            fatalError("Missing env AUDIENCE_TOKENS")
+        }
+        // Syntax: USER_SEGMENT_KEYS=key1:value1,key2:value2
+        guard let userSegmentKeysString = ProcessInfo.processInfo.environment["USER_SEGMENT_KEYS"] else {
+            fatalError("Missing env USER_SEGMENT_KEYS")
+        }
+        
         IntegrationTests.apiKey = apiKey
         IntegrationTests.collectorEndpoint = collectorEndpoint
+        IntegrationTests.audienceTokens = audienceTokensString.split(separator: ",").map { String($0) }
+        let keyValueStrings = userSegmentKeysString.split(separator: ",").map { String($0) }
+        keyValueStrings.forEach { keyValueString in
+            let keyAndValue = keyValueString.split(separator: ":")
+            IntegrationTests.userSegmentKeys[String(keyAndValue[0])] = String(keyAndValue[1])
+        }
 
         api = TDAPI.init(endpoint: apiEndpoint, apiKey: apiKey)
         if (!(try! api.isDatabaseExist(TargetDatabase))) {
@@ -139,10 +155,8 @@ class IntegrationTests: XCTestCase {
     }
     
     func testFetchUserSegmentsSucceed() {
-        let audienceTokens = ["e894a842-cf42-4df8-9a57-daf22246a040", "9b3e80e5-5495-4181-86fe-7d6d3f1c34c8"]
-        let keys = ["user_id": "TEST08680047", "td_client_id": "2dd8cc50-2756-40a1-ae02-6237c481b719"]
         let expectation = self.expectation(description: "fetchUserSegments should succeed")
-        sdkClient.fetchUserSegments(audienceTokens, keys: keys) { (jsonResponse, error) in
+        sdkClient.fetchUserSegments(IntegrationTests.audienceTokens, keys: IntegrationTests.userSegmentKeys) { (jsonResponse, error) in
             XCTAssertNil(error)
             XCTAssertNotNil(jsonResponse)
             expectation.fulfill()
@@ -151,10 +165,8 @@ class IntegrationTests: XCTestCase {
     }
     
     func testFetchUserSegmentsServerErrorFailure() {
-        let audienceTokens = ["e894a842-cf42-4df8-9a57-daf22246a040", "9b3e80e5-5495-4181-86fe-7d6d3f1c34c8"]
-        let keys = ["user_id": "TEST08680047"]
         let expectation = self.expectation(description: "fetchUserSegments should fail with server error")
-        sdkClient.fetchUserSegments(audienceTokens, keys: keys) { (jsonResponse, error) in
+        sdkClient.fetchUserSegments(IntegrationTests.audienceTokens, keys: [:]) { (jsonResponse, error) in
             XCTAssertNil(jsonResponse)
             XCTAssertNotNil(error)
             expectation.fulfill()

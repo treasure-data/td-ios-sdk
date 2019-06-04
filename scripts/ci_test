@@ -17,6 +17,8 @@ xcodebuild \
     API_MASTER_KEY="$API_MASTER_KEY" \
     API_ENDPOINT="$API_ENDPOINT" \
     COLLECTOR_ENDPOINT="$COLLECTOR_ENDPOINT" \
+    AUDIENCE_TOKENS="$AUDIENCE_TOKENS" \
+    USER_SEGMENT_KEYS="$USER_SEGMENT_KEYS" \
     test \
     | gsed -u '1,100s/^\(.*API_MASTER_KEY\s*=\s*\)\(\b.*\b\)\(.*\)$/\1XXXXXXXXXXX\3/g' \
     | tee "$LOG_FILE" \

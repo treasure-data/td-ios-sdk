@@ -64,6 +64,16 @@
             value = "$(COLLECTOR_ENDPOINT)"
             isEnabled = "YES">
          </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "AUDIENCE_TOKENS"
+            value = "$(AUDIENCE_TOKENS)"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "USER_SEGMENT_KEYS"
+            value = "$(USER_SEGMENT_KEYS)"
+            isEnabled = "YES">
+         </EnvironmentVariable>
       </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
