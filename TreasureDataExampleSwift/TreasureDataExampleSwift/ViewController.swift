@@ -49,7 +49,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func fetchUserSegments(sender: AnyObject) {
-        let audienceTokens = ["Your API Token here"]
+        let audienceTokens = ["Your Profile API (Audience) Token here"]
         let keys = ["your_key": "your_value",]
         let options: [TDRequestOptionsKey : Any] = [.timeoutInterval: 10, .cachePolicy: 10];
         TreasureData.sharedInstance().fetchUserSegments(audienceTokens, keys: keys, options: options) { response, error in

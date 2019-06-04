@@ -156,7 +156,7 @@
 
 - (IBAction)fetchUserSegments:(id)sender {
     [self updateClientIfFormChanged];
-    NSArray *audienceTokens = @[@"Your API Token here"];
+    NSArray *audienceTokens = @[@"Your Profile API (Audience) Token here"];
     NSDictionary *keys = @{@"your_key": @"your_value"};
     NSDictionary<TDRequestOptionsKey, id> *options = @{
        TDRequestOptionsTimeoutIntervalKey: [NSNumber numberWithInteger: 10],

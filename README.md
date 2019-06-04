@@ -426,7 +426,7 @@ Usage example:
 
 // Call fetchUserSegments to get user segments as NSArray
 
-NSArray *audienceTokens = @[@"Your API Token here"];
+NSArray *audienceTokens = @[@"Your Profile API (Audience) Token here"];
 NSDictionary *keys = @{@"your_key": @"your_value"};
 NSDictionary<TDRequestOptionsKey, id> *options = @{
     TDRequestOptionsTimeoutIntervalKey: [NSNumber numberWithInteger: 10],
