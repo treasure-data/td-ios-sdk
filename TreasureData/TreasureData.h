@@ -63,7 +63,7 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 @property(nonatomic, strong) NSString * _Nullable defaultTable;
 
 /**
- * The host to use for the Personalization API
+ * The host to use for the Profile API
  * Defaults to https://cdp.in.treasuredata.com
  *
  * Possible values:
@@ -409,20 +409,18 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 
 /**
  * Fetch user segments from cdp endpoint. Callback with either a JSON serialized object or an error.
- * @discussion This will make a call to shared instance's cdpEndpoint. Make sure you configure cdpEndpoint before using this method
+ *
+ * @warning This will make a call to shared instance's cdpEndpoint. Make sure you configure cdpEndpoint before using this method
  * @param audienceTokens List of audience tokens. There must be at least one token.
- * @param keys Attributes dictionary.
+ * @param Profiles' keys as specified in key column.
  * @param options Request options. For possible options, see TDRequestOptionsKey.
  * @param handler Completion callback with either JSON object or an error. The callback will be called from the caller's queue, or if there is no queue, default to main queue.
- * Example @code TreasureData.sharedInstance().fetchUserSegments(audienceTokens, keys: keys, options: options) { response, error in
-    print("Response: \(String(describing: response))");
-    print("Error: \(String(describing: error))");
- }
  */
 - (void)fetchUserSegments: (nonnull NSArray<NSString *> *)audienceTokens
                      keys: (nonnull NSDictionary<NSString *, id> *)keys
                   options: (nullable NSDictionary<TDRequestOptionsKey, id> *)options
-        completionHandler: (void (^_Nonnull)(NSArray* _Nullable jsonResponse, NSError* _Nullable error)) handler;
+        completionHandler: (void (^_Nonnull)(NSArray* _Nullable jsonResponse, NSError* _Nullable error)) handler
+        NS_SWIFT_NAME(fetchUserSegments(tokens:keys:options:completionHandler:));
 
 #pragma mark - Misc.
 

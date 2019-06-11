@@ -156,17 +156,17 @@ class IntegrationTests: XCTestCase {
     
     func testFetchUserSegmentsSucceed() {
         let expectation = self.expectation(description: "fetchUserSegments should succeed")
-        sdkClient.fetchUserSegments(IntegrationTests.audienceTokens, keys: IntegrationTests.userSegmentKeys) { (jsonResponse, error) in
+        sdkClient.fetchUserSegments(tokens: IntegrationTests.audienceTokens, keys: IntegrationTests.userSegmentKeys) { (jsonResponse, error) in
             XCTAssertNil(error)
             XCTAssertNotNil(jsonResponse)
             expectation.fulfill()
         }
         waitForExpectations(timeout: 60, handler: nil)
     }
-    
+
     func testFetchUserSegmentsServerErrorFailure() {
         let expectation = self.expectation(description: "fetchUserSegments should fail with server error")
-        sdkClient.fetchUserSegments(IntegrationTests.audienceTokens, keys: [:]) { (jsonResponse, error) in
+        sdkClient.fetchUserSegments(tokens: IntegrationTests.audienceTokens, keys: [:]) { (jsonResponse, error) in
             XCTAssertNil(jsonResponse)
             XCTAssertNotNil(error)
             expectation.fulfill()

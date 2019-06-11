@@ -413,7 +413,7 @@ An example of a IAP event:
 
 We will do a separated `SKProductsRequest` to get full product's information. If the request is failed somehow, fields with "td_iap_product_" prefix will be null. Also note that that the `currency_code` is only available from iOS 10 onwards.
 
-#### Personalization API
+#### Profile API
 
 ##### fetchUserSegments
 
