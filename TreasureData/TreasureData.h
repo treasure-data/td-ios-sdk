@@ -420,7 +420,7 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
                      keys: (nonnull NSDictionary<NSString *, id> *)keys
                   options: (nullable NSDictionary<TDRequestOptionsKey, id> *)options
         completionHandler: (void (^_Nonnull)(NSArray* _Nullable jsonResponse, NSError* _Nullable error)) handler
-        NS_SWIFT_NAME(fetchUserSegments(audienceTokens:keys:options:completionHandler:));
+        NS_SWIFT_NAME(fetchUserSegments(tokens:keys:options:completionHandler:));
 
 #pragma mark - Misc.
 
