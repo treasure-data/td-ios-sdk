@@ -517,7 +517,7 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="Personalization API" id="Rhc-2h-6m9">
+                            <tableViewSection headerTitle="Profile API" id="Rhc-2h-6m9">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" rowHeight="46" id="2YF-Wg-ENq">
                                         <rect key="frame" x="0.0" y="1005.5" width="375" height="46"/>

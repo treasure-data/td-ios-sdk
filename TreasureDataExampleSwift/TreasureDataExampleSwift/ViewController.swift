@@ -52,7 +52,7 @@ class ViewController: UIViewController {
         let audienceTokens = ["Your Profile API (Audience) Token here"]
         let keys = ["your_key": "your_value",]
         let options: [TDRequestOptionsKey : Any] = [.timeoutInterval: 10, .cachePolicy: 10];
-        TreasureData.sharedInstance().fetchUserSegments(audienceTokens, keys: keys, options: options) { response, error in
+        TreasureData.sharedInstance().fetchUserSegments(audienceTokens: audienceTokens, keys: keys, options: options) { response, error in
             print("Response: \(String(describing: response))");
             print("Error: \(String(describing: error))");
         }
