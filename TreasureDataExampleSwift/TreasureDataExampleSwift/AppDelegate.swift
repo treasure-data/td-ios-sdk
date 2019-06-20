@@ -24,6 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         TreasureData.sharedInstance().enableAutoAppendModelInformation()
         TreasureData.sharedInstance().disableRetryUploading()
         TreasureData.sharedInstance().startSession("demotbl")
+        TreasureData.sharedInstance().enableAppLifecycleEvent()
         
         if (TreasureData.sharedInstance().isFirstRun()) {
             TreasureData.sharedInstance().addEvent(
