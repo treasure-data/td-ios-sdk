@@ -21,43 +21,45 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="21" translatesAutoresizingMaskIntoConstraints="NO" id="Hej-8J-TwE">
-                                <rect key="frame" x="130.5" y="382" width="153" height="132"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tB7-f3-BmA">
-                                        <rect key="frame" x="39" y="0.0" width="75" height="30"/>
-                                        <state key="normal" title="Add Event!">
-                                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="touchDownAddEventWithSender:" destination="BYZ-38-t0r" eventType="touchDown" id="20G-pZ-OCW"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b8o-Z7-bTI">
-                                        <rect key="frame" x="24.5" y="51" width="104" height="30"/>
-                                        <state key="normal" title="Upload Events!">
-                                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="touchDownUploadEventsWithSender:" destination="BYZ-38-t0r" eventType="touchDown" id="X7e-ir-rTH"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AdX-De-xSx">
-                                        <rect key="frame" x="0.0" y="102" width="153" height="30"/>
-                                        <state key="normal" title="Fetch User Segments!">
-                                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="fetchUserSegmentsWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XSz-fo-zvq"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b8o-Z7-bTI">
+                                <rect key="frame" x="20" y="433" width="374" height="30"/>
+                                <state key="normal" title="Upload Events!">
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="touchDownUploadEventsWithSender:" destination="BYZ-38-t0r" eventType="touchDown" id="X7e-ir-rTH"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AdX-De-xSx">
+                                <rect key="frame" x="20" y="479" width="374" height="30"/>
+                                <state key="normal" title="Fetch User Segments!">
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="fetchUserSegmentsWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XSz-fo-zvq"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tB7-f3-BmA">
+                                <rect key="frame" x="20" y="387" width="374" height="30"/>
+                                <state key="normal" title="Add Event!">
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="touchDownAddEventWithSender:" destination="BYZ-38-t0r" eventType="touchDown" id="20G-pZ-OCW"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="Hej-8J-TwE" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="0BR-2E-jOF"/>
-                            <constraint firstItem="Hej-8J-TwE" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="At6-mv-Hnt"/>
+                            <constraint firstItem="AdX-De-xSx" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="12W-a1-JXp"/>
+                            <constraint firstItem="AdX-De-xSx" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="Ke6-SU-RRO"/>
+                            <constraint firstItem="b8o-Z7-bTI" firstAttribute="top" secondItem="tB7-f3-BmA" secondAttribute="bottom" constant="16" id="PN7-jP-xGA"/>
+                            <constraint firstItem="b8o-Z7-bTI" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="PPq-qi-7rN"/>
+                            <constraint firstItem="b8o-Z7-bTI" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="ROk-wy-xMc"/>
+                            <constraint firstItem="AdX-De-xSx" firstAttribute="top" secondItem="b8o-Z7-bTI" secondAttribute="bottom" constant="16" id="VQm-0g-wox"/>
+                            <constraint firstItem="b8o-Z7-bTI" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="ouq-5M-gTx"/>
+                            <constraint firstItem="tB7-f3-BmA" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="s5h-RG-yUA"/>
+                            <constraint firstItem="tB7-f3-BmA" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="yGS-kg-s1g"/>
                         </constraints>
                     </view>
                     <connections>
@@ -67,7 +69,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="235.7487922705314" y="232.96874999999997"/>
+            <point key="canvasLocation" x="234.78260869565219" y="232.36607142857142"/>
         </scene>
     </scenes>
 </document>

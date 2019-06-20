@@ -38,11 +38,25 @@ _defaults:
     store_test_results:
       path: ./test_results
 
+  - &ios9_install_and_work_around
+    run:
+      name: iOS 9 Install and  Work Around
+      command: |
+        xcversion simulators --install='iOS 9.3' --no-progress
+        sudo mkdir '/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 9.3.simruntime/Contents/Resources/RuntimeRoot/usr/lib/swift'
+
+  - &ios8_install_and_work_around
+    run:
+      name: iOS 8 Install and Work Around
+      command: |
+        xcversion simulators --install='iOS 8.4' --no-progress
+        sudo mkdir '/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 8.4.simruntime/Contents/Resources/RuntimeRoot/usr/lib/swift'
+
 jobs:
 
   test_ios12:
     macos:
-      xcode: "10.2.0" 
+      xcode: "10.2.1" 
     steps:
       - checkout
       - *auxiliary_setup
@@ -58,7 +72,7 @@ jobs:
 
   test_ios11:
     macos:
-      xcode: "10.1.0"
+      xcode: "10.2.1"
     steps:
       - checkout
       - *auxiliary_setup
@@ -68,13 +82,13 @@ jobs:
       - run:
           name: Test on iOS 11
           no_output_timeout: 1800
-          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 7,OS=11.2' logs/xcbuild_ios_10.log test_results/ios_10.xml
+          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 7,OS=11.4' logs/xcbuild_ios_10.log test_results/ios_10.xml
       - *store_artifacts
       - *store_test_results
 
   test_ios10:
     macos:
-      xcode: "10.1.0"
+      xcode: "10.2.1"
 
     steps:
       - checkout
@@ -89,6 +103,41 @@ jobs:
       - *store_artifacts
       - *store_test_results
 
+  test_ios9:
+    macos:
+      xcode: "10.2.1"
+    steps:
+      - checkout
+      - *ios9_install_and_work_around
+      - *auxiliary_setup
+      - *restore_pods_cache
+      - *install_pods
+      - *save_pods_cache
+      - run:
+          name: Test on iOS 9
+          no_output_timeout: 1800
+          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 6s,OS=9.3' logs/xcbuild_ios_9.log test_results/ios_9.xml
+      - *store_artifacts
+      - *store_test_results
+
+  test_ios8:
+    macos:
+      xcode: "10.2.1"
+    steps:
+      - checkout
+      - *ios8_install_and_work_around
+      - *auxiliary_setup
+      - *restore_pods_cache
+      - *install_pods
+      - *save_pods_cache
+      - run:
+          name: Test on iOS 8
+          no_output_timeout: 1800
+          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 6,OS=8.4' logs/xcbuild_ios_8.log test_results/ios_8.xml
+      - *store_artifacts
+      - *store_test_results
+
+
 workflows:
   version: 2
   test:
@@ -96,3 +145,6 @@ workflows:
       - test_ios12
       - test_ios11
       - test_ios10
+      - test_ios9
+      - test_ios8
+
