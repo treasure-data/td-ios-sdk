@@ -40,10 +40,9 @@ _defaults:
 
   - &ios9_work_around
     run:
-      name: iOS Work Around
+      name: iOS 9 Work Around
       command: |
         xcversion simulators --install='iOS 9.3' --no-progress
-        sudo mkdir '/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 9.3.simruntime/Contents/Resources/RuntimeRoot/usr/lib/swift'
 
 jobs:
 
