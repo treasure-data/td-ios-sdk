@@ -52,16 +52,11 @@ _defaults:
         xcversion simulators --install='iOS 8.4' --no-progress
         sudo mkdir '/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 8.4.simruntime/Contents/Resources/RuntimeRoot/usr/lib/swift'
 
-  - &ios7_install
-      run:
-        name: iOS 7 Install
-        command: xcversion simulators --install='iOS 7.1.2' --no-progress
-
 jobs:
 
   test_ios12:
     macos:
-      xcode: "10.2.0" 
+      xcode: "10.2.1" 
     steps:
       - checkout
       - *auxiliary_setup
@@ -77,7 +72,7 @@ jobs:
 
   test_ios11:
     macos:
-      xcode: "10.1.0"
+      xcode: "10.2.1"
     steps:
       - checkout
       - *auxiliary_setup
@@ -93,7 +88,7 @@ jobs:
 
   test_ios10:
     macos:
-      xcode: "10.1.0"
+      xcode: "10.2.1"
 
     steps:
       - checkout
@@ -142,27 +137,14 @@ jobs:
       - *store_artifacts
       - *store_test_results
 
-  test_ios7:
-    macos:
-      xcode: "8.3.3"
-    steps:
-      - checkout
-      - *ios7_install
-      - *auxiliary_setup
-      - *restore_pods_cache
-      - *install_pods
-      - *save_pods_cache
-      - run:
-          name: Test on iOS 7
-          no_output_timeout: 1800
-          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 5s,OS=7.1.2' logs/xcbuild_ios_7.log test_results/ios_7.xml
-      - *store_artifacts
-      - *store_test_results
-
 
 workflows:
   version: 2
   test:
     jobs:
+      - test_ios12
+      - test_ios11
+      - test_ios10
+      - test_ios9
       - test_ios8
 
