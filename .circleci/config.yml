@@ -38,6 +38,11 @@ _defaults:
     store_test_results:
       path: ./test_results
 
+  - &ios9_work_around
+    run:
+      name: iOS Work Around
+      command: mkdir '/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 9.3.simruntime/Contents/Resources/RuntimeRoot/usr/lib/swift'
+
 jobs:
 
   test_ios12:
@@ -89,10 +94,27 @@ jobs:
       - *store_artifacts
       - *store_test_results
 
+  test_ios9:
+    macos:
+      xcode: "10.1.0"
+
+    steps:
+      - checkout
+      - *ios9_work_around
+      - *auxiliary_setup
+      - *restore_pods_cache
+      - *install_pods
+      - *save_pods_cache
+      - run:
+          name: Test on iOS 9
+          no_output_timeout: 1800
+          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 6,OS=9.3' logs/xcbuild_ios_9.log test_results/ios_9.xml
+      - *store_artifacts
+      - *store_test_results
+
+
 workflows:
   version: 2
   test:
     jobs:
-      - test_ios12
-      - test_ios11
-      - test_ios10
+      - test_ios9
