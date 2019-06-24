@@ -53,9 +53,9 @@ _defaults:
         sudo mkdir '/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 8.4.simruntime/Contents/Resources/RuntimeRoot/usr/lib/swift'
 
   - &ios7_install
-      name: iOS 7 Install
-      command: |
-        xcversion simulators --install='iOS 7.1.2' --no-progress
+      run:
+        name: iOS 7 Install
+        command: xcversion simulators --install='iOS 7.1.2' --no-progress
 
 jobs:
 
