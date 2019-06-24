@@ -166,5 +166,4 @@ workflows:
     jobs:
       - test_ios9
       - test_ios8
-      - test_ios7
 
