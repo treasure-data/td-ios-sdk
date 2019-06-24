@@ -54,7 +54,8 @@ _defaults:
 
   - &ios7_install
       name: iOS 7 Install
-      command: xcversion simulators --install='iOS 7.1.2' --no-progress
+      command: |
+        xcversion simulators --install='iOS 7.1.2' --no-progress
 
 jobs:
 
