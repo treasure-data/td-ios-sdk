@@ -129,7 +129,7 @@ jobs:
       xcode: "10.2.1"
     steps:
       - checkout
-      - *ios8_install_and__work_around
+      - *ios8_install_and_work_around
       - *auxiliary_setup
       - *restore_pods_cache
       - *install_pods
