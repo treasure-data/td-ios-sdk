@@ -49,8 +49,8 @@ _defaults:
     run:
       name: iOS 8 Install and Work Around
       command: |
-        xcversion simulators --install='iOS 8.4.1' --no-progress
-        sudo mkdir '/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 8.4.1.simruntime/Contents/Resources/RuntimeRoot/usr/lib/swift'
+        xcversion simulators --install='iOS 8.4' --no-progress
+        sudo mkdir '/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 8.4.simruntime/Contents/Resources/RuntimeRoot/usr/lib/swift'
 
   - &ios7_install
       name: iOS 7 Install
@@ -137,7 +137,7 @@ jobs:
       - run:
           name: Test on iOS 8
           no_output_timeout: 1800
-          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 6,OS=8.4.1' logs/xcbuild_ios_8.log test_results/ios_8.xml
+          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 6,OS=8.4' logs/xcbuild_ios_8.log test_results/ios_8.xml
       - *store_artifacts
       - *store_test_results
 
