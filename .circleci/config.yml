@@ -82,7 +82,7 @@ jobs:
       - run:
           name: Test on iOS 11
           no_output_timeout: 1800
-          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 7,OS=11.2' logs/xcbuild_ios_10.log test_results/ios_10.xml
+          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 7,OS=11.4' logs/xcbuild_ios_10.log test_results/ios_10.xml
       - *store_artifacts
       - *store_test_results
 
