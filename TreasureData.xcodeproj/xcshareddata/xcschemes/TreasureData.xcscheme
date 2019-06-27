@@ -37,6 +37,23 @@
                BlueprintName = "TreasureDataTests"
                ReferencedContainer = "container:TreasureData.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "IntegrationTests/testCustomEvent()">
+               </Test>
+               <Test
+                  Identifier = "IntegrationTests/testFetchUserSegmentsServerErrorFailure()">
+               </Test>
+               <Test
+                  Identifier = "IntegrationTests/testFetchUserSegmentsSucceed()">
+               </Test>
+               <Test
+                  Identifier = "IntegrationTests/testResetUniqId()">
+               </Test>
+               <Test
+                  Identifier = "IntegrationTests/testSession()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>

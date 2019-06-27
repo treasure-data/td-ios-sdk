@@ -102,7 +102,7 @@ class IntegrationTests: XCTestCase {
         let result = try! IntegrationTests.api.stubbornQuery(
             "select td_ios_event, td_app_ver, td_app_ver_num from \(sdkClient.defaultTable!) limit 1",
             database: IntegrationTests.TargetDatabase)
-        XCTAssertEqual(result[0][0] as! String, "TD_IOS_APP_OPEN")
+        XCTAssertEqual(result[0][0] as! String, "TD_IOS_APP_INSTALL")
         XCTAssertNotNil(result[0][1])
         XCTAssertNotNil(result[0][2])
     }
