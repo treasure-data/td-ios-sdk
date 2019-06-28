@@ -92,6 +92,7 @@ class IntegrationTests: XCTestCase {
         } else {
             XCTFail("Could not create event!")
         }
+        
     }
 
     func testLifeCycleAppOpenedEvent() {
