@@ -108,7 +108,7 @@ jobs:
       xcode: "10.2.1"
     steps:
       - checkout
-      - *ios9_install_and_work_around
+      - *ios9_install_and_workaround
       - *auxiliary_setup
       - *restore_pods_cache
       - *install_pods
@@ -125,7 +125,7 @@ jobs:
       xcode: "10.2.1"
     steps:
       - checkout
-      - *ios8_install_and_work_around
+      - *ios8_install_and_workaround
       - *auxiliary_setup
       - *restore_pods_cache
       - *install_pods
