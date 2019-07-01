@@ -117,6 +117,10 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     return self;
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver: self];
+}
 
 - (void)event:(NSDictionary *)record table:(NSString *)table {
     [self addEvent:record table:table];
