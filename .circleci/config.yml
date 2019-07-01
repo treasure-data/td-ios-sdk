@@ -38,16 +38,16 @@ _defaults:
     store_test_results:
       path: ./test_results
 
-  - &ios9_install_and_work_around
+  - &ios9_install_and_workaround
     run:
-      name: iOS 9 Install and  Work Around
+      name: iOS 9 Install and  Workaround
       command: |
         xcversion simulators --install='iOS 9.3' --no-progress
         sudo mkdir '/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 9.3.simruntime/Contents/Resources/RuntimeRoot/usr/lib/swift'
 
-  - &ios8_install_and_work_around
+  - &ios8_install_and_workaround
     run:
-      name: iOS 8 Install and Work Around
+      name: iOS 8 Install and Workaround
       command: |
         xcversion simulators --install='iOS 8.4' --no-progress
         sudo mkdir '/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 8.4.simruntime/Contents/Resources/RuntimeRoot/usr/lib/swift'
