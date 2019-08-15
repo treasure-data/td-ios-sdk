@@ -16,6 +16,7 @@
 #import "TDIAPObserver.h"
 #import "TDClientInternal.h"
 #import "NSString+Helpers.h"
+#import <AdSupport/ASIdentifierManager.h>
 
 static bool isTraceLoggingEnabled = false;
 static bool isEventCompressionEnabled = true;
@@ -26,6 +27,7 @@ static NSString *defaultCdpEndpoint = @"https://cdp.in.treasuredata.com";
 static NSString *storageKeyOfUuid = @"td_sdk_uuid";
 static NSString *storageKeyOfFirstRun = @"td_sdk_first_run";
 static NSString *keyOfUuid = @"td_uuid";
+static NSString *keyOfAdvertisingIdentifier = @"td_maid";
 static NSString *keyOfBoard = @"td_board";
 static NSString *keyOfBrand = @"td_brand";
 static NSString *keyOfDevice = @"td_device";
@@ -55,6 +57,7 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
 @property BOOL autoAppendModelInformation;
 @property BOOL autoAppendAppInformation;
 @property BOOL autoAppendLocaleInformation;
+@property BOOL autoAppendAdvertisingIdentifier;
 @property NSString *sessionId;
 @property BOOL serverSideUploadTimestamp;
 @property NSString *serverSideUploadTimestampColumn;
@@ -256,6 +259,9 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     if (self.autoAppendLocaleInformation) {
         enrichedRecord = [self appendLocaleInformation:enrichedRecord];
     }
+    if (self.autoAppendAdvertisingIdentifier) {
+        enrichedRecord = [self appendAdvertisingIdentifier:enrichedRecord];
+    }
     return enrichedRecord;
 }
 
@@ -335,6 +341,24 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     NSLocale *locale = [NSLocale currentLocale];
     [record setValue:[locale objectForKey: NSLocaleCountryCode] forKey:keyOfLocaleCountry];
     [record setValue:[locale objectForKey: NSLocaleLanguageCode] forKey:keyOfLocaleLang];
+    return record;
+}
+
+- (NSDictionary*)appendAdvertisingIdentifier:(NSDictionary *)origRecord {
+    NSString *advertisingIdentifier = nil;
+    Class identifierManager = NSClassFromString(@"ASIdentifierManager");
+    if (identifierManager) {
+        SEL sharedManagerSelector = NSSelectorFromString(@"sharedManager");
+        IMP sharedManagerMethod = [identifierManager methodForSelector:sharedManagerSelector];
+        id sharedManager = ((id (*)(id, SEL)) sharedManagerMethod)(identifierManager, sharedManagerSelector);
+        SEL advertisingIdentifierSelector = NSSelectorFromString(@"advertisingIdentifier");
+        IMP advertisingIdentifierMethod = [sharedManager methodForSelector:advertisingIdentifierSelector];
+        NSUUID *uuid = ((NSUUID * (*)(id, SEL)) advertisingIdentifierMethod)(sharedManager, advertisingIdentifierSelector);
+        advertisingIdentifier = [uuid UUIDString];
+    }
+    
+    NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
+    [record setValue:advertisingIdentifier forKey:keyOfAdvertisingIdentifier];
     return record;
 }
 
@@ -547,6 +571,14 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
 
 - (void)disableAutoAppendRecordUUID {
     self.autoAppendRecordUUIDColumn = nil;
+}
+
+- (void)enableAutoAppendAdvertisingIdentifier {
+    self.autoAppendAdvertisingIdentifier = true;
+}
+
+- (void)disableAutoAppendAdvertisingIdentifier {
+    self.autoAppendAdvertisingIdentifier = false;
 }
 
 + (void)initializeWithApiKey:(NSString *)apiKey {

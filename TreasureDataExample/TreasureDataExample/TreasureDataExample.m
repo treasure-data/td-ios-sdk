@@ -30,6 +30,7 @@ static NSString *testTable;
     [[TreasureData sharedInstance] enableAutoAppendLocaleInformation];
     [[TreasureData sharedInstance] enableServerSideUploadTimestamp:@"server_upload_time"];
     [[TreasureData sharedInstance] enableInAppPurchaseEvent];
+    [[TreasureData sharedInstance] enableAutoAppendAdvertisingIdentifier];
 }
 
 + (NSString *)testTable {

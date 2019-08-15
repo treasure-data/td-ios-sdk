@@ -280,6 +280,16 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
  */
 - (void)disableAutoAppendRecordUUID;
 
+/**
+ * Automatically append device's advertising identifer, a.k.a IDFA.
+ */
+- (void)enableAutoAppendAdvertisingIdentifier;
+
+/**
+ * Disable automatically append device's advertising identifer, a.k.a IDFA.
+ */
+- (void)disableAutoAppendAdvertisingIdentifier;
+
 #pragma mark - Session
 
 /**
