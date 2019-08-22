@@ -574,7 +574,7 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
 }
 
 - (void)enableAutoAppendAdvertisingIdentifier {
-    self.autoAppendAdvertisingIdColumn = @"td_maid";
+    [self enableAutoAppendAdvertisingIdentifier: keyOfAdvertisingIdentifier];
 }
 
 - (void)enableAutoAppendAdvertisingIdentifier:(NSString *)columnName {
