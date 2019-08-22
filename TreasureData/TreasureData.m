@@ -57,11 +57,11 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
 @property BOOL autoAppendModelInformation;
 @property BOOL autoAppendAppInformation;
 @property BOOL autoAppendLocaleInformation;
-@property BOOL autoAppendAdvertisingIdentifier;
 @property NSString *sessionId;
 @property BOOL serverSideUploadTimestamp;
 @property NSString *serverSideUploadTimestampColumn;
 @property NSString *autoAppendRecordUUIDColumn;
+@property NSString *autoAppendAdvertisingIdColumn;
 
 @property (nonatomic, assign, getter=isCustomEventEnabled) BOOL customEventEnabled;
 @property (nonatomic, assign, getter=isAppLifecycleEventEnabled) BOOL appLifecycleEventEnabled;
@@ -259,7 +259,7 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     if (self.autoAppendLocaleInformation) {
         enrichedRecord = [self appendLocaleInformation:enrichedRecord];
     }
-    if (self.autoAppendAdvertisingIdentifier) {
+    if (self.autoAppendAdvertisingIdColumn) {
         enrichedRecord = [self appendAdvertisingIdentifier:enrichedRecord];
     }
     return enrichedRecord;
@@ -358,7 +358,7 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     }
     
     NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
-    [record setValue:advertisingIdentifier forKey:keyOfAdvertisingIdentifier];
+    [record setValue:advertisingIdentifier forKey:self.autoAppendAdvertisingIdColumn];
     return record;
 }
 
@@ -573,12 +573,12 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     self.autoAppendRecordUUIDColumn = nil;
 }
 
-- (void)enableAutoAppendAdvertisingIdentifier {
-    self.autoAppendAdvertisingIdentifier = true;
+- (void)enableAutoAppendAdvertisingIdentifier:(NSString *)columnName {
+    self.autoAppendAdvertisingIdColumn = columnName;
 }
 
 - (void)disableAutoAppendAdvertisingIdentifier {
-    self.autoAppendAdvertisingIdentifier = false;
+    self.autoAppendAdvertisingIdColumn = nil;
 }
 
 + (void)initializeWithApiKey:(NSString *)apiKey {

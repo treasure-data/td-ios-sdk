@@ -282,8 +282,10 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 
 /**
  * Automatically append device's advertising identifer, a.k.a IDFA.
+ *
+ * @param columnName The column to write the advertising identifier
  */
-- (void)enableAutoAppendAdvertisingIdentifier;
+- (void)enableAutoAppendAdvertisingIdentifier:(NSString* _Nonnull)columnName;
 
 /**
  * Disable automatically append device's advertising identifer, a.k.a IDFA.
