@@ -578,7 +578,12 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
 }
 
 - (void)enableAutoAppendAdvertisingIdentifier:(NSString *)columnName {
-    self.autoAppendAdvertisingIdColumn = columnName;
+    Class identifierManager = NSClassFromString(@"ASIdentifierManager");
+    if (!identifierManager) {
+        NSLog(@"ERROR: You are attempting to enable auto append Advertising Identifer but ASIdentifierManager class is not detected. To use this feature, you must link AdSupport framework in your project");
+    } else {
+        self.autoAppendAdvertisingIdColumn = columnName;
+    }
 }
 
 - (void)disableAutoAppendAdvertisingIdentifier {
