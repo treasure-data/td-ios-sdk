@@ -573,6 +573,10 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     self.autoAppendRecordUUIDColumn = nil;
 }
 
+- (void)enableAutoAppendAdvertisingIdentifier {
+    self.autoAppendAdvertisingIdColumn = @"td_maid";
+}
+
 - (void)enableAutoAppendAdvertisingIdentifier:(NSString *)columnName {
     self.autoAppendAdvertisingIdColumn = columnName;
 }

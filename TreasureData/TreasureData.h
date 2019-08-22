@@ -281,6 +281,12 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 - (void)disableAutoAppendRecordUUID;
 
 /**
+ * Automatically append device's advertising identifer, a.k.a IDFA, using "td_maid" as the default column name.
+ *
+ */
+- (void)enableAutoAppendAdvertisingIdentifier;
+
+/**
  * Automatically append device's advertising identifer, a.k.a IDFA.
  *
  * @param columnName The column to write the advertising identifier
