@@ -501,6 +501,23 @@ static NSString *END_POINT = @"http://localhost";
             }];
 }
 
+- (void)testAutoAppendAdvertisingIdEnabled {
+    [self.td enableAutoAppendAdvertisingIdentifier];
+    [self.td addEvent:[NSDictionary dictionary] table:@"somewhere"];
+    [self assertEventCount:1];
+    NSDictionary *sampleEvent= self.td.capturedEvents[0];
+    XCTAssertNotNil(sampleEvent[@"td_maid"]);
+    self.isFinished = true;
+}
+
+- (void)testAutoAppendAdvertisingIdDisabled {
+    [self.td disableAutoAppendAdvertisingIdentifier];
+    [self.td addEvent:[NSDictionary dictionary] table:@"somewhere"];
+    [self assertEventCount:1];
+    NSDictionary *sampleEvent= self.td.capturedEvents[0];
+    XCTAssertNil(sampleEvent[@"td_maid"]);
+    self.isFinished = true;
+}
 
 - (void)testIsFirstRun {
     XCTAssertTrue([self.td isFirstRun]);
