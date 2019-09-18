@@ -71,9 +71,9 @@ class TDAPI {
     /*!
      * Retry query until succeed
      *
-     * - Parameter timeout: timeout in seconds, default is 60 minutes
+     * - Parameter timeout: timeout in seconds, default is 30 minutes
      */
-    func stubbornQuery(_ query: String, database: String, timeout: TimeInterval = 60 * 60) throws -> [[Any]] {
+    func stubbornQuery(_ query: String, database: String, timeout: TimeInterval = 30 * 60) throws -> [[Any]] {
         let started = Date()
 
         func doRetry(_ query: String, database: String) throws -> [[Any]] {
