@@ -158,6 +158,7 @@ workflows:
   version: 2
   test:
     jobs:
+      - test_ios13
       - test_ios12
       - test_ios11
       - test_ios10
