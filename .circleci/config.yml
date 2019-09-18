@@ -54,7 +54,7 @@ _defaults:
 
 jobs:
 
-test_ios13:
+  test_ios13:
     macos:
       xcode: "11.0"
     steps:
