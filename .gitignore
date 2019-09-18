@@ -4,3 +4,5 @@ Pods/
 xcuserdata
 UserInterfaceState.xcuserstate
 TreasureDataExample/Podfile.lock
+TreasureDataExampleSwift/Podfile.lock
+build
