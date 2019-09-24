@@ -1,18 +1,23 @@
 PODS:
-  - KeenClientTD (3.2.34):
-    - KeenClientTD/keen_sqlite (= 3.2.34)
-  - KeenClientTD/keen_sqlite (3.2.34)
+  - KeenClientTD (3.2.33):
+    - KeenClientTD/keen_sqlite (= 3.2.33)
+  - KeenClientTD/keen_sqlite (3.2.33)
 
 DEPENDENCIES:
-  - KeenClientTD (= 3.2.34)
+  - KeenClientTD (from `https://github.com/treasure-data/KeenClient-iOS.git`)
 
-SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
-    - KeenClientTD
+EXTERNAL SOURCES:
+  KeenClientTD:
+    :git: https://github.com/treasure-data/KeenClient-iOS.git
+
+CHECKOUT OPTIONS:
+  KeenClientTD:
+    :commit: 26a391ceaa1800821f386342211529becc2aeaf8
+    :git: https://github.com/treasure-data/KeenClient-iOS.git
 
 SPEC CHECKSUMS:
-  KeenClientTD: 62b6bfcc42c32e0fa623fafb24739fcfc2edf586
+  KeenClientTD: 1faa85dca8fe1cf14a7b5c1a736a4fa9ea42fea7
 
-PODFILE CHECKSUM: 096a72cf9020a39499b673eb80fff9f5d2664183
+PODFILE CHECKSUM: 19cb4e7b765b0ad5b5e99ad7446b87794cd55c88
 
-COCOAPODS: 1.7.0
+COCOAPODS: 1.7.5
