@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 0.3.2
+_2019-09-26_
+
+- Minor version to fix publising wrong commit in version 0.3.1
+- Update KeenClientTD dependency to version 3.2.35 to remove dependency on CoreLocation.
+
 ## Version 0.3.1
 _2019-09-26_
 
