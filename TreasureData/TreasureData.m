@@ -16,6 +16,7 @@
 #import "TDIAPObserver.h"
 #import "TDClientInternal.h"
 #import "NSString+Helpers.h"
+#import <AdSupport/ASIdentifierManager.h>
 
 static bool isTraceLoggingEnabled = false;
 static bool isEventCompressionEnabled = true;
@@ -26,6 +27,7 @@ static NSString *defaultCdpEndpoint = @"https://cdp.in.treasuredata.com";
 static NSString *storageKeyOfUuid = @"td_sdk_uuid";
 static NSString *storageKeyOfFirstRun = @"td_sdk_first_run";
 static NSString *keyOfUuid = @"td_uuid";
+static NSString *keyOfAdvertisingIdentifier = @"td_maid";
 static NSString *keyOfBoard = @"td_board";
 static NSString *keyOfBrand = @"td_brand";
 static NSString *keyOfDevice = @"td_device";
@@ -59,6 +61,7 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
 @property BOOL serverSideUploadTimestamp;
 @property NSString *serverSideUploadTimestampColumn;
 @property NSString *autoAppendRecordUUIDColumn;
+@property NSString *autoAppendAdvertisingIdColumn;
 
 @property (nonatomic, assign, getter=isCustomEventEnabled) BOOL customEventEnabled;
 @property (nonatomic, assign, getter=isAppLifecycleEventEnabled) BOOL appLifecycleEventEnabled;
@@ -256,6 +259,9 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     if (self.autoAppendLocaleInformation) {
         enrichedRecord = [self appendLocaleInformation:enrichedRecord];
     }
+    if (self.autoAppendAdvertisingIdColumn) {
+        enrichedRecord = [self appendAdvertisingIdentifier:enrichedRecord];
+    }
     return enrichedRecord;
 }
 
@@ -335,6 +341,24 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     NSLocale *locale = [NSLocale currentLocale];
     [record setValue:[locale objectForKey: NSLocaleCountryCode] forKey:keyOfLocaleCountry];
     [record setValue:[locale objectForKey: NSLocaleLanguageCode] forKey:keyOfLocaleLang];
+    return record;
+}
+
+- (NSDictionary*)appendAdvertisingIdentifier:(NSDictionary *)origRecord {
+    NSString *advertisingIdentifier = nil;
+    Class identifierManager = NSClassFromString(@"ASIdentifierManager");
+    if (identifierManager) {
+        SEL sharedManagerSelector = NSSelectorFromString(@"sharedManager");
+        IMP sharedManagerMethod = [identifierManager methodForSelector:sharedManagerSelector];
+        id sharedManager = ((id (*)(id, SEL)) sharedManagerMethod)(identifierManager, sharedManagerSelector);
+        SEL advertisingIdentifierSelector = NSSelectorFromString(@"advertisingIdentifier");
+        IMP advertisingIdentifierMethod = [sharedManager methodForSelector:advertisingIdentifierSelector];
+        NSUUID *uuid = ((NSUUID * (*)(id, SEL)) advertisingIdentifierMethod)(sharedManager, advertisingIdentifierSelector);
+        advertisingIdentifier = [uuid UUIDString];
+    }
+    
+    NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
+    [record setValue:advertisingIdentifier forKey:self.autoAppendAdvertisingIdColumn];
     return record;
 }
 
@@ -547,6 +571,23 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
 
 - (void)disableAutoAppendRecordUUID {
     self.autoAppendRecordUUIDColumn = nil;
+}
+
+- (void)enableAutoAppendAdvertisingIdentifier {
+    [self enableAutoAppendAdvertisingIdentifier: keyOfAdvertisingIdentifier];
+}
+
+- (void)enableAutoAppendAdvertisingIdentifier:(NSString *)columnName {
+    Class identifierManager = NSClassFromString(@"ASIdentifierManager");
+    if (!identifierManager) {
+        NSLog(@"ERROR: You are attempting to enable auto append Advertising Identifer but ASIdentifierManager class is not detected. To use this feature, you must link AdSupport framework in your project");
+    } else {
+        self.autoAppendAdvertisingIdColumn = columnName;
+    }
+}
+
+- (void)disableAutoAppendAdvertisingIdentifier {
+    self.autoAppendAdvertisingIdColumn = nil;
 }
 
 + (void)initializeWithApiKey:(NSString *)apiKey {

@@ -128,7 +128,6 @@
 				TargetAttributes = {
 					6B769A521C37D34100D7082B = {
 						CreatedOnToolsVersion = 7.1;
-						DevelopmentTeam = 8SS78NLKPM;
 						LastSwiftMigration = 0800;
 					};
 				};
@@ -349,7 +348,7 @@
 			baseConfigurationReference = FE85A0F7EE3EB3256E77ED74 /* Pods-TreasureDataExampleSwift.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 8SS78NLKPM;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = TreasureDataExampleSwift/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -365,7 +364,7 @@
 			baseConfigurationReference = DAF5FCFA956F81F1861AB324 /* Pods-TreasureDataExampleSwift.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 8SS78NLKPM;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = TreasureDataExampleSwift/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
