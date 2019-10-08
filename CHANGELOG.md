@@ -1,5 +1,15 @@
 # Change Log
 
+## Version 0.3.2
+_2019-09-26_
+
+- Update KeenClientTD dependency to version 3.2.35 to remove dependency on CoreLocation.
+
+## Version 0.3.1
+_2019-09-26_
+
+- Added test coverage for iOS 8 and 9.
+
 ## Version 0.3.0
 _2019-06-11_
 

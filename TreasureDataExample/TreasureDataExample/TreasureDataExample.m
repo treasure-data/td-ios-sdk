@@ -42,7 +42,7 @@ static NSString *testTable;
 }
 
 + (NSSet<NSString *> *)productIds {
-    return [NSSet setWithArray: @[@"your_product_id_1", @"your_product_id_2"]];
+    return [NSSet setWithArray: @[@"in_app_purchase_1"]];
 }
 
 @end
