@@ -66,7 +66,7 @@ jobs:
       - run:
           name: Test on iOS 13
           no_output_timeout: 1800
-          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 11,OS=13.2' logs/xcbuild_ios_13.log test_results/ios_13.xml
+          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 11,OS=13.3' logs/xcbuild_ios_13.log test_results/ios_13.xml
       - *store_artifacts
       - *store_test_results
 
