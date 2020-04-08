@@ -14,6 +14,7 @@ class IntegrationTests: XCTestCase {
     static var api: TDAPI!
     static var apiKey: String!
     static var collectorEndpoint: String!
+    static var cdpEndpoint: String!
 
     static let TargetDatabase = "ios_it"
     static var sessionPrefix = uuid()
@@ -33,6 +34,9 @@ class IntegrationTests: XCTestCase {
         guard let collectorEndpoint = ProcessInfo.processInfo.environment["COLLECTOR_ENDPOINT"] else {
             fatalError("Missing env COLLECTOR_ENDPOINT")
         }
+        guard let cdpEndpoint = ProcessInfo.processInfo.environment["CDP_ENDPOINT"] else {
+            fatalError("Missing env CDP_ENDPOINT")
+        }
         // Syntax: AUDIENCE_TOKENS=token1,token2
         guard let audienceTokensString = ProcessInfo.processInfo.environment["AUDIENCE_TOKENS"] else {
             fatalError("Missing env AUDIENCE_TOKENS")
@@ -44,6 +48,7 @@ class IntegrationTests: XCTestCase {
         
         IntegrationTests.apiKey = apiKey
         IntegrationTests.collectorEndpoint = collectorEndpoint
+        IntegrationTests.cdpEndpoint = cdpEndpoint
         IntegrationTests.audienceTokens = audienceTokensString.split(separator: ",").map { String($0) }
         let keyValueStrings = userSegmentKeysString.split(separator: ",").map { String($0) }
         keyValueStrings.forEach { keyValueString in
@@ -65,6 +70,7 @@ class IntegrationTests: XCTestCase {
         TreasureData.initializeApiEndpoint(IntegrationTests.collectorEndpoint)
         sdkClient = TreasureData(apiKey: IntegrationTests.apiKey)
         sdkClient.defaultDatabase = IntegrationTests.TargetDatabase
+        sdkClient.cdpEndpoint = IntegrationTests.cdpEndpoint
         tempTables = []
     }
 
