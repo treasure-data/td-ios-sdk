@@ -265,7 +265,7 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     return enrichedRecord;
 }
 
-- (NSString*)getUUID {
+- (NSString *)getUUID {
     if (_UUID == nil) {
         _UUID = [[NSUserDefaults standardUserDefaults] stringForKey:storageKeyOfUuid];
     }

@@ -394,6 +394,12 @@ static NSString *END_POINT = @"http://localhost";
             }];
 }
 
+- (void)testGetUUIDReturnsValue {
+    [self.td enableAutoAppendUniqId];
+    XCTAssertNotNil([self.td getUUID]);
+    self.isFinished = true;
+}
+
 - (void)testAutoAppendUuid {
     [self baseTesting:^() {
         MyTreasureData *anotherTd = [[MyTreasureData alloc] initWithApiKey:@"dummy_apikey"];
