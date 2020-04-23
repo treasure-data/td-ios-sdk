@@ -183,6 +183,9 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 
 #pragma mark - Events' metadata
 
+/**
+ * Get UUID generated from TreasureData. The value will be set to `td_uuid` column for every events if `enableAutoAppendUniqId` is called.
+ */
 - (NSString *_Nonnull)getUUID;
 
 /**
