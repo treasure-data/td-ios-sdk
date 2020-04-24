@@ -27,18 +27,6 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "NO">
-      <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6B73809D192A09160097D56E"
-               BuildableName = "TreasureDataTests.xctest"
-               BlueprintName = "TreasureDataTests"
-               ReferencedContainer = "container:TreasureData.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-      </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
@@ -52,6 +40,11 @@
          <EnvironmentVariable
             key = "API_MASTER_KEY"
             value = "$(API_MASTER_KEY)"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "CDP_ENDPOINT"
+            value = "$(CDP_ENDPOINT)"
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
@@ -75,8 +68,18 @@
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
-      <AdditionalOptions>
-      </AdditionalOptions>
+      <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "6B73809D192A09160097D56E"
+               BuildableName = "TreasureDataTests.xctest"
+               BlueprintName = "TreasureDataTests"
+               ReferencedContainer = "container:TreasureData.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+      </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -97,8 +100,6 @@
             ReferencedContainer = "container:TreasureData.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
