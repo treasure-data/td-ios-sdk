@@ -280,7 +280,7 @@ If you've set an encryption key via `initializeEncryptionKey` class method, our 
 ```
 
 ### Adding UUID of the device to each event automatically
-UUID of the device will be added to each event automatically if you call `enableAutoAppendUniqId`. This value won't change until the application is uninstalled.
+UUID of the device will be added to each event automatically if you call `enableAutoAppendUniqId`. This value won't change until the application is uninstalled or  `resetUniqId` is called. 
 
 ```
 [[TreasureData sharedInstance] enableAutoAppendUniqId];
@@ -288,6 +288,16 @@ UUID of the device will be added to each event automatically if you call `enable
 
 It outputs the value as a column name `td_uuid`.
 
+### Get UUID and Reset UUID
+You can get current UUID (`td_uuid`) at any time using following API. Remember that this UUID will change if  `resetUniqId` is called.
+```
+NSString *td_uuid = [[TreasureData sharedInstance] getUUID];
+```
+
+You can also reset UUID (`td_uuid`) at any time using following API. 
+```
+[[TreasureData sharedInstance] resetUniqId];
+```
 
 ### Adding an UUID to each event record automatically
 UUID will be added to each event record automatically if you call `enableAutoAppendRecordUUID`. Each event has different UUID.
