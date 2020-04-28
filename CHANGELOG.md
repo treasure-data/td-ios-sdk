@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 0.5.0
+_2020-04-28_
+
+* Add documentation to support AP02 region
+* Add API `getUUID` to get `td_uuid`
+
 ## Version 0.4.0
 _2019-10-09_
 
