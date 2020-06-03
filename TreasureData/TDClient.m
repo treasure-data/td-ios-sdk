@@ -50,13 +50,13 @@ static NSString *version = @"0.5.0";
 }
 
 - (NSString *)sha256Hash:(NSString *)input {
-    // Generate a cryptographic digest using the secure SHA-512 algorithm
+    // Generate a cryptographic digest using the secure SHA-256 algorithm
     const char* cString = [input UTF8String];
     unsigned char hashedString[CC_SHA256_DIGEST_LENGTH];
     CC_SHA256(cString, (CC_LONG) strlen(cString), hashedString);
 
     // Convert the digest to an NSString hex-string for straightforward use
-    NSMutableString *nsString = [NSMutableString stringWithCapacity:CC_SHA256_DIGEST_LENGTH];
+    NSMutableString *nsString = [NSMutableString stringWithCapacity:CC_SHA256_DIGEST_LENGTH * 2];
     for (int i = 0; i < CC_SHA256_DIGEST_LENGTH; i++) {
         [nsString appendFormat:@"%02x", hashedString[i]];
     }
