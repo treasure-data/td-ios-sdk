@@ -34,6 +34,8 @@ Finally, execute 'pod install'.
 $ pod install
 ```
 
+Remember to reopen your project by opening .xcworkspace file instead of .xcodeproj file 
+
 ### Framework
 
 Download [TreasureData.framework](http://cdn.treasuredata.com/sdk/ios/0.5.0/TreasureData-iOS-SDK.framework.zip) and add it and `libz` library into your project.
