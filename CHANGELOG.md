@@ -1,5 +1,10 @@
 # Change Log
 
+## Version 0.6.0
+_2020-06-15_
+
+* Use SHA-256 algorithm instead of MD5 algorithm to generate project id for cache data in Keen client
+
 ## Version 0.5.0
 _2020-04-28_
 
