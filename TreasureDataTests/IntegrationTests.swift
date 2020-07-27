@@ -100,18 +100,30 @@ class IntegrationTests: XCTestCase {
         }
         
     }
-
+    
     func testLifeCycleAppOpenedEvent() {
         sdkClient.enableAppLifecycleEvent()
         sdkClient.defaultTable = newTempTable()
         NotificationCenter.default.post(name: Notification.Name("UIApplicationDidFinishLaunchingNotification"), object: nil)
         sdkClient.uploadEvents()
         let result = try! IntegrationTests.api.stubbornQuery(
-            "select td_ios_event, td_app_ver, td_app_ver_num from \(sdkClient.defaultTable!) limit 1",
+            "select td_ios_event, td_app_ver, td_app_ver_num from \(sdkClient.defaultTable!) limit 2",
             database: IntegrationTests.TargetDatabase)
-        XCTAssertEqual(result[0][0] as! String, "TD_IOS_APP_OPEN")
-        XCTAssertNotNil(result[0][1])
-        XCTAssertNotNil(result[0][2])
+        
+        XCTAssert(result.count == 1 || result.count == 2, "Invalid number of events")
+        if result.count == 1 {
+            XCTAssertEqual(result[0][0] as! String, "TD_IOS_APP_OPEN")
+            XCTAssertNotNil(result[0][1])
+            XCTAssertNotNil(result[0][2])
+        } else if result.count == 2 {
+            let event0 = result[0][0] as! String
+            let event1 = result[1][0] as! String
+            XCTAssert(event0 == "TD_IOS_APP_OPEN" || event1 == "TD_IOS_APP_OPEN", "No TD_IOS_APP_OPEN event found")
+            XCTAssertNotNil(result[0][1])
+            XCTAssertNotNil(result[0][2])
+            XCTAssertNotNil(result[1][1])
+            XCTAssertNotNil(result[1][2])
+        }
     }
 
     func testSession() {
