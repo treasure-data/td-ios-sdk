@@ -8,7 +8,6 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "TreasureData.h"
-#import "math.h"
 #import "TDClient.h"
 #import "Session.h"
 #import "TDUtils.h"
