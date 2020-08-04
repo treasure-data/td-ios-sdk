@@ -1,5 +1,10 @@
 # Change Log
 
+## Version 0.6.1
+_2020-08-04_
+
+* Remove unused math.h import in TreasureData.m file
+
 ## Version 0.6.0
 _2020-06-15_
 
