@@ -16,6 +16,7 @@
 - (void) start;
 - (void) finish;
 - (NSString*) getId;
+- (void)resetId;
 @end
 
 #endif /* Session_h */
