@@ -73,6 +73,7 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
 @implementation TreasureData {
     NSString * _UUID;
     TDIAPObserver * _iapObserver;
+    NSMutableDictionary *_defaultValues;
 }
 
 - (id)initWithApiKey:(NSString *)apiKey {
@@ -202,7 +203,7 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
                     }
                     else {
                         NSString *tag = [NSString stringWithFormat:@"%@.%@", database, table];
-                        NSDictionary *enrichedRecord = [self enrichEventRecord:record];
+                        NSDictionary *enrichedRecord = [self enrichEventRecord:record database:database table:table];
                         [self.client addEventWithCallbacks:enrichedRecord
                                          toEventCollection:tag
                                                  onSuccess:success
@@ -234,9 +235,12 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     return event;
 }
 
-- (NSDictionary *)enrichEventRecord:(NSDictionary *)origRecord {
+- (NSDictionary *)enrichEventRecord:(NSDictionary *)origRecord database:(NSString *)database table:(NSString *)table {
     NSDictionary *enrichedRecord = [TDUtils stripNonEventData:origRecord];
-
+    
+    if (_defaultValues != nil) {
+        enrichedRecord = [self appendDefaultValues:enrichedRecord database:database table:table];
+    }
     if (self.autoAppendUniqId) {
         enrichedRecord = [self appendUniqId:enrichedRecord];
     }
@@ -262,6 +266,21 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
         enrichedRecord = [self appendAdvertisingIdentifier:enrichedRecord];
     }
     return enrichedRecord;
+}
+
+- (NSDictionary *)appendDefaultValues:(NSDictionary *)origRecord database:(NSString *)database table:(NSString *)table {
+    if (_defaultValues == nil) return origRecord;
+    NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
+
+    NSString *anyTableOrDatabaseKey = @".";
+    [record addEntriesFromDictionary:[_defaultValues objectForKey:anyTableOrDatabaseKey]];
+    NSString *anyTableKey = [NSString stringWithFormat:@"%@.", database];
+    [record addEntriesFromDictionary:[_defaultValues objectForKey:anyTableKey]];
+    NSString *anyDatabaseKey = [NSString stringWithFormat:@".%@", table];
+    [record addEntriesFromDictionary:[_defaultValues objectForKey:anyDatabaseKey]];
+    NSString *tableKey = [NSString stringWithFormat:@"%@.%@", database, table];
+    [record addEntriesFromDictionary:[_defaultValues objectForKey:tableKey]];
+    return record;
 }
 
 - (NSString *)getUUID {
@@ -811,6 +830,40 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
             }
         }
     }];
+}
+
+#pragma mark - Default values
+
+-(NSString *)defaultValueTableKeyForDatabase:(nullable NSString *)database table:(nullable NSString *)table {
+    NSString *_database = database == nil ? @"" : database;
+    NSString *_table = table == nil ? @"" : table;
+    return [NSString stringWithFormat:@"%@.%@", _database, _table];
+}
+
+- (void)setDefaultValue:(nullable id)value forKey:(nonnull NSString *)key database:(nullable NSString *)database table:(nullable NSString *)table {
+    if (_defaultValues == nil) _defaultValues = [NSMutableDictionary new];
+    NSString *tableKey = [self defaultValueTableKeyForDatabase:database table:table];
+    NSDictionary *tableDictionary = [_defaultValues objectForKey:tableKey];
+    NSMutableDictionary *mutableTableDictionary = tableDictionary == nil ? [NSMutableDictionary dictionary] : [NSMutableDictionary dictionaryWithDictionary:tableDictionary];
+    
+    [mutableTableDictionary setObject:value forKey:key];
+    [_defaultValues setObject:mutableTableDictionary forKey:tableKey];
+}
+
+- (nullable id)defaultValueForKey:(nonnull NSString*)key database:(nullable NSString *)database table:(nullable NSString *)table {
+    NSString *tableKey = [self defaultValueTableKeyForDatabase:database table:table];
+    NSDictionary *tableDictionary = [_defaultValues objectForKey:tableKey];
+    return [tableDictionary objectForKey:key];
+}
+
+- (void)removeDefaultValueForKey:(nonnull NSString *)key database:(nullable NSString *)database table:(nullable NSString *)table {
+    NSString *tableKey = [self defaultValueTableKeyForDatabase:database table:table];
+    NSDictionary *tableDictionary = [_defaultValues objectForKey:tableKey];
+    if (tableDictionary == nil) return;
+    NSMutableDictionary *mutableTableDictionary = [NSMutableDictionary dictionaryWithDictionary:tableDictionary];
+    
+    [mutableTableDictionary removeObjectForKey:key];
+    [_defaultValues setObject:mutableTableDictionary forKey:tableKey];
 }
 
 #pragma mark - Exposed for testing

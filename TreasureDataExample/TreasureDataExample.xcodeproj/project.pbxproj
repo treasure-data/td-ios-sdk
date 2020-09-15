@@ -15,6 +15,7 @@
 		6B14FEEF1D3624DA00E9C3AF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B14FEED1D3624DA00E9C3AF /* Main.storyboard */; };
 		6B14FEF41D3624DA00E9C3AF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B14FEF21D3624DA00E9C3AF /* LaunchScreen.storyboard */; };
 		ACC8A425266E84EF5E9033F4 /* libPods-TreasureDataExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5DD3B4DAFF3BD9DE0273623 /* libPods-TreasureDataExample.a */; settings = {ATTRIBUTES = (Required, ); }; };
+		DF9AC1CD250651FA00561E7A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF9AC1CC250651FA00561E7A /* AdSupport.framework */; };
 		E58437E1224A36D2009F0C7F /* IAPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58437E0224A36D2009F0C7F /* IAPViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -33,6 +34,7 @@
 		6B14FEF31D3624DA00E9C3AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6B14FEF51D3624DA00E9C3AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D756E6DA689C821E31575BDE /* Pods-TreasureDataExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureDataExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureDataExample/Pods-TreasureDataExample.debug.xcconfig"; sourceTree = "<group>"; };
+		DF9AC1CC250651FA00561E7A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		E58437DF224A36D1009F0C7F /* TreasureDataExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TreasureDataExample-Bridging-Header.h"; sourceTree = "<group>"; };
 		E58437E0224A36D2009F0C7F /* IAPViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAPViewController.swift; sourceTree = "<group>"; };
 		F5DD3B4DAFF3BD9DE0273623 /* libPods-TreasureDataExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TreasureDataExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -44,6 +46,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ACC8A425266E84EF5E9033F4 /* libPods-TreasureDataExample.a in Frameworks */,
+				DF9AC1CD250651FA00561E7A /* AdSupport.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,6 +56,7 @@
 		16695A7E935BB39E4AA99D6B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DF9AC1CC250651FA00561E7A /* AdSupport.framework */,
 				F5DD3B4DAFF3BD9DE0273623 /* libPods-TreasureDataExample.a */,
 			);
 			name = Frameworks;

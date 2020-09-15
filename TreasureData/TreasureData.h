@@ -450,6 +450,33 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
         completionHandler: (void (^_Nonnull)(NSArray* _Nullable jsonResponse, NSError* _Nullable error)) handler
         NS_SWIFT_NAME(fetchUserSegments(tokens:keys:options:completionHandler:));
 
+#pragma mark - Default values
+
+/**
+ * Set default `value` for specified `key` in all new events added to a specified `database` and `table`. When `database` and/or `table` parameters are nil, the nil parameter acts like a wild card that allows to set specifed key value pair to new events added to any database (if `database` is nil) and/or to any table (if `table` is nil). For example, if you pass nil to both `database` and `table` parameters, all new events will have specified default value.
+ * @param value default  value object that must be of type NSString or NSNumber.
+ * @param key the event's key that default value is set to, corresponding to column in table.
+ * @param database the database to set default value to. If nil, specified table of any database will have new events with the added default value.
+ * @param table the table to set default value to. If nil, any table of specified database will have new events with the added default value.
+ */
+- (void)setDefaultValue:(nullable id)value forKey:(nonnull NSString *)key database:(nullable NSString *)database table:(nullable NSString *)table;
+
+/**
+* Get default value of `key` in `database` and `table`. See setDefaultValue:forKey:database:table: for logic setting database and table.
+* @param key the event's key that default value is set to, corresponding to column in table.
+* @param database the database to get default value from. If nil, get default value of specified table of any database.
+* @param table the table to get default value from. If nil, get default value of any table of specified database.
+*/
+- (nullable id)defaultValueForKey:(nonnull NSString*)key database:(nullable NSString *)database table:(nullable NSString *)table;
+
+/**
+ * Remove default value of `key` in `database` and `table`. See setDefaultValue:forKey:database:table: for logic setting database and table.
+ * @param key the event's key that default value is set to, corresponding to column in table.
+ * @param database the database to remove default value from. If nil, specified table of any database will have new events without the default value.
+ * @param table the table to remove default value from. If nil, any table of specified database will have new events without the default value.
+ */
+- (void)removeDefaultValueForKey:(nonnull NSString *)key database:(nullable NSString *)database table:(nullable NSString *)table;
+
 #pragma mark - Misc.
 
 /**
