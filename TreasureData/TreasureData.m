@@ -8,7 +8,6 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "TreasureData.h"
-#import "math.h"
 #import "TDClient.h"
 #import "Session.h"
 #import "TDUtils.h"
@@ -265,7 +264,7 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     return enrichedRecord;
 }
 
-- (NSString*)getUUID {
+- (NSString *)getUUID {
     if (_UUID == nil) {
         _UUID = [[NSUserDefaults standardUserDefaults] stringForKey:storageKeyOfUuid];
     }

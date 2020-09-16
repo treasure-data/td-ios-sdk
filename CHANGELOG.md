@@ -1,5 +1,21 @@
 # Change Log
 
+## Version 0.6.1
+_2020-08-04_
+
+* Remove unused math.h import in TreasureData.m file
+
+## Version 0.6.0
+_2020-06-15_
+
+* Use SHA-256 algorithm instead of MD5 algorithm to generate project id for cache data in Keen client
+
+## Version 0.5.0
+_2020-04-28_
+
+* Add documentation to support AP02 region
+* Add API `getUUID` to get `td_uuid`
+
 ## Version 0.4.0
 _2019-10-09_
 

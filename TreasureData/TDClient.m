@@ -13,7 +13,7 @@
 #import "Deflate.h"
 #import "TDClient.h"
 
-static NSString *version = @"0.4.0";
+static NSString *version = @"0.6.1";
 
 @implementation TDClient
 
@@ -23,7 +23,7 @@ static NSString *version = @"0.4.0";
 }
 
 - (id)__initWithApiKey:(NSString *)apiKey apiEndpoint:(NSString*)apiEndpoint {
-    NSString *projectId = [NSString stringWithFormat:@"_td %@", [self md5:apiKey]];
+    NSString *projectId = [NSString stringWithFormat:@"_td %@", [self sha256Hash:apiKey]];
     self = [self initWithProjectId:projectId andWriteKey:@"dummy_write_key" andReadKey:@"dummy_read_key"];
     self.apiKey = apiKey;
     self.apiEndpoint = apiEndpoint;
@@ -49,18 +49,19 @@ static NSString *version = @"0.4.0";
     return self;
 }
 
-- (NSString *)md5:(NSString *)input
-{
-    const char *cStr = [input UTF8String];
-    unsigned char digest[16];
-    CC_MD5(cStr, (CC_LONG)strlen(cStr), digest);
-    
-    NSMutableString *output = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
-    
-    for(int i = 0; i < CC_MD5_DIGEST_LENGTH; i++)
-        [output appendFormat:@"%02x", digest[i]];
-    
-    return output;
+- (NSString *)sha256Hash:(NSString *)input {
+    // Generate a cryptographic digest using the secure SHA-256 algorithm
+    const char* cString = [input UTF8String];
+    unsigned char hashedString[CC_SHA256_DIGEST_LENGTH];
+    CC_SHA256(cString, (CC_LONG) strlen(cString), hashedString);
+
+    // Convert the digest to an NSString hex-string for straightforward use
+    NSMutableString *nsString = [NSMutableString stringWithCapacity:CC_SHA256_DIGEST_LENGTH * 2];
+    for (int i = 0; i < CC_SHA256_DIGEST_LENGTH; i++) {
+        [nsString appendFormat:@"%02x", hashedString[i]];
+    }
+
+    return nsString;
 }
 
 - (void)sendEvents:(NSData *)data completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler {
