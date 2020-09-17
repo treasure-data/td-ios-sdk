@@ -840,7 +840,7 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     return [NSString stringWithFormat:@"%@.%@", _database, _table];
 }
 
-- (void)setDefaultValue:(nullable id)value forKey:(nonnull NSString *)key database:(nullable NSString *)database table:(nullable NSString *)table {
+- (void)setDefaultValue:(nonnull id)value forKey:(nonnull NSString *)key database:(nullable NSString *)database table:(nullable NSString *)table {
     if (_defaultValues == nil) _defaultValues = [NSMutableDictionary new];
     NSString *tableKey = [self defaultValueTableKeyForDatabase:database table:table];
     NSDictionary *tableDictionary = [_defaultValues objectForKey:tableKey];

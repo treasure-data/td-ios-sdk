@@ -459,7 +459,7 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
  * @param database the database to set default value to. If nil, specified table of any database will have new events with the added default value.
  * @param table the table to set default value to. If nil, any table of specified database will have new events with the added default value.
  */
-- (void)setDefaultValue:(nullable id)value forKey:(nonnull NSString *)key database:(nullable NSString *)database table:(nullable NSString *)table;
+- (void)setDefaultValue:(nonnull id)value forKey:(nonnull NSString *)key database:(nullable NSString *)database table:(nullable NSString *)table;
 
 /**
 * Get default value of `key` in `database` and `table`. See setDefaultValue:forKey:database:table: for logic setting database and table.
