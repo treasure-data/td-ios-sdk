@@ -236,11 +236,10 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
 }
 
 - (NSDictionary *)enrichEventRecord:(NSDictionary *)origRecord database:(NSString *)database table:(NSString *)table {
-    NSDictionary *enrichedRecord = [TDUtils stripNonEventData:origRecord];
+    NSDictionary *enrichedRecord = [self prependDefaultValues:origRecord database:database table:table];
     
-    if (_defaultValues != nil) {
-        enrichedRecord = [self appendDefaultValues:enrichedRecord database:database table:table];
-    }
+    enrichedRecord = [TDUtils stripNonEventData:enrichedRecord];
+    
     if (self.autoAppendUniqId) {
         enrichedRecord = [self appendUniqId:enrichedRecord];
     }
@@ -268,9 +267,9 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     return enrichedRecord;
 }
 
-- (NSDictionary *)appendDefaultValues:(NSDictionary *)origRecord database:(NSString *)database table:(NSString *)table {
+- (NSDictionary *)prependDefaultValues:(NSDictionary *)origRecord database:(NSString *)database table:(NSString *)table {
     if (_defaultValues == nil) return origRecord;
-    NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
+    NSMutableDictionary *record = [NSMutableDictionary new];
 
     NSString *anyTableOrDatabaseKey = @".";
     [record addEntriesFromDictionary:[_defaultValues objectForKey:anyTableOrDatabaseKey]];
@@ -280,6 +279,8 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     [record addEntriesFromDictionary:[_defaultValues objectForKey:anyDatabaseKey]];
     NSString *tableKey = [NSString stringWithFormat:@"%@.%@", database, table];
     [record addEntriesFromDictionary:[_defaultValues objectForKey:tableKey]];
+    
+    [record addEntriesFromDictionary:origRecord];
     return record;
 }
 

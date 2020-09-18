@@ -985,7 +985,7 @@ static NSString *END_POINT = @"http://localhost";
     self.isFinished = true;
 }
 
-- (void)testAddDefaultValuesOverwriteSuccesfully {
+- (void)testAddDefaultValuesOverrideSuccesfully {
     [self.td setDefaultValue:@"Any Table & DB" forKey:@"key" database:nil table:nil];
     [self.td addEvent:@{@"key1": @"value1"} database:@"test_db" table:@"test_table"];
     
@@ -998,11 +998,14 @@ static NSString *END_POINT = @"http://localhost";
     [self.td setDefaultValue:@"Specific Table & DB" forKey:@"key" database:@"test_db" table:@"test_table"];
     [self.td addEvent:@{@"key4": @"value4"} database:@"test_db" table:@"test_table"];
     
-    [self assertEventCount:4];
+    [self.td addEvent:@{@"key": @"Event Value"} database:@"test_db" table:@"test_table"];
+    
+    [self assertEventCount:5];
     XCTAssertEqual(self.td.capturedEvents[0][@"key"], @"Any Table & DB");
     XCTAssertEqual(self.td.capturedEvents[1][@"key"], @"Any Table");
     XCTAssertEqual(self.td.capturedEvents[2][@"key"], @"Any DB");
     XCTAssertEqual(self.td.capturedEvents[3][@"key"], @"Specific Table & DB");
+    XCTAssertEqual(self.td.capturedEvents[4][@"key"], @"Event Value");
     
     self.isFinished = true;
 }
