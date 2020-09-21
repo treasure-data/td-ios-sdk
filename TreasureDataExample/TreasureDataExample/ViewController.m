@@ -46,6 +46,9 @@
     self.defaultValueField.delegate = self;
     [self.defaultValueKeyField setText:@"default_value"];
     self.defaultValueKeyField.delegate = self;
+    
+    self.defaultValueTargetTableField.delegate = self;
+    self.defaultValueTargetDatabaseField.delegate = self;
 
     [self customEventSwitchChanged:self.customEventSwitch];
     [self appLifecycleEventSwitchChanged:self.appLifecycleEventSwitch];
@@ -173,19 +176,27 @@
 
 #pragma mark - Default Values
 
+- (NSString *)defaultValueTargetTable {
+    return [_defaultValueTargetTableField.text isEqual: @""] ? nil : _defaultValueTargetTableField.text;
+}
+
+- (NSString *)defaultValueTargetDatabase {
+    return [_defaultValueTargetDatabaseField.text isEqual: @""] ? nil : _defaultValueTargetDatabaseField.text;
+}
+
 - (IBAction)setDefaultValueButtonTapped:(id)sender {
-    [[TreasureData sharedInstance] setDefaultValue:_defaultValueField.text forKey:_defaultValueKeyField.text database:nil table:nil];
+    [[TreasureData sharedInstance] setDefaultValue:_defaultValueField.text forKey:_defaultValueKeyField.text database:[self defaultValueTargetDatabase] table:[self defaultValueTargetTable]];
 }
 
 - (IBAction)getDefaultValueButtonTapped:(id)sender {
-    NSString* defaultValue = [[TreasureData sharedInstance] defaultValueForKey:_defaultValueKeyField.text database:nil table:nil];
+    NSString* defaultValue = [[TreasureData sharedInstance] defaultValueForKey:_defaultValueKeyField.text database:[self defaultValueTargetDatabase] table:[self defaultValueTargetTable]];
     UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Default Value" message: defaultValue preferredStyle:UIAlertControllerStyleAlert];
     [alertVC addAction: [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:nil]];
     [self showViewController:alertVC sender:nil];
 }
 
 - (IBAction)removeDefaultValueButtonTapped:(id)sender {
-    [[TreasureData sharedInstance] removeDefaultValueForKey:_defaultValueKeyField.text database:nil table:nil];
+    [[TreasureData sharedInstance] removeDefaultValueForKey:_defaultValueKeyField.text database:[self defaultValueTargetDatabase] table:[self defaultValueTargetTable]];
 }
 
 #pragma mark - Profile API

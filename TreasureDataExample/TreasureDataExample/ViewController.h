@@ -23,6 +23,8 @@
 
 @property (weak, nonatomic) IBOutlet UITextField *defaultValueField;
 @property (weak, nonatomic) IBOutlet UITextField *defaultValueKeyField;
+@property (weak, nonatomic) IBOutlet UITextField *defaultValueTargetTableField;
+@property (weak, nonatomic) IBOutlet UITextField *defaultValueTargetDatabaseField;
 
 @property (weak, nonatomic) IBOutlet UISwitch *customEventSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *appLifecycleEventSwitch;
