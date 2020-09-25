@@ -43,4 +43,8 @@ static int DEFAULT_SESSION_PENDING_MILLIS = 10 * 1000;
     }
     return self.id;
 }
+
+- (void)resetId {
+    self.id = [[NSUUID UUID] UUIDString];
+}
 @end

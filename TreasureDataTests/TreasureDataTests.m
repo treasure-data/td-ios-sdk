@@ -735,6 +735,53 @@ static NSString *END_POINT = @"http://localhost";
             }];
 }
 
+- (void)testResetGlobalSessionId {
+    __block NSString *sessionId1;
+    __block NSString *sessionId2;
+    __block NSString *sessionId3;
+    
+    [self baseTesting:^() {
+        self.td.defaultDatabase = @"db_";
+        [self setupDefaultExpectedResponseBody: @{@"db_.tbl":@[@{@"success":@"true"}, @{@"success":@"true"}, @{@"success":@"true"}]}];
+        [TreasureData startSession];
+        sessionId1 = [TreasureData getSessionId];
+        [self.td addEvent:@{@"counter":@"one"} database:@"db_" table:@"tbl"];
+        sessionId2 = [TreasureData getSessionId];
+        [self.td addEvent:@{@"counter":@"two"} database:@"db_" table:@"tbl"];
+        [TreasureData resetSessionId];
+        sessionId3 = [TreasureData getSessionId];
+        [self.td addEvent:@{@"counter":@"three"} database:@"db_" table:@"tbl"];
+    } assertion:^(NSDictionary *ev) {
+        NSArray *arr = [ev objectForKey:@"db_.tbl"];
+        NSString *eventSessionIdOne;
+        NSString *eventSessionIdTwo;
+        NSString *eventSessionIdThree;
+        
+        XCTAssertEqual(1, self.session.sendRequestCount);
+        XCTAssertEqual(1, ev.count);
+        XCTAssertEqual(3, arr.count);
+        
+        for (NSDictionary *x in arr) {
+            if ([[x objectForKey:@"counter"] isEqualToString:@"one"]) {
+                eventSessionIdOne = [x objectForKey:@"td_session_id"];
+            } else if ([[x objectForKey:@"counter"] isEqualToString:@"two"]) {
+                eventSessionIdTwo = [x objectForKey:@"td_session_id"];
+            } else if ([[x objectForKey:@"counter"] isEqualToString:@"three"]) {
+                eventSessionIdThree = [x objectForKey:@"td_session_id"];
+            }
+        }
+        
+        XCTAssertNotNil(eventSessionIdOne);
+        XCTAssertNotNil(eventSessionIdTwo);
+        XCTAssertNotNil(eventSessionIdThree);
+        XCTAssertEqualObjects(sessionId1, eventSessionIdOne);
+        XCTAssertEqualObjects(sessionId2, eventSessionIdTwo);
+        XCTAssertEqualObjects(sessionId3, eventSessionIdThree);
+        XCTAssertEqualObjects(eventSessionIdOne, eventSessionIdTwo);
+        XCTAssertNotEqualObjects(eventSessionIdTwo, eventSessionIdThree);
+    }];
+}
+
 
 - (void)testSingleEventWithoutCallbackWithWrongDatabaseName {
     [self.td addEvent:@{@"name":@"foobar"} database:@"DB_" table:@"tbl"];

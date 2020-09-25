@@ -549,6 +549,10 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     return [session getId];
 }
 
++ (void)resetSessionId {
+    [session resetId];
+}
+
 + (void)setSessionTimeoutMilli:(long)to {
     sessionTimeoutMilli = to;
 }

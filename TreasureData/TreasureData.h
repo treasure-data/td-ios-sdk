@@ -361,6 +361,11 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 + (NSString* _Nullable)getSessionId;
 
 /**
+ * Reset static session. This will force create a new session when static method `startSession` is called.
+ */
++ (void)resetSessionId;
+
+/**
  * Set the minimal time window that the static session stays alive.
  *
  * @param to The session timeout, default is 10 seconds

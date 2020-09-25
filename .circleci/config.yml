@@ -53,10 +53,26 @@ _defaults:
         sudo mkdir '/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 8.4.simruntime/Contents/Resources/RuntimeRoot/usr/lib/swift'
 
 jobs:
+  test_ios14:
+    macos:
+      xcode: "12.0.0"
+    steps:
+      - checkout
+      - *auxiliary_setup
+      - *restore_pods_cache
+      - *install_pods
+      - *save_pods_cache
+      - run:
+          name: Test on iOS 14
+          no_output_timeout: 1800
+          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 11,OS=14.0' logs/xcbuild_ios_14.log test_results/ios_14.xml
+      - *store_artifacts
+      - *store_test_results
+
 
   test_ios13:
     macos:
-      xcode: "11.0"
+      xcode: "11.6.0"
     steps:
       - checkout
       - *auxiliary_setup
@@ -66,7 +82,7 @@ jobs:
       - run:
           name: Test on iOS 13
           no_output_timeout: 1800
-          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 11,OS=13.0' logs/xcbuild_ios_13.log test_results/ios_13.xml
+          command: ./scripts/ci_test 'platform=iOS Simulator,name=iPhone 11,OS=13.6' logs/xcbuild_ios_13.log test_results/ios_13.xml
       - *store_artifacts
       - *store_test_results
 
@@ -158,6 +174,7 @@ workflows:
   version: 2
   test:
     jobs:
+      - test_ios14
       - test_ios13
       - test_ios12
       - test_ios11
