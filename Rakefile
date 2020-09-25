@@ -108,10 +108,8 @@ def create_universal_library(output_dir)
 end
 
 def copy_header_file(output_dir)
-  keen_header_dir = File.join(output_dir, 'KeenClientTD')
-  mkdir_p(keen_header_dir)
   sh("cp -p Output/Release-iphoneos/include/TreasureData/* #{output_dir}")
-  sh("cp -p Output/Release-iphoneos/KeenClientTD/*.h #{keen_header_dir}")
+  sh("cp -RL Pods/Headers/Public/. #{output_dir}")
 end
 
 def create_info_plist(output_dir)
