@@ -20,5 +20,6 @@
 
 + (NSSet<NSString *> *)productIds;
 
++ (void)requestAppTrackingAuthorizationIfNeeded;
 
 @end
