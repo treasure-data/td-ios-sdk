@@ -314,7 +314,12 @@ UUID will be added to each event record automatically if you call `enableAutoApp
 It outputs the value as a column name `record_uuid` by default.
 
 ### Adding Advertising Id to each event record automatically
-Advertising Id will be added to each event record automatically if you call `enableAutoAppendAdvertisingIdentifier`. You must link Ad Support framework in Link Binary With Libraries build phase for this feature to work. User must also not turn on Limit Ad Tracking feature in their iOS device, otherwise Treasure Data will send zero filled string as the advertising id (the value we get from Ad Support framework).
+Advertising Id will be added to each event record automatically if you call `enableAutoAppendAdvertisingIdentifier`.
+
+You must link Ad Support framework in Link Binary With Libraries build phase for this feature to work. User must also not turn on Limit Ad Tracking feature in their iOS device, otherwise Treasure Data will send zero filled string as the advertising id (the value we get from Ad Support framework).
+
+Starting in iOS 14, you will have to explicitly request user's permission for advertising identifier using AppTrackingTransparency framework. Consult Apple official documentation for AppTrackingTransparency on how to implement this requirement.
+
 If you turn on this feature, keep in mind that you will have to declare correct reason for getting advertising identifier when you submit your app for review to the App Store.
 
 ```
