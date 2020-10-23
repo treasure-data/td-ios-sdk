@@ -37,6 +37,8 @@
     [self customEventSwitchChanged:self.customEventSwitch];
     [self appLifecycleEventSwitchChanged:self.appLifecycleEventSwitch];
     [self iapEventSwitchChanged:self.iapEventSwitch];
+    
+    [TreasureDataExample requestAppTrackingAuthorizationIfNeeded];
 }
 
 - (void)didReceiveMemoryWarning {

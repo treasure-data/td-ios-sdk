@@ -10,6 +10,7 @@
 
 #import "TreasureData.h"
 #import "TreasureDataExample.h"
+@import AppTrackingTransparency;
 
 @implementation TreasureDataExample
 
@@ -31,6 +32,16 @@ static NSString *testTable;
     [[TreasureData sharedInstance] enableServerSideUploadTimestamp:@"server_upload_time"];
     [[TreasureData sharedInstance] enableInAppPurchaseEvent];
     [[TreasureData sharedInstance] enableAutoAppendAdvertisingIdentifier:@"td_maid"];
+}
+
++ (void)requestAppTrackingAuthorizationIfNeeded {
+    if (@available(iOS 14, *)) {
+        [ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status) {
+            NSLog(@"app tracking status %lu", (unsigned long)status);
+        }];
+    } else {
+        // No need to request app tracking authorization
+    }
 }
 
 + (NSString *)testTable {
