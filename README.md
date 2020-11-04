@@ -1,7 +1,7 @@
 Treasure Data iOS SDK
 ===============
 
-iOS SDK for [Treasure Data](http://www.treasuredata.com/). With this SDK, you can import the events on your applications into Treasure Data easily. Technically, this library supports iOS 7 and later, but we only execute OS coverage tests for iOS 8, 9, 10, 11, 12 and 13.
+iOS SDK for [Treasure Data](http://www.treasuredata.com/). With this SDK, you can import the events on your applications into Treasure Data easily. Technically, this library supports iOS 7 and later, but we only execute OS coverage tests for iOS 8, 9, 10, 11, 12, 13 and 14.
 
 Also, there is an alternative SDK written in Swift [https://github.com/recruit-lifestyle/TreasureDataSDK](https://github.com/recruit-lifestyle/TreasureDataSDK). Note, however, that it does not support current GDPR functionality in the mainstream TD SDKs.
 
@@ -342,7 +342,12 @@ UUID will be added to each event record automatically if you call `enableAutoApp
 It outputs the value as a column name `record_uuid` by default.
 
 ### Adding Advertising Id to each event record automatically
-Advertising Id will be added to each event record automatically if you call `enableAutoAppendAdvertisingIdentifier`. You must link Ad Support framework in Link Binary With Libraries build phase for this feature to work. User must also not turn on Limit Ad Tracking feature in their iOS device, otherwise Treasure Data will send zero filled string as the advertising id (the value we get from Ad Support framework).
+Advertising Id will be added to each event record automatically if you call `enableAutoAppendAdvertisingIdentifier`.
+
+You must link Ad Support framework in Link Binary With Libraries build phase for this feature to work. User must also not turn on Limit Ad Tracking feature in their iOS device, otherwise Treasure Data will send zero filled string as the advertising id (the value we get from Ad Support framework).
+
+Starting in iOS 14, you will have to explicitly request user's permission for advertising identifier using AppTrackingTransparency framework. Consult Apple official documentation for AppTrackingTransparency on how to implement this requirement.
+
 If you turn on this feature, keep in mind that you will have to declare correct reason for getting advertising identifier when you submit your app for review to the App Store.
 
 ```
