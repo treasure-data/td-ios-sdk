@@ -6,18 +6,18 @@
 //  Copyright © 2016 Treasure Data. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "iOSViewController.h"
 #import "TreasureData.h"
 
 #import "TreasureDataExample.h"
 
-@interface ViewController ()
+@interface iOSViewController ()
 
 @property (nonatomic, assign) BOOL isFormDirty;
 
 @end
 
-@implementation ViewController
+@implementation iOSViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -81,7 +81,7 @@
 }
 
 - (IBAction)addEvent:(id)addEventButton {
-    [ViewController shiftButton:addEventButton toState:kButtonStatePending withTitle:@"Adding Event..."];
+    [iOSViewController shiftButton:addEventButton toState:kButtonStatePending withTitle:@"Adding Event..."];
 
     [self updateClientIfFormChanged];
 
@@ -93,9 +93,9 @@
      table:[TreasureDataExample testTable]
      onSuccess:^(){
          dispatch_async(dispatch_get_main_queue(), ^{
-             [ViewController shiftButton:addEventButton toState:kButtonStateSuccess withTitle:@"Add Event Success!"];
+             [iOSViewController shiftButton:addEventButton toState:kButtonStateSuccess withTitle:@"Add Event Success!"];
              [NSTimer scheduledTimerWithTimeInterval:1.0 repeats:NO block:^(NSTimer *timer) {
-                 [ViewController shiftButton:addEventButton toState:kButtonStateNormal withTitle:@"Add Test Event"];
+                 [iOSViewController shiftButton:addEventButton toState:kButtonStateNormal withTitle:@"Add Test Event"];
              }];
          });
      }
@@ -103,32 +103,32 @@
          NSLog(@"addEvent: error. errorCode=%@, message=%@", errorCode, message);
          dispatch_async(dispatch_get_main_queue(), ^{
              NSString *text = [errorCode isEqualToString:@"custom_event_unallowed"] ? @"Add Event Denied!" : @"Add Event Error!";
-             [ViewController shiftButton:addEventButton toState:kButtonStateFailed withTitle:text];
+             [iOSViewController shiftButton:addEventButton toState:kButtonStateFailed withTitle:text];
              [NSTimer scheduledTimerWithTimeInterval:1.0 repeats:NO block:^(NSTimer *timer) {
-                 [ViewController shiftButton:addEventButton toState:kButtonStateNormal withTitle:@"Add Test Event"];
+                 [iOSViewController shiftButton:addEventButton toState:kButtonStateNormal withTitle:@"Add Test Event"];
              }];
          });
      }];
 }
 
 - (IBAction)uploadEvents:(id)uploadButton {
-    [ViewController shiftButton:uploadButton toState:kButtonStatePending withTitle:@"Uploading Events..."];
+    [iOSViewController shiftButton:uploadButton toState:kButtonStatePending withTitle:@"Uploading Events..."];
 
     [self updateClientIfFormChanged];
 
     [[TreasureData sharedInstance] uploadEventsWithCallback:^(){
         NSLog(@"uploadEvents: success");
         dispatch_async(dispatch_get_main_queue(), ^{
-            [ViewController shiftButton:uploadButton toState:kButtonStateSuccess withTitle:@"Upload Events Success!"];
+            [iOSViewController shiftButton:uploadButton toState:kButtonStateSuccess withTitle:@"Upload Events Success!"];
             [NSTimer scheduledTimerWithTimeInterval:1.5 repeats:NO block:^(NSTimer* timer) {
-                [ViewController shiftButton:uploadButton toState:kButtonStateNormal withTitle:@"Upload Events"];
+                [iOSViewController shiftButton:uploadButton toState:kButtonStateNormal withTitle:@"Upload Events"];
             }];
         });
     } onError:^(NSString* errorCode, NSString* message) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [ViewController shiftButton:uploadButton toState:kButtonStateFailed withTitle:@"Upload Events Error!"];
+            [iOSViewController shiftButton:uploadButton toState:kButtonStateFailed withTitle:@"Upload Events Error!"];
             [NSTimer scheduledTimerWithTimeInterval:1.5 repeats:NO block:^(NSTimer* timer) {
-                [ViewController shiftButton:uploadButton toState:kButtonStateNormal withTitle:@"Upload Events"];
+                [iOSViewController shiftButton:uploadButton toState:kButtonStateNormal withTitle:@"Upload Events"];
             }];
         });
         NSLog(@"uploadEvents: error. errorCode=%@, message=%@", errorCode, message);
@@ -137,9 +137,9 @@
 
 - (IBAction)resetDeviceUniqueID:(id)sender {
     [[TreasureData sharedInstance] resetUniqId];
-    [ViewController shiftButton:sender toState:kButtonStateSuccess withTitle:@"Device Unique ID is Reset!"];
+    [iOSViewController shiftButton:sender toState:kButtonStateSuccess withTitle:@"Device Unique ID is Reset!"];
     [NSTimer scheduledTimerWithTimeInterval:1 repeats:NO block:^(NSTimer* timer) {
-        [ViewController shiftButton:sender toState:kButtonStateNormal withTitle:@"Reset Device Unique ID"];
+        [iOSViewController shiftButton:sender toState:kButtonStateNormal withTitle:@"Reset Device Unique ID"];
     }];
 }
 

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UITableViewController
+@interface iOSViewController : UITableViewController
 
 @property (weak, nonatomic) IBOutlet UITextField *apiEndpointField;
 @property (weak, nonatomic) IBOutlet UITextField *apiKeyField;

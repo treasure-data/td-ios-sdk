@@ -9,13 +9,20 @@
 /* Begin PBXBuildFile section */
 		20B1861B2085DABD00B1A488 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 20B1861A2085DABC00B1A488 /* Assets.xcassets */; };
 		20F4C4C120855AF90049E1C7 /* TreasureDataExample.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F4C4C020855AF90049E1C7 /* TreasureDataExample.m */; };
+		32BFC2E7A4E4919CA4A0BD44 /* libPods-TreasureDataTVOSExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 558BCB4EAB5DC3E964E70E49 /* libPods-TreasureDataTVOSExample.a */; };
 		6B14FEE61D3624DA00E9C3AF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B14FEE51D3624DA00E9C3AF /* main.m */; };
 		6B14FEE91D3624DA00E9C3AF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B14FEE81D3624DA00E9C3AF /* AppDelegate.m */; };
-		6B14FEEC1D3624DA00E9C3AF /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B14FEEB1D3624DA00E9C3AF /* ViewController.m */; };
+		6B14FEEC1D3624DA00E9C3AF /* iOSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B14FEEB1D3624DA00E9C3AF /* iOSViewController.m */; };
 		6B14FEEF1D3624DA00E9C3AF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B14FEED1D3624DA00E9C3AF /* Main.storyboard */; };
 		6B14FEF41D3624DA00E9C3AF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B14FEF21D3624DA00E9C3AF /* LaunchScreen.storyboard */; };
 		ACC8A425266E84EF5E9033F4 /* libPods-TreasureDataExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5DD3B4DAFF3BD9DE0273623 /* libPods-TreasureDataExample.a */; settings = {ATTRIBUTES = (Required, ); }; };
 		DF0ED81B252B4DE4008F58B5 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF0ED81A252B4DE4008F58B5 /* AdSupport.framework */; };
+		DF1AEC102539B618004DCAEF /* TVOSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1AEC0F2539B618004DCAEF /* TVOSAppDelegate.m */; };
+		DF1AEC132539B618004DCAEF /* TVOSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1AEC122539B618004DCAEF /* TVOSViewController.m */; };
+		DF1AEC162539B618004DCAEF /* TVOSMain.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF1AEC142539B618004DCAEF /* TVOSMain.storyboard */; };
+		DF1AEC182539B61B004DCAEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DF1AEC172539B61B004DCAEF /* Assets.xcassets */; };
+		DF1AEC1B2539B61B004DCAEF /* TVOSLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF1AEC192539B61B004DCAEF /* TVOSLaunchScreen.storyboard */; };
+		DF1AEC1E2539B61B004DCAEF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1AEC1D2539B61B004DCAEF /* main.m */; };
 		E58437E1224A36D2009F0C7F /* IAPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58437E0224A36D2009F0C7F /* IAPViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -24,17 +31,30 @@
 		20B1861A2085DABC00B1A488 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		20F4C4BF20855AE80049E1C7 /* TreasureDataExample.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TreasureDataExample.h; sourceTree = "<group>"; };
 		20F4C4C020855AF90049E1C7 /* TreasureDataExample.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TreasureDataExample.m; sourceTree = "<group>"; };
+		558BCB4EAB5DC3E964E70E49 /* libPods-TreasureDataTVOSExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TreasureDataTVOSExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B14FEE11D3624DA00E9C3AF /* TreasureDataExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TreasureDataExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B14FEE51D3624DA00E9C3AF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6B14FEE71D3624DA00E9C3AF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		6B14FEE81D3624DA00E9C3AF /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		6B14FEEA1D3624DA00E9C3AF /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		6B14FEEB1D3624DA00E9C3AF /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		6B14FEEA1D3624DA00E9C3AF /* iOSViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iOSViewController.h; sourceTree = "<group>"; };
+		6B14FEEB1D3624DA00E9C3AF /* iOSViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iOSViewController.m; sourceTree = "<group>"; };
 		6B14FEEE1D3624DA00E9C3AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6B14FEF31D3624DA00E9C3AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6B14FEF51D3624DA00E9C3AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6E9E4DE6FF1370C2CA049A7E /* Pods-TreasureDataTVOSExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureDataTVOSExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureDataTVOSExample/Pods-TreasureDataTVOSExample.release.xcconfig"; sourceTree = "<group>"; };
 		D756E6DA689C821E31575BDE /* Pods-TreasureDataExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureDataExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureDataExample/Pods-TreasureDataExample.debug.xcconfig"; sourceTree = "<group>"; };
+		DAC6B3E7A6E2A7F8AF5AC283 /* Pods-TreasureDataTVOSExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureDataTVOSExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureDataTVOSExample/Pods-TreasureDataTVOSExample.debug.xcconfig"; sourceTree = "<group>"; };
 		DF0ED81A252B4DE4008F58B5 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		DF1AEC0C2539B617004DCAEF /* TreasureDataTVOSExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TreasureDataTVOSExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DF1AEC0E2539B618004DCAEF /* TVOSAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TVOSAppDelegate.h; sourceTree = "<group>"; };
+		DF1AEC0F2539B618004DCAEF /* TVOSAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TVOSAppDelegate.m; sourceTree = "<group>"; };
+		DF1AEC112539B618004DCAEF /* TVOSViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TVOSViewController.h; sourceTree = "<group>"; };
+		DF1AEC122539B618004DCAEF /* TVOSViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TVOSViewController.m; sourceTree = "<group>"; };
+		DF1AEC152539B618004DCAEF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/TVOSMain.storyboard; sourceTree = "<group>"; };
+		DF1AEC172539B61B004DCAEF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		DF1AEC1A2539B61B004DCAEF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/TVOSLaunchScreen.storyboard; sourceTree = "<group>"; };
+		DF1AEC1C2539B61B004DCAEF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DF1AEC1D2539B61B004DCAEF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E58437DF224A36D1009F0C7F /* TreasureDataExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TreasureDataExample-Bridging-Header.h"; sourceTree = "<group>"; };
 		E58437E0224A36D2009F0C7F /* IAPViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAPViewController.swift; sourceTree = "<group>"; };
 		F5DD3B4DAFF3BD9DE0273623 /* libPods-TreasureDataExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TreasureDataExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -50,6 +70,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DF1AEC092539B617004DCAEF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				32BFC2E7A4E4919CA4A0BD44 /* libPods-TreasureDataTVOSExample.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -58,6 +86,7 @@
 			children = (
 				DF0ED81A252B4DE4008F58B5 /* AdSupport.framework */,
 				F5DD3B4DAFF3BD9DE0273623 /* libPods-TreasureDataExample.a */,
+				558BCB4EAB5DC3E964E70E49 /* libPods-TreasureDataTVOSExample.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -66,6 +95,7 @@
 			isa = PBXGroup;
 			children = (
 				6B14FEE31D3624DA00E9C3AF /* TreasureDataExample */,
+				DF1AEC0D2539B618004DCAEF /* TreasureDataTVOSExample */,
 				6B14FEE21D3624DA00E9C3AF /* Products */,
 				B26184E85948AC90D9AB6C2D /* Pods */,
 				16695A7E935BB39E4AA99D6B /* Frameworks */,
@@ -76,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				6B14FEE11D3624DA00E9C3AF /* TreasureDataExample.app */,
+				DF1AEC0C2539B617004DCAEF /* TreasureDataTVOSExample.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -87,8 +118,8 @@
 				20F4C4C020855AF90049E1C7 /* TreasureDataExample.m */,
 				6B14FEE71D3624DA00E9C3AF /* AppDelegate.h */,
 				6B14FEE81D3624DA00E9C3AF /* AppDelegate.m */,
-				6B14FEEA1D3624DA00E9C3AF /* ViewController.h */,
-				6B14FEEB1D3624DA00E9C3AF /* ViewController.m */,
+				6B14FEEA1D3624DA00E9C3AF /* iOSViewController.h */,
+				6B14FEEB1D3624DA00E9C3AF /* iOSViewController.m */,
 				E58437E0224A36D2009F0C7F /* IAPViewController.swift */,
 				20B1861A2085DABC00B1A488 /* Assets.xcassets */,
 				6B14FEED1D3624DA00E9C3AF /* Main.storyboard */,
@@ -113,8 +144,26 @@
 			children = (
 				D756E6DA689C821E31575BDE /* Pods-TreasureDataExample.debug.xcconfig */,
 				0EE6C1C60442438D3CE887F3 /* Pods-TreasureDataExample.release.xcconfig */,
+				DAC6B3E7A6E2A7F8AF5AC283 /* Pods-TreasureDataTVOSExample.debug.xcconfig */,
+				6E9E4DE6FF1370C2CA049A7E /* Pods-TreasureDataTVOSExample.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		DF1AEC0D2539B618004DCAEF /* TreasureDataTVOSExample */ = {
+			isa = PBXGroup;
+			children = (
+				DF1AEC0E2539B618004DCAEF /* TVOSAppDelegate.h */,
+				DF1AEC0F2539B618004DCAEF /* TVOSAppDelegate.m */,
+				DF1AEC112539B618004DCAEF /* TVOSViewController.h */,
+				DF1AEC122539B618004DCAEF /* TVOSViewController.m */,
+				DF1AEC142539B618004DCAEF /* TVOSMain.storyboard */,
+				DF1AEC192539B61B004DCAEF /* TVOSLaunchScreen.storyboard */,
+				DF1AEC172539B61B004DCAEF /* Assets.xcassets */,
+				DF1AEC1C2539B61B004DCAEF /* Info.plist */,
+				DF1AEC1D2539B61B004DCAEF /* main.m */,
+			);
+			path = TreasureDataTVOSExample;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,6 +187,24 @@
 			productReference = 6B14FEE11D3624DA00E9C3AF /* TreasureDataExample.app */;
 			productType = "com.apple.product-type.application";
 		};
+		DF1AEC0B2539B617004DCAEF /* TreasureDataTVOSExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DF1AEC3B2539B61B004DCAEF /* Build configuration list for PBXNativeTarget "TreasureDataTVOSExample" */;
+			buildPhases = (
+				C7AF954D8E07AC67E7E55DD0 /* [CP] Check Pods Manifest.lock */,
+				DF1AEC082539B617004DCAEF /* Sources */,
+				DF1AEC092539B617004DCAEF /* Frameworks */,
+				DF1AEC0A2539B617004DCAEF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TreasureDataTVOSExample;
+			productName = TreasureDataTVOSExample;
+			productReference = DF1AEC0C2539B617004DCAEF /* TreasureDataTVOSExample.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -156,6 +223,10 @@
 							};
 						};
 					};
+					DF1AEC0B2539B617004DCAEF = {
+						CreatedOnToolsVersion = 12.0.1;
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = 6B14FEDC1D3624DA00E9C3AF /* Build configuration list for PBXProject "TreasureDataExample" */;
@@ -172,6 +243,7 @@
 			projectRoot = "";
 			targets = (
 				6B14FEE01D3624DA00E9C3AF /* TreasureDataExample */,
+				DF1AEC0B2539B617004DCAEF /* TreasureDataTVOSExample */,
 			);
 		};
 /* End PBXProject section */
@@ -184,6 +256,16 @@
 				6B14FEF41D3624DA00E9C3AF /* LaunchScreen.storyboard in Resources */,
 				20B1861B2085DABD00B1A488 /* Assets.xcassets in Resources */,
 				6B14FEEF1D3624DA00E9C3AF /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DF1AEC0A2539B617004DCAEF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DF1AEC1B2539B61B004DCAEF /* TVOSLaunchScreen.storyboard in Resources */,
+				DF1AEC182539B61B004DCAEF /* Assets.xcassets in Resources */,
+				DF1AEC162539B618004DCAEF /* TVOSMain.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -208,6 +290,28 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		C7AF954D8E07AC67E7E55DD0 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TreasureDataTVOSExample-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -215,11 +319,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6B14FEEC1D3624DA00E9C3AF /* ViewController.m in Sources */,
+				6B14FEEC1D3624DA00E9C3AF /* iOSViewController.m in Sources */,
 				20F4C4C120855AF90049E1C7 /* TreasureDataExample.m in Sources */,
 				E58437E1224A36D2009F0C7F /* IAPViewController.swift in Sources */,
 				6B14FEE91D3624DA00E9C3AF /* AppDelegate.m in Sources */,
 				6B14FEE61D3624DA00E9C3AF /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DF1AEC082539B617004DCAEF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DF1AEC132539B618004DCAEF /* TVOSViewController.m in Sources */,
+				DF1AEC1E2539B61B004DCAEF /* main.m in Sources */,
+				DF1AEC102539B618004DCAEF /* TVOSAppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,6 +354,22 @@
 				6B14FEF31D3624DA00E9C3AF /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		DF1AEC142539B618004DCAEF /* TVOSMain.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DF1AEC152539B618004DCAEF /* Base */,
+			);
+			name = TVOSMain.storyboard;
+			sourceTree = "<group>";
+		};
+		DF1AEC192539B61B004DCAEF /* TVOSLaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DF1AEC1A2539B61B004DCAEF /* Base */,
+			);
+			name = TVOSLaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -393,6 +523,59 @@
 			};
 			name = Release;
 		};
+		DF1AEC352539B61B004DCAEF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DAC6B3E7A6E2A7F8AF5AC283 /* Pods-TreasureDataTVOSExample.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9W6J4NV9HT;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = TreasureDataTVOSExample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.treasuredata.test-td-framework.TreasureDataTVOSExample";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 12.4;
+			};
+			name = Debug;
+		};
+		DF1AEC362539B61B004DCAEF /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6E9E4DE6FF1370C2CA049A7E /* Pods-TreasureDataTVOSExample.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9W6J4NV9HT;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = TreasureDataTVOSExample/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.treasuredata.test-td-framework.TreasureDataTVOSExample";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 12.4;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -410,6 +593,15 @@
 			buildConfigurations = (
 				6B14FEF91D3624DA00E9C3AF /* Debug */,
 				6B14FEFA1D3624DA00E9C3AF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DF1AEC3B2539B61B004DCAEF /* Build configuration list for PBXNativeTarget "TreasureDataTVOSExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DF1AEC352539B61B004DCAEF /* Debug */,
+				DF1AEC362539B61B004DCAEF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
