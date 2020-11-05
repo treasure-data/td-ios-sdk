@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "TreasureData-iOS-SDK"
-  s.version      = "0.6.1"
+  s.version      = "0.7.0"
   s.summary      = "TreasureData SDK for iOS."
   s.license      = "Apache"
   s.authors      = { "mitsu" => "mitsu@treasure-data.com",
