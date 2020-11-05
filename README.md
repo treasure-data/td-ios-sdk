@@ -144,6 +144,34 @@ This SDK imports events in exactly once style with the combination of these feat
 
 As for the deduplication window is 1 hour by default, so it's important not to keep buffered events more than 1 hour to avoid duplicated events.
 
+### Default values
+
+Set a default value if you want an event added to a table, a database, or any table or database to automatically set value for a key.
+If you have multiple default values set to the same key, newly added event will have the default value applied and override in following order:
+1. Default value targeting all table and database will be applied first.
+2. Default value targeting all table in a database will then be applied.
+3. Default value targeting the table to which the event is added will then be applied.
+4. Default value targeting the table and database to which the event is added will then be applied.
+5. Finally, if the event has a value for the key, that value will override all default values.
+
+To set default value:
+```
+[[TreasureData sharedInstance] setDefaultValue:@"Value" forKey:@"key" database:nil table:nil]; // Targeting all databases and tables
+[[TreasureData sharedInstance] setDefaultValue:@"Value" forKey:@"key" database:"database_name" table:nil]; // Targeting all tables of database "database_name"
+[[TreasureData sharedInstance] setDefaultValue:@"Value" forKey:@"key" database:nil table:"table_name"]; // Targeting all tables with "table_name"
+[[TreasureData sharedInstance] setDefaultValue:@"Value" forKey:@"key" database:"database_name" table:"table_name"]; // Targeting table "table_name" of database "database_name"
+```
+
+To get default value:
+```
+NSString *defaultValue = [[TreasureData sharedInstance] defaultValueForKey:@"key" database:"database_name" table:"table_name"]; // Get default value for key targeting database "database_name" and table "table_name".
+```
+
+To remove default value:
+```
+[[TreasureData sharedInstance] removeDefaultValueForKey:@"key" database:"database_name" table:"table_name"]; // Only remove default values targeting database "database_name" and table "table_name".
+```
+
 ### Start/End session
 
 When you call `startSession` method,  the SDK generates a session ID that's kept until `endSession` is called. The session id is outputs as a column name "td_session_id". Also, `startSession` and `endSession` methods add an event that includes `{"td_session_event":"start" or "end"}`.
