@@ -23,6 +23,7 @@
 		DF1AEC182539B61B004DCAEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DF1AEC172539B61B004DCAEF /* Assets.xcassets */; };
 		DF1AEC1B2539B61B004DCAEF /* TVOSLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF1AEC192539B61B004DCAEF /* TVOSLaunchScreen.storyboard */; };
 		DF1AEC1E2539B61B004DCAEF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1AEC1D2539B61B004DCAEF /* main.m */; };
+		DFFDBE382559A69E004B9C48 /* TextFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DFFDBE372559A69E004B9C48 /* TextFieldTableViewCell.m */; };
 		E58437E1224A36D2009F0C7F /* IAPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58437E0224A36D2009F0C7F /* IAPViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +56,8 @@
 		DF1AEC1A2539B61B004DCAEF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/TVOSLaunchScreen.storyboard; sourceTree = "<group>"; };
 		DF1AEC1C2539B61B004DCAEF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DF1AEC1D2539B61B004DCAEF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		DFFDBE372559A69E004B9C48 /* TextFieldTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TextFieldTableViewCell.m; sourceTree = "<group>"; };
+		DFFDBE3B2559A6EC004B9C48 /* TextFieldTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextFieldTableViewCell.h; sourceTree = "<group>"; };
 		E58437DF224A36D1009F0C7F /* TreasureDataExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TreasureDataExample-Bridging-Header.h"; sourceTree = "<group>"; };
 		E58437E0224A36D2009F0C7F /* IAPViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAPViewController.swift; sourceTree = "<group>"; };
 		F5DD3B4DAFF3BD9DE0273623 /* libPods-TreasureDataExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TreasureDataExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -157,6 +160,8 @@
 				DF1AEC0F2539B618004DCAEF /* TVOSAppDelegate.m */,
 				DF1AEC112539B618004DCAEF /* TVOSViewController.h */,
 				DF1AEC122539B618004DCAEF /* TVOSViewController.m */,
+				DFFDBE3B2559A6EC004B9C48 /* TextFieldTableViewCell.h */,
+				DFFDBE372559A69E004B9C48 /* TextFieldTableViewCell.m */,
 				DF1AEC142539B618004DCAEF /* TVOSMain.storyboard */,
 				DF1AEC192539B61B004DCAEF /* TVOSLaunchScreen.storyboard */,
 				DF1AEC172539B61B004DCAEF /* Assets.xcassets */,
@@ -334,6 +339,7 @@
 				DF1AEC132539B618004DCAEF /* TVOSViewController.m in Sources */,
 				DF1AEC1E2539B61B004DCAEF /* main.m in Sources */,
 				DF1AEC102539B618004DCAEF /* TVOSAppDelegate.m in Sources */,
+				DFFDBE382559A69E004B9C48 /* TextFieldTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -489,6 +495,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_MODULES_AUTOLINK = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = 9W6J4NV9HT;
 				INFOPLIST_FILE = TreasureDataExample/Info.plist;
