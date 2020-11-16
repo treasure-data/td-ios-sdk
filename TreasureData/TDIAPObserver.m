@@ -161,6 +161,7 @@
 @implementation TDProductRequester {
     NSString *_productID;
     TDIAPObserver * __weak _observer;
+    SKProductsRequest *_productsRequest;
 }
 
 - (instancetype)initWithProductIdentifier:(NSString *)productID observer:(TDIAPObserver *)observer {
@@ -179,14 +180,15 @@
 
 - (void)start {
     NSSet *productIDs = [NSSet setWithArray:@[_productID]];
-    SKProductsRequest *productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:productIDs];
-    productsRequest.delegate = self;
-    [productsRequest start];
+    _productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:productIDs];
+    _productsRequest.delegate = self;
+    [_productsRequest start];
 }
 
 - (void)stop {
     NSMutableDictionary *requestHandlers = [NSMutableDictionary dictionaryWithDictionary:_observer.pendingProductRequesters];
     requestHandlers[_productID] = nil;
+    _productsRequest = nil;
     _observer.pendingProductRequesters = [NSDictionary dictionaryWithDictionary:requestHandlers];
 }
 

@@ -6,11 +6,12 @@
 //  Copyright © 2020 Treasure Data. All rights reserved.
 //
 
+@import StoreKit;
 #import "TVOSViewController.h"
 #import "TreasureData.h"
 #import "TextFieldTableViewCell.h"
 
-@interface TVOSViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface TVOSViewController () <UITableViewDelegate, UITableViewDataSource, SKProductsRequestDelegate, SKPaymentTransactionObserver>
 @property (strong, nonatomic) NSString *defaultTable;
 @property (strong, nonatomic) NSString *defaultDatabase;
 @property (strong, nonatomic) NSString *encryptionKey;
@@ -25,6 +26,7 @@
 @property (strong, nonatomic) NSString *sessionDatabase;
 @property (strong, nonatomic) NSArray *audienceTokens;
 @property (strong, nonatomic) NSDictionary *audienceKeys;
+@property (strong, nonatomic) SKProductsRequest *productRequest;
 @end
 
 @implementation TVOSViewController
@@ -33,6 +35,12 @@
     [super viewDidLoad];
     self.defaultDatabase = @"default_db";
     self.defaultTable = @"default_table";
+    self.eventDatabase = @"event_db";
+    self.eventTable = @"event_table";
+    self.encryptionKey = @"encryption_key";
+    self.apiKey = @"xxxxxx";
+    self.audienceTokens = @[@"xxxx", @"xxxxx"];
+    self.audienceKeys = @{@"key1": @"value2", @"key2": @"value2"};
     
     _dataSource = @[];
     _tableView.dataSource = self;
@@ -351,9 +359,7 @@
                     },
                     @{
                         @"title": @"Purchase",
-                        @"action": ^{
-                            // TODO: Implement test for in app purchase
-                        }
+                        @"action": ^{ [self purchase]; }
                     }
             ]
         },
@@ -367,7 +373,7 @@
                                                             if (error != nil) {
                                                                 [self alertWithTitle:@"Failed to fetch user segments!" andMessage:error.localizedDescription];
                                                             } else {
-                                                                [self alertWithTitle:@"Fetch user segments successfully!" andMessage:@""];
+                                                                [self alertWithTitle:@"Fetch user segments successfully!" andMessage:[jsonResponse debugDescription]];
                                                             }
                             }];
                         }
@@ -471,6 +477,14 @@
     }];
 }
 
+- (void)purchase {
+    NSLog(@"Purchasing IAP");
+    NSSet *productIds = [NSSet setWithObjects:@"com.treasuredata.iaptest.consumable1", nil];
+    _productRequest = [[SKProductsRequest alloc] initWithProductIdentifiers: productIds];
+    _productRequest.delegate = self;
+    [_productRequest start];
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -513,6 +527,48 @@
         action();
     }
     [tableView deselectRowAtIndexPath:indexPath animated:true];
+}
+
+#pragma mark - SKProductsRequestDelegate
+
+- (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response {
+    NSLog(@"Fetched products");
+    SKProduct *buyingProduct = response.products.firstObject;
+    SKPayment *payment = [SKPayment paymentWithProduct:buyingProduct];
+    [SKPaymentQueue.defaultQueue addTransactionObserver:self];
+    [SKPaymentQueue.defaultQueue addPayment:payment];
+}
+
+- (void)requestDidFinish:(SKRequest *)request {
+    NSLog(@"Fetch product request did finish");
+}
+
+- (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
+    NSLog(@"Failed to fetch products");
+    [self alertWithTitle:@"Failed to purchase" andMessage:error.localizedDescription];
+}
+
+#pragma mark - SKPaymentTransactionObserver
+
+- (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray<SKPaymentTransaction *> *)transactions {
+    for (SKPaymentTransaction *transaction in transactions) {
+        switch (transaction.transactionState) {
+            case SKPaymentTransactionStatePurchased:
+                [self alertWithTitle:@"Purchased successfully" andMessage:@""];
+                break;
+            case SKPaymentTransactionStateDeferred:
+                [self alertWithTitle:@"Purchase deferred" andMessage:@""];
+                break;
+            case SKPaymentTransactionStateRestored:
+                [self alertWithTitle:@"Purchase restored" andMessage:@""];
+            case SKPaymentTransactionStateFailed:
+                [self alertWithTitle:@"Failed to purchase" andMessage:transaction.error.localizedDescription];
+                break;
+                
+            default:
+                break;
+        }
+    }
 }
 
 #pragma mark - Helpers

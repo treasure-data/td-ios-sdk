@@ -23,6 +23,8 @@
 		DF1AEC182539B61B004DCAEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DF1AEC172539B61B004DCAEF /* Assets.xcassets */; };
 		DF1AEC1B2539B61B004DCAEF /* TVOSLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF1AEC192539B61B004DCAEF /* TVOSLaunchScreen.storyboard */; };
 		DF1AEC1E2539B61B004DCAEF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1AEC1D2539B61B004DCAEF /* main.m */; };
+		DF89BC96255EA40700666B44 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF89BC95255EA40700666B44 /* AdSupport.framework */; };
+		DF89BC98255EA41D00666B44 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF89BC97255EA41D00666B44 /* StoreKit.framework */; };
 		DFFDBE382559A69E004B9C48 /* TextFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DFFDBE372559A69E004B9C48 /* TextFieldTableViewCell.m */; };
 		E58437E1224A36D2009F0C7F /* IAPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58437E0224A36D2009F0C7F /* IAPViewController.swift */; };
 /* End PBXBuildFile section */
@@ -56,6 +58,8 @@
 		DF1AEC1A2539B61B004DCAEF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/TVOSLaunchScreen.storyboard; sourceTree = "<group>"; };
 		DF1AEC1C2539B61B004DCAEF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DF1AEC1D2539B61B004DCAEF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		DF89BC95255EA40700666B44 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS14.2.sdk/System/Library/Frameworks/AdSupport.framework; sourceTree = DEVELOPER_DIR; };
+		DF89BC97255EA41D00666B44 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS14.2.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
 		DFFDBE372559A69E004B9C48 /* TextFieldTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TextFieldTableViewCell.m; sourceTree = "<group>"; };
 		DFFDBE3B2559A6EC004B9C48 /* TextFieldTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextFieldTableViewCell.h; sourceTree = "<group>"; };
 		E58437DF224A36D1009F0C7F /* TreasureDataExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TreasureDataExample-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -77,7 +81,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DF89BC98255EA41D00666B44 /* StoreKit.framework in Frameworks */,
 				32BFC2E7A4E4919CA4A0BD44 /* libPods-TreasureDataTVOSExample.a in Frameworks */,
+				DF89BC96255EA40700666B44 /* AdSupport.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,7 +93,9 @@
 		16695A7E935BB39E4AA99D6B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DF89BC97255EA41D00666B44 /* StoreKit.framework */,
 				DF0ED81A252B4DE4008F58B5 /* AdSupport.framework */,
+				DF89BC95255EA40700666B44 /* AdSupport.framework */,
 				F5DD3B4DAFF3BD9DE0273623 /* libPods-TreasureDataExample.a */,
 				558BCB4EAB5DC3E964E70E49 /* libPods-TreasureDataTVOSExample.a */,
 			);
@@ -550,7 +558,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.treasuredata.test-td-framework.TreasureDataTVOSExample";
+				PRODUCT_BUNDLE_IDENTIFIER = com.treasuredata.iaptest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -576,7 +584,7 @@
 				INFOPLIST_FILE = TreasureDataTVOSExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.treasuredata.test-td-framework.TreasureDataTVOSExample";
+				PRODUCT_BUNDLE_IDENTIFIER = com.treasuredata.iaptest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
