@@ -43,7 +43,6 @@ static NSString *keyOfLocaleLang = @"td_locale_lang";
 static NSString *keyOfSessionId = @"td_session_id";
 static NSString *keyOfSessionEvent = @"td_session_event";
 static NSString *keyOfServerSideUploadTimestamp = @"#SSUT";
-static NSString *osType = @"iOS";
 static NSString *sessionEventStart = @"start";
 static NSString *sessionEventEnd = @"end";
 static Session *session = nil;
@@ -303,7 +302,11 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     // [record setValue:@"" forKey:key_of_display];
     [record setValue:dev.model forKey:keyOfModel];
     [record setValue:dev.systemVersion forKey:keyOfOsVer];
-    [record setValue:osType forKey:keyOfOsType];
+#if TARGET_OS_TV
+    [record setValue:@"tvOS" forKey:keyOfOsType];
+#else
+    [record setValue:@"iOS" forKey:keyOfOsType];
+#endif
     return record;
 }
 
