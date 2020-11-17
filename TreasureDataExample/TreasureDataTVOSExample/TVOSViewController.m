@@ -16,6 +16,7 @@
 @property (strong, nonatomic) NSString *defaultDatabase;
 @property (strong, nonatomic) NSString *encryptionKey;
 @property (strong, nonatomic) NSString *apiKey;
+@property (strong, nonatomic) NSString *cdpEndpoint;
 @property (strong, nonatomic) NSString *eventTable;
 @property (strong, nonatomic) NSString *eventDatabase;
 @property (strong, nonatomic) NSArray *dataSource;
@@ -33,14 +34,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.defaultDatabase = @"default_db";
-    self.defaultTable = @"default_table";
-    self.eventDatabase = @"event_db";
-    self.eventTable = @"event_table";
-    self.encryptionKey = @"encryption_key";
-    self.apiKey = @"xxxxxx";
-    self.audienceTokens = @[@"xxxx", @"xxxxx"];
-    self.audienceKeys = @{@"key1": @"value2", @"key2": @"value2"};
+    _defaultDatabase = @"default_db";
+    _defaultTable = @"default_table";
+    _eventDatabase = @"event_db";
+    _eventTable = @"event_table";
+    _encryptionKey = @"encryption_key";
+    _cdpEndpoint = @"https://cdp.in.treasuredata.com";
+    _apiKey = @"xxxxxx";
+    _audienceTokens = @[@"xxxx", @"xxxxx"];
+    _audienceKeys = @{@"key1": @"value2", @"key2": @"value2"};
     
     _dataSource = @[];
     _tableView.dataSource = self;
@@ -368,15 +370,7 @@
             @"sectionRows": @[
                     @{
                         @"title": @"Fetch user segments",
-                        @"action": ^{
-                            [[TreasureData sharedInstance] fetchUserSegments:self.audienceTokens keys:self.audienceKeys options:nil completionHandler:^(NSArray * _Nullable jsonResponse, NSError * _Nullable error) {
-                                                            if (error != nil) {
-                                                                [self alertWithTitle:@"Failed to fetch user segments!" andMessage:error.localizedDescription];
-                                                            } else {
-                                                                [self alertWithTitle:@"Fetch user segments successfully!" andMessage:[jsonResponse debugDescription]];
-                                                            }
-                            }];
-                        }
+                        @"action": ^{ [self fetchUserSegments]; }
                     }
             ]
         },
@@ -474,6 +468,17 @@
         [self alertWithTitle:@"Event Uploaded!" andMessage:nil];
     } onError:^(NSString * _Nonnull errorCode, NSString * _Nullable errorMessage) {
         [self alertWithTitle:@"Failed to upload event!" andMessage:errorMessage];
+    }];
+}
+
+- (void)fetchUserSegments {
+    [[TreasureData sharedInstance] fetchUserSegments:self.audienceTokens keys:self.audienceKeys options:nil completionHandler:^(NSArray * _Nullable jsonResponse, NSError * _Nullable error) {
+                                    if (error != nil) {
+                                        NSString *title = [NSString stringWithFormat:@"Failed to fetch user segments! Error: %li", (long)error.code];
+                                        [self alertWithTitle:title andMessage:error.localizedDescription];
+                                    } else {
+                                        [self alertWithTitle:@"Fetch user segments successfully!" andMessage:[jsonResponse debugDescription]];
+                                    }
     }];
 }
 
@@ -592,6 +597,7 @@
     [TreasureData initializeWithApiKey:_apiKey];
     [[TreasureData sharedInstance] setDefaultDatabase:_defaultDatabase];
     [[TreasureData sharedInstance] setDefaultTable:_defaultTable];
+    [[TreasureData sharedInstance] setCdpEndpoint:_cdpEndpoint];
     [[TreasureData sharedInstance] enableAutoAppendUniqId];
     [[TreasureData sharedInstance] enableAutoAppendRecordUUID];
     [[TreasureData sharedInstance] enableAutoAppendModelInformation];

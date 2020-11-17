@@ -781,9 +781,8 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
                                             timeoutInterval:timeout];
     
     // Call api
-    NSOperationQueue *queue =[NSOperationQueue currentQueue];
-    if (queue == nil) queue = [NSOperationQueue mainQueue];
-    [NSURLConnection sendAsynchronousRequest:urlRequest queue:queue completionHandler:^(NSURLResponse * _Nullable response, NSData * _Nullable data, NSError * _Nullable connectionError) {
+    NSURLSessionDataTask *dataTask = [[NSURLSession sharedSession] dataTaskWithRequest:urlRequest completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable connectionError) {
+        NSLog(@"urlconn response %@, data %@, connectionError %@", response, data, connectionError);
         if (connectionError) {
             handler(nil, connectionError);
         } else {
@@ -797,10 +796,13 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
             } else if ([jsonResponse isKindOfClass: [NSDictionary class]] && ((NSDictionary *)jsonResponse)[@"error"] != nil) {
                 // Error returned in response
                 NSDictionary *errorResponse = (NSDictionary *)jsonResponse;
-                NSDictionary *userInfo = @{
-                   NSLocalizedDescriptionKey: errorResponse[@"error"],
-                   NSLocalizedFailureReasonErrorKey: errorResponse[@"message"]
-                };
+                NSMutableDictionary *userInfo = [NSMutableDictionary new];
+                if (errorResponse[@"error"]) {
+                    userInfo[NSLocalizedDescriptionKey] = errorResponse[@"error"];
+                }
+                if (errorResponse[@"message"]) {
+                    userInfo[NSLocalizedFailureReasonErrorKey] = errorResponse[@"message"];
+                }
                 NSInteger code = [(NSNumber *)errorResponse[@"status"] integerValue];
                 NSError *serverError = [NSError errorWithDomain:TreasureDataErrorDomain code:code userInfo: userInfo];
                 handler(nil, serverError);
@@ -815,6 +817,7 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
             }
         }
     }];
+    [dataTask resume];
 }
 
 #pragma mark - Exposed for testing
