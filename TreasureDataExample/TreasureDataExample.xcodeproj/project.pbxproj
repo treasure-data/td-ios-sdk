@@ -510,7 +510,7 @@
 				INFOPLIST_FILE = TreasureDataExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.treasuredata.td-ios-sdk-demo";
+				PRODUCT_BUNDLE_IDENTIFIER = com.treasuredata.iaptest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "TreasureDataExample/TreasureDataExample-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -531,7 +531,7 @@
 				INFOPLIST_FILE = TreasureDataExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.treasuredata.td-ios-sdk-demo";
+				PRODUCT_BUNDLE_IDENTIFIER = com.treasuredata.iaptest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "TreasureDataExample/TreasureDataExample-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
