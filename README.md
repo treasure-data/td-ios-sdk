@@ -1,7 +1,7 @@
 Treasure Data iOS SDK
 ===============
 
-iOS SDK for [Treasure Data](http://www.treasuredata.com/). With this SDK, you can import the events on your applications into Treasure Data easily. Technically, this library supports iOS 7 and later, but we only execute OS coverage tests for iOS 8, 9, 10, 11, 12, 13 and 14.
+iOS and tvOS SDK for [Treasure Data](http://www.treasuredata.com/). With this SDK, you can import the events on your applications into Treasure Data easily. Technically, this library supports iOS 7 and later, but we only execute OS coverage tests for iOS 8, 9, 10, 11, 12, 13 and 14. This SDK also support Apple tvOS 12 and up.
 
 Also, there is an alternative SDK written in Swift [https://github.com/recruit-lifestyle/TreasureDataSDK](https://github.com/recruit-lifestyle/TreasureDataSDK). Note, however, that it does not support current GDPR functionality in the mainstream TD SDKs.
 
@@ -134,6 +134,8 @@ It depends on the characteristic of your application when to upload and how ofte
 - When closing the application
 
 The sent events is going to be buffered for a few minutes before they get imported into Treasure Data storage.
+
+In tvOS, cache storage is stored in cache directory which can be purged at any time. It is highly recommended to call upload events APIs as requently as possible to prevent loss of data.
 
 ### Retry uploading and deduplication
 
@@ -487,6 +489,13 @@ The SDK provide some convenient methods to easily opt-out of tracking the device
 These can be opted back in by calling `enableCustomEvent` or `enableAppLifecycleEvent`. Note that these settings are saved persistently, so it survives across app launches. Generally these methods should be called when reflecting your user's choice, not on every time initializing the SDK. By default custom events are enabled and app lifecycles events are disabled. 
 
 - Use `resetUniqId` to reset the identification of device on subsequent events. `td_uuid` will be randomized to another value and an extra event is captured with `{"td_ios_event":  "forget_device_id", "td_uuid": <old_uuid>}` to the `defaultTable`.
+
+## tvOS
+
+This SDK supports Apple tvOS version 12 and up. APIs and their behaviors are largely the same as being used in iOS application, except:
+
+! In tvOS, cache storage is stored in cache directory which can be purged at any time. It is highly recommended to call upload events APIs as requently as possible to prevent loss of data.
+
 
 ## Troubleshooting
 
