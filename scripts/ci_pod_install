@@ -10,7 +10,7 @@ if [ -d "$SCRIPT_DIR/../Pods" ]; then
     # seems like a doubly layered caching.
 else
     curl https://cocoapods-specs.circleci.com/fetch-cocoapods-repo-from-s3.sh | bash -s cf
-    echo "Using $(gem list ^cocoapods$)"
+    echo "Using $(bundle show ^cocoapods$)"
     bundle exec pod install
 fi
 
