@@ -176,7 +176,7 @@ jobs:
       - run_tests_flow:
           version_name: "8"
           os: "8.4"
-          simulator: "iPhone 6s"
+          simulator: "iPhone 6"
 
 
 workflows:
