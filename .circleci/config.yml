@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 
 _defaults:
 
@@ -10,15 +10,6 @@ _defaults:
         HOMEBREW_NO_AUTO_UPDATE=1 brew install gnu-sed # for ci_test script
         mkdir logs test_results
 
-  - &install_cocoapods
-    steps:
-      - restore_cache:
-          key: 1-gems-{{ checksum "Gemfile.lock" }}
-      - run: bundle check || bundle install --path vendor/bundle --clean
-      - save_cache:
-          key: 1-gems-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
 
   - &restore_pods_cache
     restore_cache:
@@ -62,6 +53,18 @@ _defaults:
         xcversion simulators --install='iOS 8.4' --no-progress
         sudo mkdir '/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 8.4.simruntime/Contents/Resources/RuntimeRoot/usr/lib/swift'
 
+commands:
+ install_cocoapods:
+  description: "Command to install and cache Cocoapods"
+  steps:
+    - restore_cache:
+        key: 1-gems-{{ checksum "Gemfile.lock" }}
+    - run: bundle check || bundle install --path vendor/bundle --clean
+    - save_cache:
+        key: 1-gems-{{ checksum "Gemfile.lock" }}
+        paths:
+          - vendor/bundle
+
 jobs:
   test_ios14:
     macos:
@@ -69,7 +72,7 @@ jobs:
     steps:
       - checkout
       - *auxiliary_setup
-      - *install_cocoapods
+      - install_cocoapods
       - *restore_pods_cache
       - *install_pods
       - *save_pods_cache
@@ -87,7 +90,7 @@ jobs:
     steps:
       - checkout
       - *auxiliary_setup
-      - *install_cocoapods
+      - install_cocoapods
       - *restore_pods_cache
       - *install_pods
       - *save_pods_cache
@@ -104,7 +107,7 @@ jobs:
     steps:
       - checkout
       - *auxiliary_setup
-      - *install_cocoapods
+      - install_cocoapods
       - *restore_pods_cache
       - *install_pods
       - *save_pods_cache
@@ -121,7 +124,7 @@ jobs:
     steps:
       - checkout
       - *auxiliary_setup
-      - *install_cocoapods
+      - install_cocoapods
       - *restore_pods_cache
       - *install_pods
       - *save_pods_cache
@@ -139,7 +142,7 @@ jobs:
     steps:
       - checkout
       - *auxiliary_setup
-      - *install_cocoapods
+      - install_cocoapods
       - *restore_pods_cache
       - *install_pods
       - *save_pods_cache
@@ -157,7 +160,7 @@ jobs:
       - checkout
       - *ios9_install_and_workaround
       - *auxiliary_setup
-      - *install_cocoapods
+      - install_cocoapods
       - *restore_pods_cache
       - *install_pods
       - *save_pods_cache
@@ -175,7 +178,7 @@ jobs:
       - checkout
       - *ios8_install_and_workaround
       - *auxiliary_setup
-      - *install_cocoapods
+      - install_cocoapods
       - *restore_pods_cache
       - *install_pods
       - *save_pods_cache
