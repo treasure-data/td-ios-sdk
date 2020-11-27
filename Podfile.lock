@@ -1,18 +1,18 @@
 PODS:
-  - KeenClientTD (3.2.35):
-    - KeenClientTD/keen_sqlite (= 3.2.35)
-  - KeenClientTD/keen_sqlite (3.2.35)
+  - KeenClientTD (3.3.0):
+    - KeenClientTD/keen_sqlite (= 3.3.0)
+  - KeenClientTD/keen_sqlite (3.3.0)
 
 DEPENDENCIES:
-  - KeenClientTD (= 3.2.35)
+  - KeenClientTD (= 3.3.0)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  https://cdn.cocoapods.org/:
     - KeenClientTD
 
 SPEC CHECKSUMS:
-  KeenClientTD: dc8f7d3948b650b6c04a3be73f947bb757467efd
+  KeenClientTD: 0e0399a8e5030890ace84644cea0bd39463c3ad4
 
-PODFILE CHECKSUM: 7148f57bcf4b8488673f52ee710cf2de23769865
+PODFILE CHECKSUM: 1f896df3bc3ce253b645f6fffc7b165c2819c6b7
 
 COCOAPODS: 1.9.3
