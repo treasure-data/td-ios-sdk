@@ -11,7 +11,7 @@ if [ -d "$SCRIPT_DIR/../Pods" ]; then
 else
     curl https://cocoapods-specs.circleci.com/fetch-cocoapods-repo-from-s3.sh | bash -s cf
     echo "Using $(gem list ^cocoapods$)"
-    pod install
+    bundle exec pod install
 fi
 
 exit 0
