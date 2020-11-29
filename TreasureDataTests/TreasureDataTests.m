@@ -990,6 +990,133 @@ static NSString *END_POINT = @"http://localhost";
     }
 }
 
+#pragma mark - Default Values
+
+- (void) testAddDefaultValuesSuccesfully {
+    [self.td setDefaultValue:@"String" forKey:@"string" database:nil table:nil];
+    [self.td setDefaultValue:@1 forKey:@"number" database:nil table:nil];
+    [self.td setDefaultValue:@"Only 1" forKey:@"only_1" database:@"test_db" table:@"test_table"];
+    [self.td setDefaultValue:@"Only 2" forKey:@"only_2" database:@"test_db_2" table:@"test_table_2"];
+    [self.td setDefaultValue:@"Any Table" forKey:@"any_table" database:@"test_db" table:nil];
+    [self.td setDefaultValue:@"Any Table 2" forKey:@"any_table_2" database:@"test_db_2" table:nil];
+    [self.td setDefaultValue:@"Any Database" forKey:@"any_db" database:nil table:@"test_table"];
+    [self.td setDefaultValue:@"Any Database 2" forKey:@"any_db_2" database:nil table:@"test_table_2"];
+
+    [self.td addEvent:@{@"key1": @"value1"} database:@"test_db" table:@"test_table"];
+    [self.td addEvent:@{@"key2": @"value2"} database:@"test_db_2" table:@"test_table_2"];
+    
+    [self assertEventCount:2];
+    NSDictionary *sampleEvent= self.td.capturedEvents[0];
+    NSDictionary *sampleEvent2= self.td.capturedEvents[1];
+    
+    XCTAssertEqual(sampleEvent[@"key1"], @"value1");
+    XCTAssertEqual(sampleEvent[@"string"], @"String");
+    XCTAssertEqual(sampleEvent[@"number"], @1);
+    XCTAssertEqual(sampleEvent[@"only_1"], @"Only 1");
+    XCTAssertNil(sampleEvent[@"only_2"]);
+    XCTAssertEqual(sampleEvent[@"any_table"], @"Any Table");
+    XCTAssertNil(sampleEvent[@"any_table_2"]);
+    XCTAssertEqual(sampleEvent[@"any_db"], @"Any Database");
+    XCTAssertNil(sampleEvent[@"any_db_2"]);
+    
+    XCTAssertEqual(sampleEvent2[@"key2"], @"value2");
+    XCTAssertEqual(sampleEvent2[@"string"], @"String");
+    XCTAssertEqual(sampleEvent2[@"number"], @1);
+    XCTAssertEqual(sampleEvent2[@"only_2"], @"Only 2");
+    XCTAssertNil(sampleEvent2[@"only_1"]);
+    XCTAssertNil(sampleEvent2[@"any_table"]);
+    XCTAssertEqual(sampleEvent2[@"any_table_2"], @"Any Table 2");
+    XCTAssertNil(sampleEvent2[@"any_db"]);
+    XCTAssertEqual(sampleEvent2[@"any_db_2"], @"Any Database 2");
+    
+    self.isFinished = true;
+}
+
+- (void)testAddDefaultValuesOverrideSuccesfully {
+    [self.td setDefaultValue:@"Any Table & DB" forKey:@"key" database:nil table:nil];
+    [self.td addEvent:@{@"key1": @"value1"} database:@"test_db" table:@"test_table"];
+    
+    [self.td setDefaultValue:@"Any Table" forKey:@"key" database:@"test_db" table:nil];
+    [self.td addEvent:@{@"key2": @"value2"} database:@"test_db" table:@"test_table"];
+    
+    [self.td setDefaultValue:@"Any DB" forKey:@"key" database:nil table:@"test_table"];
+    [self.td addEvent:@{@"key3": @"value3"} database:@"test_db" table:@"test_table"];
+    
+    [self.td setDefaultValue:@"Specific Table & DB" forKey:@"key" database:@"test_db" table:@"test_table"];
+    [self.td addEvent:@{@"key4": @"value4"} database:@"test_db" table:@"test_table"];
+    
+    [self.td addEvent:@{@"key": @"Event Value"} database:@"test_db" table:@"test_table"];
+    
+    [self assertEventCount:5];
+    XCTAssertEqual(self.td.capturedEvents[0][@"key"], @"Any Table & DB");
+    XCTAssertEqual(self.td.capturedEvents[1][@"key"], @"Any Table");
+    XCTAssertEqual(self.td.capturedEvents[2][@"key"], @"Any DB");
+    XCTAssertEqual(self.td.capturedEvents[3][@"key"], @"Specific Table & DB");
+    XCTAssertEqual(self.td.capturedEvents[4][@"key"], @"Event Value");
+    
+    self.isFinished = true;
+}
+
+- (void)testGetDefaultValueForKey {
+    [self.td setDefaultValue:@"Value" forKey:@"key" database:nil table:nil];
+    [self.td setDefaultValue:@"Value" forKey:@"key_table" database:nil table:@"test_table"];
+    [self.td setDefaultValue:@"Value" forKey:@"key_database" database:@"test_db" table:nil];
+    [self.td setDefaultValue:@"Value" forKey:@"key_table_database" database:@"test_db" table:@"test_table"];
+    
+    NSString *nilKeyValue = [self.td defaultValueForKey:@"nilKey" database:nil table:nil];
+    NSString *keyValue = [self.td defaultValueForKey:@"key" database:nil table:nil];
+    NSString *keyTableValue = [self.td defaultValueForKey:@"key_table" database:nil table:@"test_table"];
+    NSString *keyDBValue = [self.td defaultValueForKey:@"key_database" database:@"test_db" table:nil];
+    NSString *keyTableDBValue = [self.td defaultValueForKey:@"key_table_database" database:@"test_db" table:@"test_table"];
+    
+    XCTAssertNil(nilKeyValue);
+    XCTAssertEqual(keyValue, @"Value");
+    XCTAssertEqual(keyTableValue, @"Value");
+    XCTAssertEqual(keyDBValue, @"Value");
+    XCTAssertEqual(keyTableDBValue, @"Value");
+    
+    self.isFinished = true;
+}
+
+- (void)testRemoveDefaultValuesSuccessfully {
+    [self.td setDefaultValue:@"Value" forKey:@"key" database:nil table:nil];
+    [self.td setDefaultValue:@"Value" forKey:@"key_table" database:nil table:@"test_table"];
+    [self.td setDefaultValue:@"Value" forKey:@"key_database" database:@"test_db" table:nil];
+    [self.td setDefaultValue:@"Value" forKey:@"key_table_database" database:@"test_db" table:@"test_table"];
+    [self.td addEvent:@{@"key1": @"value1"} database:@"test_db" table:@"test_table"];
+    [self.td removeDefaultValueForKey:@"key" database:nil table:nil];
+    [self.td removeDefaultValueForKey:@"key_table" database:nil table:@"test_table"];
+    [self.td removeDefaultValueForKey:@"key_database" database:@"test_db" table:nil];
+    [self.td removeDefaultValueForKey:@"key_table_database" database:@"test_db" table:@"test_table"];
+    [self.td addEvent:@{@"key2": @"value2"} database:@"test_db" table:@"test_table"];
+    
+    [self assertEventCount:2];
+    XCTAssertEqual(self.td.capturedEvents[0][@"key"], @"Value");
+    XCTAssertEqual(self.td.capturedEvents[0][@"key_table"], @"Value");
+    XCTAssertEqual(self.td.capturedEvents[0][@"key_database"], @"Value");
+    XCTAssertEqual(self.td.capturedEvents[0][@"key_table_database"], @"Value");
+    XCTAssertNil(self.td.capturedEvents[1][@"key"]);
+    XCTAssertNil(self.td.capturedEvents[1][@"key_table"]);
+    XCTAssertNil(self.td.capturedEvents[1][@"key_database"]);
+    XCTAssertNil(self.td.capturedEvents[1][@"key_table_database"]);
+    
+    self.isFinished = true;
+}
+
+- (void)testRemoveDefaultValuesNoop {
+    [self.td setDefaultValue:@"Value" forKey:@"key" database:nil table:nil];
+    [self.td removeDefaultValueForKey:@"key" database:nil table:@"test_table"];
+    [self.td removeDefaultValueForKey:@"key" database:@"test_db" table: nil];
+    [self.td removeDefaultValueForKey:@"key" database:@"test_db" table:@"test_table"];
+    [self.td removeDefaultValueForKey:@"key2" database:nil table:nil];
+    [self.td addEvent:@{@"key1": @"value1"} database:@"test_db" table:@"test_table"];
+
+    [self assertEventCount:1];
+    XCTAssertEqual(self.td.capturedEvents[0][@"key"], @"Value");
+    XCTAssertNil(self.td.capturedEvents[0][@"key2"]);
+    self.isFinished = true;
+}
+
 #pragma mark - Assertions
 
 - (void)assertHasCapturedEventType:(NSString *)eventType {

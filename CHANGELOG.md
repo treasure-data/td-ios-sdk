@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 0.7.0
+_2020-11-05_
+
+* New default values feature
+* New resetSessionId API
+
 ## Version 0.6.1
 _2020-08-04_
 

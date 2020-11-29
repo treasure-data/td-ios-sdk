@@ -21,18 +21,34 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     [self.apiEndpointField setText:TreasureData.sharedInstance.client.apiEndpoint];
+    self.apiEndpointField.delegate = self;
     [self.apiKeyField setText:TreasureData.sharedInstance.client.apiKey];
+    self.apiKeyField.delegate = self;
     [self.cdpEndpointField setText:TreasureData.sharedInstance.cdpEndpoint];
+    self.cdpEndpointField.delegate = self;
     [self.targetDatabaseField setText:TreasureData.sharedInstance.defaultDatabase];
+    self.targetDatabaseField.delegate = self;
 
     [self.defaultTableField setText:[[TreasureData sharedInstance] defaultTable]];
+    self.defaultTableField.delegate = self;
     [self.targetTableField setText:[TreasureDataExample testTable]];
+    self.targetTableField.delegate = self;
     [self.defaultTableField setText:[[TreasureData sharedInstance] defaultTable]];
+    self.defaultTableField.delegate = self;
 
     [self.customEventSwitch setOn:[[TreasureData sharedInstance] isCustomEventEnabled]];
     [self.appLifecycleEventSwitch setOn:[[TreasureData sharedInstance] isAppLifecycleEventEnabled]];
     [self.iapEventSwitch setOn:[[TreasureData sharedInstance] isInAppPurchaseEventEnabled]];
+    
+    [self.defaultValueField setText:@"Test Default Value"];
+    self.defaultValueField.delegate = self;
+    [self.defaultValueKeyField setText:@"default_value"];
+    self.defaultValueKeyField.delegate = self;
+    
+    self.defaultValueTargetTableField.delegate = self;
+    self.defaultValueTargetDatabaseField.delegate = self;
 
     [self customEventSwitchChanged:self.customEventSwitch];
     [self appLifecycleEventSwitchChanged:self.appLifecycleEventSwitch];
@@ -49,6 +65,8 @@
 - (IBAction)formChanged:(UITextField *)sender {
     self.isFormDirty = YES;
 }
+
+#pragma mark - GDPR
 
 - (IBAction)customEventSwitchChanged:(UISwitch *)sender {
     if ([sender isOn]) {
@@ -79,6 +97,8 @@
         [[TreasureData sharedInstance] disableAppLifecycleEvent];
     }
 }
+
+#pragma mark - Actions
 
 - (IBAction)addEvent:(id)addEventButton {
     [iOSViewController shiftButton:addEventButton toState:kButtonStatePending withTitle:@"Adding Event..."];
@@ -156,6 +176,33 @@
     }
 }
 
+#pragma mark - Default Values
+
+- (NSString *)defaultValueTargetTable {
+    return [_defaultValueTargetTableField.text isEqual: @""] ? nil : _defaultValueTargetTableField.text;
+}
+
+- (NSString *)defaultValueTargetDatabase {
+    return [_defaultValueTargetDatabaseField.text isEqual: @""] ? nil : _defaultValueTargetDatabaseField.text;
+}
+
+- (IBAction)setDefaultValueButtonTapped:(id)sender {
+    [[TreasureData sharedInstance] setDefaultValue:_defaultValueField.text forKey:_defaultValueKeyField.text database:[self defaultValueTargetDatabase] table:[self defaultValueTargetTable]];
+}
+
+- (IBAction)getDefaultValueButtonTapped:(id)sender {
+    NSString* defaultValue = [[TreasureData sharedInstance] defaultValueForKey:_defaultValueKeyField.text database:[self defaultValueTargetDatabase] table:[self defaultValueTargetTable]];
+    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"Default Value" message: defaultValue preferredStyle:UIAlertControllerStyleAlert];
+    [alertVC addAction: [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:nil]];
+    [self showViewController:alertVC sender:nil];
+}
+
+- (IBAction)removeDefaultValueButtonTapped:(id)sender {
+    [[TreasureData sharedInstance] removeDefaultValueForKey:_defaultValueKeyField.text database:[self defaultValueTargetDatabase] table:[self defaultValueTargetTable]];
+}
+
+#pragma mark - Profile API
+
 - (IBAction)fetchUserSegments:(id)sender {
     [self updateClientIfFormChanged];
     NSArray *audienceTokens = @[@"Your Profile API (Audience) Token here"];
@@ -201,6 +248,13 @@ typedef enum {
             button.userInteractionEnabled = YES;
             break;
     }
+}
+
+#pragma MARK: - UITextFieldDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return true;
 }
 
 @end
