@@ -43,7 +43,6 @@ static NSString *keyOfLocaleLang = @"td_locale_lang";
 static NSString *keyOfSessionId = @"td_session_id";
 static NSString *keyOfSessionEvent = @"td_session_event";
 static NSString *keyOfServerSideUploadTimestamp = @"#SSUT";
-static NSString *osType = @"iOS";
 static NSString *sessionEventStart = @"start";
 static NSString *sessionEventEnd = @"end";
 static Session *session = nil;
@@ -323,7 +322,11 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     // [record setValue:@"" forKey:key_of_display];
     [record setValue:dev.model forKey:keyOfModel];
     [record setValue:dev.systemVersion forKey:keyOfOsVer];
-    [record setValue:osType forKey:keyOfOsType];
+#if TARGET_OS_TV
+    [record setValue:@"tvOS" forKey:keyOfOsType];
+#else
+    [record setValue:@"iOS" forKey:keyOfOsType];
+#endif
     return record;
 }
 
@@ -801,9 +804,8 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
                                             timeoutInterval:timeout];
     
     // Call api
-    NSOperationQueue *queue =[NSOperationQueue currentQueue];
-    if (queue == nil) queue = [NSOperationQueue mainQueue];
-    [NSURLConnection sendAsynchronousRequest:urlRequest queue:queue completionHandler:^(NSURLResponse * _Nullable response, NSData * _Nullable data, NSError * _Nullable connectionError) {
+    NSURLSessionDataTask *dataTask = [[NSURLSession sharedSession] dataTaskWithRequest:urlRequest completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable connectionError) {
+        NSLog(@"urlconn response %@, data %@, connectionError %@", response, data, connectionError);
         if (connectionError) {
             handler(nil, connectionError);
         } else {
@@ -817,10 +819,13 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
             } else if ([jsonResponse isKindOfClass: [NSDictionary class]] && ((NSDictionary *)jsonResponse)[@"error"] != nil) {
                 // Error returned in response
                 NSDictionary *errorResponse = (NSDictionary *)jsonResponse;
-                NSDictionary *userInfo = @{
-                   NSLocalizedDescriptionKey: errorResponse[@"error"],
-                   NSLocalizedFailureReasonErrorKey: errorResponse[@"message"]
-                };
+                NSMutableDictionary *userInfo = [NSMutableDictionary new];
+                if (errorResponse[@"error"]) {
+                    userInfo[NSLocalizedDescriptionKey] = errorResponse[@"error"];
+                }
+                if (errorResponse[@"message"]) {
+                    userInfo[NSLocalizedFailureReasonErrorKey] = errorResponse[@"message"];
+                }
                 NSInteger code = [(NSNumber *)errorResponse[@"status"] integerValue];
                 NSError *serverError = [NSError errorWithDomain:TreasureDataErrorDomain code:code userInfo: userInfo];
                 handler(nil, serverError);
@@ -835,6 +840,7 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
             }
         }
     }];
+    [dataTask resume];
 }
 
 #pragma mark - Default values

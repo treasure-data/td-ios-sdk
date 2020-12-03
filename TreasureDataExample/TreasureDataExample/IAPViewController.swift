@@ -35,7 +35,7 @@ class IAPViewController : UITableViewController, SKProductsRequestDelegate, SKPa
     }
     
     @IBAction func purchase(_ sender: UIButton) {
-        (self.parent as! ViewController).updateClientIfFormChanged()
+        (self.parent as! iOSViewController).updateClientIfFormChanged()
 
         let product = products[sender.tag]
         SKPaymentQueue.default().add(SKPayment(product: product))

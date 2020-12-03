@@ -53,7 +53,7 @@ static NSString *testTable;
 }
 
 + (NSSet<NSString *> *)productIds {
-    return [NSSet setWithArray: @[@"in_app_purchase_1"]];
+    return [NSSet setWithArray: @[@"com.treasuredata.iaptest.consumable1"]];
 }
 
 @end
