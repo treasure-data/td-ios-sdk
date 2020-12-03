@@ -1,5 +1,10 @@
 # Change Log
 
+## Version 0.8.0
+_2020-12-03_
+
+* Add support for tvOS
+
 ## Version 0.7.0
 _2020-11-05_
 
