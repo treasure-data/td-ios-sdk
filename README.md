@@ -99,7 +99,7 @@ To add an event to local buffer, you can call `TreasureData`'s `addEvent` or `ad
 ```
 
 
-Specify the database and table to which you want to import the events. The total length of database and table must be shorter than 129 chars.
+Specify the database and table to which you want to import the events. The total length of database and table must be shorter than 129 chars. Each table will cache no more than 10000 events.
 
 ### Upload buffered events to TreasureData
 
