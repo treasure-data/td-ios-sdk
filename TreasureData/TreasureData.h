@@ -445,7 +445,7 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
  *
  * @warning This will make a call to shared instance's cdpEndpoint. Make sure you configure cdpEndpoint before using this method
  * @param audienceTokens List of audience tokens. There must be at least one token.
- * @param Profiles' keys as specified in key column.
+ * @param keys Profiles' as specified in key column.
  * @param options Request options. For possible options, see TDRequestOptionsKey.
  * @param handler Completion callback with either JSON object or an error. The callback will be called from the caller's queue, or if there is no queue, default to main queue.
  */
