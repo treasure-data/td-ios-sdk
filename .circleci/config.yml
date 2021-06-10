@@ -114,11 +114,11 @@ commands:
 jobs:
   test_ios14:
     macos:
-      xcode: "12.0.0"
+      xcode: "12.5.0"
     steps:
       - run_tests_flow:
-          version_name: "14"
-          os: "14.0"
+          version_name: "14.5"
+          os: "14.5"
           simulator: "iPhone 11"
 
   test_ios13:
