@@ -7,7 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#if TD_SWIFT_PACKAGE
+@import KeenClientTD;
+#else
 #import "KeenClientTD/KeenClient.h"
+#endif
 
 /**
  * The internal client using for sending requests. Most of the exposed properties could be configured via the container `TreasureData` instance. You probably need this only to tuning the retry parameters.

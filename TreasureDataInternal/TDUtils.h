@@ -6,6 +6,8 @@
 //  Copyright © 2018 Treasure Data. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
 static NSString *const TDEventClassKey = @"__td_event_class";
 static NSString *const TDEventClassCustom = @"custom";
 static NSString *const TDEventClassAppLifecycle = @"app_lifecycle";
