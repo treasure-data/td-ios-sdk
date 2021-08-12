@@ -43,31 +43,31 @@ jobs:
           cd $GITHUB_WORKSPACE/td-ios-sdk
           sudo jazzy --config .jazzy.yaml
 
-      # - name: Commit Docs
-      #   run: |
-      #     sudo mkdir $GITHUB_WORKSPACE/docs
-      #     sudo mv -f td-ios-sdk/build/docs/javadoc $GITHUB_WORKSPACE/docs
-      #     cd $GITHUB_WORKSPACE/td-android-sdk
-      #     git config user.email "ci-bot@treasure-data.com"
-      #     git config user.name "ci-bot"
-      #     git stash
-      #     git reset --hard
-      #     git fetch
-      #     git checkout gh-pages
-      #     git pull
-      #     sudo rm -rf ./docs
-      #     sudo mv $GITHUB_WORKSPACE/docs ./docs
-      #     echo "[log git status]"
-      #     git status
-      #     git add ./docs/*
-      #     git commit -m "[ci-bot] Updating docs microsite to latest from master"
-      #     echo "[log pwd]"
-      #     pwd
-      #     echo "[log env]"
-      #     env
-      # - name: deploy docs
-      #   uses: ad-m/github-push-action@master
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     branch: gh-pages
-      #     directory: td-ios-sdk
+      - name: Commit Docs
+        run: |
+          sudo mkdir $GITHUB_WORKSPACE/docs
+          sudo mv -f td-ios-sdk/docs $GITHUB_WORKSPACE/docs
+          cd $GITHUB_WORKSPACE/td-ios-sdk
+          git config user.email "ci-bot@treasure-data.com"
+          git config user.name "ci-bot"
+          git stash
+          git reset --hard
+          git fetch
+          git checkout gh-pages
+          git pull
+          sudo rm -rf ./*
+          sudo mv $GITHUB_WORKSPACE/docs ./
+          echo "[log git status]"
+          git status
+          git add ./*
+          git commit -m "[ci-bot] Updating docs microsite to latest from master"
+          echo "[log pwd]"
+          pwd
+          echo "[log env]"
+          env
+      - name: deploy docs
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          directory: td-ios-sdk
