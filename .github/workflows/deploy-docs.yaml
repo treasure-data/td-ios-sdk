@@ -1,0 +1,73 @@
+name: Deploy Docs Microsite
+
+on:
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Who triggered this test run?'
+  push:
+    branches:
+      - master
+    paths:
+      - 'TreasureData/**.h'
+
+jobs:
+  deploy-docs-microsite:
+    name: Build and Deploy Docs microsite to treasure-data.github.io/td-ios-sdk
+    runs-on: macos-latest
+    continue-on-error: true
+    steps:
+      - name: Setup
+        continue-on-error: true
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.7'
+      - run: gem install jazzy
+
+      - name: git checkout
+        uses: actions/checkout@v2
+        with:
+          persistent-creadentials: false
+          fetch-depth: 0
+          repository: 'blackstoneengineering/td-ios-sdk'
+          ref: 'master'
+          path: td-ios-sdk
+      # - name: git checkout - debug
+      #   run: |
+      #     git clone https://github.com/blackstoneengineering/td-ios-sdk td-android-sdk
+      #     cd td-android-sdk
+      #     git checkout master
+      - name: build docs
+        continue-on-error: true
+        run: |
+          cd $GITHUB_WORKSPACE/td-ios-sdk
+          sudo jazzy --config .jazzy.yaml
+
+      # - name: Commit Docs
+      #   run: |
+      #     sudo mkdir $GITHUB_WORKSPACE/docs
+      #     sudo mv -f td-ios-sdk/build/docs/javadoc $GITHUB_WORKSPACE/docs
+      #     cd $GITHUB_WORKSPACE/td-android-sdk
+      #     git config user.email "ci-bot@treasure-data.com"
+      #     git config user.name "ci-bot"
+      #     git stash
+      #     git reset --hard
+      #     git fetch
+      #     git checkout gh-pages
+      #     git pull
+      #     sudo rm -rf ./docs
+      #     sudo mv $GITHUB_WORKSPACE/docs ./docs
+      #     echo "[log git status]"
+      #     git status
+      #     git add ./docs/*
+      #     git commit -m "[ci-bot] Updating docs microsite to latest from master"
+      #     echo "[log pwd]"
+      #     pwd
+      #     echo "[log env]"
+      #     env
+      # - name: deploy docs
+      #   uses: ad-m/github-push-action@master
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     branch: gh-pages
+      #     directory: td-ios-sdk
