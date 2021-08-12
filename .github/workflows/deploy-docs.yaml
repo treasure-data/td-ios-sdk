@@ -29,45 +29,34 @@ jobs:
         with:
           persistent-creadentials: false
           fetch-depth: 0
-          repository: 'blackstoneengineering/td-ios-sdk'
+          repository: 'treasure-data/td-ios-sdk'
           ref: 'master'
           path: td-ios-sdk
-      # - name: git checkout - debug
-      #   run: |
-      #     git clone https://github.com/blackstoneengineering/td-ios-sdk td-android-sdk
-      #     cd td-android-sdk
-      #     git checkout master
+      - name: git checkout
+        uses: actions/checkout@v2
+        with:
+          persistent-creadentials: false
+          fetch-depth: 0
+          repository: 'treasure-data/td-ios-sdk'
+          ref: 'gh-pages'
+          path: gh-pages
       - name: build docs
         continue-on-error: true
         run: |
           cd $GITHUB_WORKSPACE/td-ios-sdk
-          sudo jazzy --config .jazzy.yaml
+          sudo jazzy --config .jazzy.yaml -o $GITHUB_WORKSPACE/gh-pages
 
       - name: Commit Docs
         run: |
-          sudo mkdir $GITHUB_WORKSPACE/docs
-          sudo mv -f td-ios-sdk/docs $GITHUB_WORKSPACE/docs
-          cd $GITHUB_WORKSPACE/td-ios-sdk
+          cd $GITHUB_WORKSPACE/gh-pages
           git config user.email "ci-bot@treasure-data.com"
           git config user.name "ci-bot"
-          git stash
-          git reset --hard
-          git fetch
-          git checkout gh-pages
-          git pull
-          sudo rm -rf ./*
-          sudo mv $GITHUB_WORKSPACE/docs ./
-          echo "[log git status]"
           git status
           git add ./*
           git commit -m "[ci-bot] Updating docs microsite to latest from master"
-          echo "[log pwd]"
-          pwd
-          echo "[log env]"
-          env
       - name: deploy docs
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
-          directory: td-ios-sdk
+          directory: gh-pages
