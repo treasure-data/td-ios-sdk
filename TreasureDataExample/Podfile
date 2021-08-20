@@ -4,5 +4,4 @@ end
 
 target 'TreasureDataTVOSExample' do
   pod 'TreasureData-iOS-SDK', :path => '..'
-  pod 'KeenClientTD', :git => 'https://github.com/treasure-data/KeenClient-iOS.git', :commit => '164d1c6'
 end

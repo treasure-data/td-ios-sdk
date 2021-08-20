@@ -1,5 +1,10 @@
 # Change Log
 
+## Version 0.8.1
+_2020-08-19_
+
+* Fix using wrong version of KeenClientTD (should be 3.3.0).
+
 ## Version 0.8.0
 _2020-12-03_
 
