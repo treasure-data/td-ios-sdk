@@ -132,7 +132,7 @@ jobs:
 
   test_ios12:
     macos:
-      xcode: "10.2.1" 
+      xcode: "10.3.0" 
     steps:
       - run_tests_flow:
           version_name: "12"
@@ -141,7 +141,7 @@ jobs:
 
   test_ios11:
     macos:
-      xcode: "10.2.1"
+      xcode: "10.3.0"
     steps:
       - run_tests_flow:
           version_name: "11"
@@ -150,7 +150,7 @@ jobs:
 
   test_ios10:
     macos:
-      xcode: "10.2.1"
+      xcode: "10.3.0"
 
     steps:
       - run_tests_flow:
@@ -160,7 +160,7 @@ jobs:
 
   test_ios9:
     macos:
-      xcode: "10.2.1"
+      xcode: "10.3.0"
     steps:
       - ios9_install_and_workaround
       - run_tests_flow:
@@ -170,7 +170,7 @@ jobs:
 
   test_ios8:
     macos:
-      xcode: "10.2.1"
+      xcode: "10.3.0"
     steps:
       - ios8_install_and_workaround
       - run_tests_flow:
