@@ -127,8 +127,8 @@ jobs:
     steps:
       - run_tests_flow:
           version_name: "12"
-          os: "12.2"
-          simulator: "iPhone 7"
+          os: "12.4"
+          simulator: "iPhone 8"
 
 
 workflows:
