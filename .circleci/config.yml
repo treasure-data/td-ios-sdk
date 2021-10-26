@@ -68,24 +68,6 @@ commands:
       - store_test_results:
           path: ./test_results
 
-  ios9_install_and_workaround:
-    description: "Command for iOS 9 workaround"
-    steps:
-      - run:
-          name: iOS 9 Install and  Workaround
-          command: |
-            xcversion simulators --install='iOS 9.3' --no-progress
-            sudo mkdir '/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 9.3.simruntime/Contents/Resources/RuntimeRoot/usr/lib/swift'
-
-  ios8_install_and_workaround:
-    description: "Command for iOS 8 workaround"
-    steps:
-      - run:
-          name: iOS 8 Install and Workaround
-          command: |
-            xcversion simulators --install='iOS 8.4' --no-progress
-            sudo mkdir '/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 8.4.simruntime/Contents/Resources/RuntimeRoot/usr/lib/swift'
-
   run_tests_flow:
     description: "Single flow for running tests targetting specified iOS"
     parameters:
@@ -112,6 +94,15 @@ commands:
 
 
 jobs:
+  test_ios15:
+    macos:
+      xcode: "13.1.0"
+    steps:
+      - run_tests_flow:
+          version_name: "15.0"
+          os: "15.0"
+          simulator: "iPhone 12"
+
   test_ios14:
     macos:
       xcode: "12.5.0"
@@ -132,61 +123,19 @@ jobs:
 
   test_ios12:
     macos:
-      xcode: "10.2.1" 
+      xcode: "10.3.0" 
     steps:
       - run_tests_flow:
           version_name: "12"
-          os: "12.2"
-          simulator: "iPhone 7"
-
-  test_ios11:
-    macos:
-      xcode: "10.2.1"
-    steps:
-      - run_tests_flow:
-          version_name: "11"
-          os: "11.4"
-          simulator: "iPhone 7"
-
-  test_ios10:
-    macos:
-      xcode: "10.2.1"
-
-    steps:
-      - run_tests_flow:
-          version_name: "10"
-          os: "10.3.1"
-          simulator: "iPhone 7"
-
-  test_ios9:
-    macos:
-      xcode: "10.2.1"
-    steps:
-      - ios9_install_and_workaround
-      - run_tests_flow:
-          version_name: "9"
-          os: "9.3"
-          simulator: "iPhone 6s"
-
-  test_ios8:
-    macos:
-      xcode: "10.2.1"
-    steps:
-      - ios8_install_and_workaround
-      - run_tests_flow:
-          version_name: "8"
-          os: "8.4"
-          simulator: "iPhone 6"
+          os: "12.4"
+          simulator: "iPhone 8"
 
 
 workflows:
   version: 2
   test:
     jobs:
+      - test_ios15
       - test_ios14
       - test_ios13
       - test_ios12
-      - test_ios11
-      - test_ios10
-      - test_ios9
-      - test_ios8
