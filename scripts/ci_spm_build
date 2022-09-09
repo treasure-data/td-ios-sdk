@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+set -o pipefail
+
+DESTINATION="$1"
+LOG_FILE="$2"
+
+cd "$(dirname "$(dirname "${BASH_SOURCE[0]}")")"
+
+# Remove xcode project and workspace so when xcodebuild is invoqued the default SPM package scheme is findable.
+rm -rf TreasureData.xcodeproj
+rm -rf TreasureData.xcworkspace
+xcodebuild -list -json
+
+# For now only build.
+xcodebuild \
+    -scheme "TreasureData-iOS-SDK" \
+    -destination "$DESTINATION" \
+    build \
+    | tee "$LOG_FILE" \
+    | xcpretty
+
+xcodebuild_status=$?
+
+exit $xcodebuild_status

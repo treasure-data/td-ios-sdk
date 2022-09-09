@@ -9,3 +9,6 @@ build
 Output
 
 .build/
+
+# Logs directory for CI scriptss
+logs/
