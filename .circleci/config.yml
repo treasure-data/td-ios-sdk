@@ -121,7 +121,7 @@ jobs:
 
   test_ios14:
     macos:
-      xcode: "12.5.0"
+      xcode: "12.5.1"
     steps:
       - run_tests_flow:
           version_name: "14.5"
@@ -130,11 +130,11 @@ jobs:
 
   test_ios13:
     macos:
-      xcode: "11.6.0"
+      xcode: "11.7"
     steps:
       - run_tests_flow:
           version_name: "13"
-          os: "13.6"
+          os: "13.7"
           simulator: "iPhone 11"
 
   test_ios12:
