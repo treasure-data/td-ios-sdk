@@ -94,47 +94,57 @@ commands:
 
 
 jobs:
-  test_ios15:
+  test_ios16:
     macos:
-      xcode: "13.1.0"
+      xcode: "14.1.0"
     steps:
       - run_tests_flow:
           version_name: "15.0"
-          os: "15.0"
-          simulator: "iPhone 12"
+          os: "16.1"
+          simulator: "iPhone 14"
+
+  test_ios15:
+    macos:
+      xcode: "14.1.0"
+    steps:
+      - run_tests_flow:
+          version_name: "15.0"
+          os: "15.5"
+          simulator: "iPhone 13"
 
   test_ios14:
     macos:
-      xcode: "12.5.0"
+      xcode: "13.4.1"
     steps:
       - run_tests_flow:
           version_name: "14.5"
           os: "14.5"
-          simulator: "iPhone 11"
+          simulator: "iPhone 12"
 
   test_ios13:
     macos:
-      xcode: "11.6.0"
+      xcode: "12.5.1"
     steps:
       - run_tests_flow:
           version_name: "13"
-          os: "13.6"
+          os: "13.7"
           simulator: "iPhone 11"
 
   test_ios12:
     macos:
-      xcode: "10.3.0" 
+      xcode: "11.7.0" 
     steps:
       - run_tests_flow:
           version_name: "12"
           os: "12.4"
-          simulator: "iPhone 8"
+          simulator: "iPhone X"
 
 
 workflows:
   version: 2
   test:
     jobs:
+      - test_ios16
       - test_ios15
       - test_ios14
       - test_ios13
