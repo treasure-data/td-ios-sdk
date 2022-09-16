@@ -77,7 +77,7 @@ static NSString *END_POINT = @"http://localhost";
 @end
 
 @interface MySession : NSURLSession
-@property NSURLRequest *requestData;
+@property NSMutableArray *requestData;
 @property NSData *expectedResponseBody;
 @property NSURLResponse *expectedResponse;
 @property int sendRequestCount;
@@ -86,7 +86,8 @@ static NSString *END_POINT = @"http://localhost";
 @implementation MySession
 - (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request completionHandler:(void (^)(NSData * __nullable data, NSURLResponse * __nullable response, NSError * __nullable error))completionHandler {
     self.sendRequestCount++;
-    self.requestData = request;
+    if (self.requestData == nil) { self.requestData = [NSMutableArray new]; }
+    [self.requestData addObject:request];
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(queue, ^{
         [NSThread sleepForTimeInterval:0.2];
@@ -220,11 +221,18 @@ static NSString *END_POINT = @"http://localhost";
 }
 
 - (void)assertRequest:(void(^)(NSDictionary*))assertion {
-    NSString *url = [self.session.requestData.URL absoluteString];
-    XCTAssertEqualObjects(@"http://localhost/ios/v3/event", url);
-    NSError *error = [NSError alloc];
-    NSDictionary *ev = [NSJSONSerialization JSONObjectWithData:self.session.requestData.HTTPBody options:0 error:&error];
-    assertion(ev);
+    for (NSURLRequest *requestData in self.session.requestData) {
+        NSString *url = [requestData.URL absoluteString];
+    //    NSLog(@"assertRequest url %@ %@ %@", url, url.lastPathComponent, [url stringByDeletingLastPathComponent].lastPathComponent);
+    //    XCTAssertEqualObjects(@"http://localhost/ios/v3/event", url);
+    //    XCTAssertEqualObjects(@"http://localhost/db_/tbl", url);
+        NSError *error = [NSError alloc];
+        NSDictionary *response = [NSJSONSerialization JSONObjectWithData:requestData.HTTPBody options:0 error:&error];
+        NSLog(@"response %@", response);
+        NSDictionary *events = [response objectForKey:@"events"];
+        NSDictionary *mappedEvents = @{[NSString stringWithFormat:@"%@.%@", [url stringByDeletingLastPathComponent].lastPathComponent,  url.lastPathComponent]: events};
+        assertion(mappedEvents);
+    }
 }
 
 - (void)baseTesting:(void(^)(void))setup onSuccess:(void(^)(void))onSuccess onError:(void(^)(NSString*, NSString*))onError {
@@ -267,7 +275,6 @@ static NSString *END_POINT = @"http://localhost";
                        expectedKeys:(NSArray*)expectedKeys {
     NSMutableArray* extacted = [[NSMutableArray alloc] init];
     for (NSDictionary* x in xs) {
-        NSLog(@"%@", x);
         XCTAssertEqualObjects(
               [[x allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)],
               [expectedKeys sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)]
@@ -344,27 +351,31 @@ static NSString *END_POINT = @"http://localhost";
 
 - (void)testMultiEvents {
     [self baseTesting:^() {
-        [self setupDefaultExpectedResponseBody:
-            @{
-              @"db0.tbl0":@[@{@"success":@"true"}, @{@"success":@"true"}],
-              @"db1.tbl1":@[@{@"success":@"true"}]
-            }
-        ];
+        [self setupDefaultExpectedResponseBody: @{
+            @"db0.tbl0":@[@{@"success":@"true"}, @{@"success":@"true"}],
+            @"db1.tbl1":@[@{@"success":@"true"}]
+        }];
         [self.td addEvent:@{@"name":@"one"} database:@"db0" table:@"tbl0"];
         [self.td addEvent:@{@"name":@"two"} database:@"db1" table:@"tbl1"];
         [self.td addEvent:@{@"name":@"three"} database:@"db0" table:@"tbl0"];
     }
             assertion:^(NSDictionary *ev){
-                XCTAssertEqual(2, ev.count);
-                NSArray *arr = [ev objectForKey:@"db0.tbl0"];
-                [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"one", @"three"]
-                     expectedKeys:@[@"name", @"keen", @"#UUID"]
-                 ];
-                arr = [ev objectForKey:@"db1.tbl1"];
-                [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"two"]
-                     expectedKeys:@[@"name", @"keen", @"#UUID"]
-                 ];
-            }];
+        XCTAssertEqual(1, ev.count);
+        NSArray *arr = [ev objectForKey:@"db0.tbl0"];
+        if (arr != nil) {
+            [self assertCollectedValueWithKey:arr
+                                          key:@"name"
+                                 expectedVals:@[@"one", @"three"]
+                                 expectedKeys:@[@"name", @"keen", @"#UUID"]];
+        }
+        arr = [ev objectForKey:@"db1.tbl1"];
+        if (arr != nil) {
+            [self assertCollectedValueWithKey:arr
+                                          key:@"name"
+                                 expectedVals:@[@"two"]
+                                 expectedKeys:@[@"name", @"keen", @"#UUID"]];
+        }
+    }];
 }
 
 - (void)testSetDefaultApiEndpoint {
@@ -404,27 +415,33 @@ static NSString *END_POINT = @"http://localhost";
     [self baseTesting:^() {
         MyTreasureData *anotherTd = [[MyTreasureData alloc] initWithApiKey:@"dummy_apikey"];
         [self.td enableAutoAppendUniqId];
-        [self setupDefaultExpectedResponseBody:
-                @{@"db0.tbl0":@[@{@"success":@"true"}],
-                  @"db1.tbl1":@[@{@"success":@"true"}]}];
-
-         [self.td addEvent:@{@"name":@"foobar"} database:@"db0" table:@"tbl0"];
+        [self setupDefaultExpectedResponseBody:@{
+            @"db0.tbl0":@[@{@"success":@"true"}],
+            @"db1.tbl1":@[@{@"success":@"true"}]
+        }];
+        [self.td addEvent:@{@"name":@"foobar"} database:@"db0" table:@"tbl0"];
         [anotherTd addEvent:@{@"name":@"helloworld"} database:@"db1" table:@"tbl1"];
     }
             assertion:^(NSDictionary *ev){
-                XCTAssertEqual(1, self.session.sendRequestCount);
-                XCTAssertEqual(2, ev.count);
-
-                NSArray *arr = [ev objectForKey:@"db0.tbl0"];
-                [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"foobar"]
-                                     expectedKeys:@[@"name", @"keen", @"#UUID", @"td_uuid"]
-                 ];
-
-                arr = [ev objectForKey:@"db1.tbl1"];
-                [self assertCollectedValueWithKey:arr key:@"name" expectedVals:@[@"helloworld"]
-                                     expectedKeys:@[@"name", @"keen", @"#UUID"]
-                 ];
-}];
+        XCTAssertEqual(2, self.session.sendRequestCount);
+        XCTAssertEqual(1, ev.count);
+        
+        NSArray *arr = [ev objectForKey:@"db0.tbl0"];
+        if (arr != nil) {
+            [self assertCollectedValueWithKey:arr
+                                          key:@"name"
+                                 expectedVals:@[@"foobar"]
+                                 expectedKeys:@[@"name", @"keen", @"#UUID", @"td_uuid"]];
+        }
+        
+        arr = [ev objectForKey:@"db1.tbl1"];
+        if (arr != nil) {
+            [self assertCollectedValueWithKey:arr
+                                          key:@"name"
+                                 expectedVals:@[@"helloworld"]
+                                 expectedKeys:@[@"name", @"keen", @"#UUID"]];
+        }
+    }];
 }
 
 - (void)testAutoAppendRecordUUIDWithDefaultColumnName {

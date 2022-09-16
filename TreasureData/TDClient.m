@@ -64,15 +64,16 @@ static NSString *version = @"0.8.1";
     return nsString;
 }
 
-- (void)sendEvents:(NSData *)data completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler {
-    NSString *urlString = [NSString stringWithFormat:@"%@/%@", self.apiEndpoint, @"ios/v3/event"];
+- (void)sendEvents:(NSData *)data database:(NSString *)database table:(NSString *)table completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler {
+    NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@", self.apiEndpoint, database, table];
     KCLog(@"Sending events to: %@", urlString);
     NSURL *url = [NSURL URLWithString:urlString];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [request setValue:self.apiKey forHTTPHeaderField:@"X-TD-Write-Key"];
-    [request setValue:@"k" forHTTPHeaderField:@"X-TD-Data-Type"];   // means KeenIO data type
+    [request setValue:[NSString stringWithFormat: @"TD1 %@", self.apiKey] forHTTPHeaderField:@"Authorization"];
+    [request setValue:@"application/vnd.treasuredata.v1.js+json" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"application/vnd.treasuredata.v1.js+json" forHTTPHeaderField:@"Accept"];
     [request setValue:[NSString stringWithFormat:@"TD-iOS-SDK/%@ (%@ %@)", version, [[UIDevice currentDevice] systemName], [[UIDevice currentDevice] systemVersion]] forHTTPHeaderField:@"User-Agent"];
     
     if (_enableEventCompression) {
@@ -90,6 +91,7 @@ static NSString *version = @"0.8.1";
              }
              */
             [request setValue:@"deflate" forHTTPHeaderField:@"Content-Encoding"];
+            [request setValue:@"deflate" forHTTPHeaderField:@"Accept-Encoding"];
         }
     }
     
