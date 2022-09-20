@@ -19,7 +19,7 @@ let package = Package(
         // Dependencies
         // https://developer.apple.com/documentation/packagedescription/package/dependency
         // FIXME: Use real KeenClient-iOS library from Treasure Data official repository
-        .package(url: "git@github.com:nacho4d/KeenClient-iOS.git", .exact("13.3.0")),
+        .package(url: "git@github.com:nacho4d/KeenClient-iOS.git", .exact("13.3.1")),
         // For development purposes you can set a path to refer to a local package
         //.package(path: "../KeenClient-iOS")
     ],
