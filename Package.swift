@@ -41,7 +41,7 @@ let package = Package(
                 "TreasureData-iOS-SDK.podspec",
                 "TreasureDataExample/",
                 "TreasureDataExampleSwift/",
-                "TreasureDataTest/"
+                "TreasureDataTests/"
             ],
             sources: [
                 "TreasureData/",
