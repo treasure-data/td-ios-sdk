@@ -10,8 +10,8 @@
 
 #import <UIKit/UIKit.h>
 #import <CommonCrypto/CommonDigest.h>
-#import "Deflate.h"
 #import "TDClient.h"
+#import <GZIP/GZIP.h>
 
 static NSString *version = @"0.8.1";
 
@@ -77,25 +77,11 @@ static NSString *version = @"0.8.1";
     [request setValue:[NSString stringWithFormat:@"TD-iOS-SDK/%@ (%@ %@)", version, [[UIDevice currentDevice] systemName], [[UIDevice currentDevice] systemVersion]] forHTTPHeaderField:@"User-Agent"];
     
     if (_enableEventCompression) {
-        NSData *compressedData = [Deflate deflate:data];
-        if (!compressedData) {
-            KCLog(@"Compression failed");
-        }
-        else {
-            KCLog(@"Compressed: before=%ld, after=%ld", (unsigned long)[data length], (unsigned long)[compressedData length]);
-            data = compressedData;
-            /*
-             Byte* bytes = [data bytes];
-             for (int i=0; i < [data length]; i++) {
-             NSLog(@"byte[%d]: 0x%02x", i, bytes[i]);
-             }
-             */
-            [request setValue:@"deflate" forHTTPHeaderField:@"Content-Encoding"];
-            [request setValue:@"deflate" forHTTPHeaderField:@"Accept-Encoding"];
-        }
+        [request setValue:@"gzip" forHTTPHeaderField:@"Content-Encoding"];
+        [request setHTTPBody:[data gzippedData]];
+    } else {
+        [request setHTTPBody:data];
     }
-    
-    [request setHTTPBody:data];
     
     [self __sendHTTPRequest:request retryCounter:0 completionHandler:completionHandler];
 }
