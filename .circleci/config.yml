@@ -107,7 +107,7 @@ jobs:
 
   test_ios14:
     macos:
-      xcode: "13.4.1"
+      xcode: "12.5.1"
     steps:
       - run_tests_flow:
           os: "14.5"
@@ -115,7 +115,7 @@ jobs:
 
   test_ios13:
     macos:
-      xcode: "12.5.1"
+      xcode: "11.7"
     steps:
       - run_tests_flow:
           os: "13.7"
