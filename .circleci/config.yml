@@ -87,6 +87,22 @@ commands:
           simulator: <<parameters.simulator>>
       - store_results
 
+  build_spm:
+    description: "Build library as a Swift Package Manager"
+    parameters:
+      os:
+        type: "string"
+        default: "15.5"
+      simulator:
+        type: "string"
+        default: "iPhone 13"
+    steps:
+      - checkout
+      - auxiliary_setup
+      - run:
+          name: SPM build
+          command: ./scripts/ci_spm_build 'platform=iOS Simulator,name=<<parameters.simulator>>,OS=<<parameters.os>>' logs/xcbuild_spm_ios_<<parameters.os>>.log
+      - store_results
 
 jobs:
   test_ios16:
@@ -130,6 +146,13 @@ jobs:
           os: "12.4"
           simulator: "iPhone X"
 
+  build_spm_ios15:
+    macos:
+      xcode: "13.4.1"
+    steps:
+      - build_spm:
+          os: "15.5"
+          simulator: "iPhone 13"
 
 workflows:
   version: 2
@@ -140,3 +163,4 @@ workflows:
       - test_ios14
       - test_ios13
       - test_ios12
+      - build_spm_ios15

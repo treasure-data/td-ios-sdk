@@ -8,7 +8,11 @@
 
 #import "TDUtils.h"
 #import "Constants.h"
+#if TD_SWIFT_PACKAGE
+@import KeenClientTD;
+#else
 #import "KeenClientTD/KeenClient.h"
+#endif
 
 @implementation TDUtils
 
