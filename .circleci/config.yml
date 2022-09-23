@@ -118,6 +118,7 @@ jobs:
       xcode: "11.7"
     steps:
       - run_tests_flow:
+          version_name: "13"
           os: "13.7"
           simulator: "iPhone 11"
 
