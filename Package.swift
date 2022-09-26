@@ -5,27 +5,20 @@ import PackageDescription
 let package = Package(
     name: "TreasureData-iOS-SDK",
     platforms: [
-        .macOS(.v10_10),
-        .iOS(.v11),
-        .tvOS(.v9),
-        .watchOS(.v2)
+        .iOS(.v12),
+        .tvOS(.v9)
     ],
     products: [
         .library(
             name: "TreasureData-iOS-SDK",
-            targets: ["TreasureData"]),
+            targets: ["TreasureData_iOS_SDK"]),
     ],
     dependencies: [
-        // Dependencies
-        // https://developer.apple.com/documentation/packagedescription/package/dependency
-        // FIXME: Use real KeenClient-iOS library from Treasure Data official repository
-        .package(url: "git@github.com:nacho4d/KeenClient-iOS.git", .exact("13.3.1")),
-        // For development purposes you can set a path to refer to a local package
-        //.package(path: "../KeenClient-iOS")
+        .package(url: "git@github.com:nacho4d/KeenClient-iOS.git", .exact("td_3.4.0"))
     ],
     targets: [
       .target(
-            name: "TreasureData",
+            name: "TreasureData_iOS_SDK",
             dependencies: [
                 "KeenClientTD"
             ],
@@ -48,9 +41,6 @@ let package = Package(
                 "TreasureDataInternal/",
             ],
             publicHeadersPath: "TreasureData",
-            cSettings: [
-                .define("TD_SWIFT_PACKAGE")
-            ],
             cxxSettings: [
                 .headerSearchPath("TreasureData"),
                 .headerSearchPath("TreasureDataInternal"),

@@ -1,4 +1,5 @@
-platform :ios, '7.0'
+platform :ios, '12.0'
+use_frameworks!
 
 target 'TreasureData' do
   pod 'KeenClientTD', '= 3.3.0'
