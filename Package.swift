@@ -14,7 +14,7 @@ let package = Package(
             targets: ["TreasureData_iOS_SDK"]),
     ],
     dependencies: [
-        .package(url: "git@github.com:nacho4d/KeenClient-iOS.git", .exact("td_3.4.0"))
+        .package(url: "git@github.com:treasure-data/KeenClient-iOS.git", .exact("3.9.0"))
     ],
     targets: [
       .target(
