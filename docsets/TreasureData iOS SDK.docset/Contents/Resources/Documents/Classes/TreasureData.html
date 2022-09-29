@@ -8,19 +8,27 @@
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a name="//apple_ref/objc/Class/TreasureData" class="dashAnchor"></a>
     <a title="TreasureData Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">TreasureData iOS SDK Docs</a> (88% documented)</p>
+        <p><a href="../index.html">TreasureData iOS SDK 0.8.1 Docs</a> (89% documented)</p>
+        <div class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
       </div>
     </header>
     <div class="content-wrapper">
       <p id="breadcrumbs">
         <a href="../index.html">TreasureData iOS SDK Reference</a>
-        <img id="carat" src="../img/carat.png" />
+        <img id="carat" src="../img/carat.png" alt=""/>
         TreasureData Class Reference
       </p>
     </div>
@@ -39,13 +47,13 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="../Type Definitions.html">Type Definitions</a>
+            <a href="../Type%20Definitions.html">Type Definitions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Type Definitions.html#/c:TreasureData.h@T@ErrorHandler">ErrorHandler</a>
+                <a href="../Type%20Definitions.html#/c:TreasureData.h@T@ErrorHandler">ErrorHandler</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Type Definitions.html#/c:TreasureData.h@T@SuccessHander">SuccessHander</a>
+                <a href="../Type%20Definitions.html#/c:TreasureData.h@T@SuccessHander">SuccessHander</a>
               </li>
             </ul>
           </li>
@@ -57,7 +65,13 @@
             <h1>TreasureData</h1>
               <div class="declaration">
                 <div class="language">
+                  <p class="aside-title">Objective-C</p>
                   <pre class="highlight objective_c"><code><span class="k">@interface</span> <span class="nc">TreasureData</span> <span class="p">:</span> <span class="nc">NSObject</span></code></pre>
+
+                </div>
+                <div class="language">
+                  <p class="aside-title">Swift</p>
+                  <pre class="highlight swift"><code><span class="kd">class</span> <span class="kt">TreasureData</span> <span class="p">:</span> <span class="kt">NSObject</span></code></pre>
 
                 </div>
               </div>
@@ -67,8 +81,8 @@
 <pre class="highlight objective_c"><code> <span class="p">[</span><span class="n">TreasureData</span> <span class="nf">initializeWithApiKey</span><span class="p">:</span><span class="s">@"&lt;your_write_only_api_key&gt;"</span><span class="p">];</span>
 
  <span class="p">[[</span><span class="n">TreasureData</span> <span class="nf">sharedInstance</span><span class="p">]</span> <span class="nf">addEvent</span><span class="p">:@{</span><span class="s">@"welcome"</span><span class="o">:</span> <span class="s">@"Hello world"</span><span class="p">}</span>
-                                <span class="nf">database</span><span class="p">:</span><span class="s">@"my_db"</span>
-                                <span class="n">table</span><span class="o">:</span><span class="s">@"my_ios_events"</span><span class="p">];</span>
+                                <span class="nl">database:</span><span class="s">@"my_db"</span>
+                                <span class="nl">table:</span><span class="s">@"my_ios_events"</span><span class="p">];</span>
 
  <span class="p">[[</span><span class="n">TreasureData</span> <span class="nf">sharedInstance</span><span class="p">]</span> <span class="nf">uploadEvents</span><span class="p">];</span>
 </code></pre>
@@ -97,7 +111,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Objective-C</p>
-                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n"><a href="../Classes/TDClient.html">TDClient</a></span> <span class="o">*</span><span class="n">_Nullable</span> <span class="n">client</span><span class="p">;</span></code></pre>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n"><a href="../Classes/TDClient.html">TDClient</a></span> <span class="o">*</span><span class="n">_Nullable</span> <span class="n">client</span><span class="p">;</span></code></pre>
 
                         </div>
                         <div class="language">
@@ -122,14 +136,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The destination database for events that doesn&rsquo;t specify one, default is <q>td</q>.</p>
+                        <p>The destination database for events that doesn&rsquo;t specify one, default is &ldquo;td&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Objective-C</p>
-                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">_Nullable</span> <span class="n">defaultDatabase</span><span class="p">;</span></code></pre>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">_Nullable</span> <span class="n">defaultDatabase</span><span class="p">;</span></code></pre>
 
                         </div>
                         <div class="language">
@@ -154,14 +168,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The destination table for events that doesn&rsquo;t specify one. Currently this also applied for automatically tracked events (if enabled): app lifecycle, IAP and audits, default is <q>td_ios</q>.</p>
+                        <p>The destination table for events that doesn&rsquo;t specify one. Currently this also applied for automatically tracked events (if enabled): app lifecycle, IAP and audits, default is &ldquo;td_ios&rdquo;.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Objective-C</p>
-                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">_Nullable</span> <span class="n">defaultTable</span><span class="p">;</span></code></pre>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">_Nullable</span> <span class="n">defaultTable</span><span class="p">;</span></code></pre>
 
                         </div>
                         <div class="language">
@@ -193,14 +207,15 @@
     AWS East  <a href="https://cdp.in.treasuredata.com">https://cdp.in.treasuredata.com</a>
     AWS Tokyo <a href="https://cdp-tokyo.in.treasuredata.com">https://cdp-tokyo.in.treasuredata.com</a>
     AWS EU    <a href="https://cdp-eu01.in.treasuredata.com">https://cdp-eu01.in.treasuredata.com</a>
-    IDCF      <a href="https://cdp-idcf.in.treasuredata.com">https://cdp-idcf.in.treasuredata.com</a></p>
+    AWS Asia Pacific (Seoul)  <a href="https://cdp-ap02.in.treasuredata.com">https://cdp-ap02.in.treasuredata.com</a>
+    AWS Asia Pacific (Tokyo)  <a href="https://cdp-ap03.in.treasuredata.com">https://cdp-ap03.in.treasuredata.com</a></p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Objective-C</p>
-                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">readwrite</span><span class="p">,</span> <span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">_Nullable</span> <span class="n">cdpEndpoint</span><span class="p">;</span></code></pre>
+                          <pre class="highlight objective_c"><code><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">_Nullable</span> <span class="n">cdpEndpoint</span><span class="p">;</span></code></pre>
 
                         </div>
                         <div class="language">
@@ -218,9 +233,11 @@
               <div class="task-name-container">
                 <a name="/Initialization"></a>
                 <a name="//apple_ref/objc/Section/Initialization" class="dashAnchor"></a>
-                <a href="#/Initialization">
-                  <h3 class="section-name">Initialization</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Initialization"></a>
+                  <h3 class="section-name"><span>Initialization</span>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -228,7 +245,7 @@
                     <code>
                     <a name="/c:objc(cs)TreasureData(cm)initializeApiEndpoint:"></a>
                     <a name="//apple_ref/objc/Method/+initializeApiEndpoint:" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)TreasureData(cm)initializeApiEndpoint:">+initializeApiEndpoint:</a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(cm)initializeApiEndpoint:">+initializeApiEndpoint:<wbr></a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -236,7 +253,13 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Assign the target API endpoint, default is <q>https://in.treasuredata.com</q>.
+                        <p>Assign the target API endpoint, default is &ldquo;<a href="https://in.treasuredata.com">https://in.treasuredata.com</a>&rdquo;.
+Possible values:
+   AWS East  <a href="https://in.treasuredata.com">https://in.treasuredata.com</a>
+   AWS Tokyo <a href="https://tokyo.in.treasuredata.com">https://tokyo.in.treasuredata.com</a>
+   AWS EU    <a href="https://eu01.in.treasuredata.com">https://eu01.in.treasuredata.com</a>
+   AWS Asia Pacific (Seoul)  <a href="https://ap02.in.treasuredata.com">https://ap02.in.treasuredata.com</a>
+   AWS Asia Pacific (Tokyo)  <a href="https://ap03.in.treasuredata.com">https://ap03.in.treasuredata.com</a>
 This have to be call before <code>initializeWithApiKey(apiKey:)</code>, otherwise it won&rsquo;t have effect.</p>
 
                       </div>
@@ -280,7 +303,7 @@ This have to be call before <code>initializeWithApiKey(apiKey:)</code>, otherwis
                     <code>
                     <a name="/c:objc(cs)TreasureData(cm)initializeEncryptionKey:"></a>
                     <a name="//apple_ref/objc/Method/+initializeEncryptionKey:" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)TreasureData(cm)initializeEncryptionKey:">+initializeEncryptionKey:</a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(cm)initializeEncryptionKey:">+initializeEncryptionKey:<wbr></a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -313,7 +336,7 @@ This should be called only once and prior to any <code>addEvent...</code> call.<
                     <code>
                     <a name="/c:objc(cs)TreasureData(cm)initializeWithApiKey:"></a>
                     <a name="//apple_ref/objc/Method/+initializeWithApiKey:" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)TreasureData(cm)initializeWithApiKey:">+initializeWithApiKey:</a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(cm)initializeWithApiKey:">+initializeWithApiKey:<wbr></a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -399,7 +422,7 @@ This should be called only once and prior to any <code>addEvent...</code> call.<
                     <code>
                     <a name="/c:objc(cs)TreasureData(im)initWithApiKey:"></a>
                     <a name="//apple_ref/objc/Method/-initWithApiKey:" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)TreasureData(im)initWithApiKey:">-initWithApiKey:</a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)initWithApiKey:">-initWithApiKey:<wbr></a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -451,9 +474,11 @@ This should be called only once and prior to any <code>addEvent...</code> call.<
               <div class="task-name-container">
                 <a name="/Tracking%20events"></a>
                 <a name="//apple_ref/objc/Section/Tracking events" class="dashAnchor"></a>
-                <a href="#/Tracking%20events">
-                  <h3 class="section-name">Tracking events</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Tracking%20events"></a>
+                  <h3 class="section-name"><span>Tracking events</span>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -461,7 +486,7 @@ This should be called only once and prior to any <code>addEvent...</code> call.<
                     <code>
                     <a name="/c:objc(cs)TreasureData(im)addEvent:database:table:"></a>
                     <a name="//apple_ref/objc/Method/-addEvent:database:table:" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)TreasureData(im)addEvent:database:table:">-addEvent:database:table:</a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)addEvent:database:table:">-addEvent:<wbr>database:<wbr>table:<wbr></a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -538,7 +563,7 @@ This should be called only once and prior to any <code>addEvent...</code> call.<
                     <code>
                     <a name="/c:objc(cs)TreasureData(im)addEvent:table:"></a>
                     <a name="//apple_ref/objc/Method/-addEvent:table:" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)TreasureData(im)addEvent:table:">-addEvent:table:</a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)addEvent:table:">-addEvent:<wbr>table:<wbr></a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -602,7 +627,7 @@ This should be called only once and prior to any <code>addEvent...</code> call.<
                     <code>
                     <a name="/c:objc(cs)TreasureData(im)addEventWithCallback:database:table:onSuccess:onError:"></a>
                     <a name="//apple_ref/objc/Method/-addEventWithCallback:database:table:onSuccess:onError:" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)TreasureData(im)addEventWithCallback:database:table:onSuccess:onError:">-addEventWithCallback:database:table:onSuccess:onError:</a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)addEventWithCallback:database:table:onSuccess:onError:">-addEventWithCallback:<wbr>database:<wbr>table:<wbr>onSuccess:<wbr>onError:<wbr></a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -631,13 +656,13 @@ This should be called only once and prior to any <code>addEvent...</code> call.<
                                        <span class="nf">database</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">)</span><span class="nv">database</span>
                                           <span class="nf">table</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">)</span><span class="nv">table</span>
                                       <span class="nf">onSuccess</span><span class="p">:</span>
-                                          <span class="p">(</span><span class="n"><a href="../Type Definitions.html#/c:TreasureData.h@T@SuccessHander">SuccessHander</a></span> <span class="n">_Nullable</span><span class="p">)</span><span class="nv">onSuccess</span>
-                                        <span class="nf">onError</span><span class="p">:(</span><span class="n"><a href="../Type Definitions.html#/c:TreasureData.h@T@ErrorHandler">ErrorHandler</a></span> <span class="n">_Nullable</span><span class="p">)</span><span class="nv">onError</span><span class="p">;</span></code></pre>
+                                          <span class="p">(</span><span class="n"><a href="../Type%20Definitions.html#/c:TreasureData.h@T@SuccessHander">SuccessHander</a></span> <span class="n">_Nullable</span><span class="p">)</span><span class="nv">onSuccess</span>
+                                        <span class="nf">onError</span><span class="p">:(</span><span class="n"><a href="../Type%20Definitions.html#/c:TreasureData.h@T@ErrorHandler">ErrorHandler</a></span> <span class="n">_Nullable</span><span class="p">)</span><span class="nv">onError</span><span class="p">;</span></code></pre>
 
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">addEvent</span><span class="p">(</span><span class="n">withCallback</span> <span class="nv">record</span><span class="p">:</span> <span class="p">[</span><span class="kt">AnyHashable</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">],</span> <span class="nv">database</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">table</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">onSuccess</span><span class="p">:</span> <span class="kt"><a href="../Type Definitions.html#/c:TreasureData.h@T@SuccessHander">SuccessHander</a></span><span class="p">?,</span> <span class="nv">onError</span><span class="p">:</span> <span class="kt"><a href="../Type Definitions.html#/c:TreasureData.h@T@ErrorHandler">ErrorHandler</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">AnyHashable</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">addEvent</span><span class="p">(</span><span class="n">withCallback</span> <span class="nv">record</span><span class="p">:</span> <span class="p">[</span><span class="kt">AnyHashable</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">],</span> <span class="nv">database</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">table</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">onSuccess</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:TreasureData.h@T@SuccessHander">SuccessHander</a></span><span class="p">?,</span> <span class="nv">onError</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:TreasureData.h@T@ErrorHandler">ErrorHandler</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">AnyHashable</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]?</span></code></pre>
 
                         </div>
                       </div>
@@ -701,7 +726,7 @@ This should be called only once and prior to any <code>addEvent...</code> call.<
                               </td>
                               <td>
                                 <div>
-                                  <p>get called (on main thread) when the event failed to inserted to the local buffer, perfer <code><a href="../Type Definitions.html#/c:TreasureData.h@T@ErrorHandler">ErrorHandler</a></code> for possible error codes</p>
+                                  <p>get called (on main thread) when the event failed to inserted to the local buffer, perfer <code><a href="../Type%20Definitions.html#/c:TreasureData.h@T@ErrorHandler">ErrorHandler</a></code> for possible error codes</p>
                                 </div>
                               </td>
                             </tr>
@@ -716,7 +741,7 @@ This should be called only once and prior to any <code>addEvent...</code> call.<
                     <code>
                     <a name="/c:objc(cs)TreasureData(im)addEventWithCallback:table:onSuccess:onError:"></a>
                     <a name="//apple_ref/objc/Method/-addEventWithCallback:table:onSuccess:onError:" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)TreasureData(im)addEventWithCallback:table:onSuccess:onError:">-addEventWithCallback:table:onSuccess:onError:</a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)addEventWithCallback:table:onSuccess:onError:">-addEventWithCallback:<wbr>table:<wbr>onSuccess:<wbr>onError:<wbr></a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -734,13 +759,13 @@ This should be called only once and prior to any <code>addEvent...</code> call.<
                           <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="n">_Nullable</span><span class="p">)</span><span class="nf">addEventWithCallback</span><span class="p">:(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">)</span><span class="nv">record</span>
                                           <span class="nf">table</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">)</span><span class="nv">table</span>
                                       <span class="nf">onSuccess</span><span class="p">:</span>
-                                          <span class="p">(</span><span class="n"><a href="../Type Definitions.html#/c:TreasureData.h@T@SuccessHander">SuccessHander</a></span> <span class="n">_Nullable</span><span class="p">)</span><span class="nv">onSuccess</span>
-                                        <span class="nf">onError</span><span class="p">:(</span><span class="n"><a href="../Type Definitions.html#/c:TreasureData.h@T@ErrorHandler">ErrorHandler</a></span> <span class="n">_Nullable</span><span class="p">)</span><span class="nv">onError</span><span class="p">;</span></code></pre>
+                                          <span class="p">(</span><span class="n"><a href="../Type%20Definitions.html#/c:TreasureData.h@T@SuccessHander">SuccessHander</a></span> <span class="n">_Nullable</span><span class="p">)</span><span class="nv">onSuccess</span>
+                                        <span class="nf">onError</span><span class="p">:(</span><span class="n"><a href="../Type%20Definitions.html#/c:TreasureData.h@T@ErrorHandler">ErrorHandler</a></span> <span class="n">_Nullable</span><span class="p">)</span><span class="nv">onError</span><span class="p">;</span></code></pre>
 
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">addEvent</span><span class="p">(</span><span class="n">withCallback</span> <span class="nv">record</span><span class="p">:</span> <span class="p">[</span><span class="kt">AnyHashable</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">],</span> <span class="nv">table</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">onSuccess</span><span class="p">:</span> <span class="kt"><a href="../Type Definitions.html#/c:TreasureData.h@T@SuccessHander">SuccessHander</a></span><span class="p">?,</span> <span class="nv">onError</span><span class="p">:</span> <span class="kt"><a href="../Type Definitions.html#/c:TreasureData.h@T@ErrorHandler">ErrorHandler</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">AnyHashable</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">addEvent</span><span class="p">(</span><span class="n">withCallback</span> <span class="nv">record</span><span class="p">:</span> <span class="p">[</span><span class="kt">AnyHashable</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">],</span> <span class="nv">table</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">onSuccess</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:TreasureData.h@T@SuccessHander">SuccessHander</a></span><span class="p">?,</span> <span class="nv">onError</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:TreasureData.h@T@ErrorHandler">ErrorHandler</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">AnyHashable</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]?</span></code></pre>
 
                         </div>
                       </div>
@@ -792,7 +817,7 @@ This should be called only once and prior to any <code>addEvent...</code> call.<
                               </td>
                               <td>
                                 <div>
-                                  <p>get called (on main thread) when the event failed to inserted to the local buffer, perfer <code><a href="../Type Definitions.html#/c:TreasureData.h@T@ErrorHandler">ErrorHandler</a></code> for possible error codes</p>
+                                  <p>get called (on main thread) when the event failed to inserted to the local buffer, perfer <code><a href="../Type%20Definitions.html#/c:TreasureData.h@T@ErrorHandler">ErrorHandler</a></code> for possible error codes</p>
                                 </div>
                               </td>
                             </tr>
@@ -807,7 +832,7 @@ This should be called only once and prior to any <code>addEvent...</code> call.<
                     <code>
                     <a name="/c:objc(cs)TreasureData(im)uploadEventsWithCallback:onError:"></a>
                     <a name="//apple_ref/objc/Method/-uploadEventsWithCallback:onError:" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)TreasureData(im)uploadEventsWithCallback:onError:">-uploadEventsWithCallback:onError:</a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)uploadEventsWithCallback:onError:">-uploadEventsWithCallback:<wbr>onError:<wbr></a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -822,13 +847,13 @@ This should be called only once and prior to any <code>addEvent...</code> call.<
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Objective-C</p>
-                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">uploadEventsWithCallback</span><span class="p">:(</span><span class="n"><a href="../Type Definitions.html#/c:TreasureData.h@T@SuccessHander">SuccessHander</a></span> <span class="n">_Nullable</span><span class="p">)</span><span class="nv">onSuccess</span>
-                         <span class="nf">onError</span><span class="p">:(</span><span class="n"><a href="../Type Definitions.html#/c:TreasureData.h@T@ErrorHandler">ErrorHandler</a></span> <span class="n">_Nullable</span><span class="p">)</span><span class="nv">onError</span><span class="p">;</span></code></pre>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">uploadEventsWithCallback</span><span class="p">:(</span><span class="n"><a href="../Type%20Definitions.html#/c:TreasureData.h@T@SuccessHander">SuccessHander</a></span> <span class="n">_Nullable</span><span class="p">)</span><span class="nv">onSuccess</span>
+                         <span class="nf">onError</span><span class="p">:(</span><span class="n"><a href="../Type%20Definitions.html#/c:TreasureData.h@T@ErrorHandler">ErrorHandler</a></span> <span class="n">_Nullable</span><span class="p">)</span><span class="nv">onError</span><span class="p">;</span></code></pre>
 
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">uploadEvents</span><span class="p">(</span><span class="n">callback</span> <span class="nv">onSuccess</span><span class="p">:</span> <span class="kt"><a href="../Type Definitions.html#/c:TreasureData.h@T@SuccessHander">SuccessHander</a></span><span class="p">?,</span> <span class="nv">onError</span><span class="p">:</span> <span class="kt"><a href="../Type Definitions.html#/c:TreasureData.h@T@ErrorHandler">ErrorHandler</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">uploadEvents</span><span class="p">(</span><span class="n">callback</span> <span class="nv">onSuccess</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:TreasureData.h@T@SuccessHander">SuccessHander</a></span><span class="p">?,</span> <span class="nv">onError</span><span class="p">:</span> <span class="kt"><a href="../Type%20Definitions.html#/c:TreasureData.h@T@ErrorHandler">ErrorHandler</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -856,7 +881,7 @@ This should be called only once and prior to any <code>addEvent...</code> call.<
                               </td>
                               <td>
                                 <div>
-                                  <p>get called (on main thread) when the event failed to inserted to the configured endpoint, perfer <code><a href="../Type Definitions.html#/c:TreasureData.h@T@ErrorHandler">ErrorHandler</a></code> for possible error codes</p>
+                                  <p>get called (on main thread) when the event failed to inserted to the configured endpoint, perfer <code><a href="../Type%20Definitions.html#/c:TreasureData.h@T@ErrorHandler">ErrorHandler</a></code> for possible error codes</p>
                                 </div>
                               </td>
                             </tr>
@@ -902,13 +927,47 @@ This should be called only once and prior to any <code>addEvent...</code> call.<
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Events&#39;%20metadata"></a>
+                <a name="/Events%27%20metadata"></a>
                 <a name="//apple_ref/objc/Section/Events&#39; metadata" class="dashAnchor"></a>
-                <a href="#/Events&#39;%20metadata">
-                  <h3 class="section-name">Events&#39; metadata</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Events%27%20metadata"></a>
+                  <h3 class="section-name"><span>Events&rsquo; metadata</span>
+</h3>
+                </div>
               </div>
               <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TreasureData(im)getUUID"></a>
+                    <a name="//apple_ref/objc/Method/-getUUID" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)getUUID">-getUUID</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get UUID generated from TreasureData. The value will be set to <code>td_uuid</code> column for every events if <code>enableAutoAppendUniqId</code> is called.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">)</span><span class="n">getUUID</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getUUID</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
                 <li class="item">
                   <div>
                     <code>
@@ -1024,9 +1083,9 @@ Note: this won&rsquo;t reset the current buffered events before this call</p>
                         <p>Disable these auto appended columns:</p>
 
 <ul>
-<li><code>td_device</code>, <code>td_model</code>: current these share a same value, extracted from <code>UIDevice.currentDevice.model</code>. Example: <q>iPhone</q>, <q>iPad</q>,&hellip;</li>
-<li><code>td_os_version</code>: Extracted from <code>UIDevice.currentDevice.systemVersion</code>. Example: <q>11.4.1</q>, <q>12.1.4</q>,&hellip;</li>
-<li><code>td_os_type</code>: Always <q>iOS</q></li>
+<li><code>td_device</code>, <code>td_model</code>: current these share a same value, extracted from <code>UIDevice.currentDevice.model</code>. Example: &ldquo;iPhone&rdquo;, &ldquo;iPad&rdquo;,&hellip;</li>
+<li><code>td_os_version</code>: Extracted from <code>UIDevice.currentDevice.systemVersion</code>. Example: &ldquo;11.4.1&rdquo;, &ldquo;12.1.4&rdquo;,&hellip;</li>
+<li><code>td_os_type</code>: Always &ldquo;iOS&rdquo;</li>
 </ul>
 
                       </div>
@@ -1165,8 +1224,8 @@ Note: this won&rsquo;t reset the current buffered events before this call</p>
                         <p>Automatically append these columns:</p>
 
 <ul>
-<li><code>td_locale_country</code>: ISO 3166-1&rsquo;s code, extracted from <code>NSLocale.currentLocale</code>&lsquo;s <code>NSLocaleCountryCode</code>. Example: <q>USA</q>, <q>AUS</q>,&hellip;</li>
-<li><code>td_locale_language: ISO 639-1&#39;s code, extracted from</code>NSLocal.currentLocal<code>&#39;s</code>NSLocaleLanguageCode`. Example: <q>es</q>, <q>en</q>,&hellip;</li>
+<li><code>td_locale_country</code>: ISO 3166-1&rsquo;s code, extracted from <code>NSLocale.currentLocale</code>&lsquo;s <code>NSLocaleCountryCode</code>. Example: &ldquo;USA&rdquo;, &ldquo;AUS&rdquo;,&hellip;</li>
+<li><code>td_locale_language: ISO 639-1&#39;s code, extracted from</code>NSLocal.currentLocal<code>&#39;s</code>NSLocaleLanguageCode`. Example: &ldquo;es&rdquo;, &ldquo;en&rdquo;,&hellip;</li>
 </ul>
 
 <p>This is disabled by default.</p>
@@ -1225,7 +1284,7 @@ Note: this won&rsquo;t reset the current buffered events before this call</p>
                     <code>
                     <a name="/c:objc(cs)TreasureData(im)enableServerSideUploadTimestamp:"></a>
                     <a name="//apple_ref/objc/Method/-enableServerSideUploadTimestamp:" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)TreasureData(im)enableServerSideUploadTimestamp:">-enableServerSideUploadTimestamp:</a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)enableServerSideUploadTimestamp:">-enableServerSideUploadTimestamp:<wbr></a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1342,7 +1401,7 @@ Note: this won&rsquo;t reset the current buffered events before this call</p>
                     <code>
                     <a name="/c:objc(cs)TreasureData(im)enableAutoAppendRecordUUID:"></a>
                     <a name="//apple_ref/objc/Method/-enableAutoAppendRecordUUID:" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)TreasureData(im)enableAutoAppendRecordUUID:">-enableAutoAppendRecordUUID:</a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)enableAutoAppendRecordUUID:">-enableAutoAppendRecordUUID:<wbr></a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1401,7 +1460,7 @@ Note: this won&rsquo;t reset the current buffered events before this call</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Same as `-[TreasureData enableAutoAppendRecordUUID:], using <q>record_uuid</q> as the column name.</p>
+                        <p>Same as `-[TreasureData enableAutoAppendRecordUUID:], using &ldquo;record_uuid&rdquo; as the column name.</p>
 
                       </div>
                       <div class="declaration">
@@ -1452,15 +1511,132 @@ Note: this won&rsquo;t reset the current buffered events before this call</p>
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TreasureData(im)enableAutoAppendAdvertisingIdentifier"></a>
+                    <a name="//apple_ref/objc/Method/-enableAutoAppendAdvertisingIdentifier" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)enableAutoAppendAdvertisingIdentifier">-enableAutoAppendAdvertisingIdentifier</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Automatically append device&rsquo;s advertising identifer, a.k.a IDFA, using &ldquo;td_maid&rdquo; as the default column name.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">enableAutoAppendAdvertisingIdentifier</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">enableAutoAppendAdvertisingIdentifier</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TreasureData(im)enableAutoAppendAdvertisingIdentifier:"></a>
+                    <a name="//apple_ref/objc/Method/-enableAutoAppendAdvertisingIdentifier:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)enableAutoAppendAdvertisingIdentifier:">-enableAutoAppendAdvertisingIdentifier:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Automatically append device&rsquo;s advertising identifer, a.k.a IDFA.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">enableAutoAppendAdvertisingIdentifier</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">)</span><span class="nv">columnName</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">enableAutoAppendAdvertisingIdentifier</span><span class="p">(</span><span class="n">_</span> <span class="nv">columnName</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>columnName</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The column to write the advertising identifier</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TreasureData(im)disableAutoAppendAdvertisingIdentifier"></a>
+                    <a name="//apple_ref/objc/Method/-disableAutoAppendAdvertisingIdentifier" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)disableAutoAppendAdvertisingIdentifier">-disableAutoAppendAdvertisingIdentifier</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Disable automatically append device&rsquo;s advertising identifer, a.k.a IDFA.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">disableAutoAppendAdvertisingIdentifier</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">disableAutoAppendAdvertisingIdentifier</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
             <div class="task-group">
               <div class="task-name-container">
                 <a name="/Session"></a>
                 <a name="//apple_ref/objc/Section/Session" class="dashAnchor"></a>
-                <a href="#/Session">
-                  <h3 class="section-name">Session</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Session"></a>
+                  <h3 class="section-name"><span>Session</span>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -1468,7 +1644,7 @@ Note: this won&rsquo;t reset the current buffered events before this call</p>
                     <code>
                     <a name="/c:objc(cs)TreasureData(im)startSession:database:"></a>
                     <a name="//apple_ref/objc/Method/-startSession:database:" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)TreasureData(im)startSession:database:">-startSession:database:</a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)startSession:database:">-startSession:<wbr>database:<wbr></a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1478,7 +1654,7 @@ Note: this won&rsquo;t reset the current buffered events before this call</p>
                       <div class="abstract">
                         <p>Start to a new session for this <code>TreasureData</code>&lsquo;s instance</p>
 
-<p>Every subsequent events tracked from this instance will be appended a same random and unique value to <code>td_session_id</code> column. An additional event of `{<q>td_session_event</q>: <q>start</q>} will also be tracked, target the specified table and database.</p>
+<p>Every subsequent events tracked from this instance will be appended a same random and unique value to <code>td_session_id</code> column. An additional event of `{&ldquo;td_session_event&rdquo;: &ldquo;start&rdquo;} will also be tracked, target the specified table and database.</p>
 
                       </div>
                       <div class="declaration">
@@ -1534,7 +1710,7 @@ Note: this won&rsquo;t reset the current buffered events before this call</p>
                     <code>
                     <a name="/c:objc(cs)TreasureData(im)startSession:"></a>
                     <a name="//apple_ref/objc/Method/-startSession:" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)TreasureData(im)startSession:">-startSession:</a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)startSession:">-startSession:<wbr></a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1566,7 +1742,7 @@ Note: this won&rsquo;t reset the current buffered events before this call</p>
                     <code>
                     <a name="/c:objc(cs)TreasureData(im)endSession:database:"></a>
                     <a name="//apple_ref/objc/Method/-endSession:database:" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)TreasureData(im)endSession:database:">-endSession:database:</a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)endSession:database:">-endSession:<wbr>database:<wbr></a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1631,7 +1807,7 @@ Note: this won&rsquo;t reset the current buffered events before this call</p>
                     <code>
                     <a name="/c:objc(cs)TreasureData(im)endSession:"></a>
                     <a name="//apple_ref/objc/Method/-endSession:" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)TreasureData(im)endSession:">-endSession:</a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)endSession:">-endSession:<wbr></a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1789,9 +1965,41 @@ Note: this won&rsquo;t reset the current buffered events before this call</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/c:objc(cs)TreasureData(cm)resetSessionId"></a>
+                    <a name="//apple_ref/objc/Method/+resetSessionId" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(cm)resetSessionId">+resetSessionId</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Reset static session. This will force create a new session when static method <code>startSession</code> is called.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">+</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">resetSessionId</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">class</span> <span class="kd">func</span> <span class="nf">resetSessionId</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/c:objc(cs)TreasureData(cm)setSessionTimeoutMilli:"></a>
                     <a name="//apple_ref/objc/Method/+setSessionTimeoutMilli:" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)TreasureData(cm)setSessionTimeoutMilli:">+setSessionTimeoutMilli:</a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(cm)setSessionTimeoutMilli:">+setSessionTimeoutMilli:<wbr></a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1843,9 +2051,11 @@ Note: this won&rsquo;t reset the current buffered events before this call</p>
               <div class="task-name-container">
                 <a name="/Automatically%20tracked%20events"></a>
                 <a name="//apple_ref/objc/Section/Automatically tracked events" class="dashAnchor"></a>
-                <a href="#/Automatically%20tracked%20events">
-                  <h3 class="section-name">Automatically tracked events</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Automatically%20tracked%20events"></a>
+                  <h3 class="section-name"><span>Automatically tracked events</span>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -2070,8 +2280,8 @@ This is a persistent setting, able to set through <code>enableAppLifecycleEvent<
  <span class="s">"td_iap_product_price"</span><span class="o">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">99</span><span class="p">,</span>
  <span class="s">"td_iap_product_localized_title"</span><span class="o">:</span> <span class="s">"Your Product Title"</span><span class="p">,</span>
  <span class="s">"td_iap_product_localized_description"</span><span class="o">:</span> <span class="s">"Your Product Description"</span><span class="p">,</span>
- <span class="s">"td_iap_product_currency_code"</span><span class="o">:</span> <span class="s">"USD"</span><span class="p">,</span>  <span class="c1">// this is only available on iOS 10 and above
-</span></code></pre>
+ <span class="s">"td_iap_product_currency_code"</span><span class="o">:</span> <span class="s">"USD"</span><span class="p">,</span>  <span class="c1">// this is only available on iOS 10 and above</span>
+</code></pre>
 
                       </div>
                       <div class="declaration">
@@ -2160,9 +2370,11 @@ This is a persistent setting, able to set through <code>enableAppLifecycleEvent<
               <div class="task-name-container">
                 <a name="/Personalization%20API"></a>
                 <a name="//apple_ref/objc/Section/Personalization API" class="dashAnchor"></a>
-                <a href="#/Personalization%20API">
-                  <h3 class="section-name">Personalization API</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Personalization%20API"></a>
+                  <h3 class="section-name"><span>Personalization API</span>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -2170,7 +2382,7 @@ This is a persistent setting, able to set through <code>enableAppLifecycleEvent<
                     <code>
                     <a name="/c:objc(cs)TreasureData(im)fetchUserSegments:keys:options:completionHandler:"></a>
                     <a name="//apple_ref/objc/Method/-fetchUserSegments:keys:options:completionHandler:" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)TreasureData(im)fetchUserSegments:keys:options:completionHandler:">-fetchUserSegments:keys:options:completionHandler:</a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)fetchUserSegments:keys:options:completionHandler:">-fetchUserSegments:<wbr>keys:<wbr>options:<wbr>completionHandler:<wbr></a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2200,7 +2412,7 @@ This is a persistent setting, able to set through <code>enableAppLifecycleEvent<
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">fetchUserSegments</span><span class="p">(</span><span class="n">tokens</span> <span class="nv">audienceTokens</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="nv">keys</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">],</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">completionHandler</span> <span class="nv">handler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt">Any</span><span class="p">]?,</span> <span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">fetchUserSegments</span><span class="p">(</span><span class="n">tokens</span> <span class="nv">audienceTokens</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="nv">keys</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">],</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span></code></pre>
 
                         </div>
                       </div>
@@ -2217,6 +2429,18 @@ This is a persistent setting, able to set through <code>enableAppLifecycleEvent<
                               <td>
                                 <div>
                                   <p>List of audience tokens. There must be at least one token.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>keys</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Profiles&rsquo; as specified in key column.</p>
                                 </div>
                               </td>
                             </tr>
@@ -2254,11 +2478,278 @@ This is a persistent setting, able to set through <code>enableAppLifecycleEvent<
             </div>
             <div class="task-group">
               <div class="task-name-container">
+                <a name="/Default%20values"></a>
+                <a name="//apple_ref/objc/Section/Default values" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Default%20values"></a>
+                  <h3 class="section-name"><span>Default values</span>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TreasureData(im)setDefaultValue:forKey:database:table:"></a>
+                    <a name="//apple_ref/objc/Method/-setDefaultValue:forKey:database:table:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)setDefaultValue:forKey:database:table:">-setDefaultValue:<wbr>forKey:<wbr>database:<wbr>table:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Set default <code>value</code> for  <code>key</code> in all new events targeting <code>database</code> and <code>table</code>.
+When <code>database</code> and/or <code>table</code> parameters are nil, the nil parameter acts like a wild card that allows to set specified key value pair to new events added to any database (if <code>database</code> is nil) and/or to any table (if <code>table</code> is nil).
+For example, if you pass nil to both <code>database</code> and <code>table</code> parameters, all new events will have specified default value.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setDefaultValue</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">id</span><span class="p">)</span><span class="nv">value</span>
+                 <span class="nf">forKey</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span>
+               <span class="nf">database</span><span class="p">:(</span><span class="n">nullable</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">database</span>
+                  <span class="nf">table</span><span class="p">:(</span><span class="n">nullable</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">table</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">setDefaultValue</span><span class="p">(</span><span class="n">_</span> <span class="nv">value</span><span class="p">:</span> <span class="kt">Any</span><span class="p">,</span> <span class="n">forKey</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">database</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">table</span><span class="p">:</span> <span class="kt">String</span><span class="p">?)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>value</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>default value for <code>key</code></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>key</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the event&rsquo;s key that default value is set to, corresponding to column in table.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>database</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the database to set default value to. If nil, specified table of any database will have new events with the added default value.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>table</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the table to set default value to. If nil, any table of specified database will have new events with the added default value.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TreasureData(im)defaultValueForKey:database:table:"></a>
+                    <a name="//apple_ref/objc/Method/-defaultValueForKey:database:table:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)defaultValueForKey:database:table:">-defaultValueForKey:<wbr>database:<wbr>table:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get default value of <code>key</code> in all new events targeting <code>database</code> and <code>table</code>.
+See setDefaultValue:forKey:database:table: for logic setting database and table.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">nullable</span> <span class="n">id</span><span class="p">)</span><span class="nf">defaultValueForKey</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span>
+                         <span class="nf">database</span><span class="p">:(</span><span class="n">nullable</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">database</span>
+                            <span class="nf">table</span><span class="p">:(</span><span class="n">nullable</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">table</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">defaultValue</span><span class="p">(</span><span class="n">forKey</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">database</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">table</span><span class="p">:</span> <span class="kt">String</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Any</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>key</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the event&rsquo;s key that default value is set to, corresponding to column in table.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>database</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the database to get default value from. If nil, get default value of specified table of any database.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>table</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the table to get default value from. If nil, get default value of any table of specified database.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>default value for <code>key</code> for events targeting <code>database</code> and <code>table</code>.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TreasureData(im)removeDefaultValueForKey:database:table:"></a>
+                    <a name="//apple_ref/objc/Method/-removeDefaultValueForKey:database:table:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)removeDefaultValueForKey:database:table:">-removeDefaultValueForKey:<wbr>database:<wbr>table:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Remove default value of <code>key</code> in all new events targeting <code>database</code> and <code>table</code>.
+See setDefaultValue:forKey:database:table: for logic setting database and table.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">removeDefaultValueForKey</span><span class="p">:(</span><span class="n">nonnull</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">key</span>
+                        <span class="nf">database</span><span class="p">:(</span><span class="n">nullable</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">database</span>
+                           <span class="nf">table</span><span class="p">:(</span><span class="n">nullable</span> <span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">table</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">removeDefaultValue</span><span class="p">(</span><span class="n">forKey</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">database</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">table</span><span class="p">:</span> <span class="kt">String</span><span class="p">?)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>key</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the event&rsquo;s key that default value is set to, corresponding to column in table.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>database</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the database to remove default value from. If nil, specified table of any database will have new events without the default value.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>table</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the table to remove default value from. If nil, any table of specified database will have new events without the default value.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
                 <a name="/Misc."></a>
                 <a name="//apple_ref/objc/Section/Misc." class="dashAnchor"></a>
-                <a href="#/Misc.">
-                  <h3 class="section-name">Misc.</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Misc."></a>
+                  <h3 class="section-name"><span>Misc.</span>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -2591,9 +3082,11 @@ This is a persistent setting, able to set through <code>enableAppLifecycleEvent<
               <div class="task-name-container">
                 <a name="/Deprecated"></a>
                 <a name="//apple_ref/objc/Section/Deprecated" class="dashAnchor"></a>
-                <a href="#/Deprecated">
-                  <h3 class="section-name">Deprecated</h3>
-                </a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Deprecated"></a>
+                  <h3 class="section-name"><span>Deprecated</span>
+</h3>
+                </div>
               </div>
               <ul>
                 <li class="item">
@@ -2601,7 +3094,7 @@ This is a persistent setting, able to set through <code>enableAppLifecycleEvent<
                     <code>
                     <a name="/c:objc(cs)TreasureData(im)event:database:table:"></a>
                     <a name="//apple_ref/objc/Method/-event:database:table:" class="dashAnchor"></a>
-                    <a class="token discouraged" href="#/c:objc(cs)TreasureData(im)event:database:table:">-event:database:table:</a>
+                    <a class="token discouraged" href="#/c:objc(cs)TreasureData(im)event:database:table:">-event:<wbr>database:<wbr>table:<wbr></a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2637,7 +3130,7 @@ This is a persistent setting, able to set through <code>enableAppLifecycleEvent<
                     <code>
                     <a name="/c:objc(cs)TreasureData(im)event:table:"></a>
                     <a name="//apple_ref/objc/Method/-event:table:" class="dashAnchor"></a>
-                    <a class="token discouraged" href="#/c:objc(cs)TreasureData(im)event:table:">-event:table:</a>
+                    <a class="token discouraged" href="#/c:objc(cs)TreasureData(im)event:table:">-event:<wbr>table:<wbr></a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2673,7 +3166,7 @@ This is a persistent setting, able to set through <code>enableAppLifecycleEvent<
                     <code>
                     <a name="/c:objc(cs)TreasureData(im)uploadWithBlock:"></a>
                     <a name="//apple_ref/objc/Method/-uploadWithBlock:" class="dashAnchor"></a>
-                    <a class="token discouraged" href="#/c:objc(cs)TreasureData(im)uploadWithBlock:">-uploadWithBlock:</a>
+                    <a class="token discouraged" href="#/c:objc(cs)TreasureData(im)uploadWithBlock:">-uploadWithBlock:<wbr></a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2697,7 +3190,7 @@ This is a persistent setting, able to set through <code>enableAppLifecycleEvent<
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">upload</span><span class="p">(</span><span class="n">_</span> <span class="nv">block</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">upload</span><span class="p">()</span> <span class="k">async</span></code></pre>
 
                         </div>
                       </div>
@@ -2709,7 +3202,7 @@ This is a persistent setting, able to set through <code>enableAppLifecycleEvent<
                     <code>
                     <a name="/c:objc(cs)TreasureData(im)uploadEventsWithBlock:"></a>
                     <a name="//apple_ref/objc/Method/-uploadEventsWithBlock:" class="dashAnchor"></a>
-                    <a class="token discouraged" href="#/c:objc(cs)TreasureData(im)uploadEventsWithBlock:">-uploadEventsWithBlock:</a>
+                    <a class="token discouraged" href="#/c:objc(cs)TreasureData(im)uploadEventsWithBlock:">-uploadEventsWithBlock:<wbr></a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2733,7 +3226,7 @@ This is a persistent setting, able to set through <code>enableAppLifecycleEvent<
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">uploadEvents</span><span class="p">(</span><span class="n">_</span> <span class="nv">block</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">uploadEvents</span><span class="p">()</span> <span class="k">async</span></code></pre>
 
                         </div>
                       </div>
@@ -2745,7 +3238,7 @@ This is a persistent setting, able to set through <code>enableAppLifecycleEvent<
                     <code>
                     <a name="/c:objc(cs)TreasureData(im)setApiEndpoint:"></a>
                     <a name="//apple_ref/objc/Method/-setApiEndpoint:" class="dashAnchor"></a>
-                    <a class="token discouraged" href="#/c:objc(cs)TreasureData(im)setApiEndpoint:">-setApiEndpoint:</a>
+                    <a class="token discouraged" href="#/c:objc(cs)TreasureData(im)setApiEndpoint:">-setApiEndpoint:<wbr></a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2781,11 +3274,10 @@ This is a persistent setting, able to set through <code>enableAppLifecycleEvent<
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/treasure-data/td-ios-sdk" target="_blank" rel="external">mitsu and huylenq</a>. All rights reserved. (Last updated: 2019-06-11)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2022 <a class="link" href="https://github.com/treasure-data/td-ios-sdk" target="_blank" rel="external noopener">mitsu, huylenq, and tung-vu-td</a>. All rights reserved. (Last updated: 2022-09-29)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
     </div>
   </body>
-</div>
 </html>
