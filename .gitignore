@@ -7,3 +7,8 @@ TreasureDataExample/Podfile.lock
 TreasureDataExampleSwift/Podfile.lock
 build
 Output
+
+.build/
+
+# Logs directory for CI scriptss
+logs/
