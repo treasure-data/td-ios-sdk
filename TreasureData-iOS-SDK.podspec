@@ -1,12 +1,12 @@
 Pod::Spec.new do |s|
   s.name         = "TreasureData-iOS-SDK"
-  s.version      = "0.8.1"
+  s.version      = "0.9.0"
   s.summary      = "TreasureData SDK for iOS."
   s.license      = "Apache"
   s.authors      = { "mitsu" => "mitsu@treasure-data.com",
                       "huylenq" => "huy.lenq@gmail.com",
                       "tung-vu-td" => "tung.vu@treasure-data.com" }
-  s.platforms    = { :ios => "7.0", :tvos => "9.0" }
+  s.platforms    = { :ios => "12.0", :tvos => "12.0" }
   s.homepage     = "https://github.com/treasure-data/td-ios-sdk"
   s.source       = { :git => "https://github.com/treasure-data/td-ios-sdk.git", :tag => s.version.to_s  }
   s.source_files = ['TreasureData', "TreasureDataInternal"]
