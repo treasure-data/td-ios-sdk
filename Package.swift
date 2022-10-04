@@ -14,7 +14,7 @@ let package = Package(
             targets: ["TreasureData_iOS_SDK"]),
     ],
     dependencies: [
-        .package(url: "git@github.com:treasure-data/KeenClient-iOS.git", .exact("3.9.0"))
+        .package(url: "https://github.com/treasure-data/KeenClient-iOS.git", .exact("3.9.0"))
     ],
     targets: [
       .target(

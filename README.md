@@ -36,6 +36,15 @@ $ pod install
 
 Remember to reopen your project by opening .xcworkspace file instead of .xcodeproj file 
 
+### Swift Package Manager
+
+You can install either via Xcode: File > Swift Packages > Add Package Dependency and enter `https://github.com/treasure-data/td-ios-sdk.git`.
+
+Or add this line to `dependencies` array in Package.swift file:
+```
+.package(url: "https://github.com/treasure-data/td-ios-sdk.git", .upToNextMajor(from: "0.9.0"))
+```
+
 ### Framework
 
 From 0.9.0, we no longer support standalone framework.
