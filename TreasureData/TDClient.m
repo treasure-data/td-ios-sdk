@@ -11,7 +11,7 @@
 #import <UIKit/UIKit.h>
 #import <CommonCrypto/CommonDigest.h>
 #import "TDClient.h"
-#import <GZIP/GZIP.h>
+@import GZIP;
 
 static NSString *version = @"0.9.0";
 
