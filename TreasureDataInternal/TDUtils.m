@@ -8,7 +8,7 @@
 
 #import "TDUtils.h"
 #import "Constants.h"
-#import "KeenClientTD/KeenClient.h"
+@import KeenClientTD;
 
 @implementation TDUtils
 

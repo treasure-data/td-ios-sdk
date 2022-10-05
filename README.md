@@ -1,7 +1,7 @@
 Treasure Data iOS SDK
 ===============
 
-iOS and tvOS SDK for [Treasure Data](http://www.treasuredata.com/). With this SDK, you can import the events on your applications into Treasure Data easily. Technically, this library supports iOS 7 and later, but we only execute OS coverage tests for iOS 8, 9, 10, 11, 12, 13 ,14 and 15. This SDK also support Apple tvOS 12 and up.
+iOS and tvOS SDK for [Treasure Data](http://www.treasuredata.com/). With this SDK, you can import the events on your applications into Treasure Data easily. As of 0.9.0, this SDK support iOS 12 and up as well as support tvOS 12 and up.
 
 Also, there is an alternative SDK written in Swift [https://github.com/recruit-lifestyle/TreasureDataSDK](https://github.com/recruit-lifestyle/TreasureDataSDK). Note, however, that it does not support current GDPR functionality in the mainstream TD SDKs.
 
@@ -20,10 +20,10 @@ $ gem install cocoapods
 Next, add this line in your Podfile.
 
 ```
-pod 'TreasureData-iOS-SDK', '= 0.8.1'
+pod 'TreasureData-iOS-SDK', '= 0.9.0'
 ```
 
-If you use the SDK in Swift, add this line to your Podfile.
+Add this line to your Podfile (usually at the beginning of the file).
 ```
 use_frameworks!
 ```
@@ -36,9 +36,18 @@ $ pod install
 
 Remember to reopen your project by opening .xcworkspace file instead of .xcodeproj file 
 
+### Swift Package Manager
+
+You can install either via Xcode: File > Swift Packages > Add Package Dependency and enter `https://github.com/treasure-data/td-ios-sdk.git`.
+
+Or add this line to `dependencies` array in Package.swift file:
+```
+.package(url: "https://github.com/treasure-data/td-ios-sdk.git", .upToNextMajor(from: "0.9.0"))
+```
+
 ### Framework
 
-Download [TreasureData.framework](http://cdn.treasuredata.com/sdk/ios/0.8.1/TreasureData-iOS-SDK.framework.zip) and add it and `libz` library into your project.
+From 0.9.0, we no longer support standalone framework.
 
 ## Usage in Objective-C
 

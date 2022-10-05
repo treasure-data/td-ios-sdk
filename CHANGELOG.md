@@ -1,6 +1,13 @@
 # Change Log
 
-## Version 0.8.1
+## version 0.9.0
+_2022-09-29_
+
+* Add support for Swift Package Manager
+* No longer support standalone Framework
+* SDK user now need to add use_framework! in their Podfile
+
+## version 0.8.1
 _2020-08-19_
 
 * Fix using wrong version of KeenClientTD (should be 3.3.0).

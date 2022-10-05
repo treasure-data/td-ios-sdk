@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "KeenClientTD/KeenClient.h"
+@import KeenClientTD;
 
 /**
  * The internal client using for sending requests. Most of the exposed properties could be configured via the container `TreasureData` instance. You probably need this only to tuning the retry parameters.
