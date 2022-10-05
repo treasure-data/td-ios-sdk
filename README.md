@@ -297,7 +297,7 @@ You can detect if it's the first running or not easily using `isFirstRun` method
 
 ### Endpoint
 
-The API endpoint (default: https://in.treasuredata.com) can be modified using `initializeApiEndpoint` class method. For example,
+The API endpoint (default: https://us01.records.in.treasuredata.com) can be modified using `initializeApiEndpoint` class method. For example,
 
 ```
 [TreasureData initializeApiEndpoint:@"https://specifying-another-endpoint.com"];

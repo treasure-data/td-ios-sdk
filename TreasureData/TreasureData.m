@@ -104,7 +104,7 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
         // Unlike custom events, app lifecycle events must be explicitly enabled
         self.appLifecycleEventEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENT_ENABLED];
 
-        NSString *endpoint = defaultApiEndpoint ? defaultApiEndpoint : @"https://in.treasuredata.com";
+        NSString *endpoint = defaultApiEndpoint ? defaultApiEndpoint : @"https://us01.records.in.treasuredata.com";
         self.client = [[TDClient alloc] __initWithApiKey:apiKey
                                              apiEndpoint:endpoint];
         if (self.client) {
