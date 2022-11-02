@@ -31,7 +31,7 @@ static NSString *version = @"0.9.0";
         if (!NSClassFromString(@"NSUUID")) {
             return @{};
         }
-        return @{@"#UUID": [[NSUUID UUID] UUIDString]};
+        return @{@"uuid": [[NSUUID UUID] UUIDString]};
     };
     /*
      > 5.times.inject(0){|a, i| puts a; x = 4 * (2 ** i); a += x; a}
