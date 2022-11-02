@@ -302,38 +302,6 @@ static NSString *END_POINT = @"http://localhost";
         }];
 }
 
-- (void)testSingleEventWithServerSideUploadTimestampWithDefaultColumnName {
-    [self baseTesting:^() {
-        [self setupDefaultExpectedResponseBody: @{@"db_.tbl":@[@{@"success":@"true"}]}];
-        [self.td enableServerSideUploadTimestamp];
-        [self.td addEvent:@{@"name":@"foobar"} database:@"db_" table:@"tbl"];
-    }
-            assertion:^(NSDictionary *ev){
-                XCTAssertEqual(1, self.session.sendRequestCount);
-                XCTAssertEqual(1, ev.count);
-                NSArray *arr = [ev objectForKey:@"db_.tbl"];
-                [self assertCollectedValueWithKey:arr key:@"#SSUT" expectedVals:@[@1]
-                                     expectedKeys:@[@"name", @"uuid", @"#SSUT"]
-                 ];
-            }];
-}
-
-- (void)testSingleEventWithServerSideUploadTimestamp {
-    [self baseTesting:^() {
-        [self setupDefaultExpectedResponseBody: @{@"db_.tbl":@[@{@"success":@"true"}]}];
-        [self.td enableServerSideUploadTimestamp:@"my_server_upload_time"];
-        [self.td addEvent:@{@"name":@"foobar"} database:@"db_" table:@"tbl"];
-    }
-            assertion:^(NSDictionary *ev){
-                XCTAssertEqual(1, self.session.sendRequestCount);
-                XCTAssertEqual(1, ev.count);
-                NSArray *arr = [ev objectForKey:@"db_.tbl"];
-                [self assertCollectedValueWithKey:arr key:@"#SSUT" expectedVals:@[@"my_server_upload_time"]
-                                     expectedKeys:@[@"name", @"uuid", @"#SSUT"]
-                 ];
-            }];
-}
-
 - (void)testSingleEventWithDefaultDatabase {
     [self baseTesting:^() {
         self.td.defaultDatabase = @"db_";

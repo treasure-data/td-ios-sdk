@@ -42,7 +42,6 @@ static NSString *keyOfLocaleCountry = @"td_locale_country";
 static NSString *keyOfLocaleLang = @"td_locale_lang";
 static NSString *keyOfSessionId = @"td_session_id";
 static NSString *keyOfSessionEvent = @"td_session_event";
-static NSString *keyOfServerSideUploadTimestamp = @"#SSUT";
 static NSString *sessionEventStart = @"start";
 static NSString *sessionEventEnd = @"end";
 static Session *session = nil;
@@ -56,8 +55,6 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
 @property BOOL autoAppendAppInformation;
 @property BOOL autoAppendLocaleInformation;
 @property NSString *sessionId;
-@property BOOL serverSideUploadTimestamp;
-@property NSString *serverSideUploadTimestampColumn;
 @property NSString *autoAppendRecordUUIDColumn;
 @property NSString *autoAppendAdvertisingIdColumn;
 
@@ -251,9 +248,6 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     if (session || self.sessionId) {
         enrichedRecord = [self appendSessionId:enrichedRecord];
     }
-    if (self.serverSideUploadTimestamp) {
-        enrichedRecord = [self appendServerSideUploadTimestamp:enrichedRecord];
-    }
     if (self.autoAppendAppInformation) {
         enrichedRecord = [self appendAppInformation:enrichedRecord];
     }
@@ -398,17 +392,6 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     }
     else {
         [record setValue:self.sessionId forKey:keyOfSessionId];
-    }
-    return record;
-}
-
-- (NSDictionary*)appendServerSideUploadTimestamp:(NSDictionary *)origRecord {
-    NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
-    if (self.serverSideUploadTimestampColumn) {
-        [record setValue:self.serverSideUploadTimestampColumn forKey:keyOfServerSideUploadTimestamp];
-    }
-    else {
-        [record setValue:@true forKey:keyOfServerSideUploadTimestamp];
     }
     return record;
 }
@@ -558,26 +541,6 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
 
 + (void)setSessionTimeoutMilli:(long)to {
     sessionTimeoutMilli = to;
-}
-
-// FIXME: document - which column will be used if unspecified?
-- (void)enableServerSideUploadTimestamp {
-    self.serverSideUploadTimestamp = TRUE;
-    self.serverSideUploadTimestampColumn = nil;
-}
-
-- (void)enableServerSideUploadTimestamp: (NSString*)columnName {
-    if (!columnName) {
-        KCLog(@"WARN: the specified columnName for server upload timestamp is nil; auto appending server upload timestamp won't be enabled.");
-        return;
-    }
-    self.serverSideUploadTimestamp = TRUE;
-    self.serverSideUploadTimestampColumn = columnName;
-}
-
-- (void)disableServerSideUploadTimestamp {
-    self.serverSideUploadTimestamp = FALSE;
-    self.serverSideUploadTimestampColumn = nil;
 }
 
 - (void)enableAutoAppendRecordUUID {

@@ -253,25 +253,6 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 - (void)disableAutoAppendLocaleInformation;
 
 /**
- * Automatically append the time value when the event is received on server. Disabled by default.
- *
- * @param columnName The column to write the uploaded time value
- */
-- (void)enableServerSideUploadTimestamp: (NSString* _Nonnull)columnName;
-
-/**
- * Automatically append the time when the event is received on server. Disabled by default.
- *
- * This is disabled by default.
- */
-- (void)enableServerSideUploadTimestamp;
-
-/**
- * Disable the uploading time column
- */
-- (void)disableServerSideUploadTimestamp;
-
-/**
  * Automatically append a random and unique ID for each event. Disabled by default.
  *
  * @param columnName The column to write the ID
