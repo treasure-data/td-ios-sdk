@@ -5,6 +5,13 @@ iOS and tvOS SDK for [Treasure Data](http://www.treasuredata.com/). With this SD
 
 Also, there is an alternative SDK written in Swift [https://github.com/recruit-lifestyle/TreasureDataSDK](https://github.com/recruit-lifestyle/TreasureDataSDK). Note, however, that it does not support current GDPR functionality in the mainstream TD SDKs.
 
+## Migration to version 1
+
+Version 1 has major changes that are not backward compatible with previous versions. If you are upgrading from version 0.9.0 or earlier, your code will not run correctly without doing these following steps:
+- API endpoint has changed to Ingestion Endpoint. For now, the only available endpoint is https://us01.records.in.treasuredata.com.
+- Server side upload timestamp feature is removed. If you need this feature, please contact our support team.
+- `uuid` is now reserved column name. If you try to add value to event's `uuid` key, you won't see the column show up in the database.
+
 ## Installation
 
 There are several ways to install the library.
