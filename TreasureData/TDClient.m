@@ -72,8 +72,8 @@ static NSString *version = @"0.9.0";
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setValue:[NSString stringWithFormat: @"TD1 %@", self.apiKey] forHTTPHeaderField:@"Authorization"];
-    [request setValue:@"application/vnd.treasuredata.v1.js+json" forHTTPHeaderField:@"Content-Type"];
-    [request setValue:@"application/vnd.treasuredata.v1.js+json" forHTTPHeaderField:@"Accept"];
+    [request setValue:@"application/vnd.treasuredata.v1+json" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"application/vnd.treasuredata.v1+json" forHTTPHeaderField:@"Accept"];
     [request setValue:[NSString stringWithFormat:@"TD-iOS-SDK/%@ (%@ %@)", version, [[UIDevice currentDevice] systemName], [[UIDevice currentDevice] systemVersion]] forHTTPHeaderField:@"User-Agent"];
     
     if (_enableEventCompression) {

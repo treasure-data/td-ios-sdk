@@ -29,7 +29,6 @@ static NSString *testTable;
     [[TreasureData sharedInstance] enableAutoAppendModelInformation];
     [[TreasureData sharedInstance] enableAutoAppendAppInformation];
     [[TreasureData sharedInstance] enableAutoAppendLocaleInformation];
-    [[TreasureData sharedInstance] enableServerSideUploadTimestamp:@"server_upload_time"];
     [[TreasureData sharedInstance] enableInAppPurchaseEvent];
     [[TreasureData sharedInstance] enableAutoAppendAdvertisingIdentifier:@"td_maid"];
 }
