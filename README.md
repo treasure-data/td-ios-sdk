@@ -349,6 +349,20 @@ You can also reset UUID (`td_uuid`) at any time using following API.
 [[TreasureData sharedInstance] resetUniqId];
 ```
 
+### Adding local time to each even record automatically (enabled by default)
+By default, local timestampt will be added to event's `time` key automatically. If you `disableAutoAppendLocalTimestamp` without adding `time` key to the event yourself, our server will add server side timestamp to `time` column. You can also auto track local time with custom column. If so, the `time` column will have server side timestamp.
+
+```
+// Use local time as `time` column
+[[TreasureData sharedInstance] enableAutoAppendLocalTimestamp];
+
+// Add local time as a customized column name
+[[TreasureData sharedInstance] enableAutoAppendLocalTimestamp:@"clientside_time"];
+
+// Disable auto append local time
+[[TreasureData sharedInstance] disableAutoAppendLocalTimestamp];
+```
+
 ### Adding an UUID to each event record automatically
 UUID will be added to each event record automatically if you call `enableAutoAppendRecordUUID`. Each event has different UUID.
 

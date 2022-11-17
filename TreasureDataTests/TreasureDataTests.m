@@ -397,15 +397,15 @@ static NSString *END_POINT = @"http://localhost";
     
     [self baseTesting:^() {
         [self setupDefaultExpectedResponseBody: @{@"db_.tbl":@[@{@"success":@"true"}]}];
-        [self.td enableAutoAppendLocalTimestamp:@"my_server_upload_time"];
+        [self.td enableAutoAppendLocalTimestamp:@"my_local_time"];
         [self.td addEvent:@{@"name":@"foobar"} database:@"db_" table:@"tbl"];
     }
             assertion:^(NSDictionary *ev){
         XCTAssertEqual(1, self.session.sendRequestCount);
         XCTAssertEqual(1, ev.count);
         NSArray *arr = [ev objectForKey:@"db_.tbl"];
-        [self assertCollectedValueWithKey:arr key:@"my_server_upload_time" expectedVals:@[timestamp]
-                             expectedKeys:@[@"name", @"uuid", @"my_server_upload_time"]
+        [self assertCollectedValueWithKey:arr key:@"my_local_time" expectedVals:@[timestamp]
+                             expectedKeys:@[@"name", @"uuid", @"my_local_time"]
         ];
     }];
 }
