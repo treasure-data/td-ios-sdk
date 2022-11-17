@@ -210,6 +210,25 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 - (void)resetUniqId;
 
 /**
+ * Automatically append the local time value when the event is added. Enabled by default.
+ *
+ * @param columnName The column to write the local time value
+ */
+- (void)enableAutoAppendLocalTimestamp:(NSString* _Nonnull)columnName;
+
+/**
+ * Automatically append the local time when the event is added. By default, the column's name is "time"
+ *
+ * This is enabled by default.
+ */
+- (void)enableAutoAppendLocalTimestamp;
+
+/**
+ * Disable automatically append the local time when the event is added.
+ */
+- (void)disableAutoAppendLocalTimestamp;
+
+/**
  * Disable these auto appended columns:
  *
  * - `td_device`, `td_model`: current these share a same value, extracted from `UIDevice.currentDevice.model`. Example: "iPhone", "iPad",...

@@ -25,6 +25,7 @@ static NSString *defaultApiEndpoint = nil;
 static NSString *defaultCdpEndpoint = @"https://cdp.in.treasuredata.com";
 static NSString *storageKeyOfUuid = @"td_sdk_uuid";
 static NSString *storageKeyOfFirstRun = @"td_sdk_first_run";
+static NSString *keyOfLocalTimestamp = @"time";
 static NSString *keyOfUuid = @"td_uuid";
 static NSString *keyOfAdvertisingIdentifier = @"td_maid";
 static NSString *keyOfBoard = @"td_board";
@@ -50,6 +51,8 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
 
 @interface TreasureData ()
 
+@property BOOL autoAppendLocalTimestamp;
+@property NSString *autoAppendLocalTimestampColumn;
 @property BOOL autoAppendUniqId;
 @property BOOL autoAppendModelInformation;
 @property BOOL autoAppendAppInformation;
@@ -90,6 +93,8 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
          *      the parent client's project ids.
          *
          */
+        
+        [self enableAutoAppendLocalTimestamp];
 
         if ([[NSUserDefaults standardUserDefaults] objectForKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENT_ENABLED] != nil) {
             self.customEventEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENT_ENABLED];
@@ -236,6 +241,9 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     
     enrichedRecord = [TDUtils stripNonEventData:enrichedRecord];
     
+    if (self.autoAppendLocalTimestamp) {
+        enrichedRecord = [self appendLocalTimestamp:enrichedRecord];
+    }
     if (self.autoAppendUniqId) {
         enrichedRecord = [self appendUniqId:enrichedRecord];
     }
@@ -286,6 +294,16 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
         [[NSUserDefaults standardUserDefaults] setObject:_UUID forKey:storageKeyOfUuid];
     }
     return _UUID;
+}
+
+- (NSDictionary*)appendLocalTimestamp:(NSDictionary *)origRecord {
+    NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
+    NSDate *now = [NSDate date];
+    NSNumber *timestamp = [NSNumber numberWithInt:(int) now.timeIntervalSince1970];
+    [record
+     setValue:timestamp
+     forKey:self.autoAppendLocalTimestampColumn ? self.autoAppendLocalTimestampColumn : keyOfLocalTimestamp];
+    return record;
 }
 
 - (NSDictionary*)appendUniqId:(NSDictionary *)origRecord {
@@ -541,6 +559,25 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
 
 + (void)setSessionTimeoutMilli:(long)to {
     sessionTimeoutMilli = to;
+}
+
+- (void)enableAutoAppendLocalTimestamp {
+    self.autoAppendLocalTimestamp = TRUE;
+    self.autoAppendLocalTimestampColumn = nil;
+}
+
+- (void)enableAutoAppendLocalTimestamp:(NSString *)columnName {
+    if (!columnName) {
+        KCLog(@"WARN: the specified columnName for local timestamp is nil; auto appending local timestamp won't be enabled.");
+              return;
+    }
+    self.autoAppendLocalTimestamp = TRUE;
+    self.autoAppendLocalTimestampColumn = columnName;
+}
+
+- (void)disableAutoAppendLocalTimestamp {
+    self.autoAppendLocalTimestamp = FALSE;
+    self.autoAppendLocalTimestampColumn = nil;
 }
 
 - (void)enableAutoAppendRecordUUID {

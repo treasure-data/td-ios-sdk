@@ -6,17 +6,26 @@ PODS:
 
 DEPENDENCIES:
   - GZIP (= 1.3.0)
-  - KeenClientTD (= 3.9.0)
+  - KeenClientTD (from `https://github.com/treasure-data/KeenClient-iOS.git`, branch `support-ingest`)
 
 SPEC REPOS:
   https://cdn.cocoapods.org/:
     - GZIP
-    - KeenClientTD
+
+EXTERNAL SOURCES:
+  KeenClientTD:
+    :branch: support-ingest
+    :git: https://github.com/treasure-data/KeenClient-iOS.git
+
+CHECKOUT OPTIONS:
+  KeenClientTD:
+    :commit: 4bf82c6cae2c550c9c930b262fe2fed9cf352837
+    :git: https://github.com/treasure-data/KeenClient-iOS.git
 
 SPEC CHECKSUMS:
   GZIP: 416858efbe66b41b206895ac6dfd5493200d95b3
   KeenClientTD: c5f4ce9842887d5c1760ca342a657272d65b31dc
 
-PODFILE CHECKSUM: b492910ae17ba7e630e16b3e0f32ee43aa3ddfe8
+PODFILE CHECKSUM: d2c25634c6f5202a535efd1de7ca940081061836
 
 COCOAPODS: 1.11.3
