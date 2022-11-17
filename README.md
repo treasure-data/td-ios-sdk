@@ -350,7 +350,7 @@ You can also reset UUID (`td_uuid`) at any time using following API.
 ```
 
 ### Adding local time to each even record automatically (enabled by default)
-By default, local timestampt will be added to event's `time` key automatically. If you `disableAutoAppendLocalTimestamp` without adding `time` key to the event yourself, our server will add server side timestamp to `time` column. You can also auto track local time with custom column. If so, the `time` column will have server side timestamp.
+By default, local timestamp will be added to event's `time` key automatically. If you `disableAutoAppendLocalTimestamp` without adding `time` key to the event yourself, the server will add server side timestamp to `time` column. You can also auto track local time with custom column. If so, the `time` column will have server side timestamp.
 
 ```
 // Use local time as `time` column

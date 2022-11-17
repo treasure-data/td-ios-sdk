@@ -51,7 +51,6 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
 
 @interface TreasureData ()
 
-@property BOOL autoAppendLocalTimestamp;
 @property NSString *autoAppendLocalTimestampColumn;
 @property BOOL autoAppendUniqId;
 @property BOOL autoAppendModelInformation;
@@ -241,7 +240,7 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     
     enrichedRecord = [TDUtils stripNonEventData:enrichedRecord];
     
-    if (self.autoAppendLocalTimestamp) {
+    if (self.autoAppendLocalTimestampColumn != nil) {
         enrichedRecord = [self appendLocalTimestamp:enrichedRecord];
     }
     if (self.autoAppendUniqId) {
@@ -300,9 +299,7 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
     NSDate *now = [NSDate date];
     NSNumber *timestamp = [NSNumber numberWithInt:(int) now.timeIntervalSince1970];
-    [record
-     setValue:timestamp
-     forKey:self.autoAppendLocalTimestampColumn ? self.autoAppendLocalTimestampColumn : keyOfLocalTimestamp];
+    [record setValue:timestamp forKey:self.autoAppendLocalTimestampColumn];
     return record;
 }
 
@@ -562,21 +559,18 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
 }
 
 - (void)enableAutoAppendLocalTimestamp {
-    self.autoAppendLocalTimestamp = TRUE;
-    self.autoAppendLocalTimestampColumn = nil;
+    self.autoAppendLocalTimestampColumn = keyOfLocalTimestamp;
 }
 
 - (void)enableAutoAppendLocalTimestamp:(NSString *)columnName {
     if (!columnName) {
-        KCLog(@"WARN: the specified columnName for local timestamp is nil; auto appending local timestamp won't be enabled.");
-              return;
+        KCLog(@"WARN: the specified columnName for local timestamp is nil. This call is noop");
+        return;
     }
-    self.autoAppendLocalTimestamp = TRUE;
     self.autoAppendLocalTimestampColumn = columnName;
 }
 
 - (void)disableAutoAppendLocalTimestamp {
-    self.autoAppendLocalTimestamp = FALSE;
     self.autoAppendLocalTimestampColumn = nil;
 }
 
