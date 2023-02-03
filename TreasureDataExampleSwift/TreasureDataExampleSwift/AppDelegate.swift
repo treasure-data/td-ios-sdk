@@ -16,9 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         TreasureData.enableLogging()
-        // TreasureData.initializeApiEndpoint("https://in.ybi.idcfcloud.net")
         TreasureData.initializeEncryptionKey("hello world")
-        TreasureData.initialize(withApiKey: "your_api_key")
+        TreasureData.initialize(withApiKey: "your_api_key", apiEndpoint: "https://specify-other-endpoint-if-needed.com")
         TreasureData.sharedInstance().defaultDatabase = "testdb"
         TreasureData.sharedInstance().enableAutoAppendUniqId()
         TreasureData.sharedInstance().enableAutoAppendModelInformation()
