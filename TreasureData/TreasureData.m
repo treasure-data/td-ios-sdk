@@ -21,7 +21,7 @@ static bool isTraceLoggingEnabled = false;
 static bool isEventCompressionEnabled = true;
 static TreasureData *sharedInstance = nil;
 static NSString *tableNamePattern = @"[^0-9a-z_]";
-static NSString *defaultApiEndpoint = nil;
+static NSString *defaultApiEndpoint = @"https://us01.records.in.treasuredata.com";
 static NSString *defaultCdpEndpoint = @"https://cdp.in.treasuredata.com";
 static NSString *storageKeyOfUuid = @"td_sdk_uuid";
 static NSString *storageKeyOfFirstRun = @"td_sdk_first_run";
@@ -74,9 +74,15 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     NSMutableDictionary *_defaultValues;
 }
 
-- (id)initWithApiKey:(NSString *)apiKey {
-    self = [self init];
 
+- (instancetype)initWithApiKey:(NSString *)apiKey {
+    self = [self initWithApiKey:apiKey apiEndpoint:defaultApiEndpoint];
+    return self;
+}
+
+- (instancetype)initWithApiKey:(NSString *)apiKey apiEndpoint:(NSString *)apiEndpoint {
+    self = [self init];
+    
     if (self) {
         /*
          * This client uses the parent's resources as follows:
@@ -94,27 +100,26 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
          */
         
         [self enableAutoAppendLocalTimestamp];
-
+        
         if ([[NSUserDefaults standardUserDefaults] objectForKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENT_ENABLED] != nil) {
             self.customEventEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENT_ENABLED];
         } else {
             // Unless being explicitly disabled, custom events are allowed
             self.customEventEnabled = YES;
         }
-
+        
         // Unlike custom events, app lifecycle events must be explicitly enabled
         self.appLifecycleEventEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENT_ENABLED];
-
-        NSString *endpoint = defaultApiEndpoint ? defaultApiEndpoint : @"https://us01.records.in.treasuredata.com";
+        
         self.client = [[TDClient alloc] __initWithApiKey:apiKey
-                                             apiEndpoint:endpoint];
+                                             apiEndpoint:apiEndpoint];
         if (self.client) {
-
+            
         } else {
             KCLog(@"Failed to initialize client");
         }
         [self observeLifecycleEvents];
-
+        
         self.addEventQueue = dispatch_queue_create("com.treasuredata.add_event", DISPATCH_QUEUE_SERIAL);
     }
     return self;
@@ -610,25 +615,24 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     self.autoAppendAdvertisingIdColumn = nil;
 }
 
-+ (void)initializeWithApiKey:(NSString *)apiKey {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[self alloc] initWithApiKey:apiKey];
-    });
-}
-
-+ (void)initializeEncryptionKey:(NSString*)encryptionKey {
-    [TDClient initializeEncryptionKey:encryptionKey];
-}
-
-
 + (instancetype)sharedInstance {
     NSAssert(sharedInstance, @"%@ sharedInstance is called before [TreasureData initializeWithApiKey:]", self);
     return sharedInstance;
 }
 
-+ (void)initializeApiEndpoint:(NSString *)apiEndpoint {
-    defaultApiEndpoint = apiEndpoint;
++ (void)initializeWithApiKey:(NSString *)apiKey {
+    [self initializeWithApiKey:apiKey apiEndpoint:defaultApiEndpoint];
+}
+
++ (void)initializeWithApiKey:(NSString *)apiKey apiEndpoint:(NSString *)apiEndpoint{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[self alloc] initWithApiKey:apiKey apiEndpoint:apiEndpoint];
+    });
+}
+
++ (void)initializeEncryptionKey:(NSString*)encryptionKey {
+    [TDClient initializeEncryptionKey:encryptionKey];
 }
 
 + (void)disableEventCompression {

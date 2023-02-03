@@ -346,8 +346,7 @@ static NSString *END_POINT = @"http://localhost";
 }
 
 - (void)testSetDefaultApiEndpoint {
-    [TreasureData initializeApiEndpoint:@"https://another.apiendpoint.xyz"];
-    [TreasureData initializeWithApiKey:@"hello_apikey"];
+    [TreasureData initializeWithApiKey:@"hello_apikey" apiEndpoint:@"https://another.apiendpoint.xyz"];
     // Avoid it to trigger app lifecycle listener without some of the expectations (app's version) being mocked.
     [[NSNotificationCenter defaultCenter] removeObserver:[TreasureData sharedInstance]];
     NSString *url = [TreasureData sharedInstance].client.apiEndpoint;

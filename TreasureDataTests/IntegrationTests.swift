@@ -67,8 +67,7 @@ class IntegrationTests: XCTestCase {
     }
 
     override func setUp() {
-        TreasureData.initializeApiEndpoint(IntegrationTests.collectorEndpoint)
-        sdkClient = TreasureData(apiKey: IntegrationTests.apiKey)
+        sdkClient = TreasureData(apiKey: IntegrationTests.apiKey, apiEndpoint: IntegrationTests.collectorEndpoint)
         sdkClient.defaultDatabase = IntegrationTests.TargetDatabase
         sdkClient.cdpEndpoint = IntegrationTests.cdpEndpoint
         tempTables = []

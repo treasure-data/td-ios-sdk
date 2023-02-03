@@ -304,11 +304,10 @@ You can detect if it's the first running or not easily using `isFirstRun` method
 
 ### Endpoint
 
-The API endpoint (default: https://us01.records.in.treasuredata.com) can be modified using `initializeApiEndpoint` class method. For example,
+The API endpoint (default: https://us01.records.in.treasuredata.com) can be specify using `+[TreasureData initializeWithApiKey:apiEndpoint]`
 
 ```
-[TreasureData initializeApiEndpoint:@"https://specifying-another-endpoint.com"];
-[TreasureData initializeWithApiKey:@"your_api_key"];
+[TreasureData initializeWithApiKey:@"your_api_key" apiEndpoint: @"https://specifying-another-endpoint.com"];
 ```
 
 ### Encryption key
@@ -487,7 +486,7 @@ TreasureData SDK is able to automatically track IAP `SKPaymentTransactionStatePu
 [[TreasureData sharedInstance] enableInAppPurchaseEvent];
 ```
 
-This is disabled by default. There is a subtle difference between this and `appLifecycleEvent`, `customEvent`. The other two, for a historical reason, are persistent settings, meaning their statuses are saved across app launches. `inAppPurchaseEvent` behaves like an ordinary object option and is not saved. You have to enable it after initialize your new `TreasureData` instance (probably only the `sharedInstance` with `initializeWithApiKey()`).
+This is disabled by default. There is a subtle difference between this and `appLifecycleEvent`, `customEvent`. The other two, for a historical reason, are persistent settings, meaning their statuses are saved across app launches. `inAppPurchaseEvent` behaves like an ordinary object option and is not saved. You have to enable it after initialize your new `TreasureData` instance (probably only the `sharedInstance` with `initializeWithApiKey`).
 
 An example of a IAP event:
 

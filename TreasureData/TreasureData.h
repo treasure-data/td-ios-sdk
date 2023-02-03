@@ -78,16 +78,24 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 #pragma mark - Initialization
 
 /**
- * Assign the target API endpoint, default is "https://us01.records.in.treasuredata.com".
- * Possible values:
+ * Initialize `TreasureData.sharedInstance` with the default API endpoint "https://us01.records.in.treasuredata.com".
+ * To use endpoint other than the default one, call `+[TreasureData initializeWithApiKey:apiEndpoint:]` instead.
+ *
+ * @param apiKey API Key (only requires `write-only`) for the default API endpoint.
+ */
++ (void)initializeWithApiKey:(NSString * _Nonnull)apiKey;
+
+/**
+ * Initialize `TreasureData.sharedInstance`
+ * Possible apiEndpoint values:
  *    AWS East https://us01.records.in.treasuredata.com
  *    AWS EU https://eu01.records.in.treasuredata.com
  *    AWS Asia Pacific (Tokyo) https://ap01.records.in.treasuredata.com
  *    AWS Asia Pacific (Seoul) https://ap02.records.in.treasuredata.com
- * This have to be call before `initializeWithApiKey(apiKey:)`, otherwise it won't have effect.
- * @param apiEndpoint for the in effect endpoint (`+[TreasureData initializeApiEndpoint:]`).
+ * @param apiKey API Key (only requires `write-only`).
+ * @param apiEndpoint a Treasure Data API endpoint.
  */
-+ (void)initializeApiEndpoint:(NSString * _Nullable)apiEndpoint;
++ (void)initializeWithApiKey:(NSString * _Nonnull)apiKey apiEndpoint:(NSString * _Nonnull)apiEndpoint;
 
 /**
  * Encrypted the event data in the local persisted buffer.
@@ -96,26 +104,27 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 + (void)initializeEncryptionKey:(NSString* _Nullable)encryptionKey;
 
 /**
- * Initialize `TreasureData.sharedInstance` with the current `apiEndpoint` configured via `+[TreasureData initializeApiEndpoint:]`
- *
- * @param apiKey API Key (only requires `write-only`) for the in effect endpoint (`+[TreasureData initializeApiEndpoint:]`).
- */
-+ (void)initializeWithApiKey:(NSString * _Nonnull)apiKey;
-
-/**
  * The default singleton SDK instance.
  *
- * You could create multiple instances that target different endpoints (and of course apiKey, and default database, table, etc.) with `-[TreasureData initWithApiKey:]`,
- * but mind that `+[TreasureData initializeApiEndpoint:]` is shared have to be called before `-[TreasureData initWithApiKey:]` to be affected.
+ * You could create multiple instances that target different endpoints (and of course apiKey, and default database, table, etc.) with `-[TreasureData initWithApiKey:]` or `-[TreasureData initWithApiKey:apiEndpoint:]`.
  */
 + (instancetype _Nonnull)sharedInstance;
 
 /**
- * Construct a new `TreasureData` instance.
+ * Construct a new `TreasureData` instance with the default API endpoint "https://us01.records.in.treasuredata.com".
+ * To use endpoint other than the default one, call `-[TreasureData initWithApiKey:apiEndpoint:]` instead.
  *
- * @param apiKey for the in effect endpoint (`+[TreasureData initializeApiEndpoint:]`).
+ * @param apiKey API Key (only requires `write-only`) for the default API endpoint.
  */
 - (id _Nonnull)initWithApiKey:(NSString * _Nonnull)apiKey;
+
+/**
+ * Construct a new `TreasureData` instance.
+ *
+ * @param apiKey API Key (only requires `write-only`).
+ * @param apiEndpoint a Treasure Data API endpoint.
+ */
+- (id _Nonnull)initWithApiKey:(NSString * _Nonnull)apiKey apiEndpoint:(NSString * _Nonnull)apiEndpoint;
 
 #pragma mark - Tracking events
 
