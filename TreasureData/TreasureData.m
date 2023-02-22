@@ -21,10 +21,11 @@ static bool isTraceLoggingEnabled = false;
 static bool isEventCompressionEnabled = true;
 static TreasureData *sharedInstance = nil;
 static NSString *tableNamePattern = @"[^0-9a-z_]";
-static NSString *defaultApiEndpoint = nil;
+static NSString *defaultApiEndpoint = @"https://us01.records.in.treasuredata.com";
 static NSString *defaultCdpEndpoint = @"https://cdp.in.treasuredata.com";
 static NSString *storageKeyOfUuid = @"td_sdk_uuid";
 static NSString *storageKeyOfFirstRun = @"td_sdk_first_run";
+static NSString *keyOfLocalTimestamp = @"time";
 static NSString *keyOfUuid = @"td_uuid";
 static NSString *keyOfAdvertisingIdentifier = @"td_maid";
 static NSString *keyOfBoard = @"td_board";
@@ -42,7 +43,6 @@ static NSString *keyOfLocaleCountry = @"td_locale_country";
 static NSString *keyOfLocaleLang = @"td_locale_lang";
 static NSString *keyOfSessionId = @"td_session_id";
 static NSString *keyOfSessionEvent = @"td_session_event";
-static NSString *keyOfServerSideUploadTimestamp = @"#SSUT";
 static NSString *sessionEventStart = @"start";
 static NSString *sessionEventEnd = @"end";
 static Session *session = nil;
@@ -51,13 +51,12 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
 
 @interface TreasureData ()
 
+@property NSString *autoAppendLocalTimestampColumn;
 @property BOOL autoAppendUniqId;
 @property BOOL autoAppendModelInformation;
 @property BOOL autoAppendAppInformation;
 @property BOOL autoAppendLocaleInformation;
 @property NSString *sessionId;
-@property BOOL serverSideUploadTimestamp;
-@property NSString *serverSideUploadTimestampColumn;
 @property NSString *autoAppendRecordUUIDColumn;
 @property NSString *autoAppendAdvertisingIdColumn;
 
@@ -75,9 +74,15 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     NSMutableDictionary *_defaultValues;
 }
 
-- (id)initWithApiKey:(NSString *)apiKey {
-    self = [self init];
 
+- (instancetype)initWithApiKey:(NSString *)apiKey {
+    self = [self initWithApiKey:apiKey apiEndpoint:defaultApiEndpoint];
+    return self;
+}
+
+- (instancetype)initWithApiKey:(NSString *)apiKey apiEndpoint:(NSString *)apiEndpoint {
+    self = [self init];
+    
     if (self) {
         /*
          * This client uses the parent's resources as follows:
@@ -93,27 +98,28 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
          *      the parent client's project ids.
          *
          */
-
+        
+        [self enableAutoAppendLocalTimestamp];
+        
         if ([[NSUserDefaults standardUserDefaults] objectForKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENT_ENABLED] != nil) {
             self.customEventEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_CUSTOM_EVENT_ENABLED];
         } else {
             // Unless being explicitly disabled, custom events are allowed
             self.customEventEnabled = YES;
         }
-
+        
         // Unlike custom events, app lifecycle events must be explicitly enabled
         self.appLifecycleEventEnabled = [[NSUserDefaults standardUserDefaults] boolForKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENT_ENABLED];
-
-        NSString *endpoint = defaultApiEndpoint ? defaultApiEndpoint : @"https://in.treasuredata.com";
+        
         self.client = [[TDClient alloc] __initWithApiKey:apiKey
-                                             apiEndpoint:endpoint];
+                                             apiEndpoint:apiEndpoint];
         if (self.client) {
-
+            
         } else {
             KCLog(@"Failed to initialize client");
         }
         [self observeLifecycleEvents];
-
+        
         self.addEventQueue = dispatch_queue_create("com.treasuredata.add_event", DISPATCH_QUEUE_SERIAL);
     }
     return self;
@@ -239,6 +245,9 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     
     enrichedRecord = [TDUtils stripNonEventData:enrichedRecord];
     
+    if (self.autoAppendLocalTimestampColumn != nil) {
+        enrichedRecord = [self appendLocalTimestamp:enrichedRecord];
+    }
     if (self.autoAppendUniqId) {
         enrichedRecord = [self appendUniqId:enrichedRecord];
     }
@@ -250,9 +259,6 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     }
     if (session || self.sessionId) {
         enrichedRecord = [self appendSessionId:enrichedRecord];
-    }
-    if (self.serverSideUploadTimestamp) {
-        enrichedRecord = [self appendServerSideUploadTimestamp:enrichedRecord];
     }
     if (self.autoAppendAppInformation) {
         enrichedRecord = [self appendAppInformation:enrichedRecord];
@@ -292,6 +298,14 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
         [[NSUserDefaults standardUserDefaults] setObject:_UUID forKey:storageKeyOfUuid];
     }
     return _UUID;
+}
+
+- (NSDictionary*)appendLocalTimestamp:(NSDictionary *)origRecord {
+    NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
+    NSDate *now = [NSDate date];
+    NSNumber *timestamp = [NSNumber numberWithInt:(int) now.timeIntervalSince1970];
+    [record setValue:timestamp forKey:self.autoAppendLocalTimestampColumn];
+    return record;
 }
 
 - (NSDictionary*)appendUniqId:(NSDictionary *)origRecord {
@@ -398,17 +412,6 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     }
     else {
         [record setValue:self.sessionId forKey:keyOfSessionId];
-    }
-    return record;
-}
-
-- (NSDictionary*)appendServerSideUploadTimestamp:(NSDictionary *)origRecord {
-    NSMutableDictionary *record = [NSMutableDictionary dictionaryWithDictionary:origRecord];
-    if (self.serverSideUploadTimestampColumn) {
-        [record setValue:self.serverSideUploadTimestampColumn forKey:keyOfServerSideUploadTimestamp];
-    }
-    else {
-        [record setValue:@true forKey:keyOfServerSideUploadTimestamp];
     }
     return record;
 }
@@ -560,24 +563,20 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     sessionTimeoutMilli = to;
 }
 
-// FIXME: document - which column will be used if unspecified?
-- (void)enableServerSideUploadTimestamp {
-    self.serverSideUploadTimestamp = TRUE;
-    self.serverSideUploadTimestampColumn = nil;
+- (void)enableAutoAppendLocalTimestamp {
+    self.autoAppendLocalTimestampColumn = keyOfLocalTimestamp;
 }
 
-- (void)enableServerSideUploadTimestamp: (NSString*)columnName {
+- (void)enableAutoAppendLocalTimestamp:(NSString *)columnName {
     if (!columnName) {
-        KCLog(@"WARN: the specified columnName for server upload timestamp is nil; auto appending server upload timestamp won't be enabled.");
+        KCLog(@"WARN: the specified columnName for local timestamp is nil. This call is noop");
         return;
     }
-    self.serverSideUploadTimestamp = TRUE;
-    self.serverSideUploadTimestampColumn = columnName;
+    self.autoAppendLocalTimestampColumn = columnName;
 }
 
-- (void)disableServerSideUploadTimestamp {
-    self.serverSideUploadTimestamp = FALSE;
-    self.serverSideUploadTimestampColumn = nil;
+- (void)disableAutoAppendLocalTimestamp {
+    self.autoAppendLocalTimestampColumn = nil;
 }
 
 - (void)enableAutoAppendRecordUUID {
@@ -616,25 +615,24 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     self.autoAppendAdvertisingIdColumn = nil;
 }
 
-+ (void)initializeWithApiKey:(NSString *)apiKey {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[self alloc] initWithApiKey:apiKey];
-    });
-}
-
-+ (void)initializeEncryptionKey:(NSString*)encryptionKey {
-    [TDClient initializeEncryptionKey:encryptionKey];
-}
-
-
 + (instancetype)sharedInstance {
     NSAssert(sharedInstance, @"%@ sharedInstance is called before [TreasureData initializeWithApiKey:]", self);
     return sharedInstance;
 }
 
-+ (void)initializeApiEndpoint:(NSString *)apiEndpoint {
-    defaultApiEndpoint = apiEndpoint;
++ (void)initializeWithApiKey:(NSString *)apiKey {
+    [self initializeWithApiKey:apiKey apiEndpoint:defaultApiEndpoint];
+}
+
++ (void)initializeWithApiKey:(NSString *)apiKey apiEndpoint:(NSString *)apiEndpoint{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[self alloc] initWithApiKey:apiKey apiEndpoint:apiEndpoint];
+    });
+}
+
++ (void)initializeEncryptionKey:(NSString*)encryptionKey {
+    [TDClient initializeEncryptionKey:encryptionKey];
 }
 
 + (void)disableEventCompression {

@@ -10,8 +10,8 @@
 
 #import <UIKit/UIKit.h>
 #import <CommonCrypto/CommonDigest.h>
-#import "Deflate.h"
 #import "TDClient.h"
+@import GZIP;
 
 static NSString *version = @"0.9.0";
 
@@ -31,7 +31,7 @@ static NSString *version = @"0.9.0";
         if (!NSClassFromString(@"NSUUID")) {
             return @{};
         }
-        return @{@"#UUID": [[NSUUID UUID] UUIDString]};
+        return @{@"uuid": [[NSUUID UUID] UUIDString]};
     };
     /*
      > 5.times.inject(0){|a, i| puts a; x = 4 * (2 ** i); a += x; a}
@@ -64,36 +64,24 @@ static NSString *version = @"0.9.0";
     return nsString;
 }
 
-- (void)sendEvents:(NSData *)data completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler {
-    NSString *urlString = [NSString stringWithFormat:@"%@/%@", self.apiEndpoint, @"ios/v3/event"];
+- (void)sendEvents:(NSData *)data database:(NSString *)database table:(NSString *)table completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler {
+    NSString *urlString = [NSString stringWithFormat:@"%@/%@/%@", self.apiEndpoint, database, table];
     KCLog(@"Sending events to: %@", urlString);
     NSURL *url = [NSURL URLWithString:urlString];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [request setValue:self.apiKey forHTTPHeaderField:@"X-TD-Write-Key"];
-    [request setValue:@"k" forHTTPHeaderField:@"X-TD-Data-Type"];   // means KeenIO data type
+    [request setValue:[NSString stringWithFormat: @"TD1 %@", self.apiKey] forHTTPHeaderField:@"Authorization"];
+    [request setValue:@"application/vnd.treasuredata.v1+json" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"application/vnd.treasuredata.v1+json" forHTTPHeaderField:@"Accept"];
     [request setValue:[NSString stringWithFormat:@"TD-iOS-SDK/%@ (%@ %@)", version, [[UIDevice currentDevice] systemName], [[UIDevice currentDevice] systemVersion]] forHTTPHeaderField:@"User-Agent"];
     
     if (_enableEventCompression) {
-        NSData *compressedData = [Deflate deflate:data];
-        if (!compressedData) {
-            KCLog(@"Compression failed");
-        }
-        else {
-            KCLog(@"Compressed: before=%ld, after=%ld", (unsigned long)[data length], (unsigned long)[compressedData length]);
-            data = compressedData;
-            /*
-             Byte* bytes = [data bytes];
-             for (int i=0; i < [data length]; i++) {
-             NSLog(@"byte[%d]: 0x%02x", i, bytes[i]);
-             }
-             */
-            [request setValue:@"deflate" forHTTPHeaderField:@"Content-Encoding"];
-        }
+        [request setValue:@"gzip" forHTTPHeaderField:@"Content-Encoding"];
+        [request setHTTPBody:[data gzippedData]];
+    } else {
+        [request setHTTPBody:data];
     }
-    
-    [request setHTTPBody:data];
     
     [self __sendHTTPRequest:request retryCounter:0 completionHandler:completionHandler];
 }

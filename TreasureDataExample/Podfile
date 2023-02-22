@@ -1,9 +1,13 @@
 use_frameworks!
 
 target 'TreasureDataExample' do
+  platform :ios, '12.0'
   pod 'TreasureData-iOS-SDK', :path => '..'
+  pod 'KeenClientTD', :path => '../../KeenClient-iOS'
 end
 
 target 'TreasureDataTVOSExample' do
+  platform :tvos, '12.0'
   pod 'TreasureData-iOS-SDK', :path => '..'
+  pod 'KeenClientTD', :path => '../../KeenClient-iOS'
 end

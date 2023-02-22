@@ -9,13 +9,13 @@
 /* Begin PBXBuildFile section */
 		20B1861B2085DABD00B1A488 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 20B1861A2085DABC00B1A488 /* Assets.xcassets */; };
 		20F4C4C120855AF90049E1C7 /* TreasureDataExample.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F4C4C020855AF90049E1C7 /* TreasureDataExample.m */; };
-		32BFC2E7A4E4919CA4A0BD44 /* libPods-TreasureDataTVOSExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 558BCB4EAB5DC3E964E70E49 /* libPods-TreasureDataTVOSExample.a */; };
+		32738784919D4E5A315DDB44 /* Pods_TreasureDataExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D119DBAC2963C40CB86778D /* Pods_TreasureDataExample.framework */; };
+		42A68B7B3B98E786DCCBA562 /* Pods_TreasureDataTVOSExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2118163CDBC9000796D6103 /* Pods_TreasureDataTVOSExample.framework */; };
 		6B14FEE61D3624DA00E9C3AF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B14FEE51D3624DA00E9C3AF /* main.m */; };
 		6B14FEE91D3624DA00E9C3AF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B14FEE81D3624DA00E9C3AF /* AppDelegate.m */; };
 		6B14FEEC1D3624DA00E9C3AF /* iOSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B14FEEB1D3624DA00E9C3AF /* iOSViewController.m */; };
 		6B14FEEF1D3624DA00E9C3AF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B14FEED1D3624DA00E9C3AF /* Main.storyboard */; };
 		6B14FEF41D3624DA00E9C3AF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B14FEF21D3624DA00E9C3AF /* LaunchScreen.storyboard */; };
-		ACC8A425266E84EF5E9033F4 /* libPods-TreasureDataExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5DD3B4DAFF3BD9DE0273623 /* libPods-TreasureDataExample.a */; settings = {ATTRIBUTES = (Required, ); }; };
 		DF0ED81B252B4DE4008F58B5 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF0ED81A252B4DE4008F58B5 /* AdSupport.framework */; };
 		DF1AEC102539B618004DCAEF /* TVOSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1AEC0F2539B618004DCAEF /* TVOSAppDelegate.m */; };
 		DF1AEC132539B618004DCAEF /* TVOSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DF1AEC122539B618004DCAEF /* TVOSViewController.m */; };
@@ -34,7 +34,7 @@
 		20B1861A2085DABC00B1A488 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		20F4C4BF20855AE80049E1C7 /* TreasureDataExample.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TreasureDataExample.h; sourceTree = "<group>"; };
 		20F4C4C020855AF90049E1C7 /* TreasureDataExample.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TreasureDataExample.m; sourceTree = "<group>"; };
-		558BCB4EAB5DC3E964E70E49 /* libPods-TreasureDataTVOSExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TreasureDataTVOSExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D119DBAC2963C40CB86778D /* Pods_TreasureDataExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TreasureDataExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B14FEE11D3624DA00E9C3AF /* TreasureDataExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TreasureDataExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B14FEE51D3624DA00E9C3AF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6B14FEE71D3624DA00E9C3AF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -45,6 +45,7 @@
 		6B14FEF31D3624DA00E9C3AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6B14FEF51D3624DA00E9C3AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6E9E4DE6FF1370C2CA049A7E /* Pods-TreasureDataTVOSExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureDataTVOSExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureDataTVOSExample/Pods-TreasureDataTVOSExample.release.xcconfig"; sourceTree = "<group>"; };
+		C2118163CDBC9000796D6103 /* Pods_TreasureDataTVOSExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TreasureDataTVOSExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D756E6DA689C821E31575BDE /* Pods-TreasureDataExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureDataExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureDataExample/Pods-TreasureDataExample.debug.xcconfig"; sourceTree = "<group>"; };
 		DAC6B3E7A6E2A7F8AF5AC283 /* Pods-TreasureDataTVOSExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureDataTVOSExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureDataTVOSExample/Pods-TreasureDataTVOSExample.debug.xcconfig"; sourceTree = "<group>"; };
 		DF0ED81A252B4DE4008F58B5 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
@@ -64,7 +65,6 @@
 		DFFDBE3B2559A6EC004B9C48 /* TextFieldTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextFieldTableViewCell.h; sourceTree = "<group>"; };
 		E58437DF224A36D1009F0C7F /* TreasureDataExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TreasureDataExample-Bridging-Header.h"; sourceTree = "<group>"; };
 		E58437E0224A36D2009F0C7F /* IAPViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAPViewController.swift; sourceTree = "<group>"; };
-		F5DD3B4DAFF3BD9DE0273623 /* libPods-TreasureDataExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TreasureDataExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,8 +72,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ACC8A425266E84EF5E9033F4 /* libPods-TreasureDataExample.a in Frameworks */,
 				DF0ED81B252B4DE4008F58B5 /* AdSupport.framework in Frameworks */,
+				32738784919D4E5A315DDB44 /* Pods_TreasureDataExample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,8 +82,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				DF89BC98255EA41D00666B44 /* StoreKit.framework in Frameworks */,
-				32BFC2E7A4E4919CA4A0BD44 /* libPods-TreasureDataTVOSExample.a in Frameworks */,
 				DF89BC96255EA40700666B44 /* AdSupport.framework in Frameworks */,
+				42A68B7B3B98E786DCCBA562 /* Pods_TreasureDataTVOSExample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,8 +96,8 @@
 				DF89BC97255EA41D00666B44 /* StoreKit.framework */,
 				DF0ED81A252B4DE4008F58B5 /* AdSupport.framework */,
 				DF89BC95255EA40700666B44 /* AdSupport.framework */,
-				F5DD3B4DAFF3BD9DE0273623 /* libPods-TreasureDataExample.a */,
-				558BCB4EAB5DC3E964E70E49 /* libPods-TreasureDataTVOSExample.a */,
+				3D119DBAC2963C40CB86778D /* Pods_TreasureDataExample.framework */,
+				C2118163CDBC9000796D6103 /* Pods_TreasureDataTVOSExample.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -190,6 +190,7 @@
 				6B14FEDD1D3624DA00E9C3AF /* Sources */,
 				6B14FEDE1D3624DA00E9C3AF /* Frameworks */,
 				6B14FEDF1D3624DA00E9C3AF /* Resources */,
+				16DC4C1A9FB923F5F332A776 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -208,6 +209,7 @@
 				DF1AEC082539B617004DCAEF /* Sources */,
 				DF1AEC092539B617004DCAEF /* Frameworks */,
 				DF1AEC0A2539B617004DCAEF /* Resources */,
+				9723A8A30BB6731BB465CD4C /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -285,6 +287,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		16DC4C1A9FB923F5F332A776 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TreasureDataExample/Pods-TreasureDataExample-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GZIP-iOS/GZIP.framework",
+				"${BUILT_PRODUCTS_DIR}/KeenClientTD-iOS/KeenClientTD.framework",
+				"${BUILT_PRODUCTS_DIR}/TreasureData-iOS-SDK-iOS/TreasureData_iOS_SDK.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GZIP.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeenClientTD.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TreasureData_iOS_SDK.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TreasureDataExample/Pods-TreasureDataExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		8F77E1303114177A4D498044 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -301,6 +325,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9723A8A30BB6731BB465CD4C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TreasureDataTVOSExample/Pods-TreasureDataTVOSExample-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GZIP-tvOS/GZIP.framework",
+				"${BUILT_PRODUCTS_DIR}/KeenClientTD-tvOS/KeenClientTD.framework",
+				"${BUILT_PRODUCTS_DIR}/TreasureData-iOS-SDK-tvOS/TreasureData_iOS_SDK.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GZIP.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeenClientTD.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TreasureData_iOS_SDK.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TreasureDataTVOSExample/Pods-TreasureDataTVOSExample-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C7AF954D8E07AC67E7E55DD0 /* [CP] Check Pods Manifest.lock */ = {

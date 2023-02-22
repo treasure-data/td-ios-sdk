@@ -20,7 +20,7 @@
 @property(nonatomic, strong) NSString *apiKey;
 
 /**
- * The targeting API endpoint, default is https://in.treasuredata.com
+ * The targeting API endpoint, default is https://us01.records.in.treasuredata.com
  */
 @property(nonatomic, strong) NSString *apiEndpoint;
 

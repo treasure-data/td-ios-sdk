@@ -78,17 +78,24 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 #pragma mark - Initialization
 
 /**
- * Assign the target API endpoint, default is "https://in.treasuredata.com".
- * Possible values:
- *    AWS East  https://in.treasuredata.com
- *    AWS Tokyo https://tokyo.in.treasuredata.com
- *    AWS EU    https://eu01.in.treasuredata.com
- *    AWS Asia Pacific (Seoul)  https://ap02.in.treasuredata.com
- *    AWS Asia Pacific (Tokyo)  https://ap03.in.treasuredata.com
- * This have to be call before `initializeWithApiKey(apiKey:)`, otherwise it won't have effect.
- * @param apiEndpoint for the in effect endpoint (`+[TreasureData initializeApiEndpoint:]`).
+ * Initialize `TreasureData.sharedInstance` with the default API endpoint "https://us01.records.in.treasuredata.com".
+ * To use endpoint other than the default one, call `+[TreasureData initializeWithApiKey:apiEndpoint:]` instead.
+ *
+ * @param apiKey API Key (only requires `write-only`) for the default API endpoint.
  */
-+ (void)initializeApiEndpoint:(NSString * _Nullable)apiEndpoint;
++ (void)initializeWithApiKey:(NSString * _Nonnull)apiKey;
+
+/**
+ * Initialize `TreasureData.sharedInstance`
+ * Possible apiEndpoint values:
+ *    AWS East https://us01.records.in.treasuredata.com
+ *    AWS EU https://eu01.records.in.treasuredata.com
+ *    AWS Asia Pacific (Tokyo) https://ap01.records.in.treasuredata.com
+ *    AWS Asia Pacific (Seoul) https://ap02.records.in.treasuredata.com
+ * @param apiKey API Key (only requires `write-only`).
+ * @param apiEndpoint a Treasure Data API endpoint.
+ */
++ (void)initializeWithApiKey:(NSString * _Nonnull)apiKey apiEndpoint:(NSString * _Nonnull)apiEndpoint;
 
 /**
  * Encrypted the event data in the local persisted buffer.
@@ -97,26 +104,27 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 + (void)initializeEncryptionKey:(NSString* _Nullable)encryptionKey;
 
 /**
- * Initialize `TreasureData.sharedInstance` with the current `apiEndpoint` configured via `+[TreasureData initializeApiEndpoint:]`
- *
- * @param apiKey API Key (only requires `write-only`) for the in effect endpoint (`+[TreasureData initializeApiEndpoint:]`).
- */
-+ (void)initializeWithApiKey:(NSString * _Nonnull)apiKey;
-
-/**
  * The default singleton SDK instance.
  *
- * You could create multiple instances that target different endpoints (and of course apiKey, and default database, table, etc.) with `-[TreasureData initWithApiKey:]`,
- * but mind that `+[TreasureData initializeApiEndpoint:]` is shared have to be called before `-[TreasureData initWithApiKey:]` to be affected.
+ * You could create multiple instances that target different endpoints (and of course apiKey, and default database, table, etc.) with `-[TreasureData initWithApiKey:]` or `-[TreasureData initWithApiKey:apiEndpoint:]`.
  */
 + (instancetype _Nonnull)sharedInstance;
 
 /**
- * Construct a new `TreasureData` instance.
+ * Construct a new `TreasureData` instance with the default API endpoint "https://us01.records.in.treasuredata.com".
+ * To use endpoint other than the default one, call `-[TreasureData initWithApiKey:apiEndpoint:]` instead.
  *
- * @param apiKey for the in effect endpoint (`+[TreasureData initializeApiEndpoint:]`).
+ * @param apiKey API Key (only requires `write-only`) for the default API endpoint.
  */
 - (id _Nonnull)initWithApiKey:(NSString * _Nonnull)apiKey;
+
+/**
+ * Construct a new `TreasureData` instance.
+ *
+ * @param apiKey API Key (only requires `write-only`).
+ * @param apiEndpoint a Treasure Data API endpoint.
+ */
+- (id _Nonnull)initWithApiKey:(NSString * _Nonnull)apiKey apiEndpoint:(NSString * _Nonnull)apiEndpoint;
 
 #pragma mark - Tracking events
 
@@ -214,6 +222,25 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 - (void)resetUniqId;
 
 /**
+ * Automatically append the local time value when the event is added. Enabled by default.
+ *
+ * @param columnName The column to write the local time value
+ */
+- (void)enableAutoAppendLocalTimestamp:(NSString* _Nonnull)columnName;
+
+/**
+ * Automatically append the local time when the event is added. By default, the column's name is "time"
+ *
+ * This is enabled by default.
+ */
+- (void)enableAutoAppendLocalTimestamp;
+
+/**
+ * Disable automatically append the local time when the event is added.
+ */
+- (void)disableAutoAppendLocalTimestamp;
+
+/**
  * Disable these auto appended columns:
  *
  * - `td_device`, `td_model`: current these share a same value, extracted from `UIDevice.currentDevice.model`. Example: "iPhone", "iPad",...
@@ -255,25 +282,6 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
  * Disable the auto appended `td_locale_country` and `td_locale_language` columns.
  */
 - (void)disableAutoAppendLocaleInformation;
-
-/**
- * Automatically append the time value when the event is received on server. Disabled by default.
- *
- * @param columnName The column to write the uploaded time value
- */
-- (void)enableServerSideUploadTimestamp: (NSString* _Nonnull)columnName;
-
-/**
- * Automatically append the time when the event is received on server. Disabled by default.
- *
- * This is disabled by default.
- */
-- (void)enableServerSideUploadTimestamp;
-
-/**
- * Disable the uploading time column
- */
-- (void)disableServerSideUploadTimestamp;
 
 /**
  * Automatically append a random and unique ID for each event. Disabled by default.

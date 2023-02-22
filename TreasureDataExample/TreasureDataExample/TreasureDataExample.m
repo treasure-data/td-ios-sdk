@@ -18,9 +18,8 @@ static NSString *testTable;
 
 + (void)setupTreasureData {
     [TreasureData enableLogging];
-    // [TreasureData initializeApiEndpoint:@"https://specify-other-endpoint-if-needed.com"];
     [TreasureData initializeEncryptionKey:@"encryption_key"];
-    [TreasureData initializeWithApiKey:@"api_key"];
+    [TreasureData initializeWithApiKey:@"api_key" apiEndpoint: @"https://specify-other-endpoint-if-needed.com"];
     [[TreasureData sharedInstance] setDefaultDatabase:@"your_db"];
     [[TreasureData sharedInstance] setDefaultTable:@"audit_and_app_lifecycles"];
     [TreasureDataExample setTestTable:@"your_table"];
@@ -29,7 +28,6 @@ static NSString *testTable;
     [[TreasureData sharedInstance] enableAutoAppendModelInformation];
     [[TreasureData sharedInstance] enableAutoAppendAppInformation];
     [[TreasureData sharedInstance] enableAutoAppendLocaleInformation];
-    [[TreasureData sharedInstance] enableServerSideUploadTimestamp:@"server_upload_time"];
     [[TreasureData sharedInstance] enableInAppPurchaseEvent];
     [[TreasureData sharedInstance] enableAutoAppendAdvertisingIdentifier:@"td_maid"];
 }

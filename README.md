@@ -5,6 +5,14 @@ iOS and tvOS SDK for [Treasure Data](http://www.treasuredata.com/). With this SD
 
 Also, there is an alternative SDK written in Swift [https://github.com/recruit-lifestyle/TreasureDataSDK](https://github.com/recruit-lifestyle/TreasureDataSDK). Note, however, that it does not support current GDPR functionality in the mainstream TD SDKs.
 
+## Migration to version 1
+
+Version 1 has major changes that are not backward compatible with previous versions. If you are upgrading from version 0.9.0 or earlier, your code will not run correctly without doing these following steps:
+- API endpoint has changed to Ingestion Endpoint. The default value is https://us01.records.in.treasuredata.com.
+- `initializeApiEndpoint:` API is no longer available, please use `initializeWithApiKey:apiEndpoint:` instead.
+- Server side upload timestamp feature is removed. If you need this feature, please contact our support team.
+- `uuid` is now reserved column name. If you try to add value to event's `uuid` key, you won't see the column show up in the database.
+
 ## Installation
 
 There are several ways to install the library.
@@ -297,11 +305,10 @@ You can detect if it's the first running or not easily using `isFirstRun` method
 
 ### Endpoint
 
-The API endpoint (default: https://in.treasuredata.com) can be modified using `initializeApiEndpoint` class method. For example,
+The API endpoint (default: https://us01.records.in.treasuredata.com) can be specify using `+[TreasureData initializeWithApiKey:apiEndpoint]`
 
 ```
-[TreasureData initializeApiEndpoint:@"https://specifying-another-endpoint.com"];
-[TreasureData initializeWithApiKey:@"your_api_key"];
+[TreasureData initializeWithApiKey:@"your_api_key" apiEndpoint: @"https://specifying-another-endpoint.com"];
 ```
 
 ### Encryption key
@@ -340,6 +347,20 @@ NSString *td_uuid = [[TreasureData sharedInstance] getUUID];
 You can also reset UUID (`td_uuid`) at any time using following API. 
 ```
 [[TreasureData sharedInstance] resetUniqId];
+```
+
+### Adding local time to each even record automatically (enabled by default)
+By default, local timestamp will be added to event's `time` key automatically. If you `disableAutoAppendLocalTimestamp` without adding `time` key to the event yourself, the server will add server side timestamp to `time` column. You can also auto track local time with custom column. If so, the `time` column will have server side timestamp.
+
+```
+// Use local time as `time` column
+[[TreasureData sharedInstance] enableAutoAppendLocalTimestamp];
+
+// Add local time as a customized column name
+[[TreasureData sharedInstance] enableAutoAppendLocalTimestamp:@"clientside_time"];
+
+// Disable auto append local time
+[[TreasureData sharedInstance] disableAutoAppendLocalTimestamp];
 ```
 
 ### Adding an UUID to each event record automatically
@@ -466,7 +487,7 @@ TreasureData SDK is able to automatically track IAP `SKPaymentTransactionStatePu
 [[TreasureData sharedInstance] enableInAppPurchaseEvent];
 ```
 
-This is disabled by default. There is a subtle difference between this and `appLifecycleEvent`, `customEvent`. The other two, for a historical reason, are persistent settings, meaning their statuses are saved across app launches. `inAppPurchaseEvent` behaves like an ordinary object option and is not saved. You have to enable it after initialize your new `TreasureData` instance (probably only the `sharedInstance` with `initializeWithApiKey()`).
+This is disabled by default. There is a subtle difference between this and `appLifecycleEvent`, `customEvent`. The other two, for a historical reason, are persistent settings, meaning their statuses are saved across app launches. `inAppPurchaseEvent` behaves like an ordinary object option and is not saved. You have to enable it after initialize your new `TreasureData` instance (probably only the `sharedInstance` with `initializeWithApiKey`).
 
 An example of a IAP event:
 
