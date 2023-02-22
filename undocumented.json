@@ -16,49 +16,49 @@
     },
     {
       "file": "/Users/runner/work/td-ios-sdk/td-ios-sdk/td-ios-sdk/TreasureData/TreasureData.h",
-      "line": 538,
+      "line": 546,
       "symbol": "TreasureData.-isFirstRun",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/td-ios-sdk/td-ios-sdk/td-ios-sdk/TreasureData/TreasureData.h",
-      "line": 539,
+      "line": 547,
       "symbol": "TreasureData.-clearFirstRun",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/td-ios-sdk/td-ios-sdk/td-ios-sdk/TreasureData/TreasureData.h",
-      "line": 543,
+      "line": 551,
       "symbol": "TreasureData.-event:database:table:",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/td-ios-sdk/td-ios-sdk/td-ios-sdk/TreasureData/TreasureData.h",
-      "line": 544,
+      "line": 552,
       "symbol": "TreasureData.-event:table:",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/td-ios-sdk/td-ios-sdk/td-ios-sdk/TreasureData/TreasureData.h",
-      "line": 545,
+      "line": 553,
       "symbol": "TreasureData.-uploadWithBlock:",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/td-ios-sdk/td-ios-sdk/td-ios-sdk/TreasureData/TreasureData.h",
-      "line": 546,
+      "line": 554,
       "symbol": "TreasureData.-uploadEventsWithBlock:",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/td-ios-sdk/td-ios-sdk/td-ios-sdk/TreasureData/TreasureData.h",
-      "line": 547,
+      "line": 555,
       "symbol": "TreasureData.-setApiEndpoint:",
       "symbol_kind": "sourcekitten.source.lang.objc.decl.method.instance",
       "warning": "undocumented"

@@ -17,7 +17,7 @@
     <a title="TreasureData Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">TreasureData iOS SDK 0.8.1 Docs</a> (89% documented)</p>
+        <p><a href="../index.html">TreasureData iOS SDK 0.9.0 Docs</a> (89% documented)</p>
         <div class="header-right">
           <form role="search" action="../search.json">
             <input type="text" placeholder="Search documentation" data-typeahead>
@@ -243,9 +243,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/c:objc(cs)TreasureData(cm)initializeApiEndpoint:"></a>
-                    <a name="//apple_ref/objc/Method/+initializeApiEndpoint:" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)TreasureData(cm)initializeApiEndpoint:">+initializeApiEndpoint:<wbr></a>
+                    <a name="/c:objc(cs)TreasureData(cm)initializeWithApiKey:"></a>
+                    <a name="//apple_ref/objc/Method/+initializeWithApiKey:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(cm)initializeWithApiKey:">+initializeWithApiKey:<wbr></a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -253,26 +253,20 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Assign the target API endpoint, default is &ldquo;<a href="https://in.treasuredata.com">https://in.treasuredata.com</a>&rdquo;.
-Possible values:
-   AWS East  <a href="https://in.treasuredata.com">https://in.treasuredata.com</a>
-   AWS Tokyo <a href="https://tokyo.in.treasuredata.com">https://tokyo.in.treasuredata.com</a>
-   AWS EU    <a href="https://eu01.in.treasuredata.com">https://eu01.in.treasuredata.com</a>
-   AWS Asia Pacific (Seoul)  <a href="https://ap02.in.treasuredata.com">https://ap02.in.treasuredata.com</a>
-   AWS Asia Pacific (Tokyo)  <a href="https://ap03.in.treasuredata.com">https://ap03.in.treasuredata.com</a>
-This have to be call before <code>initializeWithApiKey(apiKey:)</code>, otherwise it won&rsquo;t have effect.</p>
+                        <p>Initialize <code>TreasureData.sharedInstance</code> with the default API endpoint &ldquo;<a href="https://us01.records.in.treasuredata.com">https://us01.records.in.treasuredata.com</a>&rdquo;.
+ To use endpoint other than the default one, call <code><a href="../Classes/TreasureData.html#/c:objc(cs)TreasureData(cm)initializeWithApiKey:apiEndpoint:">+[TreasureData initializeWithApiKey:apiEndpoint:]</a></code> instead.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Objective-C</p>
-                          <pre class="highlight objective_c"><code><span class="k">+</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">initializeApiEndpoint</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="n">_Nullable</span><span class="p">)</span><span class="nv">apiEndpoint</span><span class="p">;</span></code></pre>
+                          <pre class="highlight objective_c"><code><span class="k">+</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">initializeWithApiKey</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">)</span><span class="nv">apiKey</span><span class="p">;</span></code></pre>
 
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">class</span> <span class="kd">func</span> <span class="nf">initializeApiEndpoint</span><span class="p">(</span><span class="n">_</span> <span class="nv">apiEndpoint</span><span class="p">:</span> <span class="kt">String</span><span class="p">?)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">class</span> <span class="kd">func</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">withApiKey</span> <span class="nv">apiKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -283,12 +277,81 @@ This have to be call before <code>initializeWithApiKey(apiKey:)</code>, otherwis
                             <tr>
                               <td>
                                 <code>
+                                <em>apiKey</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>API Key (only requires <code>write-only</code>) for the default API endpoint.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TreasureData(cm)initializeWithApiKey:apiEndpoint:"></a>
+                    <a name="//apple_ref/objc/Method/+initializeWithApiKey:apiEndpoint:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(cm)initializeWithApiKey:apiEndpoint:">+initializeWithApiKey:<wbr>apiEndpoint:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initialize <code>TreasureData.sharedInstance</code>
+Possible apiEndpoint values:
+   AWS East <a href="https://us01.records.in.treasuredata.com">https://us01.records.in.treasuredata.com</a>
+   AWS EU <a href="https://eu01.records.in.treasuredata.com">https://eu01.records.in.treasuredata.com</a>
+   AWS Asia Pacific (Tokyo) <a href="https://ap01.records.in.treasuredata.com">https://ap01.records.in.treasuredata.com</a>
+   AWS Asia Pacific (Seoul) <a href="https://ap02.records.in.treasuredata.com">https://ap02.records.in.treasuredata.com</a></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">+</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">initializeWithApiKey</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">)</span><span class="nv">apiKey</span>
+                 <span class="nf">apiEndpoint</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">)</span><span class="nv">apiEndpoint</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">class</span> <span class="kd">func</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">withApiKey</span> <span class="nv">apiKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">apiEndpoint</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>apiKey</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>API Key (only requires <code>write-only</code>).</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
                                 <em>apiEndpoint</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>for the in effect endpoint (<code>+[TreasureData initializeApiEndpoint:]</code>).</p>
+                                  <p>a Treasure Data API endpoint.</p>
                                 </div>
                               </td>
                             </tr>
@@ -334,57 +397,6 @@ This should be called only once and prior to any <code>addEvent...</code> call.<
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/c:objc(cs)TreasureData(cm)initializeWithApiKey:"></a>
-                    <a name="//apple_ref/objc/Method/+initializeWithApiKey:" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)TreasureData(cm)initializeWithApiKey:">+initializeWithApiKey:<wbr></a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Initialize <code>TreasureData.sharedInstance</code> with the current <code>apiEndpoint</code> configured via <code><a href="../Classes/TreasureData.html#/c:objc(cs)TreasureData(cm)initializeApiEndpoint:">+[TreasureData initializeApiEndpoint:]</a></code></p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Objective-C</p>
-                          <pre class="highlight objective_c"><code><span class="k">+</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">initializeWithApiKey</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">)</span><span class="nv">apiKey</span><span class="p">;</span></code></pre>
-
-                        </div>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">class</span> <span class="kd">func</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">withApiKey</span> <span class="nv">apiKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>apiKey</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>API Key (only requires <code>write-only</code>) for the in effect endpoint (<code><a href="../Classes/TreasureData.html#/c:objc(cs)TreasureData(cm)initializeApiEndpoint:">+[TreasureData initializeApiEndpoint:]</a></code>).</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
                     <a name="/c:objc(cs)TreasureData(cm)sharedInstance"></a>
                     <a name="//apple_ref/objc/Method/+sharedInstance" class="dashAnchor"></a>
                     <a class="token" href="#/c:objc(cs)TreasureData(cm)sharedInstance">+sharedInstance</a>
@@ -397,8 +409,7 @@ This should be called only once and prior to any <code>addEvent...</code> call.<
                       <div class="abstract">
                         <p>The default singleton SDK instance.</p>
 
-<p>You could create multiple instances that target different endpoints (and of course apiKey, and default database, table, etc.) with <code><a href="../Classes/TreasureData.html#/c:objc(cs)TreasureData(im)initWithApiKey:">-[TreasureData initWithApiKey:]</a></code>,
- but mind that <code><a href="../Classes/TreasureData.html#/c:objc(cs)TreasureData(cm)initializeApiEndpoint:">+[TreasureData initializeApiEndpoint:]</a></code> is shared have to be called before <code><a href="../Classes/TreasureData.html#/c:objc(cs)TreasureData(im)initWithApiKey:">-[TreasureData initWithApiKey:]</a></code> to be affected.</p>
+<p>You could create multiple instances that target different endpoints (and of course apiKey, and default database, table, etc.) with <code><a href="../Classes/TreasureData.html#/c:objc(cs)TreasureData(im)initWithApiKey:">-[TreasureData initWithApiKey:]</a></code> or <code><a href="../Classes/TreasureData.html#/c:objc(cs)TreasureData(im)initWithApiKey:apiEndpoint:">-[TreasureData initWithApiKey:apiEndpoint:]</a></code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -430,7 +441,8 @@ This should be called only once and prior to any <code>addEvent...</code> call.<
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Construct a new <code>TreasureData</code> instance.</p>
+                        <p>Construct a new <code>TreasureData</code> instance with the default API endpoint &ldquo;<a href="https://us01.records.in.treasuredata.com">https://us01.records.in.treasuredata.com</a>&rdquo;.
+ To use endpoint other than the default one, call <code><a href="../Classes/TreasureData.html#/c:objc(cs)TreasureData(im)initWithApiKey:apiEndpoint:">-[TreasureData initWithApiKey:apiEndpoint:]</a></code> instead.</p>
 
                       </div>
                       <div class="declaration">
@@ -458,7 +470,71 @@ This should be called only once and prior to any <code>addEvent...</code> call.<
                               </td>
                               <td>
                                 <div>
-                                  <p>for the in effect endpoint (<code><a href="../Classes/TreasureData.html#/c:objc(cs)TreasureData(cm)initializeApiEndpoint:">+[TreasureData initializeApiEndpoint:]</a></code>).</p>
+                                  <p>API Key (only requires <code>write-only</code>) for the default API endpoint.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TreasureData(im)initWithApiKey:apiEndpoint:"></a>
+                    <a name="//apple_ref/objc/Method/-initWithApiKey:apiEndpoint:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)initWithApiKey:apiEndpoint:">-initWithApiKey:<wbr>apiEndpoint:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Construct a new <code>TreasureData</code> instance.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">id</span> <span class="n">_Nonnull</span><span class="p">)</span><span class="nf">initWithApiKey</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">)</span><span class="nv">apiKey</span>
+                  <span class="nf">apiEndpoint</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">)</span><span class="nv">apiEndpoint</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="nf">init</span><span class="p">(</span><span class="nv">apiKey</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">apiEndpoint</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>apiKey</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>API Key (only requires <code>write-only</code>).</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>apiEndpoint</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>a Treasure Data API endpoint.</p>
                                 </div>
                               </td>
                             </tr>
@@ -1070,6 +1146,123 @@ Note: this won&rsquo;t reset the current buffered events before this call</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/c:objc(cs)TreasureData(im)enableAutoAppendLocalTimestamp:"></a>
+                    <a name="//apple_ref/objc/Method/-enableAutoAppendLocalTimestamp:" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)enableAutoAppendLocalTimestamp:">-enableAutoAppendLocalTimestamp:<wbr></a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Automatically append the local time value when the event is added. Enabled by default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">enableAutoAppendLocalTimestamp</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">)</span><span class="nv">columnName</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">enableAutoAppendLocalTimestamp</span><span class="p">(</span><span class="n">_</span> <span class="nv">columnName</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>columnName</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The column to write the local time value</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TreasureData(im)enableAutoAppendLocalTimestamp"></a>
+                    <a name="//apple_ref/objc/Method/-enableAutoAppendLocalTimestamp" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)enableAutoAppendLocalTimestamp">-enableAutoAppendLocalTimestamp</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Automatically append the local time when the event is added. By default, the column&rsquo;s name is &ldquo;time&rdquo;</p>
+
+<p>This is enabled by default.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">enableAutoAppendLocalTimestamp</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">enableAutoAppendLocalTimestamp</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TreasureData(im)disableAutoAppendLocalTimestamp"></a>
+                    <a name="//apple_ref/objc/Method/-disableAutoAppendLocalTimestamp" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)disableAutoAppendLocalTimestamp">-disableAutoAppendLocalTimestamp</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Disable automatically append the local time when the event is added.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">disableAutoAppendLocalTimestamp</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">disableAutoAppendLocalTimestamp</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/c:objc(cs)TreasureData(im)enableAutoAppendModelInformation"></a>
                     <a name="//apple_ref/objc/Method/-enableAutoAppendModelInformation" class="dashAnchor"></a>
                     <a class="token" href="#/c:objc(cs)TreasureData(im)enableAutoAppendModelInformation">-enableAutoAppendModelInformation</a>
@@ -1273,123 +1466,6 @@ Note: this won&rsquo;t reset the current buffered events before this call</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">disableAutoAppendLocaleInformation</span><span class="p">()</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/c:objc(cs)TreasureData(im)enableServerSideUploadTimestamp:"></a>
-                    <a name="//apple_ref/objc/Method/-enableServerSideUploadTimestamp:" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)TreasureData(im)enableServerSideUploadTimestamp:">-enableServerSideUploadTimestamp:<wbr></a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Automatically append the time value when the event is received on server. Disabled by default.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Objective-C</p>
-                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">enableServerSideUploadTimestamp</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="n">_Nonnull</span><span class="p">)</span><span class="nv">columnName</span><span class="p">;</span></code></pre>
-
-                        </div>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">enableServerSideUploadTimestamp</span><span class="p">(</span><span class="n">_</span> <span class="nv">columnName</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>columnName</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The column to write the uploaded time value</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/c:objc(cs)TreasureData(im)enableServerSideUploadTimestamp"></a>
-                    <a name="//apple_ref/objc/Method/-enableServerSideUploadTimestamp" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)TreasureData(im)enableServerSideUploadTimestamp">-enableServerSideUploadTimestamp</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Automatically append the time when the event is received on server. Disabled by default.</p>
-
-<p>This is disabled by default.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Objective-C</p>
-                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">enableServerSideUploadTimestamp</span><span class="p">;</span></code></pre>
-
-                        </div>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">enableServerSideUploadTimestamp</span><span class="p">()</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/c:objc(cs)TreasureData(im)disableServerSideUploadTimestamp"></a>
-                    <a name="//apple_ref/objc/Method/-disableServerSideUploadTimestamp" class="dashAnchor"></a>
-                    <a class="token" href="#/c:objc(cs)TreasureData(im)disableServerSideUploadTimestamp">-disableServerSideUploadTimestamp</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Disable the uploading time column</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Objective-C</p>
-                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">disableServerSideUploadTimestamp</span><span class="p">;</span></code></pre>
-
-                        </div>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">disableServerSideUploadTimestamp</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -3274,7 +3350,7 @@ See setDefaultValue:forKey:database:table: for logic setting database and table.
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2022 <a class="link" href="https://github.com/treasure-data/td-ios-sdk" target="_blank" rel="external noopener">mitsu, huylenq, and tung-vu-td</a>. All rights reserved. (Last updated: 2022-09-29)</p>
+          <p>&copy; 2023 <a class="link" href="https://github.com/treasure-data/td-ios-sdk" target="_blank" rel="external noopener">mitsu, huylenq, and tung-vu-td</a>. All rights reserved. (Last updated: 2023-02-22)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>

@@ -16,7 +16,7 @@
     <a title="TreasureData iOS SDK  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">TreasureData iOS SDK 0.8.1 Docs</a> (89% documented)</p>
+        <p><a href="index.html">TreasureData iOS SDK 0.9.0 Docs</a> (89% documented)</p>
         <div class="header-right">
           <form role="search" action="search.json">
             <input type="text" placeholder="Search documentation" data-typeahead>
@@ -64,9 +64,19 @@
             
             <h1 id='treasure-data-ios-sdk' class='heading'>Treasure Data iOS SDK</h1>
 
-<p>iOS and tvOS SDK for <a href="http://www.treasuredata.com/">Treasure Data</a>. With this SDK, you can import the events on your applications into Treasure Data easily. Technically, this library supports iOS 7 and later, but we only execute OS coverage tests for iOS 8, 9, 10, 11, 12, 13 ,14 and 15. This SDK also support Apple tvOS 12 and up.</p>
+<p>iOS and tvOS SDK for <a href="http://www.treasuredata.com/">Treasure Data</a>. With this SDK, you can import the events on your applications into Treasure Data easily. As of 0.9.0, this SDK support iOS 12 and up as well as support tvOS 12 and up.</p>
 
 <p>Also, there is an alternative SDK written in Swift <a href="https://github.com/recruit-lifestyle/TreasureDataSDK">https://github.com/recruit-lifestyle/TreasureDataSDK</a>. Note, however, that it does not support current GDPR functionality in the mainstream TD SDKs.</p>
+<h2 id='migration-to-version-1' class='heading'>Migration to version 1</h2>
+
+<p>Version 1 has major changes that are not backward compatible with previous versions. If you are upgrading from version 0.9.0 or earlier, your code will not run correctly without doing these following steps:</p>
+
+<ul>
+<li>API endpoint has changed to Ingestion Endpoint. The default value is <a href="https://us01.records.in.treasuredata.com">https://us01.records.in.treasuredata.com</a>.</li>
+<li><code>initializeApiEndpoint:</code> API is no longer available, please use <code>initializeWithApiKey:apiEndpoint:</code> instead.</li>
+<li>Server side upload timestamp feature is removed. If you need this feature, please contact our support team.</li>
+<li><code>uuid</code> is now reserved column name. If you try to add value to event&rsquo;s <code>uuid</code> key, you won&rsquo;t see the column show up in the database.</li>
+</ul>
 <h2 id='installation' class='heading'>Installation</h2>
 
 <p>There are several ways to install the library.</p>
@@ -77,10 +87,10 @@
 </code></pre>
 
 <p>Next, add this line in your Podfile.</p>
-<pre class="highlight plaintext"><code>pod 'TreasureData-iOS-SDK', '= 0.8.1'
+<pre class="highlight plaintext"><code>pod 'TreasureData-iOS-SDK', '= 0.9.0'
 </code></pre>
 
-<p>If you use the SDK in Swift, add this line to your Podfile.</p>
+<p>Add this line to your Podfile (usually at the beginning of the file).</p>
 <pre class="highlight plaintext"><code>use_frameworks!
 </code></pre>
 
@@ -89,9 +99,16 @@
 </code></pre>
 
 <p>Remember to reopen your project by opening .xcworkspace file instead of .xcodeproj file </p>
+<h3 id='swift-package-manager' class='heading'>Swift Package Manager</h3>
+
+<p>You can install either via Xcode: File &gt; Swift Packages &gt; Add Package Dependency and enter <code>https://github.com/treasure-data/td-ios-sdk.git</code>.</p>
+
+<p>Or add this line to <code>dependencies</code> array in Package.swift file:</p>
+<pre class="highlight plaintext"><code>.package(url: "https://github.com/treasure-data/td-ios-sdk.git", .upToNextMajor(from: "0.9.0"))
+</code></pre>
 <h3 id='framework' class='heading'>Framework</h3>
 
-<p>Download <a href="http://cdn.treasuredata.com/sdk/ios/0.8.1/TreasureData-iOS-SDK.framework.zip">TreasureData.framework</a> and add it and <code>libz</code> library into your project.</p>
+<p>From 0.9.0, we no longer support standalone framework.</p>
 <h2 id='usage-in-objective-c' class='heading'>Usage in Objective-C</h2>
 
 <ul>
@@ -319,9 +336,8 @@ If you have multiple default values set to the same key, newly added event will 
 <h2 id='additional-configuration' class='heading'>Additional Configuration</h2>
 <h3 id='endpoint' class='heading'>Endpoint</h3>
 
-<p>The API endpoint (default: <a href="https://in.treasuredata.com">https://in.treasuredata.com</a>) can be modified using <code>initializeApiEndpoint</code> class method. For example,</p>
-<pre class="highlight plaintext"><code>[TreasureData initializeApiEndpoint:@"https://specifying-another-endpoint.com"];
-[TreasureData initializeWithApiKey:@"your_api_key"];
+<p>The API endpoint (default: <a href="https://us01.records.in.treasuredata.com">https://us01.records.in.treasuredata.com</a>) can be specify using <code>+[TreasureData initializeWithApiKey:apiEndpoint]</code></p>
+<pre class="highlight plaintext"><code>[TreasureData initializeWithApiKey:@"your_api_key" apiEndpoint: @"https://specifying-another-endpoint.com"];
 </code></pre>
 <h3 id='encryption-key' class='heading'>Encryption key</h3>
 
@@ -350,6 +366,18 @@ If you have multiple default values set to the same key, newly added event will 
 
 <p>You can also reset UUID (<code>td_uuid</code>) at any time using following API. </p>
 <pre class="highlight plaintext"><code>[[TreasureData sharedInstance] resetUniqId];
+</code></pre>
+<h3 id='adding-local-time-to-each-even-record-automatically-enabled-by-default' class='heading'>Adding local time to each even record automatically (enabled by default)</h3>
+
+<p>By default, local timestamp will be added to event&rsquo;s <code>time</code> key automatically. If you <code>disableAutoAppendLocalTimestamp</code> without adding <code>time</code> key to the event yourself, the server will add server side timestamp to <code>time</code> column. You can also auto track local time with custom column. If so, the <code>time</code> column will have server side timestamp.</p>
+<pre class="highlight plaintext"><code>// Use local time as `time` column
+[[TreasureData sharedInstance] enableAutoAppendLocalTimestamp];
+
+// Add local time as a customized column name
+[[TreasureData sharedInstance] enableAutoAppendLocalTimestamp:@"clientside_time"];
+
+// Disable auto append local time
+[[TreasureData sharedInstance] disableAutoAppendLocalTimestamp];
 </code></pre>
 <h3 id='adding-an-uuid-to-each-event-record-automatically' class='heading'>Adding an UUID to each event record automatically</h3>
 
@@ -451,7 +479,7 @@ If you have multiple default values set to the same key, newly added event will 
 <pre class="highlight plaintext"><code>[[TreasureData sharedInstance] enableInAppPurchaseEvent];
 </code></pre>
 
-<p>This is disabled by default. There is a subtle difference between this and <code>appLifecycleEvent</code>, <code>customEvent</code>. The other two, for a historical reason, are persistent settings, meaning their statuses are saved across app launches. <code>inAppPurchaseEvent</code> behaves like an ordinary object option and is not saved. You have to enable it after initialize your new <code><a href="Classes/TreasureData.html">TreasureData</a></code> instance (probably only the <code>sharedInstance</code> with <code>initializeWithApiKey()</code>).</p>
+<p>This is disabled by default. There is a subtle difference between this and <code>appLifecycleEvent</code>, <code>customEvent</code>. The other two, for a historical reason, are persistent settings, meaning their statuses are saved across app launches. <code>inAppPurchaseEvent</code> behaves like an ordinary object option and is not saved. You have to enable it after initialize your new <code><a href="Classes/TreasureData.html">TreasureData</a></code> instance (probably only the <code>sharedInstance</code> with <code>initializeWithApiKey</code>).</p>
 
 <p>An example of a IAP event:</p>
 <pre class="highlight plaintext"><code>"td_ios_event": "TD_IOS_IN_APP_PURCHASE",
@@ -534,7 +562,7 @@ NSDictionary&lt;TDRequestOptionsKey, id&gt; *options = @{
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2022 <a class="link" href="https://github.com/treasure-data/td-ios-sdk" target="_blank" rel="external noopener">mitsu, huylenq, and tung-vu-td</a>. All rights reserved. (Last updated: 2022-09-29)</p>
+          <p>&copy; 2023 <a class="link" href="https://github.com/treasure-data/td-ios-sdk" target="_blank" rel="external noopener">mitsu, huylenq, and tung-vu-td</a>. All rights reserved. (Last updated: 2023-02-22)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
