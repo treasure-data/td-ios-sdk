@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "TreasureData-iOS-SDK"
-  s.version      = "0.9.0"
+  s.version      = "1.0.0"
   s.summary      = "TreasureData SDK for iOS."
   s.license      = "Apache"
   s.authors      = { "mitsu" => "mitsu@treasure-data.com",
@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.library      = 'z'
   s.frameworks   = 'Security', 'StoreKit'
   s.public_header_files = ["TreasureData/TreasureData.h", "TreasureData/TDClient.h", "TreasureData/TDRequestOptionsKey.h"]
-  s.dependency "KeenClientTD", '= 3.9.0'
+  s.dependency "KeenClientTD", '= 4.0.0'
   s.dependency "GZIP", '= 1.3.0'
   s.requires_arc = true
 end

@@ -13,7 +13,7 @@
 #import "TDClient.h"
 @import GZIP;
 
-static NSString *version = @"0.9.0";
+static NSString *version = @"1.0.0";
 
 @implementation TDClient
 

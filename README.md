@@ -28,7 +28,7 @@ $ gem install cocoapods
 Next, add this line in your Podfile.
 
 ```
-pod 'TreasureData-iOS-SDK', '= 0.9.0'
+pod 'TreasureData-iOS-SDK', '= 1.0.0'
 ```
 
 Add this line to your Podfile (usually at the beginning of the file).
@@ -50,7 +50,7 @@ You can install either via Xcode: File > Swift Packages > Add Package Dependency
 
 Or add this line to `dependencies` array in Package.swift file:
 ```
-.package(url: "https://github.com/treasure-data/td-ios-sdk.git", .upToNextMajor(from: "0.9.0"))
+.package(url: "https://github.com/treasure-data/td-ios-sdk.git", .upToNextMajor(from: "1.0.0"))
 ```
 
 ### Framework

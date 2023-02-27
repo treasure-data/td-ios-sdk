@@ -6,7 +6,7 @@ let package = Package(
     name: "TreasureData-iOS-SDK",
     platforms: [
         .iOS(.v12),
-        .tvOS(.v9)
+        .tvOS(.v12)
     ],
     products: [
         .library(
@@ -14,7 +14,7 @@ let package = Package(
             targets: ["TreasureData_iOS_SDK"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/treasure-data/KeenClient-iOS.git", .exact("3.9.0")),
+        .package(url: "https://github.com/treasure-data/KeenClient-iOS.git", .exact("4.0.0")),
         .package(url: "https://github.com/nicklockwood/GZIP.git", .upToNextMajor(from: "1.3.0"))
     ],
     targets: [
