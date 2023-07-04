@@ -1,5 +1,10 @@
 # Change Log
 
+## version 1.0.1
+_2023-06-05_
+
+* Update KeenClient-iOS to support max number of event to upload per request. Default to 400 events per request.
+
 ## version 1.0.0
 _2023-02-27_
 
