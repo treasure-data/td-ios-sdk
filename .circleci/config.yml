@@ -32,7 +32,8 @@ commands:
             - v3-pods-{{ checksum "Podfile.lock" }}
       - run:
           name: Install Pods
-          command: ./scripts/ci_pod_install
+          # command: ./scripts/ci_pod_install
+          command: pod install
       - save_cache:
           name: Saving Pods cache
           key: v3-pods-{{ checksum "Podfile.lock" }}
@@ -80,7 +81,7 @@ commands:
     steps:
       - checkout
       - auxiliary_setup
-      - install_cocoapods
+      # - install_cocoapods
       - install_pods
       - run_tests:
           os: <<parameters.os>>
