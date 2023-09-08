@@ -11,6 +11,7 @@ Version 1 has major changes that are not backward compatible with previous versi
 - API endpoint has changed to Ingestion Endpoint. The default value is https://us01.records.in.treasuredata.com.
 - `initializeApiEndpoint:` API is no longer available, please use `initializeWithApiKey:apiEndpoint:` instead.
 - Server side upload timestamp feature is removed. If you need this feature, please contact our support team.
+- New `enableAutoAppendLocalTimestamp` and `disableAutoAppendLocalTimestamp` to help automatically track local timestamp.
 - `uuid` is now reserved column name. If you try to add value to event's `uuid` key, you won't see the column show up in the database.
 
 ## Installation
@@ -434,17 +435,6 @@ It outputs the following column names and values:
 - `td_locale_country` : `[[NSLocale currentLocale] objectForKey: NSLocaleCountryCode]`
 - `td_locale_lang` : `[[NSLocale currentLocale] objectForKey: NSLocaleLanguageCode]`
 
-### Use server side upload timestamp
-
-If you want to use server side upload timestamp not only client device time that is recorded when your application calls `addEvent`, use `enableServerSideUploadTimestamp`.
-
-```
-// Use server side upload time as `time` column
-[[TreasureData sharedInstance] enableServerSideUploadTimestamp];
-
-// Add server side upload time as a customized column name
-[[TreasureData sharedInstance] enableServerSideUploadTimestamp:@"server_upload_time"];
-```
 
 ### Enable/Disable debug log
 
