@@ -106,15 +106,6 @@ commands:
       - store_results
 
 jobs:
-  test_ios17:
-    macos:
-      xcode: "15.0.0"
-      resource_class: macos.m1.medium.gen1
-    steps:
-      - run_tests_flow:
-          os: "17.0"
-          simulator: "iPhone 14"
-
   test_ios16:
     macos:
       xcode: "14.3.1"
@@ -160,7 +151,6 @@ workflows:
   version: 2
   test:
     jobs:
-      - test_ios17
       - test_ios16
       - test_ios15
       - test_ios14
