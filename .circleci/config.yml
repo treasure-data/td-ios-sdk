@@ -32,7 +32,8 @@ commands:
             - v3-pods-{{ checksum "Podfile.lock" }}
       - run:
           name: Install Pods
-          command: ./scripts/ci_pod_install
+          # command: ./scripts/ci_pod_install
+          command: pod install
       - save_cache:
           name: Saving Pods cache
           key: v3-pods-{{ checksum "Podfile.lock" }}
@@ -80,7 +81,7 @@ commands:
     steps:
       - checkout
       - auxiliary_setup
-      - install_cocoapods
+      # - install_cocoapods
       - install_pods
       - run_tests:
           os: <<parameters.os>>
@@ -107,10 +108,11 @@ commands:
 jobs:
   test_ios16:
     macos:
-      xcode: "14.1.0"
+      xcode: "14.3.1"
+      resource_class: macos.m1.medium.gen1
     steps:
       - run_tests_flow:
-          os: "16.1"
+          os: "16.4"
           simulator: "iPhone 14"
 
   test_ios15:
@@ -137,14 +139,6 @@ jobs:
           os: "13.7"
           simulator: "iPhone 11"
 
-  test_ios12:
-    macos:
-      xcode: "11.7.0" 
-    steps:
-      - run_tests_flow:
-          os: "12.4"
-          simulator: "iPhone X"
-
   build_spm_ios15:
     macos:
       xcode: "13.4.1"
@@ -161,5 +155,5 @@ workflows:
       - test_ios15
       - test_ios14
       - test_ios13
-      - test_ios12
       - build_spm_ios15
+
