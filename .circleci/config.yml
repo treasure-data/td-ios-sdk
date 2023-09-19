@@ -113,7 +113,7 @@ jobs:
     steps:
       - run_tests_flow:
           os: "17.0"
-          simulator: "iPhone 14"
+          simulator: "iPhone 15"
 
   test_ios16:
     macos:
