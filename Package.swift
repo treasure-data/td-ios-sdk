@@ -1,4 +1,4 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.3
 
 import PackageDescription
 
@@ -21,7 +21,7 @@ let package = Package(
       .target(
             name: "TreasureData_iOS_SDK",
             dependencies: [
-                "KeenClientTD",
+                .product(name: "KeenClientTD", package: "KeenClient-iOS"),
                 "GZIP"
             ],
             path: ".",
@@ -42,6 +42,7 @@ let package = Package(
                 "TreasureData/",
                 "TreasureDataInternal/",
             ],
+            resources: [.copy("PrivacyInfo.xcprivacy")],
             publicHeadersPath: "TreasureData",
             cxxSettings: [
                 .headerSearchPath("TreasureData"),
