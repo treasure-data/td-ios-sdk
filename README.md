@@ -570,4 +570,27 @@ See this example project (https://github.com/treasure-data/td-ios-sdk/tree/maste
 
 The current version has been built and tested with XCode v10.2.
 
+## Supported OS versions
+
+#### iOS
+
+| iOS Version | v0.8.0             | v0.9.0             | v1.0.1             |
+| :---------- | :----------------- | :----------------- | :----------------- |
+| 17          | not tested         | not tested         | :white_check_mark: |
+| 16          | not tested         | :white_check_mark: | :white_check_mark: |
+| 15          | not tested         | :white_check_mark: | :white_check_mark: |
+| 14          | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| 13          | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| 12          | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| 11          | :white_check_mark: | not tested         | not tested         |
+| 10          | :white_check_mark: | not tested         | not tested         |
+| 9           | :white_check_mark: | not tested         | not tested         |
+| 8           | :white_check_mark: | not tested         | not tested         |
+| 7           | not tested         | not tested         | not tested         |
+
+#### tvOS
+
+| tvOS Version | v0.8.0             | v0.9.0             | v1.0.1             |
+| :----------- | :----------------- | :----------------- | :----------------- |
+| 12 and up    | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
