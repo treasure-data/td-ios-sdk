@@ -108,7 +108,7 @@ commands:
 jobs:
   test_ios17:
     macos:
-      xcode: "15.0"
+      xcode: "15.0.0"
       resource_class: macos.m1.medium.gen1
     steps:
       - run_tests_flow:
