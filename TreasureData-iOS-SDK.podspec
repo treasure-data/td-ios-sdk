@@ -10,6 +10,7 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/treasure-data/td-ios-sdk"
   s.source       = { :git => "https://github.com/treasure-data/td-ios-sdk.git", :tag => s.version.to_s  }
   s.source_files = ['TreasureData', "TreasureDataInternal"]
+  s.resources    = "PrivacyInfo.xcprivacy"
   s.library      = 'z'
   s.frameworks   = 'Security', 'StoreKit'
   s.public_header_files = ["TreasureData/TreasureData.h", "TreasureData/TDClient.h", "TreasureData/TDRequestOptionsKey.h"]
