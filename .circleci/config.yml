@@ -161,9 +161,9 @@ workflows:
   test:
     jobs:
       - test_ios17
-      # - test_ios16
-      # - test_ios15
-      # - test_ios14
-      # - test_ios13
+      - test_ios16
+      - test_ios15
+      - test_ios14
+      - test_ios13
       - build_spm_ios15
 
