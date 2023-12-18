@@ -148,13 +148,13 @@ jobs:
           os: "13.7"
           simulator: "iPhone 11"
 
-  build_spm_ios15:
+  build_spm_ios17:
     macos:
       xcode: "15.1.0"
     steps:
       - build_spm:
-          os: "15.5"
-          simulator: "iPhone 13"
+          os: "17.2"
+          simulator: "iPhone 15"
 
 workflows:
   version: 2
@@ -165,5 +165,5 @@ workflows:
       - test_ios15
       - test_ios14
       - test_ios13
-      - build_spm_ios15
+      - build_spm_ios17
 
