@@ -150,7 +150,7 @@ jobs:
 
   build_spm_ios15:
     macos:
-      xcode: "13.4.1"
+      xcode: "15.1.0"
     steps:
       - build_spm:
           os: "15.5"
