@@ -108,11 +108,11 @@ commands:
 jobs:
   test_ios17:
     macos:
-      xcode: "15.0.0"
+      xcode: "15.1.0"
       resource_class: macos.m1.large.gen1
     steps:
       - run_tests_flow:
-          os: "17.0"
+          os: "17.2"
           simulator: "iPhone 15"
 
   test_ios16:
