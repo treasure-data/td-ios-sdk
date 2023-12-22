@@ -1,5 +1,10 @@
 # Change Log
 
+## version 1.1.0
+_2023-12-21_
+
+* Support privacy manifest file
+
 ## version 1.0.1
 _2023-06-05_
 

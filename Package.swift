@@ -15,7 +15,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/treasure-data/KeenClient-iOS.git", .exact("4.1.0")),
-        .package(url: "https://github.com/nicklockwood/GZIP.git", .upToNextMajor(from: "1.3.0"))
+        .package(url: "https://github.com/nicklockwood/GZIP.git", .upToNextMajor(from: "1.3.1"))
     ],
     targets: [
       .target(
