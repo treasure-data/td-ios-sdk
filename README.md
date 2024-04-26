@@ -10,7 +10,7 @@ Also, there is an alternative SDK written in Swift [https://github.com/recruit-l
 Version 1 has major changes that are not backward compatible with previous versions. If you are upgrading from version 0.9.0 or earlier, your code will not run correctly without doing these following steps:
 - API endpoint has changed to Ingestion Endpoint. The default value is https://us01.records.in.treasuredata.com.
 - `initializeApiEndpoint:` API is no longer available, please use `initializeWithApiKey:apiEndpoint:` instead.
-- Server side upload timestamp feature is removed. If you need this feature, please contact our support team.
+- Server side upload timestamp feature is removed.
 - New `enableAutoAppendLocalTimestamp` and `disableAutoAppendLocalTimestamp` to help automatically track local timestamp.
 - `uuid` is now reserved column name. If you try to add value to event's `uuid` key, you won't see the column show up in the database.
 
