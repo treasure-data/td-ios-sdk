@@ -1,12 +1,12 @@
 PODS:
-  - GZIP (1.3.1)
-  - KeenClientTD (4.1.0):
-    - KeenClientTD/keen_sqlite (= 4.1.0)
-  - KeenClientTD/keen_sqlite (4.1.0)
+  - GZIP (1.3.2)
+  - KeenClientTD (4.1.1):
+    - KeenClientTD/keen_sqlite (= 4.1.1)
+  - KeenClientTD/keen_sqlite (4.1.1)
 
 DEPENDENCIES:
-  - GZIP (= 1.3.1)
-  - KeenClientTD (= 4.1.0)
+  - GZIP (= 1.3.2)
+  - KeenClientTD (= 4.1.1)
 
 SPEC REPOS:
   https://cdn.cocoapods.org/:
@@ -14,9 +14,9 @@ SPEC REPOS:
     - KeenClientTD
 
 SPEC CHECKSUMS:
-  GZIP: e6922ed5bdd1d77d84589d50821ac34ea0c38d4b
-  KeenClientTD: 29a0bee0f807574996e24e88cadd9d9fecdf368c
+  GZIP: 3c0abf794bfce8c7cb34ea05a1837752416c8868
+  KeenClientTD: 6370a6861a152aa8bac2108f68e540dc9b5f72bf
 
-PODFILE CHECKSUM: 1977e78896f93ea727fb9fd6f65fc45cf74b1f89
+PODFILE CHECKSUM: c7c56130903936173a7ecee314611a525c115504
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.15.2
