@@ -1,6 +1,13 @@
 # Change Log
 
 ## version 1.1.0
+_2024-04-29_
+
+* Add NSPrivacyAccessedAPIType to Privacy manifest
+* Update KeenClientTD to 4.1.1
+* Update GZIP to 1.3.2
+
+## version 1.1.0
 _2023-12-21_
 
 * Support privacy manifest file
