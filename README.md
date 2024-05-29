@@ -13,6 +13,7 @@ Version 1 has major changes that are not backward compatible with previous versi
 - Server side upload timestamp feature is removed.
 - New `enableAutoAppendLocalTimestamp` and `disableAutoAppendLocalTimestamp` to help automatically track local timestamp.
 - `uuid` is now reserved column name. If you try to add value to event's `uuid` key, you won't see the column show up in the database.
+- Auto tracking of client id by adding `td_ip` field is no longer supported.
 
 ## Installation
 
