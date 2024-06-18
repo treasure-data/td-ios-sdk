@@ -1027,6 +1027,29 @@ static NSString *END_POINT = @"http://localhost";
     }
 }
 
+#pragma mark - Tracking td_ip
+
+- (void)testTrackingIPEnabled {
+    @try {
+        XCTAssertFalse(self.td.client.enableTrackingIP);
+        [self.td enableAutoTrackingIP];
+        XCTAssertTrue(self.td.client.enableTrackingIP);
+    } @finally {
+        self.isFinished = YES;
+    }
+}
+
+- (void)testTrackingIPDisabled {
+    @try {
+        [self.td enableAutoTrackingIP];
+        XCTAssertTrue(self.td.client.enableTrackingIP);
+        [self.td disableAutoTrackingIP];
+        XCTAssertFalse(self.td.client.enableTrackingIP);
+    } @finally {
+        self.isFinished = YES;
+    }
+}
+
 #pragma mark - Default Values
 
 - (void) testAddDefaultValuesSuccesfully {

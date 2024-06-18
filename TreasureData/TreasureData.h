@@ -318,6 +318,16 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
  */
 - (void)disableAutoAppendAdvertisingIdentifier;
 
+/**
+ * Automatically tracking device's IP address in `td_ip` column. Disabled by default
+ */
+- (void)enableAutoTrackingIP;
+
+/**
+ * Disable automatically tracking device's IP
+ */
+- (void)disableAutoTrackingIP;
+
 #pragma mark - Session
 
 /**

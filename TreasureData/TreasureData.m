@@ -615,6 +615,14 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     self.autoAppendAdvertisingIdColumn = nil;
 }
 
+- (void)enableAutoTrackingIP {
+    self.client.enableTrackingIP = true;
+}
+
+- (void)disableAutoTrackingIP {
+    self.client.enableTrackingIP = false;
+}
+
 + (instancetype)sharedInstance {
     NSAssert(sharedInstance, @"%@ sharedInstance is called before [TreasureData initializeWithApiKey:]", self);
     return sharedInstance;

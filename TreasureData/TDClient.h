@@ -24,6 +24,13 @@
  */
 @property(nonatomic, strong) NSString *apiEndpoint;
 
+#pragma mark - Tracking
+
+/**
+ * Enable tracking td_ip
+ */
+@property BOOL enableTrackingIP;
+
 #pragma mark - Retry
 
 /**
