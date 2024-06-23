@@ -108,16 +108,16 @@ commands:
 jobs:
   test_ios17:
     macos:
-      xcode: "15.1.0"
-      resource_class: macos.m1.large.gen1
+      xcode: "15.4.0"
+      resource_class: macos.m1.medium.gen1
     steps:
       - run_tests_flow:
-          os: "17.2"
+          os: "17.5"
           simulator: "iPhone 15"
 
   test_ios16:
     macos:
-      xcode: "14.3.1"
+      xcode: "15.4.0"
       resource_class: macos.m1.medium.gen1
     steps:
       - run_tests_flow:
@@ -126,7 +126,8 @@ jobs:
 
   test_ios15:
     macos:
-      xcode: "14.1.0"
+      xcode: "14.3.1"
+      resource_class: macos.m1.medium.gen1
     steps:
       - run_tests_flow:
           os: "15.5"
@@ -135,18 +136,11 @@ jobs:
   test_ios14:
     macos:
       xcode: "13.4.1"
+      resource_class: macos.m1.medium.gen1
     steps:
       - run_tests_flow:
           os: "14.5"
           simulator: "iPhone 12"
-
-  test_ios13:
-    macos:
-      xcode: "12.5.1"
-    steps:
-      - run_tests_flow:
-          os: "13.7"
-          simulator: "iPhone 11"
 
   build_spm_ios15:
     macos:
@@ -164,6 +158,5 @@ workflows:
       - test_ios16
       - test_ios15
       - test_ios14
-      - test_ios13
       - build_spm_ios15
 

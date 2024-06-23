@@ -187,10 +187,11 @@ class IntegrationTests: XCTestCase {
         let table = newTempTable()
         sdkClient.enableAutoTrackingIP()
         sdkClient.addEvent([:], table: table)
-        sdkClient.disableAutoTrackingIP() // Will disable auto tracking td_ip in all events
+        sdkClient.disableAutoTrackingIP() // Will disable auto tracking td_ip in both 2 added events
+        sdkClient.addEvent([:], table: table)
         sdkClient.uploadEvents()
-        let result = try! IntegrationTests.api.stubbornQuery("select td_ip from \(table) limit 1", database: IntegrationTests.TargetDatabase)
-        XCTAssert(!IntegrationTests.isValidIPAddress(address: result[0][0] as? String))
+        let result = try! IntegrationTests.api.stubbornQuery("select * from \(table) limit 2", database: IntegrationTests.TargetDatabase)
+        XCTAssert(result[0].count == 1 && result[1].count == 1) // count == 0 means only 1 column 'time', so there is no td_ip column
     }
 
     func testFetchUserSegmentsSucceed() {
