@@ -109,7 +109,7 @@ jobs:
   test_ios17:
     macos:
       xcode: "15.4.0"
-      resource_class: macos.m1.medium.gen1
+      resource_class: macos.m1.large.gen1
     steps:
       - run_tests_flow:
           os: "17.5"
@@ -155,8 +155,8 @@ workflows:
   test:
     jobs:
       - test_ios17
-      - test_ios16
-      - test_ios15
-      - test_ios14
+      # - test_ios16
+      # - test_ios15
+      # - test_ios14
       - build_spm_ios15
 

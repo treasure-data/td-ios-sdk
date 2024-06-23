@@ -191,7 +191,7 @@ class IntegrationTests: XCTestCase {
         sdkClient.addEvent([:], table: table)
         sdkClient.uploadEvents()
         let result = try! IntegrationTests.api.stubbornQuery("select * from \(table) limit 2", database: IntegrationTests.TargetDatabase)
-        XCTAssert(result[0].count == 1 && result[1].count == 1) // count == 0 means only 1 column 'time', so there is no td_ip column
+        XCTAssert(result[0].count == 1 && result[1].count == 1) // count == 1 means only 1 column 'time', so there is no td_ip column
     }
 
     func testFetchUserSegmentsSucceed() {
