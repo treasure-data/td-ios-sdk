@@ -173,27 +173,20 @@ class IntegrationTests: XCTestCase {
         XCTAssert(result[0][0] as! String != result[1][0] as! String)
     }
     
-    func testEnableTrackingIP() {
+    func testTrackingIP() {
         let table = newTempTable()
-        sdkClient.enableCustomEvent()
         sdkClient.enableAutoTrackingIP()
         sdkClient.addEvent([:], table: table)
         sdkClient.uploadEvents()
-        let result = try! IntegrationTests.api.stubbornQuery("select td_ip from \(table) limit 1", database: IntegrationTests.TargetDatabase)
+        sleep(2)
+        sdkClient.disableAutoTrackingIP()
+        sdkClient.addEvent([:], table: table)
+        sdkClient.uploadEvents()
+        let result = try! IntegrationTests.api.stubbornQuery("select td_ip from \(table) limit 2", database: IntegrationTests.TargetDatabase)
         XCTAssert(IntegrationTests.isValidIPAddress(address: result[0][0] as? String))
+        XCTAssert(result.count == 1) // count == 1 means there is only the first event with td_ip
     }
     
-    func testDisableTrackingIP() {
-        let table = newTempTable()
-        sdkClient.enableAutoTrackingIP()
-        sdkClient.addEvent([:], table: table)
-        sdkClient.disableAutoTrackingIP() // Will disable auto tracking td_ip in both 2 added events
-        sdkClient.addEvent([:], table: table)
-        sdkClient.uploadEvents()
-        let result = try! IntegrationTests.api.stubbornQuery("select * from \(table) limit 2", database: IntegrationTests.TargetDatabase)
-        XCTAssert(result[0].count == 1 && result[1].count == 1) // count == 1 means only 1 column 'time', so there is no td_ip column
-    }
-
     func testFetchUserSegmentsSucceed() {
         let expectation = self.expectation(description: "fetchUserSegments should succeed")
         sdkClient.fetchUserSegments(tokens: IntegrationTests.audienceTokens, keys: IntegrationTests.userSegmentKeys) { (jsonResponse, error) in
