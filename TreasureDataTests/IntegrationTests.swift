@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import Network
 
 class IntegrationTests: XCTestCase {
 
@@ -172,6 +173,20 @@ class IntegrationTests: XCTestCase {
         XCTAssert(result[0][0] as! String != result[1][0] as! String)
     }
     
+    func testTrackingIP() {
+        let table = newTempTable()
+        sdkClient.enableAutoTrackingIP()
+        sdkClient.addEvent([:], table: table)
+        sdkClient.uploadEvents()
+        sleep(2)
+        sdkClient.disableAutoTrackingIP()
+        sdkClient.addEvent([:], table: table)
+        sdkClient.uploadEvents()
+        let result = try! IntegrationTests.api.stubbornQuery("select td_ip from \(table) limit 2", database: IntegrationTests.TargetDatabase)
+        XCTAssert(IntegrationTests.isValidIPAddress(address: result[0][0] as? String))
+        XCTAssert(result.count == 1) // count == 1 means there is only the first event with td_ip
+    }
+    
     func testFetchUserSegmentsSucceed() {
         let expectation = self.expectation(description: "fetchUserSegments should succeed")
         sdkClient.fetchUserSegments(tokens: IntegrationTests.audienceTokens, keys: IntegrationTests.userSegmentKeys) { (jsonResponse, error) in
@@ -200,5 +215,10 @@ class IntegrationTests: XCTestCase {
 
     static func uuid() -> String {
         return NSUUID().uuidString.lowercased().replacingOccurrences(of: "-", with: "_")
+    }
+    
+    static func isValidIPAddress(address: String?) -> Bool {
+        guard let address = address else { return false }
+        return IPv4Address(address) != nil || IPv6Address(address) != nil
     }
 }
