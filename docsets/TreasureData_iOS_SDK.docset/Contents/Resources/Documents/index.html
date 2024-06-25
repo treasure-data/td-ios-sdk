@@ -1,26 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>TreasureData_iOS_SDK  Reference</title>
+    <title>TreasureData iOS SDK  Reference</title>
     <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="css/highlight.css" />
     <meta charset='utf-8'>
     <script src="js/jquery.min.js" defer></script>
     <script src="js/jazzy.js" defer></script>
     
+    <script src="js/lunr.min.js" defer></script>
+    <script src="js/typeahead.jquery.js" defer></script>
+    <script src="js/jazzy.search.js" defer></script>
   </head>
   <body>
-    <a title="TreasureData_iOS_SDK  Reference"></a>
+    <a title="TreasureData iOS SDK  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">TreasureData_iOS_SDK Docs</a> (77% documented)</p>
+        <p><a href="index.html">TreasureData iOS SDK 1.1.1 Docs</a> (90% documented)</p>
+        <div class="header-right">
+          <form role="search" action="search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
       </div>
     </header>
     <div class="content-wrapper">
       <p id="breadcrumbs">
-        <a href="index.html">TreasureData_iOS_SDK Reference</a>
-        <img id="carat" src="img/carat.png" />
-        TreasureData_iOS_SDK  Reference
+        <a href="index.html">TreasureData iOS SDK</a>
       </p>
     </div>
     <div class="content-wrapper">
@@ -30,15 +36,6 @@
             <a href="Classes.html">Classes</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Classes/KIOEventStore.html">KIOEventStore</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/KeenClient.html">KeenClient</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/KeenProperties.html">KeenProperties</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="Classes/TDClient.html">TDClient</a>
               </li>
               <li class="nav-group-task">
@@ -47,16 +44,13 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="Type Definitions.html">Type Definitions</a>
+            <a href="Type%20Definitions.html">Type Definitions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Type Definitions.html#/c:TreasureData.h@T@ErrorHandler">ErrorHandler</a>
+                <a href="Type%20Definitions.html#/c:TreasureData.h@T@ErrorHandler">ErrorHandler</a>
               </li>
               <li class="nav-group-task">
-                <a href="Type Definitions.html#/c:KeenClient.h@T@KeenGlobalPropertiesBlock">KeenGlobalPropertiesBlock</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Type Definitions.html#/c:TreasureData.h@T@SuccessHander">SuccessHander</a>
+                <a href="Type%20Definitions.html#/c:TreasureData.h@T@SuccessHander">SuccessHander</a>
               </li>
             </ul>
           </li>
@@ -68,9 +62,21 @@
             
             <h1 id='treasure-data-ios-sdk' class='heading'>Treasure Data iOS SDK</h1>
 
-<p>iOS SDK for <a href="http://www.treasuredata.com/">Treasure Data</a>. With this SDK, you can import the events on your applications into Treasure Data easily. Technically, this library supports iOS 7 and later, but we only execute OS coverage tests for iOS 10, 11 and 12.</p>
+<p>iOS and tvOS SDK for <a href="http://www.treasuredata.com/">Treasure Data</a>. With this SDK, you can import the events on your applications into Treasure Data easily. As of 0.9.0, this SDK support iOS 12 and up as well as support tvOS 12 and up.</p>
 
 <p>Also, there is an alternative SDK written in Swift <a href="https://github.com/recruit-lifestyle/TreasureDataSDK">https://github.com/recruit-lifestyle/TreasureDataSDK</a>. Note, however, that it does not support current GDPR functionality in the mainstream TD SDKs.</p>
+<h2 id='migration-to-version-1' class='heading'>Migration to version 1</h2>
+
+<p>Version 1 has major changes that are not backward compatible with previous versions. If you are upgrading from version 0.9.0 or earlier, your code will not run correctly without doing these following steps:</p>
+
+<ul>
+<li>API endpoint has changed to Ingestion Endpoint. The default value is <a href="https://us01.records.in.treasuredata.com">https://us01.records.in.treasuredata.com</a>.</li>
+<li><code>initializeApiEndpoint:</code> API is no longer available, please use <code>initializeWithApiKey:apiEndpoint:</code> instead.</li>
+<li>Server side upload timestamp feature is removed.</li>
+<li>New <code>enableAutoAppendLocalTimestamp</code> and <code>disableAutoAppendLocalTimestamp</code> to help automatically track local timestamp.</li>
+<li><code>uuid</code> is now reserved column name. If you try to add value to event&rsquo;s <code>uuid</code> key, you won&rsquo;t see the column show up in the database.</li>
+<li>Auto tracking of client id by adding <code>td_ip</code> field is no longer supported.</li>
+</ul>
 <h2 id='installation' class='heading'>Installation</h2>
 
 <p>There are several ways to install the library.</p>
@@ -81,20 +87,34 @@
 </code></pre>
 
 <p>Next, add this line in your Podfile.</p>
-<pre class="highlight plaintext"><code>pod 'TreasureData-iOS-SDK', '= 0.1.27'
+<pre class="highlight plaintext"><code>pod 'TreasureData-iOS-SDK', '= 1.1.1'
 </code></pre>
 
-<p>If you use the SDK in Swift, add this line to your Podfile.</p>
+<p>Add this line to your Podfile (usually at the beginning of the file).</p>
 <pre class="highlight plaintext"><code>use_frameworks!
 </code></pre>
 
 <p>Finally, execute &lsquo;pod install&rsquo;.</p>
 <pre class="highlight plaintext"><code>$ pod install
 </code></pre>
+
+<p>Remember to reopen your project by opening .xcworkspace file instead of .xcodeproj file </p>
+<h3 id='swift-package-manager' class='heading'>Swift Package Manager</h3>
+
+<p>You can install either via Xcode: File &gt; Swift Packages &gt; Add Package Dependency and enter <code>https://github.com/treasure-data/td-ios-sdk.git</code>.</p>
+
+<p>Or add this line to <code>dependencies</code> array in Package.swift file:</p>
+<pre class="highlight plaintext"><code>.package(url: "https://github.com/treasure-data/td-ios-sdk.git", .upToNextMajor(from: "1.1.1"))
+</code></pre>
 <h3 id='framework' class='heading'>Framework</h3>
 
-<p>Download <a href="http://cdn.treasuredata.com/sdk/ios/0.1.27/TreasureData-iOS-SDK.framework.zip">TreasureData.framework</a> and add it and <code>libz</code> library into your project.</p>
+<p>From 0.9.0, we no longer support standalone framework.</p>
 <h2 id='usage-in-objective-c' class='heading'>Usage in Objective-C</h2>
+
+<ul>
+<li><a href="https://docs.treasuredata.com/display/public/PD/iOS+SDK">Treasure Data&rsquo;s Guide</a> (most parts overlap with this README)</li>
+<li><a href="https://treasure-data.github.io/td-ios-sdk/Classes/TreasureData.html">API Reference</a></li>
+</ul>
 <h3 id='import-sdk-header-file' class='heading'>Import SDK header file</h3>
 <pre class="highlight plaintext"><code>#import &lt;TreasureData-iOS-SDK/TreasureData.h&gt;
 </code></pre>
@@ -140,7 +160,9 @@
     //                    table:@"demotbl"];
 </code></pre>
 
-<p>Specify the database and table to which you want to import the events.</p>
+<p>Specify the database and table to which you want to import the events. The total length of database and table must be shorter than 129 chars. Each table will cache no more than 10000 events.</p>
+
+<p>On top of that, the length of key in event must not exceed 256 chars and the length of value in event must not exceed 10000 chars.</p>
 <h3 id='upload-buffered-events-to-treasuredata' class='heading'>Upload buffered events to TreasureData</h3>
 
 <p>To upload events buffered events to Treasure Data, you can call <code><a href="Classes/TreasureData.html">TreasureData</a></code>&rsquo;s <code>uploadEvents</code> or <code>uploadEventsWithCallback</code> API.</p>
@@ -174,6 +196,8 @@
 </ul>
 
 <p>The sent events is going to be buffered for a few minutes before they get imported into Treasure Data storage.</p>
+
+<p>In tvOS, cache storage is stored in cache directory which can be purged at any time. It is highly recommended to call upload events APIs as requently as possible to prevent loss of data.</p>
 <h3 id='retry-uploading-and-deduplication' class='heading'>Retry uploading and deduplication</h3>
 
 <p>This SDK imports events in exactly once style with the combination of these features.</p>
@@ -184,9 +208,36 @@
 </ul>
 
 <p>As for the deduplication window is 1 hour by default, so it&rsquo;s important not to keep buffered events more than 1 hour to avoid duplicated events.</p>
+<h3 id='default-values' class='heading'>Default values</h3>
+
+<p>Set a default value if you want an event added to a table, a database, or any table or database to automatically set value for a key.
+If you have multiple default values set to the same key, newly added event will have the default value applied and override in following order:</p>
+
+<ol>
+<li>Default value targeting all table and database will be applied first.</li>
+<li>Default value targeting all table in a database will then be applied.</li>
+<li>Default value targeting the table to which the event is added will then be applied.</li>
+<li>Default value targeting the table and database to which the event is added will then be applied.</li>
+<li>Finally, if the event has a value for the key, that value will override all default values.</li>
+</ol>
+
+<p>To set default value:</p>
+<pre class="highlight plaintext"><code>[[TreasureData sharedInstance] setDefaultValue:@"Value" forKey:@"key" database:nil table:nil]; // Targeting all databases and tables
+[[TreasureData sharedInstance] setDefaultValue:@"Value" forKey:@"key" database:"database_name" table:nil]; // Targeting all tables of database "database_name"
+[[TreasureData sharedInstance] setDefaultValue:@"Value" forKey:@"key" database:nil table:"table_name"]; // Targeting all tables with "table_name"
+[[TreasureData sharedInstance] setDefaultValue:@"Value" forKey:@"key" database:"database_name" table:"table_name"]; // Targeting table "table_name" of database "database_name"
+</code></pre>
+
+<p>To get default value:</p>
+<pre class="highlight plaintext"><code>NSString *defaultValue = [[TreasureData sharedInstance] defaultValueForKey:@"key" database:"database_name" table:"table_name"]; // Get default value for key targeting database "database_name" and table "table_name".
+</code></pre>
+
+<p>To remove default value:</p>
+<pre class="highlight plaintext"><code>[[TreasureData sharedInstance] removeDefaultValueForKey:@"key" database:"database_name" table:"table_name"]; // Only remove default values targeting database "database_name" and table "table_name".
+</code></pre>
 <h3 id='start-end-session' class='heading'>Start/End session</h3>
 
-<p>When you call <code>startSession</code> method,  the SDK generates a session ID that&rsquo;s kept until <code>endSession</code> is called. The session id is outputs as a column name <q>td_session_id</q>. Also, <code>startSession</code> and <code>endSession</code> methods add an event that includes <code>{&quot;td_session_event&quot;:&quot;start&quot; or &quot;end&quot;}</code>.</p>
+<p>When you call <code>startSession</code> method,  the SDK generates a session ID that&rsquo;s kept until <code>endSession</code> is called. The session id is outputs as a column name &ldquo;td_session_id&rdquo;. Also, <code>startSession</code> and <code>endSession</code> methods add an event that includes <code>{&quot;td_session_event&quot;:&quot;start&quot; or &quot;end&quot;}</code>.</p>
 <pre class="highlight plaintext"><code>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [TreasureData initializeWithApiKey:@"your_api_key"];
@@ -285,51 +336,79 @@
 <h2 id='additional-configuration' class='heading'>Additional Configuration</h2>
 <h3 id='endpoint' class='heading'>Endpoint</h3>
 
-<p>The API endpoint (default: <a href="https://in.treasuredata.com">https://in.treasuredata.com</a>) can be modified using <code>initializeApiEndpoint</code> class method. For example,</p>
-<pre class="highlight plaintext"><code>    [TreasureData initializeApiEndpoint:@"https://specifying-another-endpoint.com"];
-    [TreasureData initializeWithApiKey:@"your_api_key"];
+<p>The API endpoint (default: <a href="https://us01.records.in.treasuredata.com">https://us01.records.in.treasuredata.com</a>) can be specify using <code>+[TreasureData initializeWithApiKey:apiEndpoint]</code></p>
+<pre class="highlight plaintext"><code>[TreasureData initializeWithApiKey:@"your_api_key" apiEndpoint: @"https://specifying-another-endpoint.com"];
 </code></pre>
 <h3 id='encryption-key' class='heading'>Encryption key</h3>
 
 <p>If you&rsquo;ve set an encryption key via <code>initializeEncryptionKey</code> class method, our SDK saves the events data as encrypted when called <code>addEvent</code> or <code>addEventWithCallback</code> methods.</p>
-<pre class="highlight plaintext"><code>    [TreasureData initializeEncryptionKey:@"hello world"];
-        :
-    [[TreasureData sharedInstance] addEventWithCallback: ....];
+<pre class="highlight plaintext"><code>[TreasureData initializeEncryptionKey:@"hello world"];
+
+[[TreasureData sharedInstance] addEventWithCallback: ....];
 </code></pre>
 <h3 id='default-database' class='heading'>Default database</h3>
-<pre class="highlight plaintext"><code>    [[TreasureData sharedInstance] setDefaultDatabase:@"testdb"];
-        :
-    [[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"clicked" } table:@"demotbl"]
+<pre class="highlight plaintext"><code>[[TreasureData sharedInstance] setDefaultDatabase:@"testdb"];
+
+[[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"clicked" } table:@"demotbl"]
 </code></pre>
 <h3 id='adding-uuid-of-the-device-to-each-event-automatically' class='heading'>Adding UUID of the device to each event automatically</h3>
 
-<p>UUID of the device will be added to each event automatically if you call <code>enableAutoAppendUniqId</code>. This value won&rsquo;t change until the application is uninstalled.</p>
-<pre class="highlight plaintext"><code>    [[TreasureData sharedInstance] enableAutoAppendUniqId];
-        :
-    [[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"dragged" }
-                                                database:@"testdb" table:@"demotbl"];
+<p>UUID of the device will be added to each event automatically if you call <code>enableAutoAppendUniqId</code>. This value won&rsquo;t change until the application is uninstalled or  <code>resetUniqId</code> is called. </p>
+<pre class="highlight plaintext"><code>[[TreasureData sharedInstance] enableAutoAppendUniqId];
 </code></pre>
 
 <p>It outputs the value as a column name <code>td_uuid</code>.</p>
+<h3 id='get-uuid-and-reset-uuid' class='heading'>Get UUID and Reset UUID</h3>
+
+<p>You can get current UUID (<code>td_uuid</code>) at any time using following API. Remember that this UUID will change if  <code>resetUniqId</code> is called.</p>
+<pre class="highlight plaintext"><code>NSString *td_uuid = [[TreasureData sharedInstance] getUUID];
+</code></pre>
+
+<p>You can also reset UUID (<code>td_uuid</code>) at any time using following API. </p>
+<pre class="highlight plaintext"><code>[[TreasureData sharedInstance] resetUniqId];
+</code></pre>
+<h3 id='adding-local-time-to-each-even-record-automatically-enabled-by-default' class='heading'>Adding local time to each even record automatically (enabled by default)</h3>
+
+<p>By default, local timestamp will be added to event&rsquo;s <code>time</code> key automatically. If you <code>disableAutoAppendLocalTimestamp</code> without adding <code>time</code> key to the event yourself, the server will add server side timestamp to <code>time</code> column. You can also auto track local time with custom column. If so, the <code>time</code> column will have server side timestamp.</p>
+<pre class="highlight plaintext"><code>// Use local time as `time` column
+[[TreasureData sharedInstance] enableAutoAppendLocalTimestamp];
+
+// Add local time as a customized column name
+[[TreasureData sharedInstance] enableAutoAppendLocalTimestamp:@"clientside_time"];
+
+// Disable auto append local time
+[[TreasureData sharedInstance] disableAutoAppendLocalTimestamp];
+</code></pre>
 <h3 id='adding-an-uuid-to-each-event-record-automatically' class='heading'>Adding an UUID to each event record automatically</h3>
 
 <p>UUID will be added to each event record automatically if you call <code>enableAutoAppendRecordUUID</code>. Each event has different UUID.</p>
-<pre class="highlight plaintext"><code>    [[TreasureData sharedInstance] enableAutoAppendRecordUUID];
-    // If you want to customize the column name, pass it to the API
-    // [[TreasureData sharedInstance] enableAutoAppendRecordUUID:@"my_record_uuid"];
-        :
-    [[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"dragged" }
-                                                database:@"testdb" table:@"demotbl"];
+<pre class="highlight plaintext"><code>[[TreasureData sharedInstance] enableAutoAppendRecordUUID];
+
+// If you want to customize the column name, pass it to the API
+[[TreasureData sharedInstance] enableAutoAppendRecordUUID:@"my_record_uuid"];
 </code></pre>
 
 <p>It outputs the value as a column name <code>record_uuid</code> by default.</p>
+<h3 id='adding-advertising-id-to-each-event-record-automatically' class='heading'>Adding Advertising Id to each event record automatically</h3>
+
+<p>Advertising Id will be added to each event record automatically if you call <code>enableAutoAppendAdvertisingIdentifier</code>.</p>
+
+<p>You must link Ad Support framework in Link Binary With Libraries build phase for this feature to work. User must also not turn on Limit Ad Tracking feature in their iOS device, otherwise Treasure Data will send zero filled string as the advertising id (the value we get from Ad Support framework).</p>
+
+<p>Starting in iOS 14, you will have to explicitly request user&rsquo;s permission for advertising identifier using AppTrackingTransparency framework. Consult Apple official documentation for AppTrackingTransparency on how to implement this requirement.</p>
+
+<p>If you turn on this feature, keep in mind that you will have to declare correct reason for getting advertising identifier when you submit your app for review to the App Store.</p>
+<pre class="highlight plaintext"><code>[[TreasureData sharedInstance] enableAutoAppendAdvertisingIdentifier];
+
+// If you want to customize the column name, pass it to the API
+[[TreasureData sharedInstance] enableAutoAppendAdvertisingIdentifier:@"custom_ad_id_column"];
+</code></pre>
+
+<p>It outputs the value as a column name <code>td_maid</code> by default.</p>
 <h3 id='adding-the-device-model-information-to-each-event-automatically' class='heading'>Adding the device model information to each event automatically</h3>
 
 <p>Device model infromation will be added to each event automatically if you call <code>enableAutoAppendModelInformation</code>.</p>
-<pre class="highlight plaintext"><code>    [[TreasureData sharedInstance] enableAutoAppendModelInformation];
-        :
-    [[TreasureData sharedInstance] addEventWithCallback:@{ @"event": @"dragged" }
-                                                database:@"testdb" table:@"demotbl"];
+<pre class="highlight plaintext"><code>[[TreasureData sharedInstance] enableAutoAppendModelInformation];
 </code></pre>
 
 <p>It outputs the following column names and values:</p>
@@ -338,12 +417,12 @@
 <li><code>td_device</code> : UIDevice.model</li>
 <li><code>td_model</code> : UIDevice.model</li>
 <li><code>td_os_ver</code> : UIDevice.model.systemVersion</li>
-<li><code>td_os_type</code> : <q>iOS</q></li>
+<li><code>td_os_type</code> : &ldquo;iOS&rdquo;</li>
 </ul>
 <h3 id='adding-application-version-information-to-each-event-automatically' class='heading'>Adding application version information to each event automatically</h3>
 
 <p>Application version infromation will be added to each event automatically if you call <code>enableAutoAppendAppInformation</code>.</p>
-<pre class="highlight plaintext"><code>    [[TreasureData sharedInstance] enableAutoAppendAppInformation];
+<pre class="highlight plaintext"><code>[[TreasureData sharedInstance] enableAutoAppendAppInformation];
 </code></pre>
 
 <p>It outputs the following column names and values:</p>
@@ -355,7 +434,7 @@
 <h3 id='adding-locale-configuration-information-to-each-event-automatically' class='heading'>Adding locale configuration information to each event automatically</h3>
 
 <p>Locale configuration infromation will be added to each event automatically if you call <code>enableAutoAppendLocaleInformation</code>.</p>
-<pre class="highlight plaintext"><code>    [[TreasureData sharedInstance] enableAutoAppendLocaleInformation];
+<pre class="highlight plaintext"><code>[[TreasureData sharedInstance] enableAutoAppendLocaleInformation];
 </code></pre>
 
 <p>It outputs the following column names and values:</p>
@@ -364,51 +443,81 @@
 <li><code>td_locale_country</code> : <code>[[NSLocale currentLocale] objectForKey: NSLocaleCountryCode]</code></li>
 <li><code>td_locale_lang</code> : <code>[[NSLocale currentLocale] objectForKey: NSLocaleLanguageCode]</code></li>
 </ul>
-<h3 id='use-server-side-upload-timestamp' class='heading'>Use server side upload timestamp</h3>
-
-<p>If you want to use server side upload timestamp not only client device time that is recorded when your application calls <code>addEvent</code>, use <code>enableServerSideUploadTimestamp</code>.</p>
-<pre class="highlight plaintext"><code>    // Use server side upload time as `time` column
-    [[TreasureData sharedInstance] enableServerSideUploadTimestamp];
-
-    // Add server side upload time as a customized column name
-    [[TreasureData sharedInstance] enableServerSideUploadTimestamp:@"server_upload_time"];
-</code></pre>
 <h3 id='enable-disable-debug-log' class='heading'>Enable/Disable debug log</h3>
-<pre class="highlight plaintext"><code>    [TreasureData enableLogging];
+<pre class="highlight plaintext"><code>[TreasureData enableLogging];
 </code></pre>
-<pre class="highlight plaintext"><code>    [TreasureData disableLogging];
+<pre class="highlight plaintext"><code>[TreasureData disableLogging];
 </code></pre>
-<h3 id='auto-track-in-app-purchase-event' class='heading'>Auto track In-App Purchase event</h3>
+<h3 id='automatically-tracked-events' class='heading'>Automatically tracked events</h3>
 
-<p>TreasureData SDK able to automatically track IAP <code>SKPaymentTransactionStatePurchased</code> event without having to write your own transaction observer.</p>
-<pre class="highlight plaintext"><code>    [[TreasureData sharedInstance] enableInAppPurchaseEvent];
-    [[TreasureData sharedInstance] disableInAppPurchaseEvent];
-    [[TreasureData sharedInstance] isInAppPurchaseEventEnabled];
+<p>Notes that all of these are *<em>disabled by default</em>, you have to explicitly enable it for each category.</p>
+<h4 id='app-lifecycle-events' class='heading'>App Lifecycle Events</h4>
+
+<p>Could be enabled with:</p>
+<pre class="highlight plaintext"><code>[[TreasureData sharedInstance] enableAppLifecycleEvent];
 </code></pre>
 
-<p>This is disabled by default. There is a subtle difference between this and <code>appLifecycleEvent</code>, <code>customEvent</code>. <code>appLifecycleEvent</code> and <code>customEvent</code>, for a historical reason, are persistent settings, meaning their statuses are saved across app launches. <code>inAppPurchaseEvent</code> behaves like an ordinary object options and are not saved, have you to explicitly enable it when construct a <code><a href="Classes/TreasureData.html">TreasureData</a></code> instance.</p>
+<p>There are 3 type of app lifecycle events that are tracked: <code>TD_IOS_APP_OPEN</code>, <code>TD_IOS_APP_INSTALL</code> and <code>TD_IOS_APP_UPDATE</code> (is written to <code>td_ios_event</code> column).</p>
+
+<p>Example of a tracked install event:</p>
+<pre class="highlight plaintext"><code>"td_ios_event" = "TD_IOS_APP_INSTALL";
+"td_app_ver" = "1.1";
+"td_app_ver_num" = 2;
+</code></pre>
+<h4 id='in-app-purchase-events' class='heading'>In-App Purchase Events</h4>
+
+<p>TreasureData SDK is able to automatically track IAP <code>SKPaymentTransactionStatePurchased</code> event without having to write your own transaction observer.</p>
+<pre class="highlight plaintext"><code>[[TreasureData sharedInstance] enableInAppPurchaseEvent];
+</code></pre>
+
+<p>This is disabled by default. There is a subtle difference between this and <code>appLifecycleEvent</code>, <code>customEvent</code>. The other two, for a historical reason, are persistent settings, meaning their statuses are saved across app launches. <code>inAppPurchaseEvent</code> behaves like an ordinary object option and is not saved. You have to enable it after initialize your new <code><a href="Classes/TreasureData.html">TreasureData</a></code> instance (probably only the <code>sharedInstance</code> with <code>initializeWithApiKey</code>).</p>
 
 <p>An example of a IAP event:</p>
-<pre class="highlight plaintext"><code>    "td_ios_event": "TD_IOS_IN_APP_PURCHASE",
-    "td_iap_transaction_identifier": "1000000514091400",
-    "td_iap_transaction_date": "2019-03-28T08:44:12+07:00",
-    "td_iap_quantity": 1,
-    "td_iap_product_identifier": "com.yourcompany.yourapp.yourproduct", ,
-    "td_iap_product_price": 0.99,
-    "td_iap_product_localized_title": "Your Product Title",
-    "td_iap_product_localized_description": "Your Product Description",
-    "td_iap_product_currency_code": "USD",  // this is only available on iOS 10 and above
+<pre class="highlight plaintext"><code>"td_ios_event": "TD_IOS_IN_APP_PURCHASE",
+"td_iap_transaction_identifier": "1000000514091400",
+"td_iap_transaction_date": "2019-03-28T08:44:12+07:00",
+"td_iap_quantity": 1,
+"td_iap_product_identifier": "com.yourcompany.yourapp.yourproduct", ,
+"td_iap_product_price": 0.99,
+"td_iap_product_localized_title": "Your Product Title",
+"td_iap_product_localized_description": "Your Product Description",
+"td_iap_product_currency_code": "USD",  // this is only available on iOS 10 and above
 </code></pre>
 
-<p>We did a separated <code>SKProductsRequest</code> to get full product&rsquo;s information. If the request is failed somehow, fields with <q>td_iap_product_</q> prefix will be null. Also note that that the <code>currency_code</code> is only available from iOS 10 onwards.</p>
+<p>We will do a separated <code>SKProductsRequest</code> to get full product&rsquo;s information. If the request is failed somehow, fields with &ldquo;td_iap_product_&rdquo; prefix will be null. Also note that that the <code>currency_code</code> is only available from iOS 10 onwards.</p>
+<h4 id='profile-api' class='heading'>Profile API</h4>
+<h5 id='fetchusersegments' class='heading'>fetchUserSegments</h5>
+
+<p>This feature is not enabled on accounts by default, please contact support for more information.
+Important! You must set cdpEndpoint property of TreasureData&rsquo;s sharedInstance.
+Usage example:</p>
+<pre class="highlight plaintext"><code>// Set cdpEndpoint when initialize TreasureData  
+[[TreasureData sharedInstance] setCdpEnpoint: @"[your cdp endpoint goes here]"]
+
+// Call fetchUserSegments to get user segments as NSArray
+
+NSArray *audienceTokens = @[@"Your Profile API (Audience) Token here"];
+NSDictionary *keys = @{@"your_key": @"your_value"};
+NSDictionary&lt;TDRequestOptionsKey, id&gt; *options = @{
+    TDRequestOptionsTimeoutIntervalKey: [NSNumber numberWithInteger: 10],
+    TDRequestOptionsCachePolicyKey: [NSNumber numberWithUnsignedInteger: NSURLRequestReloadIgnoringCacheData]
+};
+[[TreasureData sharedInstance] fetchUserSegments:audienceTokens
+                                            keys:keys
+                                         options:options
+                               completionHandler:^(NSArray * _Nullable jsonResponse, NSError * _Nullable error) {
+   NSLog(@"fetchUserSegments jsonResponse: %@", jsonResponse);
+   NSLog(@"fetchUserSegments error: %@", error);
+}];
+</code></pre>
 <h2 id='gdpr-compliance' class='heading'>GDPR Compliance</h2>
 
 <p>The SDK provide some convenient methods to easily opt-out of tracking the device entirely without having to resort to many cluttered if-else statements:</p>
-<pre class="highlight plaintext"><code>    // Opt-out of your own events
-    [[TreasureData sharedInstance] disableCustomEvent];
-    // Opt-out of TD generated events
-    [[TreasureData sharedInstance] disableAppLifecycleEvent];
-    [[TreasureData sharedInstance] disableInAppPurchaseEvent];
+<pre class="highlight plaintext"><code>// Opt-out of your own events
+[[TreasureData sharedInstance] disableCustomEvent];
+// Opt-out of TD generated events
+[[TreasureData sharedInstance] disableAppLifecycleEvent];
+[[TreasureData sharedInstance] disableInAppPurchaseEvent];
 </code></pre>
 
 <p>These can be opted back in by calling <code>enableCustomEvent</code> or <code>enableAppLifecycleEvent</code>. Note that these settings are saved persistently, so it survives across app launches. Generally these methods should be called when reflecting your user&rsquo;s choice, not on every time initializing the SDK. By default custom events are enabled and app lifecycles events are disabled. </p>
@@ -416,8 +525,13 @@
 <ul>
 <li>Use <code>resetUniqId</code> to reset the identification of device on subsequent events. <code>td_uuid</code> will be randomized to another value and an extra event is captured with <code>{&quot;td_ios_event&quot;:  &quot;forget_device_id&quot;, &quot;td_uuid&quot;: &lt;old_uuid&gt;}</code> to the <code>defaultTable</code>.</li>
 </ul>
+<h2 id='tvos' class='heading'>tvOS</h2>
+
+<p>This SDK supports Apple tvOS version 12 and up. APIs and their behaviors are largely the same as being used in iOS application, except:</p>
+
+<p>! In tvOS, cache storage is stored in cache directory which can be purged at any time. It is highly recommended to call upload events APIs as requently as possible to prevent loss of data.</p>
 <h2 id='troubleshooting' class='heading'>Troubleshooting</h2>
-<h4 id='with-q-data-protection-q-enabled-td-ios-sdk-occasionally-crashes' class='heading'>With <q>Data Protection</q> enabled, TD iOS SDK occasionally crashes</h4>
+<h4 id='with-quot-data-protection-quot-enabled-td-ios-sdk-occasionally-crashes' class='heading'>With &ldquo;Data Protection&rdquo; enabled, TD iOS SDK occasionally crashes</h4>
 
 <ul>
 <li>If your app calls the SDK&rsquo;s API such as <code>TreasureData#endSession</code> in <code>UIApplicationDelegate applicationDidEnterBackground</code>, check if it&rsquo;s likely the app calls the SDK&rsquo;s API several seconds after iOS is locked. If so, please make other tasks that takes time and is called prior to the SDK&rsquo;s API run in background.</li>
@@ -435,15 +549,137 @@
 <h2 id='xcode-compatibility' class='heading'>Xcode Compatibility</h2>
 
 <p>The current version has been built and tested with XCode v10.2.</p>
+<h2 id='supported-os-versions' class='heading'>Supported OS versions</h2>
+<h4 id='ios' class='heading'>iOS</h4>
+
+<table><thead>
+<tr>
+<th style="text-align: left">iOS Version</th>
+<th style="text-align: left">v0.8.0</th>
+<th style="text-align: left">v0.9.0</th>
+<th style="text-align: left">v1.0.1</th>
+<th style="text-align: left">v1.1.0</th>
+<th style="text-align: left">v1.1.1</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">17</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">:white_check_mark:</td>
+</tr>
+<tr>
+<td style="text-align: left">16</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">:white_check_mark:</td>
+</tr>
+<tr>
+<td style="text-align: left">15</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">:white_check_mark:</td>
+</tr>
+<tr>
+<td style="text-align: left">14</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">:white_check_mark:</td>
+</tr>
+<tr>
+<td style="text-align: left">13</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">:white_check_mark:</td>
+</tr>
+<tr>
+<td style="text-align: left">12</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
+</tr>
+<tr>
+<td style="text-align: left">11</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
+</tr>
+<tr>
+<td style="text-align: left">10</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
+</tr>
+<tr>
+<td style="text-align: left">9</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
+</tr>
+<tr>
+<td style="text-align: left">8</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
+</tr>
+<tr>
+<td style="text-align: left">7</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
+</tr>
+</tbody></table>
+<h4 id='tvos' class='heading'>tvOS</h4>
+
+<table><thead>
+<tr>
+<th style="text-align: left">tvOS Version</th>
+<th style="text-align: left">v0.8.0</th>
+<th style="text-align: left">v0.9.0</th>
+<th style="text-align: left">v1.0.1</th>
+<th style="text-align: left">v1.1.0</th>
+<th style="text-align: left">v1.1.1</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left">12 and up</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">:white_check_mark:</td>
+</tr>
+</tbody></table>
 
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/treasure-data/td-ios-sdk" target="_blank" rel="external">mitsu and huylenq</a>. All rights reserved. (Last updated: 2019-04-02)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2024 <a class="link" href="https://github.com/treasure-data/td-ios-sdk" target="_blank" rel="external noopener">mitsu, huylenq, and tung-vu-td</a>. All rights reserved. (Last updated: 2024-06-25)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.15.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
     </div>
   </body>
-</div>
 </html>

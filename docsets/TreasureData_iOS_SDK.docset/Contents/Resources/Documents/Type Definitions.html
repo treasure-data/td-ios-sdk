@@ -8,19 +8,27 @@
     <script src="js/jquery.min.js" defer></script>
     <script src="js/jazzy.js" defer></script>
     
+    <script src="js/lunr.min.js" defer></script>
+    <script src="js/typeahead.jquery.js" defer></script>
+    <script src="js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a name="//apple_ref/objc/Section/Type Definitions" class="dashAnchor"></a>
     <a title="Type Definitions  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">TreasureData_iOS_SDK Docs</a> (77% documented)</p>
+        <p><a href="index.html">TreasureData iOS SDK 1.1.1 Docs</a> (90% documented)</p>
+        <div class="header-right">
+          <form role="search" action="search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
       </div>
     </header>
     <div class="content-wrapper">
       <p id="breadcrumbs">
-        <a href="index.html">TreasureData_iOS_SDK Reference</a>
-        <img id="carat" src="img/carat.png" />
+        <a href="index.html">TreasureData iOS SDK</a>
+        <img id="carat" src="img/carat.png" alt=""/>
         Type Definitions  Reference
       </p>
     </div>
@@ -31,15 +39,6 @@
             <a href="Classes.html">Classes</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Classes/KIOEventStore.html">KIOEventStore</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/KeenClient.html">KeenClient</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/KeenProperties.html">KeenProperties</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="Classes/TDClient.html">TDClient</a>
               </li>
               <li class="nav-group-task">
@@ -48,16 +47,13 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="Type Definitions.html">Type Definitions</a>
+            <a href="Type%20Definitions.html">Type Definitions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Type Definitions.html#/c:TreasureData.h@T@ErrorHandler">ErrorHandler</a>
+                <a href="Type%20Definitions.html#/c:TreasureData.h@T@ErrorHandler">ErrorHandler</a>
               </li>
               <li class="nav-group-task">
-                <a href="Type Definitions.html#/c:KeenClient.h@T@KeenGlobalPropertiesBlock">KeenGlobalPropertiesBlock</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Type Definitions.html#/c:TreasureData.h@T@SuccessHander">SuccessHander</a>
+                <a href="Type%20Definitions.html#/c:TreasureData.h@T@SuccessHander">SuccessHander</a>
               </li>
             </ul>
           </li>
@@ -86,7 +82,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Generic success callback block&rsquo;s definition.</p>
 
                       </div>
                       <div class="declaration">
@@ -118,7 +114,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Generic error handler.</p>
+                        <p>Generic error callback block&rsquo;s definition.</p>
 
 <p>Known error codes:</p>
 
@@ -130,6 +126,7 @@
 <li><code>storage_error</code></li>
 <li><code>network_error</code></li>
 <li><code>server_response</code></li>
+<li><code>unknown_error</code></li>
 </ul>
 
                       </div>
@@ -151,50 +148,13 @@
                 </li>
               </ul>
             </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/c:KeenClient.h@T@KeenGlobalPropertiesBlock"></a>
-                    <a name="//apple_ref/objc/Type/KeenGlobalPropertiesBlock" class="dashAnchor"></a>
-                    <a class="token" href="#/c:KeenClient.h@T@KeenGlobalPropertiesBlock">KeenGlobalPropertiesBlock</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Objective-C</p>
-                          <pre class="highlight objective_c"><code><span class="k">typedef</span> <span class="n">NSDictionary</span><span class="o">*</span> <span class="p">(</span><span class="o">^</span><span class="n">KeenGlobalPropertiesBlock</span><span class="p">)(</span><span class="n">NSString</span> <span class="o">*</span><span class="n">eventCollection</span><span class="p">)</span></code></pre>
-
-                        </div>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">typealias</span> <span class="kt">KeenGlobalPropertiesBlock</span> <span class="o">=</span> <span class="p">(</span><span class="kt">String</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">AnyHashable</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]?</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/treasure-data/td-ios-sdk" target="_blank" rel="external">mitsu and huylenq</a>. All rights reserved. (Last updated: 2019-04-02)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2024 <a class="link" href="https://github.com/treasure-data/td-ios-sdk" target="_blank" rel="external noopener">mitsu, huylenq, and tung-vu-td</a>. All rights reserved. (Last updated: 2024-06-25)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.15.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
     </div>
   </body>
-</div>
 </html>

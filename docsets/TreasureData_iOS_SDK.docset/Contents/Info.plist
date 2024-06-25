@@ -5,9 +5,9 @@
     <key>CFBundleIdentifier</key>
       <string>com.jazzy.treasuredata_ios_sdk</string>
     <key>CFBundleName</key>
-      <string>TreasureData_iOS_SDK</string>
+      <string>TreasureData iOS SDK</string>
     <key>DocSetPlatformFamily</key>
-      <string>treasuredata_ios_sdk</string>
+      <string>treasuredata ios sdk</string>
     <key>isDashDocset</key>
       <true/>
     <key>dashIndexFilePath</key>

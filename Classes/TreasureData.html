@@ -17,7 +17,7 @@
     <a title="TreasureData Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">TreasureData iOS SDK 1.0.1 Docs</a> (89% documented)</p>
+        <p><a href="../index.html">TreasureData iOS SDK 1.1.1 Docs</a> (90% documented)</p>
         <div class="header-right">
           <form role="search" action="../search.json">
             <input type="text" placeholder="Search documentation" data-typeahead>
@@ -27,7 +27,9 @@
     </header>
     <div class="content-wrapper">
       <p id="breadcrumbs">
-        <a href="../index.html">TreasureData iOS SDK Reference</a>
+        <a href="../index.html">TreasureData iOS SDK</a>
+        <img id="carat" src="../img/carat.png" alt=""/>
+        <a href="../Classes.html">Classes</a>
         <img id="carat" src="../img/carat.png" alt=""/>
         TreasureData Class Reference
       </p>
@@ -81,8 +83,8 @@
 <pre class="highlight objective_c"><code> <span class="p">[</span><span class="n">TreasureData</span> <span class="nf">initializeWithApiKey</span><span class="p">:</span><span class="s">@"&lt;your_write_only_api_key&gt;"</span><span class="p">];</span>
 
  <span class="p">[[</span><span class="n">TreasureData</span> <span class="nf">sharedInstance</span><span class="p">]</span> <span class="nf">addEvent</span><span class="p">:@{</span><span class="s">@"welcome"</span><span class="o">:</span> <span class="s">@"Hello world"</span><span class="p">}</span>
-                                <span class="nl">database:</span><span class="s">@"my_db"</span>
-                                <span class="nl">table:</span><span class="s">@"my_ios_events"</span><span class="p">];</span>
+                                <span class="nf">database</span><span class="p">:</span><span class="s">@"my_db"</span>
+                                <span class="n">table</span><span class="o">:</span><span class="s">@"my_ios_events"</span><span class="p">];</span>
 
  <span class="p">[[</span><span class="n">TreasureData</span> <span class="nf">sharedInstance</span><span class="p">]</span> <span class="nf">uploadEvents</span><span class="p">];</span>
 </code></pre>
@@ -1702,6 +1704,70 @@ Note: this won&rsquo;t reset the current buffered events before this call</p>
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TreasureData(im)enableAutoTrackingIP"></a>
+                    <a name="//apple_ref/objc/Method/-enableAutoTrackingIP" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)enableAutoTrackingIP">-enableAutoTrackingIP</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Automatically tracking device&rsquo;s IP address in <code>td_ip</code> column. Disabled by default</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">enableAutoTrackingIP</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">enableAutoTrackingIP</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:objc(cs)TreasureData(im)disableAutoTrackingIP"></a>
+                    <a name="//apple_ref/objc/Method/-disableAutoTrackingIP" class="dashAnchor"></a>
+                    <a class="token" href="#/c:objc(cs)TreasureData(im)disableAutoTrackingIP">-disableAutoTrackingIP</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Disable automatically tracking device&rsquo;s IP</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Objective-C</p>
+                          <pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">disableAutoTrackingIP</span><span class="p">;</span></code></pre>
+
+                        </div>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">disableAutoTrackingIP</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
             <div class="task-group">
@@ -2356,8 +2422,8 @@ This is a persistent setting, able to set through <code>enableAppLifecycleEvent<
  <span class="s">"td_iap_product_price"</span><span class="o">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">99</span><span class="p">,</span>
  <span class="s">"td_iap_product_localized_title"</span><span class="o">:</span> <span class="s">"Your Product Title"</span><span class="p">,</span>
  <span class="s">"td_iap_product_localized_description"</span><span class="o">:</span> <span class="s">"Your Product Description"</span><span class="p">,</span>
- <span class="s">"td_iap_product_currency_code"</span><span class="o">:</span> <span class="s">"USD"</span><span class="p">,</span>  <span class="c1">// this is only available on iOS 10 and above</span>
-</code></pre>
+ <span class="s">"td_iap_product_currency_code"</span><span class="o">:</span> <span class="s">"USD"</span><span class="p">,</span>  <span class="c1">// this is only available on iOS 10 and above
+</span></code></pre>
 
                       </div>
                       <div class="declaration">
@@ -2488,7 +2554,7 @@ This is a persistent setting, able to set through <code>enableAppLifecycleEvent<
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">fetchUserSegments</span><span class="p">(</span><span class="n">tokens</span> <span class="nv">audienceTokens</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="nv">keys</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">],</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">fetchUserSegments</span><span class="p">(</span><span class="n">tokens</span> <span class="nv">audienceTokens</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="nv">keys</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">],</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="n">async</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span></code></pre>
 
                         </div>
                       </div>
@@ -3266,7 +3332,7 @@ See setDefaultValue:forKey:database:table: for logic setting database and table.
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">upload</span><span class="p">()</span> <span class="k">async</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">upload</span><span class="p">()</span> <span class="n">async</span></code></pre>
 
                         </div>
                       </div>
@@ -3302,7 +3368,7 @@ See setDefaultValue:forKey:database:table: for logic setting database and table.
                         </div>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">uploadEvents</span><span class="p">()</span> <span class="k">async</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">uploadEvents</span><span class="p">()</span> <span class="n">async</span></code></pre>
 
                         </div>
                       </div>
@@ -3350,8 +3416,8 @@ See setDefaultValue:forKey:database:table: for logic setting database and table.
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2023 <a class="link" href="https://github.com/treasure-data/td-ios-sdk" target="_blank" rel="external noopener">mitsu, huylenq, and tung-vu-td</a>. All rights reserved. (Last updated: 2023-07-04)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+          <p>&copy; 2024 <a class="link" href="https://github.com/treasure-data/td-ios-sdk" target="_blank" rel="external noopener">mitsu, huylenq, and tung-vu-td</a>. All rights reserved. (Last updated: 2024-06-25)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.15.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
     </div>
