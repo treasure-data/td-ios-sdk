@@ -1,6 +1,11 @@
 # Change Log
 
-## version 1.1.0
+## version 1.2.0
+_2024-07-10_
+
+* New APIs enableAutoTrackingIP and disableAutoTrackingIP to track device’s IP in td_ip column
+
+## version 1.1.1
 _2024-04-29_
 
 * Add NSPrivacyAccessedAPIType to Privacy manifest
