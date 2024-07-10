@@ -13,7 +13,7 @@ Version 1 has major changes that are not backward compatible with previous versi
 - Server side upload timestamp feature is removed.
 - New `enableAutoAppendLocalTimestamp` and `disableAutoAppendLocalTimestamp` to help automatically track local timestamp.
 - `uuid` is now reserved column name. If you try to add value to event's `uuid` key, you won't see the column show up in the database.
-- Auto tracking of client id by adding `td_ip` field is no longer supported.
+- Auto tracking of client id by adding `td_ip` field is no longer supported. Instead, use new `enableAutoTrackingIP` and `disableAutoTrackingIP` APIs.
 
 ## Installation
 
@@ -30,7 +30,7 @@ $ gem install cocoapods
 Next, add this line in your Podfile.
 
 ```
-pod 'TreasureData-iOS-SDK', '= 1.1.1'
+pod 'TreasureData-iOS-SDK', '= 1.2.0'
 ```
 
 Add this line to your Podfile (usually at the beginning of the file).
@@ -52,7 +52,7 @@ You can install either via Xcode: File > Swift Packages > Add Package Dependency
 
 Or add this line to `dependencies` array in Package.swift file:
 ```
-.package(url: "https://github.com/treasure-data/td-ios-sdk.git", .upToNextMajor(from: "1.1.1"))
+.package(url: "https://github.com/treasure-data/td-ios-sdk.git", .upToNextMajor(from: "1.2.0"))
 ```
 
 ### Framework
@@ -436,6 +436,19 @@ It outputs the following column names and values:
 - `td_locale_country` : `[[NSLocale currentLocale] objectForKey: NSLocaleCountryCode]`
 - `td_locale_lang` : `[[NSLocale currentLocale] objectForKey: NSLocaleLanguageCode]`
 
+### Auto tracking device IP
+
+Device IP will be added to each event automatically in `td_ip` column if you call `enableAutoTrackingIP`. Note that the tracked IP address is the one when you upload the events to Treasure Data, not the one when you add the event.
+
+```
+[[TreasureData sharedInstance] enableAutoTrackingIP];
+```
+
+To disable auto tracking IP:
+
+```
+[[TreasureData sharedInstance] disableAutoTrackingIP];
+```
 
 ### Enable/Disable debug log
 
@@ -575,23 +588,22 @@ The current version has been built and tested with XCode v10.2.
 
 #### iOS
 
-| iOS Version | v0.8.0             | v0.9.0             | v1.0.1             | v1.1.0             | v1.1.1             |
-| :---------- | :----------------- | :----------------- | :----------------- | :----------------- | :----------------- |
-| 17          | not tested         | not tested         | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| 16          | not tested         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| 15          | not tested         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| 14          | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| 13          | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| 12          | :white_check_mark: | :white_check_mark: | :white_check_mark: | not tested         | not tested         |
-| 11          | :white_check_mark: | not tested         | not tested         | not tested         | not tested         |
-| 10          | :white_check_mark: | not tested         | not tested         | not tested         | not tested         |
-| 9           | :white_check_mark: | not tested         | not tested         | not tested         | not tested         |
-| 8           | :white_check_mark: | not tested         | not tested         | not tested         | not tested         |
-| 7           | not tested         | not tested         | not tested         | not tested         | not tested         |
+| iOS Version | v0.8.0             | v0.9.0             | v1.0.1             | v1.1.0             | v1.1.1             | v1.2.0             |
+| :---------- | :----------------- | :----------------- | :----------------- | :----------------- | :----------------- | :----------------- |
+| 17          | not tested         | not tested         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| 16          | not tested         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| 15          | not tested         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| 14          | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| 13          | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | not tested         |
+| 12          | :white_check_mark: | :white_check_mark: | :white_check_mark: | not tested         | not tested         | not tested         |
+| 11          | :white_check_mark: | not tested         | not tested         | not tested         | not tested         | not tested         |
+| 10          | :white_check_mark: | not tested         | not tested         | not tested         | not tested         | not tested         |
+| 9           | :white_check_mark: | not tested         | not tested         | not tested         | not tested         | not tested         |
+| 8           | :white_check_mark: | not tested         | not tested         | not tested         | not tested         | not tested         |
+| 7           | not tested         | not tested         | not tested         | not tested         | not tested         | not tested         |
 
 #### tvOS
 
-| tvOS Version | v0.8.0             | v0.9.0             | v1.0.1             | v1.1.0             | v1.1.1             |
-| :----------- | :----------------- | :----------------- | :----------------- | :----------------- | :----------------- |
-| 12 and up    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-
+| tvOS Version | v0.8.0             | v0.9.0             | v1.0.1             | v1.1.0             | v1.1.1             | v1.2.0             |
+| :----------- | :----------------- | :----------------- | :----------------- | :----------------- | :----------------- | :----------------- |
+| 12 and up    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
