@@ -3,8 +3,6 @@ Treasure Data iOS SDK
 
 iOS and tvOS SDK for [Treasure Data](http://www.treasuredata.com/). With this SDK, you can import the events on your applications into Treasure Data easily. As of 0.9.0, this SDK support iOS 12 and up as well as support tvOS 12 and up.
 
-Also, there is an alternative SDK written in Swift [https://github.com/recruit-lifestyle/TreasureDataSDK](https://github.com/recruit-lifestyle/TreasureDataSDK). Note, however, that it does not support current GDPR functionality in the mainstream TD SDKs.
-
 ## Migration to version 1
 
 Version 1 has major changes that are not backward compatible with previous versions. If you are upgrading from version 0.9.0 or earlier, your code will not run correctly without doing these following steps:
@@ -14,6 +12,10 @@ Version 1 has major changes that are not backward compatible with previous versi
 - New `enableAutoAppendLocalTimestamp` and `disableAutoAppendLocalTimestamp` to help automatically track local timestamp.
 - `uuid` is now reserved column name. If you try to add value to event's `uuid` key, you won't see the column show up in the database.
 - Auto tracking of client id by adding `td_ip` field is no longer supported. Instead, use new `enableAutoTrackingIP` and `disableAutoTrackingIP` APIs.
+
+## Usage in Swift
+
+See this example project (https://github.com/treasure-data/td-ios-sdk/tree/master/TreasureDataExampleSwift) for details.
 
 ## Installation
 
@@ -575,14 +577,6 @@ This SDK supports Apple tvOS version 12 and up. APIs and their behaviors are lar
     });
 }
 ```
-
-## Usage in Swift
-
-See this example project (https://github.com/treasure-data/td-ios-sdk/tree/master/TreasureDataExampleSwift) for details.
-
-## Xcode Compatibility
-
-The current version has been built and tested with XCode v10.2.
 
 ## Supported OS versions
 
