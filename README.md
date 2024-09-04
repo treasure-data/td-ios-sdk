@@ -562,22 +562,6 @@ This SDK supports Apple tvOS version 12 and up. APIs and their behaviors are lar
 
 ! In tvOS, cache storage is stored in cache directory which can be purged at any time. It is highly recommended to call upload events APIs as requently as possible to prevent loss of data.
 
-
-## Troubleshooting
-
-#### With "Data Protection" enabled, TD iOS SDK occasionally crashes
-
-- If your app calls the SDK's API such as `TreasureData#endSession` in `UIApplicationDelegate applicationDidEnterBackground`, check if it's likely the app calls the SDK's API several seconds after iOS is locked. If so, please make other tasks that takes time and is called prior to the SDK's API run in background.
-
-```
-- (void)applicationWillResignActive:(UIApplication *)application
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        // Some tasks that can take more than 10 seconds.
-    });
-}
-```
-
 ## Supported OS versions
 
 #### iOS
