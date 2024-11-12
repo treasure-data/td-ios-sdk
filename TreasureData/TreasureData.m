@@ -9,12 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "TreasureData.h"
 #import "TDClient.h"
-#import "Session.h"
+#import "TDSession.h"
 #import "TDUtils.h"
-#import "Constants.h"
+#import "TDConstants.h"
 #import "TDIAPObserver.h"
 #import "TDClientInternal.h"
-#import "NSString+Helpers.h"
+#import "NSString+TDHelpers.h"
 #import <AdSupport/ASIdentifierManager.h>
 
 static bool isTraceLoggingEnabled = false;

@@ -1,5 +1,5 @@
 //
-//  NSString+Helpers.h
+//  NSString+TDHelpers.h
 //  TreasureData
 //
 //  Created by Tung Vu on 6/3/19.

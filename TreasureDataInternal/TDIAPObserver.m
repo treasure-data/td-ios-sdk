@@ -11,7 +11,7 @@
 
 #import "TDIAPObserver.h"
 #import "TreasureData.h"
-#import "Constants.h"
+#import "TDConstants.h"
 #import "TDUtils.h"
 
 
