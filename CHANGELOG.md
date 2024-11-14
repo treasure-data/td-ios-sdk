@@ -1,5 +1,11 @@
 # Change Log
 
+## version 1.2.1
+_2024-11-14_
+
+* Change a couple of internal headers name
+* No change in public APIs or behavior
+
 ## version 1.2.0
 _2024-07-10_
 
