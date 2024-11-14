@@ -1,5 +1,5 @@
 //
-//  Constants.h
+//  TDConstants.h
 //  TreasureData
 //
 //  Created by Huy Le on 3/1/18.

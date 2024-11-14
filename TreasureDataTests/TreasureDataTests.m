@@ -10,7 +10,7 @@
 #import "TreasureData.h"
 #import "TDClient.h"
 #import "TDClientInternal.h"
-#import "Constants.h"
+#import "TDConstants.h"
 #import "TDUtils.h"
 #import "TDIAPObserver.h"
 

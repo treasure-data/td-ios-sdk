@@ -1,5 +1,7 @@
 version: 2.1
 
+orbs:
+    macos: circleci/macos@2
 
 commands:
   auxiliary_setup:
@@ -83,6 +85,10 @@ commands:
       - auxiliary_setup
       # - install_cocoapods
       - install_pods
+      - macos/preboot-simulator:
+          version: "<<parameters.os>>"
+          platform: "iOS"
+          device: "<<parameters.simulator>>"
       - run_tests:
           os: <<parameters.os>>
           simulator: <<parameters.simulator>>
@@ -108,11 +114,11 @@ commands:
 jobs:
   test_ios18:
     macos:
-      xcode: "16.1.0"
-      resource_class: macos.m1.medium.gen1
+      xcode: "16.2.0"
+      resource_class: m2pro.medium
     steps:
       - run_tests_flow:
-          os: "18.1"
+          os: "18.2"
           simulator: "iPhone 16"
 
   test_ios17:

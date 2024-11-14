@@ -7,7 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "Session.h"
+#import "TDSession.h"
 
 @interface SessionTests : XCTestCase
 

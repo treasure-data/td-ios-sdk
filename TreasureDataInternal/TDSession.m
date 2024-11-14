@@ -1,5 +1,5 @@
 //
-//  Session.m
+//  TDSession.m
 //  TreasureData
 //
 //  Created by Mitsunori Komatsu on 6/22/16.
@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Session.h"
+#import "TDSession.h"
 
 static int DEFAULT_SESSION_PENDING_MILLIS = 10 * 1000;
 

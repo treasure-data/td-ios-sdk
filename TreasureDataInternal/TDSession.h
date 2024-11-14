@@ -1,5 +1,5 @@
 //
-//  Session.h
+//  TDSession.h
 //  TreasureData
 //
 //  Created by Mitsunori Komatsu on 6/22/16.
