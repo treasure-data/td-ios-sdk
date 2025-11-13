@@ -112,6 +112,15 @@ commands:
       - store_results
 
 jobs:
+  test_ios26:
+    macos:
+      xcode: "26.1.0"
+      resource_class: m2pro.medium
+    steps:
+      - run_tests_flow:
+          os: "26.1"
+          simulator: "iPhone 17"
+
   test_ios18:
     macos:
       xcode: "16.2.0"
@@ -169,6 +178,7 @@ workflows:
   version: 2
   test:
     jobs:
+      - test_ios26
       - test_ios18
       - test_ios17
       - test_ios16
