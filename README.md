@@ -568,6 +568,7 @@ This SDK supports Apple tvOS version 12 and up. APIs and their behaviors are lar
 
 | iOS Version | v0.8.0             | v0.9.0             | v1.0.1             | v1.1.0             | v1.1.1             | v1.2.0 & v1.2.1    |
 | :---------- | :----------------- | :----------------- | :----------------- | :----------------- | :----------------- | :----------------- |
+| 26          | not tested         | not tested         | not tested         | not tested         | not tested         | :white_check_mark: |
 | 18          | not tested         | not tested         | not tested         | not tested         | not tested         | :white_check_mark: |
 | 17          | not tested         | not tested         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | 16          | not tested         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
