@@ -196,8 +196,10 @@
 - (void)productsRequest:(nonnull SKProductsRequest *)request didReceiveResponse:(nonnull SKProductsResponse *)response {
     dispatch_async(_observer.trackIAPQueue, ^{
         @try {
-            SKProduct *product = response.products[0];  // we always request for a single product
-            [self->_observer flushTransactionOfProduct:product];
+            SKProduct *product = response.products.firstObject;  // we always request for a single product
+            if (product != nil) {
+                [self->_observer flushTransactionOfProduct:product];
+            }
             [self stop];
         }
         @catch (NSException *exception) {
