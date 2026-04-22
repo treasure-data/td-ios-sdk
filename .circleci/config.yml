@@ -157,18 +157,9 @@ jobs:
           os: "15.5"
           simulator: "iPhone 13"
 
-  test_ios14:
-    macos:
-      xcode: "13.4.1"
-      resource_class: m2pro.medium
-    steps:
-      - run_tests_flow:
-          os: "14.5"
-          simulator: "iPhone 12"
-
   build_spm_ios15:
     macos:
-      xcode: "13.4.1"
+      xcode: "14.3.1"
     steps:
       - build_spm:
           os: "15.5"
@@ -183,6 +174,5 @@ workflows:
       - test_ios17
       - test_ios16
       - test_ios15
-      - test_ios14
       - build_spm_ios15
 
