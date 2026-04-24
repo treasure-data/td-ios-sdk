@@ -1,5 +1,12 @@
 # Change Log
 
+## version 1.3.0
+_2026-04-27_
+
+* Deprecate In-App Purchase tracking feature
+* Improve performance when detecting original StoreKit API
+* Fix bug when no SKProduct returned from SKProductsRequest
+
 ## version 1.2.1
 _2024-11-14_
 

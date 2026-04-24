@@ -32,7 +32,7 @@ $ gem install cocoapods
 Next, add this line in your Podfile.
 
 ```
-pod 'TreasureData-iOS-SDK', '= 1.2.1'
+pod 'TreasureData-iOS-SDK', '= 1.3.0'
 ```
 
 Add this line to your Podfile (usually at the beginning of the file).
@@ -54,7 +54,7 @@ You can install either via Xcode: File > Swift Packages > Add Package Dependency
 
 Or add this line to `dependencies` array in Package.swift file:
 ```
-.package(url: "https://github.com/treasure-data/td-ios-sdk.git", .upToNextMajor(from: "1.2.1"))
+.package(url: "https://github.com/treasure-data/td-ios-sdk.git", .upToNextMajor(from: "1.3.0"))
 ```
 
 ### Framework
@@ -569,21 +569,21 @@ This SDK supports Apple tvOS version 12 and up. APIs and their behaviors are lar
 
 #### iOS
 
-| iOS Version | v0.8.0             | v0.9.0             | v1.0.1             | v1.1.0             | v1.1.1             | v1.2.0 & v1.2.1    |
-| :---------- | :----------------- | :----------------- | :----------------- | :----------------- | :----------------- | :----------------- |
-| 26          | not tested         | not tested         | not tested         | not tested         | not tested         | :white_check_mark: |
-| 18          | not tested         | not tested         | not tested         | not tested         | not tested         | :white_check_mark: |
-| 17          | not tested         | not tested         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| 16          | not tested         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| 15          | not tested         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| 14          | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| 13          | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | not tested         |
-| 12          | :white_check_mark: | :white_check_mark: | :white_check_mark: | not tested         | not tested         | not tested         |
-| 11          | :white_check_mark: | not tested         | not tested         | not tested         | not tested         | not tested         |
-| 10          | :white_check_mark: | not tested         | not tested         | not tested         | not tested         | not tested         |
-| 9           | :white_check_mark: | not tested         | not tested         | not tested         | not tested         | not tested         |
-| 8           | :white_check_mark: | not tested         | not tested         | not tested         | not tested         | not tested         |
-| 7           | not tested         | not tested         | not tested         | not tested         | not tested         | not tested         |
+| iOS Version | v0.8.0             | v0.9.0             | v1.0.1             | v1.1.0             | v1.1.1             | v1.2.0 & v1.2.1    | v1.3.0             |
+| :---------- | :----------------- | :----------------- | :----------------- | :----------------- | :----------------- | :----------------- | :----------------- |
+| 26          | not tested         | not tested         | not tested         | not tested         | not tested         | :white_check_mark: | :white_check_mark: |
+| 18          | not tested         | not tested         | not tested         | not tested         | not tested         | :white_check_mark: | :white_check_mark: |
+| 17          | not tested         | not tested         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| 16          | not tested         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| 15          | not tested         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| 14          | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | not tested         |
+| 13          | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | not tested         | not tested         |
+| 12          | :white_check_mark: | :white_check_mark: | :white_check_mark: | not tested         | not tested         | not tested         | not tested         |
+| 11          | :white_check_mark: | not tested         | not tested         | not tested         | not tested         | not tested         | not tested         |
+| 10          | :white_check_mark: | not tested         | not tested         | not tested         | not tested         | not tested         | not tested         |
+| 9           | :white_check_mark: | not tested         | not tested         | not tested         | not tested         | not tested         | not tested         |
+| 8           | :white_check_mark: | not tested         | not tested         | not tested         | not tested         | not tested         | not tested         |
+| 7           | not tested         | not tested         | not tested         | not tested         | not tested         | not tested         | not tested         |
 
 #### tvOS
 
