@@ -486,6 +486,9 @@ Example of a tracked install event:
 
 #### In-App Purchase Events
 
+> [!NOTE]
+> This feature is deprecated as original API for In-App Purchase, a.k.a Store Kit 1, is no longer supported by Apple. It's recommended to directly track In-App Purchase in your app code by using `-[TreasureData addEvent:database:table]` instead.
+
 TreasureData SDK is able to automatically track IAP `SKPaymentTransactionStatePurchased` event without having to write your own transaction observer.
 
 

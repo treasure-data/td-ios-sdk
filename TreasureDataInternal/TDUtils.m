@@ -77,12 +77,7 @@
 }
 
 + (BOOL)isStoreKitAvailable {
-    for (NSBundle *bundle in NSBundle.allFrameworks) {
-        if ([bundle classNamed:@"SKStoreProductViewController"]) {
-            return YES;
-        }
-    }
-    return NO;
+    return NSClassFromString(@"SKStoreProductViewController") != nil;
 }
 
 @end

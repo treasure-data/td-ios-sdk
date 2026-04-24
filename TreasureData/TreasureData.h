@@ -433,6 +433,7 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 
 /**
  * Enable tracking `SKPaymentTransactionStatePurchased` event automatically. This is disabled by default. Unlike custom and app lifecycle events, this settings is not persisted.
+ * @deprecated This method is deprecated because it uses StoreKit 1 under the hood. Directly track In App Purchase in your app code instead.
  *
  * An example IAP event record:
  * ```
@@ -446,12 +447,13 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
  * "td_iap_product_localized_description": "Your Product Description",
  * "td_iap_product_currency_code": "USD",  // this is only available on iOS 10 and above
  */
-- (void)enableInAppPurchaseEvent;
+- (void)enableInAppPurchaseEvent __attribute__((deprecated("This method is deprecated because it uses StoreKit 1 under the hood. Directly track In App Purchase in your app code instead.")));
 
 /**
  * Disable tracking IAP events
+ * @deprecated This method is deprecated as part of `enableInAppPurchaseEvent` deprecation. Directly track In App Purchase in your app code instead.
  */
-- (void)disableInAppPurchaseEvent;
+- (void)disableInAppPurchaseEvent __attribute__((deprecated("This method is deprecated as part of `enableInAppPurchaseEvent` deprecation. Directly track In App Purchase in your app code instead.")));
 
 /**
  * Whether this `TreasureData`'s instance tracking IAP events
