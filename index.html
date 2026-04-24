@@ -16,7 +16,7 @@
     <a title="TreasureData iOS SDK  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">TreasureData iOS SDK 1.1.1 Docs</a> (90% documented)</p>
+        <p><a href="index.html">TreasureData iOS SDK 1.2.1 Docs</a> (90% documented)</p>
         <div class="header-right">
           <form role="search" action="search.json">
             <input type="text" placeholder="Search documentation" data-typeahead>
@@ -63,8 +63,6 @@
             <h1 id='treasure-data-ios-sdk' class='heading'>Treasure Data iOS SDK</h1>
 
 <p>iOS and tvOS SDK for <a href="http://www.treasuredata.com/">Treasure Data</a>. With this SDK, you can import the events on your applications into Treasure Data easily. As of 0.9.0, this SDK support iOS 12 and up as well as support tvOS 12 and up.</p>
-
-<p>Also, there is an alternative SDK written in Swift <a href="https://github.com/recruit-lifestyle/TreasureDataSDK">https://github.com/recruit-lifestyle/TreasureDataSDK</a>. Note, however, that it does not support current GDPR functionality in the mainstream TD SDKs.</p>
 <h2 id='migration-to-version-1' class='heading'>Migration to version 1</h2>
 
 <p>Version 1 has major changes that are not backward compatible with previous versions. If you are upgrading from version 0.9.0 or earlier, your code will not run correctly without doing these following steps:</p>
@@ -75,8 +73,11 @@
 <li>Server side upload timestamp feature is removed.</li>
 <li>New <code>enableAutoAppendLocalTimestamp</code> and <code>disableAutoAppendLocalTimestamp</code> to help automatically track local timestamp.</li>
 <li><code>uuid</code> is now reserved column name. If you try to add value to event&rsquo;s <code>uuid</code> key, you won&rsquo;t see the column show up in the database.</li>
-<li>Auto tracking of client id by adding <code>td_ip</code> field is no longer supported.</li>
+<li>Auto tracking of client id by adding <code>td_ip</code> field is no longer supported. Instead, use new <code>enableAutoTrackingIP</code> and <code>disableAutoTrackingIP</code> APIs.</li>
 </ul>
+<h2 id='usage-in-swift' class='heading'>Usage in Swift</h2>
+
+<p>See this example project (<a href="https://github.com/treasure-data/td-ios-sdk/tree/master/TreasureDataExampleSwift">https://github.com/treasure-data/td-ios-sdk/tree/master/TreasureDataExampleSwift</a>) for details.</p>
 <h2 id='installation' class='heading'>Installation</h2>
 
 <p>There are several ways to install the library.</p>
@@ -87,7 +88,7 @@
 </code></pre>
 
 <p>Next, add this line in your Podfile.</p>
-<pre class="highlight plaintext"><code>pod 'TreasureData-iOS-SDK', '= 1.1.1'
+<pre class="highlight plaintext"><code>pod 'TreasureData-iOS-SDK', '= 1.2.1'
 </code></pre>
 
 <p>Add this line to your Podfile (usually at the beginning of the file).</p>
@@ -104,7 +105,7 @@
 <p>You can install either via Xcode: File &gt; Swift Packages &gt; Add Package Dependency and enter <code>https://github.com/treasure-data/td-ios-sdk.git</code>.</p>
 
 <p>Or add this line to <code>dependencies</code> array in Package.swift file:</p>
-<pre class="highlight plaintext"><code>.package(url: "https://github.com/treasure-data/td-ios-sdk.git", .upToNextMajor(from: "1.1.1"))
+<pre class="highlight plaintext"><code>.package(url: "https://github.com/treasure-data/td-ios-sdk.git", .upToNextMajor(from: "1.2.1"))
 </code></pre>
 <h3 id='framework' class='heading'>Framework</h3>
 
@@ -443,6 +444,15 @@ If you have multiple default values set to the same key, newly added event will 
 <li><code>td_locale_country</code> : <code>[[NSLocale currentLocale] objectForKey: NSLocaleCountryCode]</code></li>
 <li><code>td_locale_lang</code> : <code>[[NSLocale currentLocale] objectForKey: NSLocaleLanguageCode]</code></li>
 </ul>
+<h3 id='auto-tracking-device-ip' class='heading'>Auto tracking device IP</h3>
+
+<p>Device IP will be added to each event automatically in <code>td_ip</code> column if you call <code>enableAutoTrackingIP</code>. Note that the tracked IP address is the one when you upload the events to Treasure Data, not the one when you add the event.</p>
+<pre class="highlight plaintext"><code>[[TreasureData sharedInstance] enableAutoTrackingIP];
+</code></pre>
+
+<p>To disable auto tracking IP:</p>
+<pre class="highlight plaintext"><code>[[TreasureData sharedInstance] disableAutoTrackingIP];
+</code></pre>
 <h3 id='enable-disable-debug-log' class='heading'>Enable/Disable debug log</h3>
 <pre class="highlight plaintext"><code>[TreasureData enableLogging];
 </code></pre>
@@ -465,6 +475,11 @@ If you have multiple default values set to the same key, newly added event will 
 "td_app_ver_num" = 2;
 </code></pre>
 <h4 id='in-app-purchase-events' class='heading'>In-App Purchase Events</h4>
+
+<blockquote>
+<p>[!NOTE]
+This feature is deprecated as original API for In-App Purchase, a.k.a Store Kit 1, is no longer supported by Apple. It&rsquo;s recommended to directly track In-App Purchase in your app code by using <code>-[TreasureData addEvent:database:table]</code> instead.</p>
+</blockquote>
 
 <p>TreasureData SDK is able to automatically track IAP <code>SKPaymentTransactionStatePurchased</code> event without having to write your own transaction observer.</p>
 <pre class="highlight plaintext"><code>[[TreasureData sharedInstance] enableInAppPurchaseEvent];
@@ -530,25 +545,6 @@ NSDictionary&lt;TDRequestOptionsKey, id&gt; *options = @{
 <p>This SDK supports Apple tvOS version 12 and up. APIs and their behaviors are largely the same as being used in iOS application, except:</p>
 
 <p>! In tvOS, cache storage is stored in cache directory which can be purged at any time. It is highly recommended to call upload events APIs as requently as possible to prevent loss of data.</p>
-<h2 id='troubleshooting' class='heading'>Troubleshooting</h2>
-<h4 id='with-quot-data-protection-quot-enabled-td-ios-sdk-occasionally-crashes' class='heading'>With &ldquo;Data Protection&rdquo; enabled, TD iOS SDK occasionally crashes</h4>
-
-<ul>
-<li>If your app calls the SDK&rsquo;s API such as <code>TreasureData#endSession</code> in <code>UIApplicationDelegate applicationDidEnterBackground</code>, check if it&rsquo;s likely the app calls the SDK&rsquo;s API several seconds after iOS is locked. If so, please make other tasks that takes time and is called prior to the SDK&rsquo;s API run in background.</li>
-</ul>
-<pre class="highlight plaintext"><code>- (void)applicationWillResignActive:(UIApplication *)application
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        // Some tasks that can take more than 10 seconds.
-    });
-}
-</code></pre>
-<h2 id='usage-in-swift' class='heading'>Usage in Swift</h2>
-
-<p>See this example project (<a href="https://github.com/treasure-data/td-ios-sdk/tree/master/TreasureDataExampleSwift">https://github.com/treasure-data/td-ios-sdk/tree/master/TreasureDataExampleSwift</a>) for details.</p>
-<h2 id='xcode-compatibility' class='heading'>Xcode Compatibility</h2>
-
-<p>The current version has been built and tested with XCode v10.2.</p>
 <h2 id='supported-os-versions' class='heading'>Supported OS versions</h2>
 <h4 id='ios' class='heading'>iOS</h4>
 
@@ -560,8 +556,27 @@ NSDictionary&lt;TDRequestOptionsKey, id&gt; *options = @{
 <th style="text-align: left">v1.0.1</th>
 <th style="text-align: left">v1.1.0</th>
 <th style="text-align: left">v1.1.1</th>
+<th style="text-align: left">v1.2.0 &amp; v1.2.1</th>
 </tr>
 </thead><tbody>
+<tr>
+<td style="text-align: left">26</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">:white_check_mark:</td>
+</tr>
+<tr>
+<td style="text-align: left">18</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
+<td style="text-align: left">:white_check_mark:</td>
+</tr>
 <tr>
 <td style="text-align: left">17</td>
 <td style="text-align: left">not tested</td>
@@ -569,10 +584,12 @@ NSDictionary&lt;TDRequestOptionsKey, id&gt; *options = @{
 <td style="text-align: left">:white_check_mark:</td>
 <td style="text-align: left">:white_check_mark:</td>
 <td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">:white_check_mark:</td>
 </tr>
 <tr>
 <td style="text-align: left">16</td>
 <td style="text-align: left">not tested</td>
+<td style="text-align: left">:white_check_mark:</td>
 <td style="text-align: left">:white_check_mark:</td>
 <td style="text-align: left">:white_check_mark:</td>
 <td style="text-align: left">:white_check_mark:</td>
@@ -585,9 +602,11 @@ NSDictionary&lt;TDRequestOptionsKey, id&gt; *options = @{
 <td style="text-align: left">:white_check_mark:</td>
 <td style="text-align: left">:white_check_mark:</td>
 <td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">:white_check_mark:</td>
 </tr>
 <tr>
 <td style="text-align: left">14</td>
+<td style="text-align: left">:white_check_mark:</td>
 <td style="text-align: left">:white_check_mark:</td>
 <td style="text-align: left">:white_check_mark:</td>
 <td style="text-align: left">:white_check_mark:</td>
@@ -601,6 +620,7 @@ NSDictionary&lt;TDRequestOptionsKey, id&gt; *options = @{
 <td style="text-align: left">:white_check_mark:</td>
 <td style="text-align: left">:white_check_mark:</td>
 <td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">not tested</td>
 </tr>
 <tr>
 <td style="text-align: left">12</td>
@@ -609,10 +629,12 @@ NSDictionary&lt;TDRequestOptionsKey, id&gt; *options = @{
 <td style="text-align: left">:white_check_mark:</td>
 <td style="text-align: left">not tested</td>
 <td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
 </tr>
 <tr>
 <td style="text-align: left">11</td>
 <td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">not tested</td>
 <td style="text-align: left">not tested</td>
 <td style="text-align: left">not tested</td>
 <td style="text-align: left">not tested</td>
@@ -625,10 +647,12 @@ NSDictionary&lt;TDRequestOptionsKey, id&gt; *options = @{
 <td style="text-align: left">not tested</td>
 <td style="text-align: left">not tested</td>
 <td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
 </tr>
 <tr>
 <td style="text-align: left">9</td>
 <td style="text-align: left">:white_check_mark:</td>
+<td style="text-align: left">not tested</td>
 <td style="text-align: left">not tested</td>
 <td style="text-align: left">not tested</td>
 <td style="text-align: left">not tested</td>
@@ -641,9 +665,11 @@ NSDictionary&lt;TDRequestOptionsKey, id&gt; *options = @{
 <td style="text-align: left">not tested</td>
 <td style="text-align: left">not tested</td>
 <td style="text-align: left">not tested</td>
+<td style="text-align: left">not tested</td>
 </tr>
 <tr>
 <td style="text-align: left">7</td>
+<td style="text-align: left">not tested</td>
 <td style="text-align: left">not tested</td>
 <td style="text-align: left">not tested</td>
 <td style="text-align: left">not tested</td>
@@ -661,10 +687,12 @@ NSDictionary&lt;TDRequestOptionsKey, id&gt; *options = @{
 <th style="text-align: left">v1.0.1</th>
 <th style="text-align: left">v1.1.0</th>
 <th style="text-align: left">v1.1.1</th>
+<th style="text-align: left">v1.2.0 &amp; v1.2.1</th>
 </tr>
 </thead><tbody>
 <tr>
 <td style="text-align: left">12 and up</td>
+<td style="text-align: left">:white_check_mark:</td>
 <td style="text-align: left">:white_check_mark:</td>
 <td style="text-align: left">:white_check_mark:</td>
 <td style="text-align: left">:white_check_mark:</td>
@@ -676,8 +704,8 @@ NSDictionary&lt;TDRequestOptionsKey, id&gt; *options = @{
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2024 <a class="link" href="https://github.com/treasure-data/td-ios-sdk" target="_blank" rel="external noopener">mitsu, huylenq, and tung-vu-td</a>. All rights reserved. (Last updated: 2024-06-25)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.15.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+          <p>&copy; 2026 <a class="link" href="https://github.com/treasure-data/td-ios-sdk" target="_blank" rel="external noopener">mitsu, huylenq, and tung-vu-td</a>. All rights reserved. (Last updated: 2026-04-24)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.15.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
     </div>
