@@ -7,7 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "TDSession.h"
+#import "TreasureData-Swift.h"
 
 @interface SessionTests : XCTestCase
 

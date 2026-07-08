@@ -20,7 +20,6 @@
 		6B7380AC192A09160097D56E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6B7380AA192A09160097D56E /* InfoPlist.strings */; };
 		6B7380AE192A09160097D56E /* TreasureDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B7380AD192A09160097D56E /* TreasureDataTests.m */; };
 		6B758E4E1C00C59A00D597F8 /* TDClient.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6BF8C9321A3E9B76005B1804 /* TDClient.h */; };
-		6BB5A9D41D1A86EF0006A534 /* TDSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BB5A9D31D1A86EE0006A534 /* TDSession.m */; };
 		6BB5A9D61D1BBFE60006A534 /* SessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BB5A9D51D1BBFE60006A534 /* SessionTests.m */; };
 		6BF8C92D1A3E971D005B1804 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BF8C92C1A3E971D005B1804 /* CoreLocation.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		6BF8C92F1A3E972C005B1804 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BF8C92E1A3E972C005B1804 /* Security.framework */; };
@@ -32,6 +31,7 @@
 		E52CB7F521FDD78A00062EBA /* TDAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52CB7F421FDD78A00062EBA /* TDAPI.swift */; };
 		AA00000000000000000000A1 /* EventEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000B1 /* EventEngine.swift */; };
 		AA00000000000000000000A2 /* KeenEventEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000B2 /* KeenEventEngine.swift */; };
+		AA00000000000000000000A3 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000B4 /* Session.swift */; };
 		E5A84B5421FEA35300BC699D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A84B5321FEA35300BC699D /* AppDelegate.swift */; };
 		E5A84B5621FEA35300BC699D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A84B5521FEA35300BC699D /* ViewController.swift */; };
 		E5A84B5921FEA35300BC699D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E5A84B5721FEA35300BC699D /* Main.storyboard */; };
@@ -97,8 +97,6 @@
 		6B7380A9192A09160097D56E /* TreasureDataTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TreasureDataTests-Info.plist"; sourceTree = "<group>"; };
 		6B7380AB192A09160097D56E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6B7380AD192A09160097D56E /* TreasureDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TreasureDataTests.m; sourceTree = "<group>"; };
-		6BB5A9D21D1A86CD0006A534 /* TDSession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TDSession.h; sourceTree = "<group>"; };
-		6BB5A9D31D1A86EE0006A534 /* TDSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDSession.m; sourceTree = "<group>"; };
 		6BB5A9D51D1BBFE60006A534 /* SessionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionTests.m; sourceTree = "<group>"; };
 		6BF8C92C1A3E971D005B1804 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		6BF8C92E1A3E972C005B1804 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -120,6 +118,7 @@
 		AA00000000000000000000B1 /* EventEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventEngine.swift; sourceTree = "<group>"; };
 		AA00000000000000000000B2 /* KeenEventEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeenEventEngine.swift; sourceTree = "<group>"; };
 		AA00000000000000000000B3 /* TreasureData-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TreasureData-Bridging-Header.h"; sourceTree = "<group>"; };
+		AA00000000000000000000B4 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		E5701BA5225755C5000FB17F /* TDClientInternal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TDClientInternal.h; sourceTree = "<group>"; };
 		E5A84B5121FEA35300BC699D /* TestHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5A84B5321FEA35300BC699D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -175,8 +174,7 @@
 				2053A39D2047F38B0089A959 /* TDUtils.h */,
 				2053A39B2047F37F0089A959 /* TDUtils.m */,
 				201053E9204858F8009C7EFA /* TDConstants.h */,
-				6BB5A9D21D1A86CD0006A534 /* TDSession.h */,
-				6BB5A9D31D1A86EE0006A534 /* TDSession.m */,
+				AA00000000000000000000B4 /* Session.swift */,
 				1950C4C633D1BEA93C441EFC /* TDIAPObserver.h */,
 				1950CA957CA6115F3C3DD018 /* TDIAPObserver.m */,
 			);
@@ -487,13 +485,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6BB5A9D41D1A86EF0006A534 /* TDSession.m in Sources */,
 				6BF8C9341A3E9B76005B1804 /* TDClient.m in Sources */,
 				2053A39C2047F37F0089A959 /* TDUtils.m in Sources */,
 				6B738099192A09160097D56E /* TreasureData.m in Sources */,
 				1950CB9871EC3D104BCD112A /* TDIAPObserver.m in Sources */,
 				AA00000000000000000000A1 /* EventEngine.swift in Sources */,
 				AA00000000000000000000A2 /* KeenEventEngine.swift in Sources */,
+				AA00000000000000000000A3 /* Session.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -724,6 +722,10 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(CONFIGURATION_TEMP_DIR)/TreasureData.build/DerivedSources",
+				);
 				INFOPLIST_FILE = "TreasureDataTests/TreasureDataTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = "$(inherited)";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -749,6 +751,10 @@
 					"$(inherited)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(CONFIGURATION_TEMP_DIR)/TreasureData.build/DerivedSources",
+				);
 				INFOPLIST_FILE = "TreasureDataTests/TreasureDataTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = "$(inherited)";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";

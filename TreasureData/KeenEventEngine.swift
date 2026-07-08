@@ -2,12 +2,10 @@
 //  KeenEventEngine.swift
 //  TreasureData
 //
-//  Phase A implementation of `EventEngine`. Wraps the existing Objective-C
-//  `TDClient` (a `KeenClient` subclass) by *composition* — no Swift type
-//  subclasses KeenClient, so KeenClient never appears in the public API and
-//  Phase B can swap this out for a pure-Swift engine without breaking consumers.
-//
-//  See docs/PHASE-A-PLAN.md.
+//  `EventEngine` implementation that wraps the existing Objective-C `TDClient`
+//  (a `KeenClient` subclass) by *composition* — no Swift type subclasses
+//  KeenClient, so KeenClient never appears in the public API and this can be
+//  swapped for a pure-Swift engine without breaking consumers.
 //
 
 import Foundation

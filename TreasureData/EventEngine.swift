@@ -3,12 +3,9 @@
 //  TreasureData
 //
 //  The internal seam between the public `TreasureData` façade and the buffering /
-//  upload engine. In Phase A this is backed by `KeenEventEngine` (which wraps
-//  KeenClient). In Phase B the KeenClient-backed implementation is replaced by a
-//  pure-Swift one, with no change to this protocol or the public API.
-//
-//  See docs/adr/0001-phased-swift-migration-keenclient-behind-seam.md
-//  and docs/PHASE-A-PLAN.md.
+//  upload engine. This is backed by `KeenEventEngine` (which wraps KeenClient).
+//  The engine implementation can be swapped without changing this protocol or
+//  the public API.
 //
 
 import Foundation

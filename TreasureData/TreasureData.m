@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "TreasureData.h"
 #import "TDClient.h"
-#import "TDSession.h"
+#import "TreasureData-Swift.h"
 #import "TDUtils.h"
 #import "TDConstants.h"
 #import "TDIAPObserver.h"
