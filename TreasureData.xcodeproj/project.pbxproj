@@ -30,6 +30,8 @@
 		DF1DA0DA251DE468006EE00F /* TDRequestOptionsKey.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = DF259EBC22A5034A00697319 /* TDRequestOptionsKey.h */; };
 		DF9D4DC6230FBC4200682E41 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF9D4DC5230FBC4200682E41 /* AdSupport.framework */; };
 		E52CB7F521FDD78A00062EBA /* TDAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52CB7F421FDD78A00062EBA /* TDAPI.swift */; };
+		AA00000000000000000000A1 /* EventEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000B1 /* EventEngine.swift */; };
+		AA00000000000000000000A2 /* KeenEventEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000B2 /* KeenEventEngine.swift */; };
 		E5A84B5421FEA35300BC699D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A84B5321FEA35300BC699D /* AppDelegate.swift */; };
 		E5A84B5621FEA35300BC699D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A84B5521FEA35300BC699D /* ViewController.swift */; };
 		E5A84B5921FEA35300BC699D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E5A84B5721FEA35300BC699D /* Main.storyboard */; };
@@ -115,6 +117,9 @@
 		DF9D4DC5230FBC4200682E41 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		E52CB7F121FDD6D300062EBA /* TreasureDataTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TreasureDataTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		E52CB7F421FDD78A00062EBA /* TDAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDAPI.swift; sourceTree = "<group>"; };
+		AA00000000000000000000B1 /* EventEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventEngine.swift; sourceTree = "<group>"; };
+		AA00000000000000000000B2 /* KeenEventEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeenEventEngine.swift; sourceTree = "<group>"; };
+		AA00000000000000000000B3 /* TreasureData-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TreasureData-Bridging-Header.h"; sourceTree = "<group>"; };
 		E5701BA5225755C5000FB17F /* TDClientInternal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TDClientInternal.h; sourceTree = "<group>"; };
 		E5A84B5121FEA35300BC699D /* TestHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5A84B5321FEA35300BC699D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -226,6 +231,9 @@
 				6B738098192A09160097D56E /* TreasureData.m */,
 				6BF8C9321A3E9B76005B1804 /* TDClient.h */,
 				6BF8C9331A3E9B76005B1804 /* TDClient.m */,
+				AA00000000000000000000B3 /* TreasureData-Bridging-Header.h */,
+				AA00000000000000000000B1 /* EventEngine.swift */,
+				AA00000000000000000000B2 /* KeenEventEngine.swift */,
 			);
 			path = TreasureData;
 			sourceTree = "<group>";
@@ -484,6 +492,8 @@
 				2053A39C2047F37F0089A959 /* TDUtils.m in Sources */,
 				6B738099192A09160097D56E /* TreasureData.m in Sources */,
 				1950CB9871EC3D104BCD112A /* TDIAPObserver.m in Sources */,
+				AA00000000000000000000A1 /* EventEngine.swift in Sources */,
+				AA00000000000000000000A2 /* KeenEventEngine.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -656,6 +666,7 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_MODULES_AUTOLINK = YES;
+				DEFINES_MODULE = YES;
 				DSTROOT = /tmp/TreasureData.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
@@ -666,6 +677,9 @@
 				PODS_ROOT = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "TreasureData/TreasureData-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				"USER_HEADER_SEARCH_PATHS[arch=*]" = "${SOURCE_ROOT}/Headers/**";
 			};
 			name = Debug;
@@ -676,6 +690,7 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_MODULES_AUTOLINK = YES;
+				DEFINES_MODULE = YES;
 				DSTROOT = /tmp/TreasureData.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
@@ -686,6 +701,10 @@
 				PODS_ROOT = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OBJC_BRIDGING_HEADER = "TreasureData/TreasureData-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
 				"USER_HEADER_SEARCH_PATHS[arch=*]" = "${SOURCE_ROOT}/Headers/**";
 			};
 			name = Release;
