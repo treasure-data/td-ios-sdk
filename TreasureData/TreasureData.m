@@ -10,7 +10,6 @@
 #import "TreasureData.h"
 #import "TDClient.h"
 #import "TreasureData-Swift.h"
-#import "TDUtils.h"
 #import "TDConstants.h"
 #import "TDIAPObserver.h"
 #import "TDClientInternal.h"

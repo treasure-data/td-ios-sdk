@@ -12,7 +12,7 @@
 #import "TDIAPObserver.h"
 #import "TreasureData.h"
 #import "TDConstants.h"
-#import "TDUtils.h"
+#import "TreasureData-Swift.h"
 
 
 @interface TDProductRequester : NSObject <SKProductsRequestDelegate>

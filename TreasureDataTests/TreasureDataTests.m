@@ -11,7 +11,7 @@
 #import "TDClient.h"
 #import "TDClientInternal.h"
 #import "TDConstants.h"
-#import "TDUtils.h"
+#import "TreasureData-Swift.h"
 #import "TDIAPObserver.h"
 
 static NSString *END_POINT = @"http://localhost";
@@ -985,7 +985,7 @@ static NSString *END_POINT = @"http://localhost";
     // if the key is absence, then it is treated as custom events
     NSDictionary *myEvent = [TDUtils markAsCustomEvent:@{@"mykey": @"myvalue"}];
     NSDictionary *event = [self.td addEvent:myEvent table:@"somewhere"];
-    XCTAssertNil([event objectForKey:TDEventClassKey]);
+    XCTAssertNil([event objectForKey:TDUtils.eventClassKey]);
     self.isFinished = YES;
 }
 
