@@ -27,7 +27,6 @@ public class TDUtils: NSObject {
     @objc public static let eventClassCustom = "custom"
     @objc public static let eventClassAppLifecycle = "app_lifecycle"
     @objc public static let eventClassAudit = "audit"
-    @objc public static let eventClassIAP = "iap"
 
     // Mirrors TD_USER_DEFAULTS_KEY_IS_UNITY in TDConstants.h (still ObjC; the
     // #define isn't visible to Swift, so the literal is duplicated here).
@@ -55,10 +54,6 @@ public class TDUtils: NSObject {
         return mark(event, as: eventClassCustom)
     }
 
-    @objc public class func markAsIAPEvent(_ event: [String: Any]) -> [String: Any] {
-        return mark(event, as: eventClassIAP)
-    }
-
     private class func mark(_ event: [String: Any], as eventClass: String) -> [String: Any] {
         var marked = event
         marked[eventClassKey] = eventClass
@@ -79,10 +74,6 @@ public class TDUtils: NSObject {
         return eventClass == eventClassCustom
     }
 
-    @objc public class func isIAPEvent(_ event: [String: Any]) -> Bool {
-        return (event[eventClassKey] as? String) == eventClassIAP
-    }
-
     @objc public class func stripNonEventData(_ event: [String: Any]) -> [String: Any] {
         var result = event
         result.removeValue(forKey: eventClassKey)
@@ -91,9 +82,5 @@ public class TDUtils: NSObject {
 
     @objc public class func isRunningWithUnity() -> Bool {
         return UserDefaults.standard.bool(forKey: userDefaultsKeyIsUnity)
-    }
-
-    @objc public class func isStoreKitAvailable() -> Bool {
-        return NSClassFromString("SKStoreProductViewController") != nil
     }
 }

@@ -11,7 +11,6 @@
 #import "TDClient.h"
 #import "TreasureData-Swift.h"
 #import "TDConstants.h"
-#import "TDIAPObserver.h"
 #import "TDClientInternal.h"
 #import "NSString+TDHelpers.h"
 #import <AdSupport/ASIdentifierManager.h>
@@ -61,7 +60,6 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
 
 @property (nonatomic, assign, getter=isCustomEventEnabled) BOOL customEventEnabled;
 @property (nonatomic, assign, getter=isAppLifecycleEventEnabled) BOOL appLifecycleEventEnabled;
-@property (nonatomic, assign, getter=isInAppPurchaseEventEnabled) BOOL inAppPurchaseEnabled;
 
 @property (nonatomic, strong) dispatch_queue_t addEventQueue;
 
@@ -69,7 +67,6 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
 
 @implementation TreasureData {
     NSString * _UUID;
-    TDIAPObserver * _iapObserver;
     NSMutableDictionary *_defaultValues;
 }
 
@@ -129,14 +126,6 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     [[NSNotificationCenter defaultCenter] removeObserver: self];
 }
 
-- (void)event:(NSDictionary *)record table:(NSString *)table {
-    [self addEvent:record table:table];
-}
-
-- (void)event:(NSDictionary *)record database:(NSString *)database table:(NSString *)table {
-    [self addEvent:record database:database table:table];
-}
-
 - (NSDictionary *)addEvent:(NSDictionary *)record table:(NSString *)table {
     return [self addEvent:record database:self.defaultDatabase table:table];
 }
@@ -193,7 +182,6 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
             }
 
             if ([TDUtils isAppLifecycleEvent:record] && ![self isAppLifecycleEventEnabled]) return;
-            if ([TDUtils isIAPEvent:record] && ![self isInAppPurchaseEventEnabled]) return;
 
             if (self.client) {
                 if (database && table) {
@@ -415,19 +403,6 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     return record;
 }
 
-- (void)uploadWithBlock:(void (^)(void))block {
-    [self uploadEventsWithBlock:block];
-}
-
-- (void)uploadEventsWithBlock:(void (^)(void))block {
-    if (self.client) {
-        [self.client uploadWithFinishedBlock:block];
-    }
-    else {
-        NSLog(@"ERROR: The TreasureData's client is nil");
-    }
-}
-
 - (void)uploadEventsWithCallback:(void (^)(void))onSuccess onError:(void (^)(NSString*, NSString*))onError {
     if (self.client) {
         [self.client __enableEventCompression:isEventCompressionEnabled];
@@ -444,10 +419,6 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
 
 - (void)uploadEvents {
     [self uploadEventsWithCallback:nil onError:nil];
-}
-
-- (void)setApiEndpoint:(NSString*)endpoint {
-    self.client.apiEndpoint = endpoint;
 }
 
 - (void)disableAutoAppendUniqId {
@@ -744,22 +715,6 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:TD_USER_DEFAULTS_KEY_APP_LIFECYCLE_EVENT_ENABLED];
 }
 
-- (void)enableInAppPurchaseEvent {
-    if ([TDUtils isStoreKitAvailable]) {
-        self.inAppPurchaseEnabled = YES;
-        if (!_iapObserver) {
-            _iapObserver = [[TDIAPObserver alloc] initWithTD:self];
-        }
-    } else {
-        NSLog(@"WARN: Unable to enable IAP tracking as StoreKit is not available for this application!");
-    }
-}
-
-- (void)disableInAppPurchaseEvent {
-    self.inAppPurchaseEnabled = NO;
-    _iapObserver = nil;
-}
-
 - (void)resetUniqId {
     _UUID = [[NSUUID UUID] UUIDString];
     [[NSUserDefaults standardUserDefaults] setObject:_UUID forKey:storageKeyOfUuid];
@@ -886,10 +841,6 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
 
 + (void)resetSession {
     session = nil;
-}
-
-- (TDIAPObserver *)iapObserver {
-    return _iapObserver;
 }
 
 @end

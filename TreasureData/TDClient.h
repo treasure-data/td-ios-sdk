@@ -53,22 +53,4 @@
  */
 @property int uploadRetryCount;
 
-#pragma mark - Deprecated
-
-- (id)initWithApiKey:(NSString *)apiKey apiEndpoint:(NSString*)apiEndpoint DEPRECATED_MSG_ATTRIBUTE("Construct from TreasureData instead.");
-
-/**
- * The pending session of this client.
- */
-@property(nonatomic, strong) NSURLSession *session DEPRECATED_MSG_ATTRIBUTE("This will become private property on next version.");
-
-/**
- * Enable compression event data payload on uploading requests.
- */
-@property BOOL enableEventCompression DEPRECATED_MSG_ATTRIBUTE("Configure this on TreasureData instead.");
-
-- (void) sendHTTPRequest:(NSURLRequest *)request
-            retryCounter:(int)retryCounter
-       completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler DEPRECATED_MSG_ATTRIBUTE("Don't call this directly, this will become private on next version.");
-
 @end

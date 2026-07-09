@@ -12,7 +12,6 @@
 #import "TDClientInternal.h"
 #import "TDConstants.h"
 #import "TreasureData-Swift.h"
-#import "TDIAPObserver.h"
 
 static NSString *END_POINT = @"http://localhost";
 
@@ -23,50 +22,8 @@ static NSString *END_POINT = @"http://localhost";
 @end
 
 @interface TreasureData (Testing)
-- (TDIAPObserver *)iapObserver;
 - (void)initializeFirstRun;
 + (void)resetSession;
-@end
-
-@interface TDIAPObserver (Testing)
-- (void)addTransactionEvent:(SKPaymentTransaction *)transaction product:(SKProduct *)product;
-@end
-
-@interface SKDummyPayment : SKPayment
-@end
-
-@implementation SKDummyPayment
-
-- (NSString *)productIdentifier {
-    return @"dummy_product_identifier";
-}
-
-- (NSInteger)quantity {
-    return 1;
-}
-
-@end
-
-@interface SKDummyPaymentTransaction : SKPaymentTransaction
-@end
-
-@implementation SKDummyPaymentTransaction
-
-- (SKPaymentTransactionState)transactionState {
-    return SKPaymentTransactionStatePurchased;
-}
-
-- (NSString *)transactionIdentifier {
-    return @"dummy_identifier";
-}
-
-- (NSDate *)transactionDate {
-    return [NSDate new];
-}
-
-- (SKPayment *)payment {
-    return [SKDummyPayment new];
-}
 @end
 
 @interface MySessionDataTask : NSURLSessionDataTask
@@ -987,44 +944,6 @@ static NSString *END_POINT = @"http://localhost";
     NSDictionary *event = [self.td addEvent:myEvent table:@"somewhere"];
     XCTAssertNil([event objectForKey:TDUtils.eventClassKey]);
     self.isFinished = YES;
-}
-
-#pragma mark - In-App Purchase
-
-- (void)testIAPTrackingEnabled {
-    @try {
-        [self.td enableInAppPurchaseEvent];
-        XCTAssertTrue(self.td.isInAppPurchaseEventEnabled);
-        XCTAssertNotNil(self.td.iapObserver);
-    }
-    @finally {
-        self.isFinished = YES;
-    }
-}
-
-- (void)testIAPTrackingDisabled {
-    @try {
-        [self.td disableInAppPurchaseEvent];
-        XCTAssertFalse(self.td.isInAppPurchaseEventEnabled);
-        XCTAssertNil(self.td.iapObserver);
-    }
-    @finally {
-        self.isFinished = YES;
-    }
-}
-
-- (void)testTrackIAPEvent {
-    @try {
-        [self.td enableInAppPurchaseEvent];
-        self.td.defaultTable = @"default_table";
-        TDIAPObserver *iapObserver = [[TDIAPObserver alloc] initWithTD:self.td];
-        SKPaymentTransaction *transaction = [SKDummyPaymentTransaction new];
-        [iapObserver addTransactionEvent:transaction product:nil];
-        [self assertHasCapturedEventType:TD_EVENT_IAP_PURCHASE];
-    }
-    @finally {
-        self.isFinished = YES;
-    }
 }
 
 #pragma mark - Tracking td_ip

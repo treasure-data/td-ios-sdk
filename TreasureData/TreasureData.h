@@ -431,35 +431,6 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
  */
 - (BOOL)isAppLifecycleEventEnabled;
 
-/**
- * Enable tracking `SKPaymentTransactionStatePurchased` event automatically. This is disabled by default. Unlike custom and app lifecycle events, this settings is not persisted.
- * @deprecated This method is deprecated because it uses StoreKit 1 under the hood. Directly track In App Purchase in your app code instead.
- *
- * An example IAP event record:
- * ```
- * "td_ios_event": "TD_IOS_IN_APP_PURCHASE",
- * "td_iap_transaction_identifier": "1000000514091400",
- * "td_iap_transaction_date": "2019-03-28T08:44:12+07:00",
- * "td_iap_quantity": 1,
- * "td_iap_product_identifier": "com.yourcompany.yourapp.yourproduct", ,
- * "td_iap_product_price": 0.99,
- * "td_iap_product_localized_title": "Your Product Title",
- * "td_iap_product_localized_description": "Your Product Description",
- * "td_iap_product_currency_code": "USD",  // this is only available on iOS 10 and above
- */
-- (void)enableInAppPurchaseEvent __attribute__((deprecated("This method is deprecated because it uses StoreKit 1 under the hood. Directly track In App Purchase in your app code instead.")));
-
-/**
- * Disable tracking IAP events
- * @deprecated This method is deprecated as part of `enableInAppPurchaseEvent` deprecation. Directly track In App Purchase in your app code instead.
- */
-- (void)disableInAppPurchaseEvent __attribute__((deprecated("This method is deprecated as part of `enableInAppPurchaseEvent` deprecation. Directly track In App Purchase in your app code instead.")));
-
-/**
- * Whether this `TreasureData`'s instance tracking IAP events
- */
-- (BOOL)isInAppPurchaseEventEnabled;
-
 #pragma mark - Personalization API
 
 /**
@@ -557,14 +528,5 @@ typedef void (^ErrorHandler)(NSString* _Nonnull errorCode, NSString* _Nullable e
 
 - (BOOL)isFirstRun;
 - (void)clearFirstRun;
-
-#pragma mark - Deprecated
-
-- (void)event:(NSDictionary * _Nonnull)record database:(NSString * _Nonnull)database table:(NSString * _Nonnull)table DEPRECATED_ATTRIBUTE;
-- (void)event:(NSDictionary * _Nonnull)record table:(NSString * _Nonnull)table DEPRECATED_ATTRIBUTE;
-- (void)uploadWithBlock:(void (^ _Nonnull)(void))block DEPRECATED_ATTRIBUTE;
-- (void)uploadEventsWithBlock:(void (^ _Nonnull)(void))block DEPRECATED_ATTRIBUTE;
-- (void)setApiEndpoint:(NSString* _Nonnull)endpoint DEPRECATED_ATTRIBUTE;
-
 
 @end
