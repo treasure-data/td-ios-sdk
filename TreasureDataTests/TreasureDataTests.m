@@ -7,7 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "TDClient.h"
+@import KeenClientTD;
 #import "TDConstants.h"
 #import "TreasureData-Swift.h"
 

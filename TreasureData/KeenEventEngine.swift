@@ -2,17 +2,19 @@
 //  KeenEventEngine.swift
 //  TreasureData
 //
-//  `EventEngine` implementation that wraps the existing Objective-C `TDClient`
-//  (a `KeenClient` subclass) by *composition* — no Swift type subclasses
-//  KeenClient, so KeenClient never appears in the public API and this can be
-//  swapped for a pure-Swift engine without breaking consumers.
+//  `EventEngine` implementation backed by KeenClient's buffer + upload
+//  orchestration, via the internal `TDClient` (a KeenClient subclass that
+//  redirects uploads to the Treasure Data endpoint). KeenClient never appears in
+//  the public API; this can be swapped for a pure-Swift engine without breaking
+//  consumers.
 //
 
 import Foundation
+import KeenClientTD
 
 final class KeenEventEngine: EventEngine {
 
-    /// The underlying ObjC client. Held via composition, deliberately not exposed.
+    /// The underlying KeenClient subclass. Held via composition, never exposed.
     private let client: TDClient
 
     init(apiKey: String, apiEndpoint: String) {
@@ -30,29 +32,29 @@ final class KeenEventEngine: EventEngine {
     }
 
     var isTrackingIP: Bool {
-        get { client.enableTrackingIP }
-        set { client.enableTrackingIP = newValue }
+        get { client.isTrackingIP }
+        set { client.isTrackingIP = newValue }
     }
 
     var session: URLSession {
-        get { client.__session() ?? .shared }
-        set { client.__setSession(newValue) }
+        get { client.uploadSession }
+        set { client.uploadSession = newValue }
     }
 
     var retry: RetryConfig {
         get {
             RetryConfig(
-                isEnabled: client.enableRetryUploading,
-                intervalCoefficient: Int(client.uploadRetryIntervalCoeficient),
-                intervalBase: Int(client.uploadRetryIntervalBase),
-                maxCount: Int(client.uploadRetryCount)
+                isEnabled: client.retryEnabled,
+                intervalCoefficient: client.retryIntervalCoefficient,
+                intervalBase: client.retryIntervalBase,
+                maxCount: client.retryCount
             )
         }
         set {
-            client.enableRetryUploading = newValue.isEnabled
-            client.uploadRetryIntervalCoeficient = Int32(newValue.intervalCoefficient)
-            client.uploadRetryIntervalBase = Int32(newValue.intervalBase)
-            client.uploadRetryCount = Int32(newValue.maxCount)
+            client.retryEnabled = newValue.isEnabled
+            client.retryIntervalCoefficient = newValue.intervalCoefficient
+            client.retryIntervalBase = newValue.intervalBase
+            client.retryCount = newValue.maxCount
         }
     }
 
@@ -69,11 +71,11 @@ final class KeenEventEngine: EventEngine {
     func upload(compression: Bool,
                 onSuccess: EngineSuccessHandler?,
                 onError: EngineErrorHandler?) {
-        client.__enableEventCompression(compression)
+        client.isEventCompressionEnabled = compression
         client.upload(callbacks: onSuccess, onError: onError)
     }
 
     static func initializeEncryptionKey(_ key: String?) {
-        TDClient.initializeEncryptionKey(key)
+        KeenClient.initializeEncryptionKey(key)
     }
 }
