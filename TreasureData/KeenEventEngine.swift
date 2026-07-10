@@ -34,6 +34,11 @@ final class KeenEventEngine: EventEngine {
         set { client.enableTrackingIP = newValue }
     }
 
+    var session: URLSession {
+        get { client.__session() ?? .shared }
+        set { client.__setSession(newValue) }
+    }
+
     var retry: RetryConfig {
         get {
             RetryConfig(

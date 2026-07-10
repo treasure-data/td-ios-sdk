@@ -53,6 +53,9 @@ protocol EventEngine: AnyObject {
     /// Retry policy for failed uploads.
     var retry: RetryConfig { get set }
 
+    /// The URLSession used for uploads. Injectable so tests can stub the network.
+    var session: URLSession { get set }
+
     /// Buffer an already-enriched event into the given `"database.table"` collection.
     func addEvent(_ event: [String: Any],
                   collection: String,
