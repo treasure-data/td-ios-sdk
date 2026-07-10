@@ -7,19 +7,11 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "TreasureData.h"
 #import "TDClient.h"
-#import "TDClientInternal.h"
 #import "TDConstants.h"
 #import "TreasureData-Swift.h"
 
 static NSString *END_POINT = @"http://localhost";
-
-@interface MyTDClient : TDClient
-@end
-
-@implementation MyTDClient
-@end
 
 @interface TreasureData (Testing)
 - (void)initializeFirstRun;
@@ -56,78 +48,29 @@ static NSString *END_POINT = @"http://localhost";
 }
 @end
 
-@interface MyTreasureData : TreasureData
+// MyTreasureData used to be an ObjC subclass of TreasureData that overrode
+// version getters, injected a mock session, and captured events. A Swift @objc
+// class in a static library can't be subclassed from ObjC, so those hooks now
+// live on TreasureData itself (mock* properties, capturingEvents/capturedEvents,
+// injectable session). `MyTreasureData` is now just an alias, and makeTestTD
+// configures a real TreasureData with the equivalent test hooks.
+typedef TreasureData MyTreasureData;
 
-@property (nonatomic, strong) NSMutableArray<NSDictionary<NSString*,id> *> *capturedEvents;
-@property (nonatomic, assign) NSString *mockedTrackedAppVersion;
-@property (nonatomic, assign) NSString *mockedTrackedBuildNumber;
-
-@end
-
-@implementation MyTreasureData
-
-- (void)mockTrackedAppVersion:(NSString *)version {
-    self.mockedTrackedAppVersion = version;
+static MyTreasureData *makeTestTD(NSString *apiKey) {
+    MyTreasureData *td = [[TreasureData alloc] initWithApiKey:apiKey apiEndpoint:END_POINT];
+    td.session = [[MySession alloc] init];
+    td.capturingEvents = YES;
+    // Match the former subclass's fixed app version/build.
+    td.mockAppVersion = @"1.2.3";
+    td.mockBuildNumber = @"42";
+    return td;
 }
-
-- (void)mockTrackedBuildNumber:(NSString *)buildNumber {
-    self.mockedTrackedBuildNumber = buildNumber;
-}
-
-#pragma mark - Overrides
-
-- (id)initWithApiKey:(NSString *)apiKey {
-    self = [super initWithApiKey:apiKey];
-    MyTDClient *myClient = [[MyTDClient alloc] __initWithApiKey:apiKey apiEndpoint:END_POINT];
-    self.client = myClient;
-    MySession *session = [[MySession alloc] init];
-    [self.client __setSession:session];
-    self.capturedEvents = [NSMutableArray new];
-    return self;
-}
-
-- (NSString*)getAppVersion {
-    return @"1.2.3";
-}
-
-- (NSString*)getBuildNumber {
-    return @"42";
-}
-
-- (NSString *)getTrackedAppVersion {
-    return self.mockedTrackedAppVersion;
-}
-
-- (NSString *)getTrackedBuildNumber {
-    return self.mockedTrackedBuildNumber;
-}
-
-- (NSDictionary *)addEventWithCallback:(NSDictionary *)record
-                    database:(NSString *)database
-                       table:(NSString *)table
-                   onSuccess:(void (^)(void))onSuccess
-                     onError:(void (^)(NSString*, NSString*))onError {
-    NSDictionary *added = [super addEventWithCallback:record database:database table:table onSuccess:onSuccess onError:onError];
-    if (added) {
-        [self.capturedEvents addObject:added];
-    }
-    return added;
-}
-
-- (void)uploadEventsWithCallback:(void (^ _Nullable)(void))onSuccess
-                         onError:(void (^ _Nullable)(NSString* _Nonnull, NSString* _Nullable))onError {
-    [self.capturedEvents removeAllObjects];
-    [super uploadEventsWithCallback:onSuccess onError:onError];
-}
-
-@end
 
 #pragma mark -
 
 @interface TreasureDataTests : XCTestCase
 @property bool isFinished;
 @property MyTreasureData* td;
-@property MyTDClient *client;
 @property MySession *session;
 @end
 
@@ -141,13 +84,12 @@ static NSString *END_POINT = @"http://localhost";
 }
 
 - (void)initializeTD {
-    self.td = [[MyTreasureData alloc] initWithApiKey:@"dummy_apikey"];
+    self.td = makeTestTD(@"dummy_apikey");
     [self.td initializeFirstRun];
     [self.td setDefaultDatabase:@"my_database"];
-    self.client = (MyTDClient*)self.td.client;
-    self.session = (MySession*)[self.td.client __session];
-    [[MyTDClient getEventStore] deleteAllEvents];
-    [self.td.capturedEvents removeAllObjects];
+    self.session = (MySession*)self.td.session;
+    [[KeenClient getEventStore] deleteAllEvents];
+    [self.td clearCapturedEvents];
     [MyTreasureData disableEventCompression];
     [MyTreasureData resetSession];
     [self.td enableCustomEvent];
@@ -192,7 +134,7 @@ static NSString *END_POINT = @"http://localhost";
 }
 
 - (void)baseTesting:(void(^)(void))setup onSuccess:(void(^)(void))onSuccess onError:(void(^)(NSString*, NSString*))onError {
-    NSString *url = self.client.apiEndpoint;
+    NSString *url = self.td.apiEndpoint;
     XCTAssertEqualObjects(@"http://localhost", url);
 
     [self setupDefaultExpectedResponse];
@@ -306,16 +248,16 @@ static NSString *END_POINT = @"http://localhost";
     [TreasureData initializeWithApiKey:@"hello_apikey" apiEndpoint:@"https://another.apiendpoint.xyz"];
     // Avoid it to trigger app lifecycle listener without some of the expectations (app's version) being mocked.
     [[NSNotificationCenter defaultCenter] removeObserver:[TreasureData sharedInstance]];
-    NSString *url = [TreasureData sharedInstance].client.apiEndpoint;
+    NSString *url = [TreasureData sharedInstance].apiEndpoint;
     XCTAssertTrue([url isEqualToString:@"https://another.apiendpoint.xyz"]);
     self.isFinished = true;
 }
 
 - (void)testDisableUploading {
     [self baseTestingError:^() {
-        self.client.enableRetryUploading = false;
+        self.td.enableRetryUploadingFlag = false;
 
-        self.client.uploadRetryCount = 3;
+        self.td.uploadRetryCount = 3;
         [self.td enableRetryUploading];
 
         self.session.expectedResponseBody = nil;
@@ -390,7 +332,7 @@ static NSString *END_POINT = @"http://localhost";
 
 - (void)testAutoAppendUuid {
     [self baseTesting:^() {
-        MyTreasureData *anotherTd = [[MyTreasureData alloc] initWithApiKey:@"dummy_apikey"];
+        MyTreasureData *anotherTd = makeTestTD(@"dummy_apikey");
         [self.td enableAutoAppendUniqId];
         [self setupDefaultExpectedResponseBody:@{
             @"db0.tbl0":@[@{@"success":@"true"}],
@@ -840,8 +782,8 @@ static NSString *END_POINT = @"http://localhost";
 
 - (void)testAutoTrackAppInstalled {
     @try {
-        [self.td mockTrackedAppVersion:nil];
-        [self.td mockTrackedBuildNumber:nil];
+        self.td.mockTrackedAppVersion = nil;
+        self.td.mockTrackedBuildNumber = nil;
         [self.td enableAppLifecycleEvent];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
                                                             object:nil];
@@ -855,9 +797,9 @@ static NSString *END_POINT = @"http://localhost";
 
 - (void)testAutoTrackEventUpdated {
     // Previous installed version
-    [self.td mockTrackedAppVersion:@"0.0.1"];
-    [self.td mockTrackedBuildNumber:@"1"];
-    // Current version is overriden by `MyTreasureData`
+    self.td.mockTrackedAppVersion = @"0.0.1";
+    self.td.mockTrackedBuildNumber = @"1";
+    // Current version is overriden by the mock* hooks
     @try {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationDidFinishLaunchingNotification"
                                                             object:nil];
@@ -950,9 +892,9 @@ static NSString *END_POINT = @"http://localhost";
 
 - (void)testTrackingIPEnabled {
     @try {
-        XCTAssertFalse(self.td.client.enableTrackingIP);
+        XCTAssertFalse(self.td.enableTrackingIP);
         [self.td enableAutoTrackingIP];
-        XCTAssertTrue(self.td.client.enableTrackingIP);
+        XCTAssertTrue(self.td.enableTrackingIP);
     } @finally {
         self.isFinished = YES;
     }
@@ -961,9 +903,9 @@ static NSString *END_POINT = @"http://localhost";
 - (void)testTrackingIPDisabled {
     @try {
         [self.td enableAutoTrackingIP];
-        XCTAssertTrue(self.td.client.enableTrackingIP);
+        XCTAssertTrue(self.td.enableTrackingIP);
         [self.td disableAutoTrackingIP];
-        XCTAssertFalse(self.td.client.enableTrackingIP);
+        XCTAssertFalse(self.td.enableTrackingIP);
     } @finally {
         self.isFinished = YES;
     }

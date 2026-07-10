@@ -33,7 +33,7 @@ public typealias SuccessHander = () -> Void
 public typealias ErrorHandler = (_ errorCode: String, _ errorMessage: String?) -> Void
 
 @objc(TreasureData)
-public class TreasureData: NSObject {
+open class TreasureData: NSObject {
 
     // MARK: - Constants (mirror TreasureData.m file-scope statics)
 
@@ -167,6 +167,27 @@ public class TreasureData: NSObject {
     private var _UUID: String?
     private var _defaultValues: [String: [String: Any]]?
 
+    // MARK: - Testing hooks
+    //
+    // These exist only so the test suite can drive the class without subclassing
+    // it (a Swift @objc class in a static library can't be subclassed from ObjC).
+    // In production they are inert: the mock* properties default to nil, and
+    // capture is off unless `capturingEvents` is enabled.
+
+    /// When non-nil, overrides the value returned by `getAppVersion()`.
+    @objc public var mockAppVersion: String?
+    /// When non-nil, overrides the value returned by `getBuildNumber()`.
+    @objc public var mockBuildNumber: String?
+    /// When set, `getTrackedAppVersion()` returns this instead of UserDefaults.
+    @objc public var mockTrackedAppVersion: String?
+    /// When set, `getTrackedBuildNumber()` returns this instead of UserDefaults.
+    @objc public var mockTrackedBuildNumber: String?
+
+    /// Enables the `capturedEvents` buffer. Off in production.
+    @objc public var capturingEvents = false
+    /// Enriched events recorded when `capturingEvents` is enabled (testing).
+    @objc public private(set) var capturedEvents: [[String: Any]] = []
+
     // MARK: - Initialization
 
     @objc(initWithApiKey:)
@@ -232,11 +253,11 @@ public class TreasureData: NSObject {
 
     @objc(addEventWithCallback:database:table:onSuccess:onError:)
     @discardableResult
-    public func addEventWithCallback(_ record: [String: Any],
-                                     database: String?,
-                                     table: String?,
-                                     onSuccess: SuccessHander?,
-                                     onError: ErrorHandler?) -> [String: Any]? {
+    open func addEventWithCallback(_ record: [String: Any],
+                                   database: String?,
+                                   table: String?,
+                                   onSuccess: SuccessHander?,
+                                   onError: ErrorHandler?) -> [String: Any]? {
         var event: [String: Any]?
 
         // Fire callbacks on the main thread (dispatch there if not already).
@@ -282,6 +303,7 @@ public class TreasureData: NSObject {
                         error(errorCode ?? ErrorCode.unknownError, errorMessage)
                     })
                     event = enrichedRecord
+                    if capturingEvents { capturedEvents.append(enrichedRecord) }
                 }
             } else {
                 let errMsg = "database or table is nil: database=\(database ?? "(null)"), table=\(table ?? "(null)")"
@@ -383,19 +405,26 @@ public class TreasureData: NSObject {
 
     // Overridable by the MyTreasureData test subclass — @objc dynamic in the
     // class body (not an extension) so the ObjC override takes effect.
-    @objc dynamic public func getAppVersion() -> String? {
+    @objc dynamic open func getAppVersion() -> String? {
+        if let mockAppVersion = mockAppVersion { return mockAppVersion }
         return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
     }
 
-    @objc dynamic public func getBuildNumber() -> String? {
+    @objc dynamic open func getBuildNumber() -> String? {
+        if let mockBuildNumber = mockBuildNumber { return mockBuildNumber }
         return Bundle.main.infoDictionary?["CFBundleVersion"] as? String
     }
 
-    @objc dynamic public func getTrackedAppVersion() -> String? {
+    @objc dynamic open func getTrackedAppVersion() -> String? {
+        // In test mode the mock fully owns the tracked value (even nil), matching
+        // the former test subclass which returned its ivar directly. Production
+        // (capturingEvents == false) reads the persisted value.
+        if capturingEvents { return mockTrackedAppVersion }
         return UserDefaults.standard.string(forKey: TDC.userDefaultsKeyTrackedAppVersion)
     }
 
-    @objc dynamic public func getTrackedBuildNumber() -> String? {
+    @objc dynamic open func getTrackedBuildNumber() -> String? {
+        if capturingEvents { return mockTrackedBuildNumber }
         return UserDefaults.standard.string(forKey: TDC.userDefaultsKeyTrackedAppBuild)
     }
 
@@ -439,8 +468,14 @@ public class TreasureData: NSObject {
 
     // MARK: - Upload
 
+    /// Clears the testing `capturedEvents` buffer.
+    @objc public func clearCapturedEvents() { capturedEvents.removeAll() }
+
     @objc(uploadEventsWithCallback:onError:)
-    public func uploadEventsWithCallback(_ onSuccess: SuccessHander?, onError: ErrorHandler?) {
+    open func uploadEventsWithCallback(_ onSuccess: SuccessHander?, onError: ErrorHandler?) {
+        // The former test subclass cleared captured events at upload time; keep
+        // that behavior so per-upload assertions stay correct.
+        if capturingEvents { capturedEvents.removeAll() }
         engine.upload(compression: TreasureData.isEventCompressionEnabled,
                       onSuccess: onSuccess,
                       onError: { errorCode, errorMessage in

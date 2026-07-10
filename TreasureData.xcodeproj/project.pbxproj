@@ -9,8 +9,7 @@
 /* Begin PBXBuildFile section */
 		183E38A18F0332AA400DC7CF /* Pods_TreasureDataTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84D7672182E6BD476D808297 /* Pods_TreasureDataTests.framework */; };
 		6B738092192A09160097D56E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B738091192A09160097D56E /* Foundation.framework */; };
-		6B738097192A09160097D56E /* TreasureData.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6B738096192A09160097D56E /* TreasureData.h */; };
-		6B738099192A09160097D56E /* TreasureData.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B738098192A09160097D56E /* TreasureData.m */; };
+		AA00000000000000000000A5 /* TreasureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000B6 /* TreasureData.swift */; };
 		6B7380A0192A09160097D56E /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B73809F192A09160097D56E /* XCTest.framework */; };
 		6B7380A1192A09160097D56E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B738091192A09160097D56E /* Foundation.framework */; };
 		6B7380A3192A09160097D56E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B7380A2192A09160097D56E /* UIKit.framework */; };
@@ -64,7 +63,6 @@
 			dstSubfolderSpec = 16;
 			files = (
 				DF1DA0DA251DE468006EE00F /* TDRequestOptionsKey.h in CopyFiles */,
-				6B738097192A09160097D56E /* TreasureData.h in CopyFiles */,
 				6B758E4E1C00C59A00D597F8 /* TDClient.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -84,8 +82,7 @@
 		644A82FEB7ABBA6EEE825324 /* Pods-TreasureDataTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureDataTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureDataTests/Pods-TreasureDataTests.release.xcconfig"; sourceTree = "<group>"; };
 		6B73808E192A09160097D56E /* libTreasureData.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libTreasureData.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B738091192A09160097D56E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		6B738096192A09160097D56E /* TreasureData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TreasureData.h; sourceTree = "<group>"; };
-		6B738098192A09160097D56E /* TreasureData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TreasureData.m; sourceTree = "<group>"; };
+		AA00000000000000000000B6 /* TreasureData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureData.swift; sourceTree = "<group>"; };
 		6B73809E192A09160097D56E /* TreasureDataTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TreasureDataTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B73809F192A09160097D56E /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		6B7380A2192A09160097D56E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -218,8 +215,7 @@
 			isa = PBXGroup;
 			children = (
 				DF259EBC22A5034A00697319 /* TDRequestOptionsKey.h */,
-				6B738096192A09160097D56E /* TreasureData.h */,
-				6B738098192A09160097D56E /* TreasureData.m */,
+				AA00000000000000000000B6 /* TreasureData.swift */,
 				6BF8C9321A3E9B76005B1804 /* TDClient.h */,
 				6BF8C9331A3E9B76005B1804 /* TDClient.m */,
 				AA00000000000000000000B3 /* TreasureData-Bridging-Header.h */,
@@ -479,7 +475,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6BF8C9341A3E9B76005B1804 /* TDClient.m in Sources */,
-				6B738099192A09160097D56E /* TreasureData.m in Sources */,
+				AA00000000000000000000A5 /* TreasureData.swift in Sources */,
 				AA00000000000000000000A1 /* EventEngine.swift in Sources */,
 				AA00000000000000000000A2 /* KeenEventEngine.swift in Sources */,
 				AA00000000000000000000A3 /* Session.swift in Sources */,
@@ -492,9 +488,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6BB5A9D61D1BBFE60006A534 /* SessionTests.m in Sources */,
-				E5AD3AF22219A4E8001392BA /* IntegrationTests.swift in Sources */,
 				6B7380AE192A09160097D56E /* TreasureDataTests.m in Sources */,
-				E52CB7F521FDD78A00062EBA /* TDAPI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -718,6 +712,10 @@
 					"$(inherited)",
 					"$(CONFIGURATION_TEMP_DIR)/TreasureData.build/DerivedSources",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)",
+				);
 				INFOPLIST_FILE = "TreasureDataTests/TreasureDataTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = "$(inherited)";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -726,7 +724,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "TreasureDataTests/TreasureDataTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestHost.app/TestHost";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -747,6 +745,10 @@
 					"$(inherited)",
 					"$(CONFIGURATION_TEMP_DIR)/TreasureData.build/DerivedSources",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)",
+				);
 				INFOPLIST_FILE = "TreasureDataTests/TreasureDataTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = "$(inherited)";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -754,7 +756,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.treasuredata.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "TreasureDataTests/TreasureDataTests-Bridging-Header.h";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TestHost.app/TestHost";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -787,7 +789,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -818,7 +820,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.treasuredata.TestHost;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
