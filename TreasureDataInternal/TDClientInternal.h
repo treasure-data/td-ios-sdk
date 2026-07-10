@@ -13,6 +13,9 @@
 
 - (nonnull instancetype)__initWithApiKey:(nonnull NSString *)apiKey apiEndpoint:(nonnull NSString*)apiEndpoint;
 
+/// Swift-friendly factory (Swift imports this as `TDClient(apiKey:apiEndpoint:)`).
++ (nonnull instancetype)clientWithApiKey:(nonnull NSString *)apiKey apiEndpoint:(nonnull NSString *)apiEndpoint;
+
 - (nullable NSURLSession *)__session;
 - (void)__setSession:(nullable NSURLSession *)session;
 

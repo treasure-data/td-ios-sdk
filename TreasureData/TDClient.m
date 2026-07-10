@@ -15,11 +15,17 @@
 
 static NSString *version = @"1.3.0";
 
+// Private state backing the internal accessors (__session/__setSession:,
+// __enableEventCompression:). Previously exposed as deprecated public properties.
+@interface TDClient ()
+@property(nonatomic, strong) NSURLSession *session;
+@property BOOL enableEventCompression;
+@end
+
 @implementation TDClient
 
-// Deprecated
-- (id)initWithApiKey:(NSString *)apiKey apiEndpoint:(NSString*)apiEndpoint {
-    return [self __initWithApiKey:apiKey apiEndpoint:apiEndpoint];
++ (instancetype)clientWithApiKey:(NSString *)apiKey apiEndpoint:(NSString *)apiEndpoint {
+    return [[self alloc] __initWithApiKey:apiKey apiEndpoint:apiEndpoint];
 }
 
 - (id)__initWithApiKey:(NSString *)apiKey apiEndpoint:(NSString*)apiEndpoint {
@@ -86,12 +92,6 @@ static NSString *version = @"1.3.0";
     }
     
     [self __sendHTTPRequest:request retryCounter:0 completionHandler:completionHandler];
-}
-
-- (void)sendHTTPRequest:(NSURLRequest *)request
-            retryCounter:(int)retryCounter
-       completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler {
-    [self __sendHTTPRequest:request retryCounter:retryCounter completionHandler:completionHandler];
 }
 
 - (void)__sendHTTPRequest:(NSURLRequest *)request
