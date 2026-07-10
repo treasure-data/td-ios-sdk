@@ -18,6 +18,7 @@
 		6B7380AE192A09160097D56E /* TreasureDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B7380AD192A09160097D56E /* TreasureDataTests.m */; };
 		AA00000000000000000000A6 /* TDClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000B7 /* TDClient.swift */; };
 		6BB5A9D61D1BBFE60006A534 /* SessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BB5A9D51D1BBFE60006A534 /* SessionTests.m */; };
+		AA00000000000000000000A7 /* SwiftLinkage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000B9 /* SwiftLinkage.swift */; };
 		6BF8C92D1A3E971D005B1804 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BF8C92C1A3E971D005B1804 /* CoreLocation.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		6BF8C92F1A3E972C005B1804 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BF8C92E1A3E972C005B1804 /* Security.framework */; };
 		6BF8C9311A3E977B005B1804 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BF8C9301A3E977B005B1804 /* libz.dylib */; };
@@ -88,6 +89,7 @@
 		6B7380AB192A09160097D56E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6B7380AD192A09160097D56E /* TreasureDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TreasureDataTests.m; sourceTree = "<group>"; };
 		6BB5A9D51D1BBFE60006A534 /* SessionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionTests.m; sourceTree = "<group>"; };
+		AA00000000000000000000B9 /* SwiftLinkage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftLinkage.swift; sourceTree = "<group>"; };
 		6BF8C92C1A3E971D005B1804 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		6BF8C92E1A3E972C005B1804 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		6BF8C9301A3E977B005B1804 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -227,6 +229,7 @@
 				6B7380AD192A09160097D56E /* TreasureDataTests.m */,
 				6B7380A8192A09160097D56E /* Supporting Files */,
 				6BB5A9D51D1BBFE60006A534 /* SessionTests.m */,
+				AA00000000000000000000B9 /* SwiftLinkage.swift */,
 				E5AD3AF12219A4E8001392BA /* IntegrationTests.swift */,
 				E52CB7F121FDD6D300062EBA /* TreasureDataTests-Bridging-Header.h */,
 				E52CB7F421FDD78A00062EBA /* TDAPI.swift */,
@@ -485,6 +488,7 @@
 			files = (
 				6BB5A9D61D1BBFE60006A534 /* SessionTests.m in Sources */,
 				6B7380AE192A09160097D56E /* TreasureDataTests.m in Sources */,
+				AA00000000000000000000A7 /* SwiftLinkage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -708,10 +712,6 @@
 					"$(inherited)",
 					"$(CONFIGURATION_TEMP_DIR)/TreasureData.build/DerivedSources",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)",
-				);
 				INFOPLIST_FILE = "TreasureDataTests/TreasureDataTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = "$(inherited)";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -740,10 +740,6 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(CONFIGURATION_TEMP_DIR)/TreasureData.build/DerivedSources",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)",
 				);
 				INFOPLIST_FILE = "TreasureDataTests/TreasureDataTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = "$(inherited)";
