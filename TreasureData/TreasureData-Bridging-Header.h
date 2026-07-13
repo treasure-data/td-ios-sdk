@@ -6,6 +6,5 @@
 //  the SDK's Swift code.
 //
 
-#import "TDClient.h"
-#import "TDClientInternal.h"
+#import "KeenClient+TDOverride.h"
 #import "TDConstants.h"
