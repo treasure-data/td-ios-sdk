@@ -15,7 +15,15 @@ Version 1 has major changes that are not backward compatible with previous versi
 
 ## Usage in Swift
 
+Import the module (the module is named `TreasureData` as of v2.0):
+
+```swift
+import TreasureData
+```
+
 See this example project (https://github.com/treasure-data/td-ios-sdk/tree/master/TreasureDataExampleSwift) for details.
+
+> Upgrading from v1? See [docs/MIGRATION-v2.md](docs/MIGRATION-v2.md).
 
 ## Installation
 
@@ -32,7 +40,7 @@ $ gem install cocoapods
 Next, add this line in your Podfile.
 
 ```
-pod 'TreasureData-iOS-SDK', '= 1.3.0'
+pod 'TreasureData-iOS-SDK', '= 2.0.0'
 ```
 
 Add this line to your Podfile (usually at the beginning of the file).
@@ -54,7 +62,7 @@ You can install either via Xcode: File > Swift Packages > Add Package Dependency
 
 Or add this line to `dependencies` array in Package.swift file:
 ```
-.package(url: "https://github.com/treasure-data/td-ios-sdk.git", .upToNextMajor(from: "1.3.0"))
+.package(url: "https://github.com/treasure-data/td-ios-sdk.git", .upToNextMajor(from: "2.0.0"))
 ```
 
 ### Framework
@@ -66,10 +74,12 @@ From 0.9.0, we no longer support standalone framework.
 - [Treasure Data's Guide](https://docs.treasuredata.com/display/public/PD/iOS+SDK) (most parts overlap with this README)
 - [API Reference](https://treasure-data.github.io/td-ios-sdk/Classes/TreasureData.html)
 
-### Import SDK header file
+### Import SDK
 
-```
-#import <TreasureData-iOS-SDK/TreasureData.h>
+The SDK is now a Swift module. Import it from Objective-C with:
+
+```objc
+@import TreasureData;
 ```
 
 
@@ -487,32 +497,10 @@ Example of a tracked install event:
 #### In-App Purchase Events
 
 > [!NOTE]
-> This feature is deprecated as original API for In-App Purchase, a.k.a Store Kit 1, is no longer supported by Apple. It's recommended to directly track In-App Purchase in your app code by using `-[TreasureData addEvent:database:table]` instead.
-
-TreasureData SDK is able to automatically track IAP `SKPaymentTransactionStatePurchased` event without having to write your own transaction observer.
-
-
-```
-[[TreasureData sharedInstance] enableInAppPurchaseEvent];
-```
-
-This is disabled by default. There is a subtle difference between this and `appLifecycleEvent`, `customEvent`. The other two, for a historical reason, are persistent settings, meaning their statuses are saved across app launches. `inAppPurchaseEvent` behaves like an ordinary object option and is not saved. You have to enable it after initialize your new `TreasureData` instance (probably only the `sharedInstance` with `initializeWithApiKey`).
-
-An example of a IAP event:
-
-```
-"td_ios_event": "TD_IOS_IN_APP_PURCHASE",
-"td_iap_transaction_identifier": "1000000514091400",
-"td_iap_transaction_date": "2019-03-28T08:44:12+07:00",
-"td_iap_quantity": 1,
-"td_iap_product_identifier": "com.yourcompany.yourapp.yourproduct", ,
-"td_iap_product_price": 0.99,
-"td_iap_product_localized_title": "Your Product Title",
-"td_iap_product_localized_description": "Your Product Description",
-"td_iap_product_currency_code": "USD",  // this is only available on iOS 10 and above
-```
-
-We will do a separated `SKProductsRequest` to get full product's information. If the request is failed somehow, fields with "td_iap_product_" prefix will be null. Also note that that the `currency_code` is only available from iOS 10 onwards.
+> Automatic In-App Purchase tracking was **removed in v2.0**. It relied on
+> StoreKit 1, which Apple no longer supports. Track purchases directly from your
+> own StoreKit handling by calling `addEvent(_:database:table:)` with the fields
+> you care about. See [docs/MIGRATION-v2.md](docs/MIGRATION-v2.md).
 
 #### Profile API
 
@@ -552,7 +540,6 @@ The SDK provide some convenient methods to easily opt-out of tracking the device
 [[TreasureData sharedInstance] disableCustomEvent];
 // Opt-out of TD generated events
 [[TreasureData sharedInstance] disableAppLifecycleEvent];
-[[TreasureData sharedInstance] disableInAppPurchaseEvent];
 ```
 
 These can be opted back in by calling `enableCustomEvent` or `enableAppLifecycleEvent`. Note that these settings are saved persistently, so it survives across app launches. Generally these methods should be called when reflecting your user's choice, not on every time initializing the SDK. By default custom events are enabled and app lifecycles events are disabled. 

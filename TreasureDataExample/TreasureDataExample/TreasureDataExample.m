@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "TreasureData.h"
+@import TreasureData;
 #import "TreasureDataExample.h"
 @import AppTrackingTransparency;
 
@@ -28,7 +28,7 @@ static NSString *testTable;
     [[TreasureData sharedInstance] enableAutoAppendModelInformation];
     [[TreasureData sharedInstance] enableAutoAppendAppInformation];
     [[TreasureData sharedInstance] enableAutoAppendLocaleInformation];
-    [[TreasureData sharedInstance] enableInAppPurchaseEvent];
+    // IAP tracking removed in v2.0 — track purchases via addEvent instead.
     [[TreasureData sharedInstance] enableAutoAppendAdvertisingIdentifier:@"td_maid"];
 }
 

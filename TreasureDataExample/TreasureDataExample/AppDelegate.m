@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "TreasureData.h"
+@import TreasureData;
 #import "TreasureDataExample.h"
 
 @implementation AppDelegate

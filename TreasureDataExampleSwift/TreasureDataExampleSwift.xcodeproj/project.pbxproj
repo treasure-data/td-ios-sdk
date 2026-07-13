@@ -128,6 +128,7 @@
 				TargetAttributes = {
 					6B769A521C37D34100D7082B = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = 9W6J4NV9HT;
 						LastSwiftMigration = 0800;
 					};
 				};
@@ -192,13 +193,13 @@
 				"${PODS_ROOT}/Target Support Files/Pods-TreasureDataExampleSwift/Pods-TreasureDataExampleSwift-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/GZIP/GZIP.framework",
 				"${BUILT_PRODUCTS_DIR}/KeenClientTD/KeenClientTD.framework",
-				"${BUILT_PRODUCTS_DIR}/TreasureData-iOS-SDK/TreasureData_iOS_SDK.framework",
+				"${BUILT_PRODUCTS_DIR}/TreasureData-iOS-SDK/TreasureData.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GZIP.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeenClientTD.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TreasureData_iOS_SDK.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TreasureData.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -350,7 +351,7 @@
 			baseConfigurationReference = FE85A0F7EE3EB3256E77ED74 /* Pods-TreasureDataExampleSwift.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 9W6J4NV9HT;
 				INFOPLIST_FILE = TreasureDataExampleSwift/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -366,7 +367,7 @@
 			baseConfigurationReference = DAF5FCFA956F81F1861AB324 /* Pods-TreasureDataExampleSwift.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 9W6J4NV9HT;
 				INFOPLIST_FILE = TreasureDataExampleSwift/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

@@ -7,7 +7,7 @@
 //
 
 #import "iOSViewController.h"
-#import "TreasureData.h"
+@import TreasureData;
 
 #import "TreasureDataExample.h"
 
@@ -22,9 +22,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.apiEndpointField setText:TreasureData.sharedInstance.client.apiEndpoint];
+    [self.apiEndpointField setText:TreasureData.sharedInstance.apiEndpoint];
     self.apiEndpointField.delegate = self;
-    [self.apiKeyField setText:TreasureData.sharedInstance.client.apiKey];
+    // v2: apiKey is no longer publicly readable (set at initialization only).
     self.apiKeyField.delegate = self;
     [self.cdpEndpointField setText:TreasureData.sharedInstance.cdpEndpoint];
     self.cdpEndpointField.delegate = self;
@@ -40,7 +40,8 @@
 
     [self.customEventSwitch setOn:[[TreasureData sharedInstance] isCustomEventEnabled]];
     [self.appLifecycleEventSwitch setOn:[[TreasureData sharedInstance] isAppLifecycleEventEnabled]];
-    [self.iapEventSwitch setOn:[[TreasureData sharedInstance] isInAppPurchaseEventEnabled]];
+    // TODO(v2 examples): IAP tracking was removed in v2.0. Remove the iapEventSwitch
+    // / iapEventToggleLabel outlets and this UI from Main.storyboard in Xcode.
     
     [self.defaultValueField setText:@"Test Default Value"];
     self.defaultValueField.delegate = self;
@@ -52,7 +53,7 @@
 
     [self customEventSwitchChanged:self.customEventSwitch];
     [self appLifecycleEventSwitchChanged:self.appLifecycleEventSwitch];
-    [self iapEventSwitchChanged:self.iapEventSwitch];
+    // TODO(v2 examples): remove iapEventSwitchChanged: (IAP removed in v2.0).
     
     [TreasureDataExample requestAppTrackingAuthorizationIfNeeded];
 }
@@ -88,14 +89,11 @@
     }
 }
 
+// TODO(v2 examples): IAP tracking was removed in v2.0. This action is kept as a
+// no-op so the existing storyboard connection doesn't crash; remove the switch,
+// label, and this method from the project (and Main.storyboard) in Xcode.
 - (IBAction)iapEventSwitchChanged:(id)sender {
-    if ([sender isOn]) {
-        self.iapEventToggleLabel.text = @"IAP Events Enabled";
-        [[TreasureData sharedInstance] enableInAppPurchaseEvent];
-    } else {
-        self.iapEventToggleLabel.text = @"IAP Events Disabled";
-        [[TreasureData sharedInstance] disableAppLifecycleEvent];
-    }
+    self.iapEventToggleLabel.text = @"IAP tracking removed in v2.0";
 }
 
 #pragma mark - Actions
@@ -166,8 +164,9 @@
 - (void)updateClientIfFormChanged {
     if (self.isFormDirty) {
         self.isFormDirty = NO;
-        [[[TreasureData sharedInstance] client] setApiKey:self.apiKeyField.text];
-        [[[TreasureData sharedInstance] client] setApiEndpoint:self.apiEndpointField.text];
+        // v2: apiKey is fixed at initialization (no public setter). apiEndpoint
+        // is now a property directly on TreasureData (was on `client`).
+        [[TreasureData sharedInstance] setApiEndpoint:self.apiEndpointField.text];
         [[TreasureData sharedInstance] setCdpEndpoint:self.cdpEndpointField.text];
         [[TreasureData sharedInstance] setDefaultDatabase:self.targetDatabaseField.text];
         [[TreasureData sharedInstance] setDefaultTable:self.defaultTableField.text];
@@ -207,9 +206,9 @@
     [self updateClientIfFormChanged];
     NSArray *audienceTokens = @[@"Your Profile API (Audience) Token here"];
     NSDictionary *keys = @{@"your_key": @"your_value"};
-    NSDictionary<TDRequestOptionsKey, id> *options = @{
-       TDRequestOptionsTimeoutIntervalKey: [NSNumber numberWithInteger: 10],
-       TDRequestOptionsCachePolicyKey: [NSNumber numberWithUnsignedInteger: NSURLRequestReloadIgnoringCacheData]
+    NSDictionary<NSString *, id> *options = @{
+       TDRequestOptionsKey.timeoutInterval: [NSNumber numberWithInteger: 10],
+       TDRequestOptionsKey.cachePolicy: [NSNumber numberWithUnsignedInteger: NSURLRequestReloadIgnoringCacheData]
     };
     [[TreasureData sharedInstance] fetchUserSegments:audienceTokens
                                                 keys:keys

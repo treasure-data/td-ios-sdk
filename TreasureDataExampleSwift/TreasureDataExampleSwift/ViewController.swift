@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import TreasureData_iOS_SDK
+import TreasureData
 
 class ViewController: UIViewController {
 
@@ -26,8 +26,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var uploadEvents: UIButton!
 
     @IBAction func touchDownAddEvent(sender: AnyObject) {
-        TreasureData.sharedInstance().addEvent(
-            withCallback: ["name": "komamitsu", "age": 99],
+        TreasureData.sharedInstance().addEventWithCallback(
+            ["name": "komamitsu", "age": 99],
             database: "testdb",
             table: "demotbl",
             onSuccess:{()-> Void in
@@ -40,7 +40,7 @@ class ViewController: UIViewController {
     }
 
     @IBAction func touchDownUploadEvents(sender: AnyObject) {
-        TreasureData.sharedInstance().uploadEvents(callback: {
+        TreasureData.sharedInstance().uploadEventsWithCallback({
                 print("uploadEvents: success")
             },
             onError: {(errorCode, message) -> Void in

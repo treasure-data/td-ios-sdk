@@ -8,7 +8,7 @@
 
 @import StoreKit;
 #import "TVOSViewController.h"
-#import "TreasureData.h"
+@import TreasureData;
 #import "TextFieldTableViewCell.h"
 
 @interface TVOSViewController () <UITableViewDelegate, UITableViewDataSource, SKProductsRequestDelegate, SKPaymentTransactionObserver>
@@ -341,30 +341,7 @@
                     }
             ]
         },
-        @{
-            @"sectionTitle": @"IAP Event",
-            @"sectionRows": @[
-                    @{
-                        @"title": @"Enable",
-                        @"action": ^{ [[TreasureData sharedInstance] enableInAppPurchaseEvent]; }
-                    },
-                    @{
-                        @"title": @"Disable",
-                        @"action": ^{ [[TreasureData sharedInstance] disableInAppPurchaseEvent]; }
-                    },
-                    @{
-                        @"title": @"Is enabled?",
-                        @"action": ^{
-                            NSString *isInAppPurchaseEventEnabled = [[TreasureData sharedInstance] isInAppPurchaseEventEnabled] ? @"YES" : @"NO";
-                            [self alertWithTitle:@"Is IAP event enabled?" andMessage:isInAppPurchaseEventEnabled];
-                        }
-                    },
-                    @{
-                        @"title": @"Purchase",
-                        @"action": ^{ [self purchase]; }
-                    }
-            ]
-        },
+        // IAP Event section removed in v2.0 (StoreKit-1 IAP tracking removed).
         @{
             @"sectionTitle": @"Profile API",
             @"sectionRows": @[
@@ -604,7 +581,7 @@
     [[TreasureData sharedInstance] enableAutoAppendAppInformation];
     [[TreasureData sharedInstance] enableAutoAppendLocaleInformation];
     [[TreasureData sharedInstance] enableServerSideUploadTimestamp:@"server_upload_time"];
-    [[TreasureData sharedInstance] enableInAppPurchaseEvent];
+    // IAP tracking removed in v2.0.
     [[TreasureData sharedInstance] enableAutoAppendAdvertisingIdentifier:@"td_maid"];
 }
 
