@@ -8,6 +8,7 @@
 
 import XCTest
 import Network
+import TreasureData
 
 class IntegrationTests: XCTestCase {
 

@@ -23,7 +23,7 @@
 		6BF8C92F1A3E972C005B1804 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BF8C92E1A3E972C005B1804 /* Security.framework */; };
 		6BF8C9311A3E977B005B1804 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BF8C9301A3E977B005B1804 /* libz.dylib */; };
 		8E890072371B20F33AB2F9D1 /* Pods_TreasureData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DE64F5324C482BACF0070F9 /* Pods_TreasureData.framework */; };
-		DF1DA0DA251DE468006EE00F /* TDRequestOptionsKey.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = DF259EBC22A5034A00697319 /* TDRequestOptionsKey.h */; };
+		AA00000000000000000000A8 /* TDRequestOptionsKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000BA /* TDRequestOptionsKey.swift */; };
 		DF9D4DC6230FBC4200682E41 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF9D4DC5230FBC4200682E41 /* AdSupport.framework */; };
 		E52CB7F521FDD78A00062EBA /* TDAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52CB7F421FDD78A00062EBA /* TDAPI.swift */; };
 		AA00000000000000000000A1 /* EventEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000B1 /* EventEngine.swift */; };
@@ -62,7 +62,6 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				DF1DA0DA251DE468006EE00F /* TDRequestOptionsKey.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,7 +93,7 @@
 		6BF8C92E1A3E972C005B1804 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		6BF8C9301A3E977B005B1804 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		AA00000000000000000000B7 /* TDClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDClient.swift; sourceTree = "<group>"; };
-		AA00000000000000000000B8 /* KeenClient+TDOverride.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KeenClient+TDOverride.h"; sourceTree = "<group>"; };
+		AA00000000000000000000B8 /* KeenClient+TDOverride.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "KeenClient+TDOverride.h"; path = "TreasureDataObjC/include/KeenClient+TDOverride.h"; sourceTree = SOURCE_ROOT; };
 		7AAAA06E102D8C6F76B84CC0 /* Pods-TreasureData-TreasureDataTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureData-TreasureDataTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureData-TreasureDataTests/Pods-TreasureData-TreasureDataTests.release.xcconfig"; sourceTree = "<group>"; };
 		84D7672182E6BD476D808297 /* Pods_TreasureDataTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TreasureDataTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E147DCC7983A7FC2558B0A8 /* Pods-TreasureData.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureData.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureData/Pods-TreasureData.debug.xcconfig"; sourceTree = "<group>"; };
@@ -102,14 +101,13 @@
 		C672A66407ACBC0B49C815A4 /* Pods-TreasureDataTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureDataTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureDataTests/Pods-TreasureDataTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D4602B9A0FADB71F2C158763 /* Pods-Common-TreasureDataTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Common-TreasureDataTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Common-TreasureDataTests/Pods-Common-TreasureDataTests.release.xcconfig"; sourceTree = "<group>"; };
 		DC74A9280B244A4C25A4F155 /* Pods-TreasureData.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TreasureData.release.xcconfig"; path = "Pods/Target Support Files/Pods-TreasureData/Pods-TreasureData.release.xcconfig"; sourceTree = "<group>"; };
-		DF259EBC22A5034A00697319 /* TDRequestOptionsKey.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TDRequestOptionsKey.h; sourceTree = "<group>"; };
-		DF259EBD22A5138800697319 /* NSString+TDHelpers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+TDHelpers.h"; sourceTree = "<group>"; };
+		AA00000000000000000000BA /* TDRequestOptionsKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDRequestOptionsKey.swift; sourceTree = "<group>"; };
 		DF9D4DC5230FBC4200682E41 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		E52CB7F121FDD6D300062EBA /* TreasureDataTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TreasureDataTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		E52CB7F421FDD78A00062EBA /* TDAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDAPI.swift; sourceTree = "<group>"; };
 		AA00000000000000000000B1 /* EventEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventEngine.swift; sourceTree = "<group>"; };
 		AA00000000000000000000B2 /* KeenEventEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeenEventEngine.swift; sourceTree = "<group>"; };
-		AA00000000000000000000B3 /* TreasureData-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TreasureData-Bridging-Header.h"; sourceTree = "<group>"; };
+		AA00000000000000000000B3 /* TreasureData-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "TreasureData-Bridging-Header.h"; path = "Support/TreasureData-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		AA00000000000000000000B4 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		AA00000000000000000000B5 /* TDUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDUtils.swift; sourceTree = "<group>"; };
 		E5A84B5121FEA35300BC699D /* TestHost.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestHost.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -161,10 +159,8 @@
 		4F99812D269844A000471FD4 /* TreasureDataInternal */ = {
 			isa = PBXGroup;
 			children = (
-				DF259EBD22A5138800697319 /* NSString+TDHelpers.h */,
 				AA00000000000000000000B8 /* KeenClient+TDOverride.h */,
 				AA00000000000000000000B5 /* TDUtils.swift */,
-				201053E9204858F8009C7EFA /* TDConstants.h */,
 				AA00000000000000000000B4 /* Session.swift */,
 			);
 			path = TreasureDataInternal;
@@ -213,7 +209,7 @@
 		6B738093192A09160097D56E /* TreasureData */ = {
 			isa = PBXGroup;
 			children = (
-				DF259EBC22A5034A00697319 /* TDRequestOptionsKey.h */,
+				AA00000000000000000000BA /* TDRequestOptionsKey.swift */,
 				AA00000000000000000000B6 /* TreasureData.swift */,
 				AA00000000000000000000B7 /* TDClient.swift */,
 				AA00000000000000000000B3 /* TreasureData-Bridging-Header.h */,
@@ -230,6 +226,7 @@
 				6B7380A8192A09160097D56E /* Supporting Files */,
 				6BB5A9D51D1BBFE60006A534 /* SessionTests.m */,
 				AA00000000000000000000B9 /* SwiftLinkage.swift */,
+				201053E9204858F8009C7EFA /* TDConstants.h */,
 				E5AD3AF12219A4E8001392BA /* IntegrationTests.swift */,
 				E52CB7F121FDD6D300062EBA /* TreasureDataTests-Bridging-Header.h */,
 				E52CB7F421FDD78A00062EBA /* TDAPI.swift */,
@@ -474,6 +471,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA00000000000000000000A6 /* TDClient.swift in Sources */,
+				AA00000000000000000000A8 /* TDRequestOptionsKey.swift in Sources */,
 				AA00000000000000000000A5 /* TreasureData.swift in Sources */,
 				AA00000000000000000000A1 /* EventEngine.swift in Sources */,
 				AA00000000000000000000A2 /* KeenEventEngine.swift in Sources */,
@@ -661,7 +659,7 @@
 				PODS_ROOT = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "TreasureData/TreasureData-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Support/TreasureData-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				"USER_HEADER_SEARCH_PATHS[arch=*]" = "${SOURCE_ROOT}/Headers/**";
@@ -686,7 +684,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OBJC_BRIDGING_HEADER = "TreasureData/TreasureData-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Support/TreasureData-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 5.0;
 				"USER_HEADER_SEARCH_PATHS[arch=*]" = "${SOURCE_ROOT}/Headers/**";

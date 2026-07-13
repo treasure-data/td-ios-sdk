@@ -755,9 +755,9 @@ open class TreasureData: NSObject {
     // MARK: - Personalization API
 
     @objc(fetchUserSegments:keys:options:completionHandler:)
-    public func fetchUserSegments(_ audienceTokens: [String],
+    public func fetchUserSegments(tokens audienceTokens: [String],
                                   keys: [String: Any],
-                                  options: [String: Any]?,
+                                  options: [String: Any]? = nil,
                                   completionHandler handler: @escaping (_ jsonResponse: [Any]?, _ error: Error?) -> Void) {
         let cdpEndpoint = self.cdpEndpoint ?? TreasureData.C.defaultCdpEndpoint
         let encodedAudienceTokens = audienceTokens.map { TreasureData.urlEncode($0) }

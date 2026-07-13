@@ -6,5 +6,4 @@
 //  the SDK's Swift code.
 //
 
-#import "KeenClient+TDOverride.h"
-#import "TDConstants.h"
+#import "../TreasureDataObjC/include/KeenClient+TDOverride.h"
