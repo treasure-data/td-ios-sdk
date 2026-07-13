@@ -14,7 +14,7 @@ xcodebuild -list -json
 
 # For now only build.
 xcodebuild \
-    -scheme "TreasureData-iOS-SDK" \
+    -scheme "TreasureData" \
     -destination "$DESTINATION" \
     build \
     | tee "$LOG_FILE" \
