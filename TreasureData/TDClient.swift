@@ -30,7 +30,7 @@ import CommonCrypto
 
 final class TDClient: KeenClient {
 
-    private static let sdkVersion = "1.3.0"
+    private static let sdkVersion = "2.0.0"
 
     var apiKey: String = ""
     var apiEndpoint: String = ""
