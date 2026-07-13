@@ -244,6 +244,56 @@ static MyTreasureData *makeTestTD(NSString *apiKey) {
     }];
 }
 
+#pragma mark - Engine seam: upload request shape
+
+// The upload request is built in the Swift TDClient.sendEvents (the engine's
+// KeenClient subclass). These lock the observable seam contract that a future
+// engine replacement must keep: compression toggles the gzip Content-Encoding
+// and body framing. setUp disables compression by default, so the default-path
+// test covers the plain-JSON case.
+
+- (void)testUploadWithoutCompressionSendsPlainJSON {
+    [self baseTesting:^() {
+        [self setupDefaultExpectedResponseBody:@{@"db_.tbl":@[@{@"success":@"true"}]}];
+        [self.td addEvent:@{@"name":@"foobar"} database:@"db_" table:@"tbl"];
+    }
+            assertion:^(NSDictionary *ev){
+                NSURLRequest *request = self.session.requestData.firstObject;
+                // No gzip header, and the body is parseable JSON.
+                XCTAssertNil([request valueForHTTPHeaderField:@"Content-Encoding"]);
+                NSError *error = nil;
+                id json = [NSJSONSerialization JSONObjectWithData:request.HTTPBody options:0 error:&error];
+                XCTAssertNil(error);
+                XCTAssertNotNil(json[@"events"]);
+            }];
+}
+
+- (void)testUploadWithCompressionSendsGzip {
+    [MyTreasureData enableEventCompression];
+    // Use the low-level baseTesting: (no assertRequest, which would try to JSON-
+    // parse the gzipped body); assert on the raw request in onSuccess instead.
+    [self baseTesting:^() {
+        [self setupDefaultExpectedResponseBody:@{@"db_.tbl":@[@{@"success":@"true"}]}];
+        [self.td addEvent:@{@"name":@"foobar"} database:@"db_" table:@"tbl"];
+    }
+        onSuccess:^() {
+            NSURLRequest *request = self.session.requestData.firstObject;
+            XCTAssertEqualObjects(@"gzip", [request valueForHTTPHeaderField:@"Content-Encoding"]);
+            // gzip streams start with the magic bytes 0x1f 0x8b.
+            XCTAssertTrue(request.HTTPBody.length >= 2);
+            const unsigned char *bytes = request.HTTPBody.bytes;
+            XCTAssertEqual(0x1f, bytes[0]);
+            XCTAssertEqual(0x8b, bytes[1]);
+            [MyTreasureData disableEventCompression];
+            self.isFinished = true;
+        }
+        onError:^(NSString* ecode, NSString* detail){
+            XCTAssertTrue(false, @"unexpected error %@ / %@", ecode, detail);
+            [MyTreasureData disableEventCompression];
+            self.isFinished = true;
+        }];
+}
+
 - (void)testSetDefaultApiEndpoint {
     [TreasureData initializeWithApiKey:@"hello_apikey" apiEndpoint:@"https://another.apiendpoint.xyz"];
     // Avoid it to trigger app lifecycle listener without some of the expectations (app's version) being mocked.

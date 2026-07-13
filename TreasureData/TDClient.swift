@@ -15,6 +15,13 @@
 
 import Foundation
 import KeenClientTD
+// The `KeenClient (TDOverride)` category (re-declaring KeenClient's private
+// `sendEvents:...` so Swift can override it) is provided as a module under SwiftPM
+// and via the bridging header in the Xcode/CocoaPods build. Import it when built
+// as a module; otherwise the bridging header supplies it.
+#if canImport(TreasureDataObjC)
+import TreasureDataObjC
+#endif
 import GZIP
 #if canImport(UIKit)
 import UIKit
@@ -23,7 +30,7 @@ import CommonCrypto
 
 final class TDClient: KeenClient {
 
-    private static let sdkVersion = "1.3.0"
+    private static let sdkVersion = "2.0.0"
 
     var apiKey: String = ""
     var apiEndpoint: String = ""
