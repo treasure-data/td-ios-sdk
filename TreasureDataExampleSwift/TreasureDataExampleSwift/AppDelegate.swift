@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import TreasureData_iOS_SDK
+import TreasureData
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         TreasureData.enableLogging()
         TreasureData.initializeEncryptionKey("hello world")
-        TreasureData.initialize(withApiKey: "your_api_key", apiEndpoint: "https://specify-other-endpoint-if-needed.com")
+        TreasureData.initializeWithApiKey("your_api_key", apiEndpoint: "https://specify-other-endpoint-if-needed.com")
         TreasureData.sharedInstance().defaultDatabase = "testdb"
         TreasureData.sharedInstance().enableAutoAppendUniqId()
         TreasureData.sharedInstance().enableAutoAppendModelInformation()
@@ -26,8 +26,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         TreasureData.sharedInstance().enableAppLifecycleEvent()
         
         if (TreasureData.sharedInstance().isFirstRun()) {
-            TreasureData.sharedInstance().addEvent(
-                withCallback: ["event": "installed"],
+            TreasureData.sharedInstance().addEventWithCallback(
+                ["event": "installed"],
                 database: "testdb",
                 table: "demotbl",
                 onSuccess:{()-> Void in
@@ -53,7 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             application.endBackgroundTask(bgTask)
             bgTask = UIBackgroundTaskIdentifier.invalid
         })
-        TreasureData.sharedInstance().uploadEvents(callback: {
+        TreasureData.sharedInstance().uploadEventsWithCallback({
             application.endBackgroundTask(bgTask)
             bgTask = UIBackgroundTaskIdentifier.invalid
             },

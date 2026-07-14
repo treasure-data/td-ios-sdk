@@ -296,13 +296,13 @@
 				"${PODS_ROOT}/Target Support Files/Pods-TreasureDataExample/Pods-TreasureDataExample-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/GZIP-iOS/GZIP.framework",
 				"${BUILT_PRODUCTS_DIR}/KeenClientTD-iOS/KeenClientTD.framework",
-				"${BUILT_PRODUCTS_DIR}/TreasureData-iOS-SDK-iOS/TreasureData_iOS_SDK.framework",
+				"${BUILT_PRODUCTS_DIR}/TreasureData-iOS-SDK-iOS/TreasureData.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GZIP.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeenClientTD.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TreasureData_iOS_SDK.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TreasureData.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -336,13 +336,13 @@
 				"${PODS_ROOT}/Target Support Files/Pods-TreasureDataTVOSExample/Pods-TreasureDataTVOSExample-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/GZIP-tvOS/GZIP.framework",
 				"${BUILT_PRODUCTS_DIR}/KeenClientTD-tvOS/KeenClientTD.framework",
-				"${BUILT_PRODUCTS_DIR}/TreasureData-iOS-SDK-tvOS/TreasureData_iOS_SDK.framework",
+				"${BUILT_PRODUCTS_DIR}/TreasureData-iOS-SDK-tvOS/TreasureData.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GZIP.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeenClientTD.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TreasureData_iOS_SDK.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TreasureData.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
