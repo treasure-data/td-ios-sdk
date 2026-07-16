@@ -18,8 +18,6 @@
 
 + (void)setTestTable:(NSString *)table;
 
-+ (NSSet<NSString *> *)productIds;
-
 + (void)requestAppTrackingAuthorizationIfNeeded;
 
 @end

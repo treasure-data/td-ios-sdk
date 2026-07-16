@@ -40,9 +40,7 @@
 
     [self.customEventSwitch setOn:[[TreasureData sharedInstance] isCustomEventEnabled]];
     [self.appLifecycleEventSwitch setOn:[[TreasureData sharedInstance] isAppLifecycleEventEnabled]];
-    // TODO(v2 examples): IAP tracking was removed in v2.0. Remove the iapEventSwitch
-    // / iapEventToggleLabel outlets and this UI from Main.storyboard in Xcode.
-    
+
     [self.defaultValueField setText:@"Test Default Value"];
     self.defaultValueField.delegate = self;
     [self.defaultValueKeyField setText:@"default_value"];
@@ -53,8 +51,7 @@
 
     [self customEventSwitchChanged:self.customEventSwitch];
     [self appLifecycleEventSwitchChanged:self.appLifecycleEventSwitch];
-    // TODO(v2 examples): remove iapEventSwitchChanged: (IAP removed in v2.0).
-    
+
     [TreasureDataExample requestAppTrackingAuthorizationIfNeeded];
 }
 
@@ -87,13 +84,6 @@
         self.appLifecycleEventToggleLabel.text = @"App Lifecycle Events Disabled";
         [[TreasureData sharedInstance] disableAppLifecycleEvent];
     }
-}
-
-// TODO(v2 examples): IAP tracking was removed in v2.0. This action is kept as a
-// no-op so the existing storyboard connection doesn't crash; remove the switch,
-// label, and this method from the project (and Main.storyboard) in Xcode.
-- (IBAction)iapEventSwitchChanged:(id)sender {
-    self.iapEventToggleLabel.text = @"IAP tracking removed in v2.0";
 }
 
 #pragma mark - Actions

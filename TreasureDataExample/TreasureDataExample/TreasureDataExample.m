@@ -28,7 +28,6 @@ static NSString *testTable;
     [[TreasureData sharedInstance] enableAutoAppendModelInformation];
     [[TreasureData sharedInstance] enableAutoAppendAppInformation];
     [[TreasureData sharedInstance] enableAutoAppendLocaleInformation];
-    // IAP tracking removed in v2.0 — track purchases via addEvent instead.
     [[TreasureData sharedInstance] enableAutoAppendAdvertisingIdentifier:@"td_maid"];
 }
 
@@ -48,10 +47,6 @@ static NSString *testTable;
 
 + (void)setTestTable:(NSString *)table {
     testTable = table;
-}
-
-+ (NSSet<NSString *> *)productIds {
-    return [NSSet setWithArray: @[@"com.treasuredata.iaptest.consumable1"]];
 }
 
 @end
