@@ -6,12 +6,11 @@
 //  Copyright © 2020 Treasure Data. All rights reserved.
 //
 
-@import StoreKit;
 #import "TVOSViewController.h"
 @import TreasureData;
 #import "TextFieldTableViewCell.h"
 
-@interface TVOSViewController () <UITableViewDelegate, UITableViewDataSource, SKProductsRequestDelegate, SKPaymentTransactionObserver>
+@interface TVOSViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (strong, nonatomic) NSString *defaultTable;
 @property (strong, nonatomic) NSString *defaultDatabase;
 @property (strong, nonatomic) NSString *encryptionKey;
@@ -20,14 +19,12 @@
 @property (strong, nonatomic) NSString *eventTable;
 @property (strong, nonatomic) NSString *eventDatabase;
 @property (strong, nonatomic) NSArray *dataSource;
-@property (strong, nonatomic) NSString *serverSideUploadTimestampColumnName;
 @property (strong, nonatomic) NSString *recordUUIDColumnName;
 @property (strong, nonatomic) NSString *aaidColumnName;
 @property (strong, nonatomic) NSString *sessionTable;
 @property (strong, nonatomic) NSString *sessionDatabase;
 @property (strong, nonatomic) NSArray *audienceTokens;
 @property (strong, nonatomic) NSDictionary *audienceKeys;
-@property (strong, nonatomic) SKProductsRequest *productRequest;
 @end
 
 @implementation TVOSViewController
@@ -145,34 +142,6 @@
                     @{
                         @"title": @"Disable",
                         @"action": ^{ [[TreasureData sharedInstance] disableAutoAppendLocaleInformation]; }
-                    }
-            ]
-        },
-        @{
-            @"sectionTitle": @"Server Side Upload Timestamp",
-            @"sectionRows": @[
-                    @{
-                        @"type": @"TextInput",
-                        @"title": @"Column",
-                        @"value": _serverSideUploadTimestampColumnName ?: @"",
-                        @"action": ^(NSString *text) {
-                            self.serverSideUploadTimestampColumnName = text;
-                            [self reloadData];
-                        }
-                    },
-                    @{
-                        @"title": @"Enable",
-                        @"action": ^{
-                            if (self.serverSideUploadTimestampColumnName != nil && ![self.serverSideUploadTimestampColumnName isEqual:@""]) {
-                                [[TreasureData sharedInstance] enableServerSideUploadTimestamp: self.serverSideUploadTimestampColumnName];
-                            } else {
-                                [[TreasureData sharedInstance] enableServerSideUploadTimestamp];
-                            }
-                        }
-                    },
-                    @{
-                        @"title": @"Disable",
-                        @"action": ^{ [[TreasureData sharedInstance] disableServerSideUploadTimestamp]; }
                     }
             ]
         },
@@ -341,7 +310,6 @@
                     }
             ]
         },
-        // IAP Event section removed in v2.0 (StoreKit-1 IAP tracking removed).
         @{
             @"sectionTitle": @"Profile API",
             @"sectionRows": @[
@@ -459,14 +427,6 @@
     }];
 }
 
-- (void)purchase {
-    NSLog(@"Purchasing IAP");
-    NSSet *productIds = [NSSet setWithObjects:@"com.treasuredata.iaptest.consumable1", nil];
-    _productRequest = [[SKProductsRequest alloc] initWithProductIdentifiers: productIds];
-    _productRequest.delegate = self;
-    [_productRequest start];
-}
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -511,48 +471,6 @@
     [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
-#pragma mark - SKProductsRequestDelegate
-
-- (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response {
-    NSLog(@"Fetched products");
-    SKProduct *buyingProduct = response.products.firstObject;
-    SKPayment *payment = [SKPayment paymentWithProduct:buyingProduct];
-    [SKPaymentQueue.defaultQueue addTransactionObserver:self];
-    [SKPaymentQueue.defaultQueue addPayment:payment];
-}
-
-- (void)requestDidFinish:(SKRequest *)request {
-    NSLog(@"Fetch product request did finish");
-}
-
-- (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
-    NSLog(@"Failed to fetch products");
-    [self alertWithTitle:@"Failed to purchase" andMessage:error.localizedDescription];
-}
-
-#pragma mark - SKPaymentTransactionObserver
-
-- (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray<SKPaymentTransaction *> *)transactions {
-    for (SKPaymentTransaction *transaction in transactions) {
-        switch (transaction.transactionState) {
-            case SKPaymentTransactionStatePurchased:
-                [self alertWithTitle:@"Purchased successfully" andMessage:@""];
-                break;
-            case SKPaymentTransactionStateDeferred:
-                [self alertWithTitle:@"Purchase deferred" andMessage:@""];
-                break;
-            case SKPaymentTransactionStateRestored:
-                [self alertWithTitle:@"Purchase restored" andMessage:@""];
-            case SKPaymentTransactionStateFailed:
-                [self alertWithTitle:@"Failed to purchase" andMessage:transaction.error.localizedDescription];
-                break;
-                
-            default:
-                break;
-        }
-    }
-}
-
 #pragma mark - Helpers
 
 - (void)alertWithTitle:(NSString *)title andMessage:(NSString *)message {
@@ -580,8 +498,6 @@
     [[TreasureData sharedInstance] enableAutoAppendModelInformation];
     [[TreasureData sharedInstance] enableAutoAppendAppInformation];
     [[TreasureData sharedInstance] enableAutoAppendLocaleInformation];
-    [[TreasureData sharedInstance] enableServerSideUploadTimestamp:@"server_upload_time"];
-    // IAP tracking removed in v2.0.
     [[TreasureData sharedInstance] enableAutoAppendAdvertisingIdentifier:@"td_maid"];
 }
 

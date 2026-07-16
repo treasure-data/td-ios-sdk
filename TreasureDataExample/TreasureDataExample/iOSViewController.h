@@ -19,7 +19,6 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *customEventToggleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *appLifecycleEventToggleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *iapEventToggleLabel;
 
 @property (weak, nonatomic) IBOutlet UITextField *defaultValueField;
 @property (weak, nonatomic) IBOutlet UITextField *defaultValueKeyField;
@@ -28,12 +27,10 @@
 
 @property (weak, nonatomic) IBOutlet UISwitch *customEventSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *appLifecycleEventSwitch;
-@property (weak, nonatomic) IBOutlet UISwitch *iapEventSwitch;
 
 - (IBAction)formChanged:(UITextField *)sender;
 - (IBAction)customEventSwitchChanged:(UISwitch *)sender;
 - (IBAction)appLifecycleEventSwitchChanged:(UISwitch *)sender;
-- (IBAction)iapEventSwitchChanged:(id)sender;
 
 - (IBAction)addEvent:(id)sender;
 - (IBAction)uploadEvents:(id)sender;
