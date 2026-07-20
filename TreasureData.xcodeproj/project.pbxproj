@@ -18,6 +18,8 @@
 		6B7380AE192A09160097D56E /* TreasureDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B7380AD192A09160097D56E /* TreasureDataTests.m */; };
 		AA00000000000000000000A6 /* TDClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000B7 /* TDClient.swift */; };
 		6BB5A9D61D1BBFE60006A534 /* SessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BB5A9D51D1BBFE60006A534 /* SessionTests.m */; };
+		BF00000000000000000000A1 /* BufferFixtureGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = BF00000000000000000000B1 /* BufferFixtureGenerator.m */; };
+		BF00000000000000000000A2 /* BufferContractTest.m in Sources */ = {isa = PBXBuildFile; fileRef = BF00000000000000000000B2 /* BufferContractTest.m */; };
 		AA00000000000000000000A7 /* SwiftLinkage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000B9 /* SwiftLinkage.swift */; };
 		6BF8C92D1A3E971D005B1804 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BF8C92C1A3E971D005B1804 /* CoreLocation.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		6BF8C92F1A3E972C005B1804 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BF8C92E1A3E972C005B1804 /* Security.framework */; };
@@ -88,6 +90,8 @@
 		6B7380AB192A09160097D56E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6B7380AD192A09160097D56E /* TreasureDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TreasureDataTests.m; sourceTree = "<group>"; };
 		6BB5A9D51D1BBFE60006A534 /* SessionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionTests.m; sourceTree = "<group>"; };
+		BF00000000000000000000B1 /* BufferFixtureGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BufferFixtureGenerator.m; sourceTree = "<group>"; };
+		BF00000000000000000000B2 /* BufferContractTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BufferContractTest.m; sourceTree = "<group>"; };
 		AA00000000000000000000B9 /* SwiftLinkage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftLinkage.swift; sourceTree = "<group>"; };
 		6BF8C92C1A3E971D005B1804 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		6BF8C92E1A3E972C005B1804 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -225,6 +229,8 @@
 				6B7380AD192A09160097D56E /* TreasureDataTests.m */,
 				6B7380A8192A09160097D56E /* Supporting Files */,
 				6BB5A9D51D1BBFE60006A534 /* SessionTests.m */,
+				BF00000000000000000000B1 /* BufferFixtureGenerator.m */,
+				BF00000000000000000000B2 /* BufferContractTest.m */,
 				AA00000000000000000000B9 /* SwiftLinkage.swift */,
 				201053E9204858F8009C7EFA /* TDConstants.h */,
 				E5AD3AF12219A4E8001392BA /* IntegrationTests.swift */,
@@ -485,6 +491,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				6BB5A9D61D1BBFE60006A534 /* SessionTests.m in Sources */,
+				BF00000000000000000000A1 /* BufferFixtureGenerator.m in Sources */,
+				BF00000000000000000000A2 /* BufferContractTest.m in Sources */,
 				6B7380AE192A09160097D56E /* TreasureDataTests.m in Sources */,
 				AA00000000000000000000A7 /* SwiftLinkage.swift in Sources */,
 			);
