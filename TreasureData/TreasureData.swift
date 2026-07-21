@@ -13,7 +13,6 @@
 //
 
 import Foundation
-import KeenClientTD
 #if canImport(UIKit)
 import UIKit
 #endif
@@ -653,8 +652,8 @@ open class TreasureData: NSObject {
     @objc public class func disableEventCompression() { isEventCompressionEnabled = false }
     @objc public class func enableEventCompression() { isEventCompressionEnabled = true }
 
-    @objc public class func disableLogging() { KeenClient.disableLogging() }
-    @objc public class func enableLogging() { KeenClient.enableLogging() }
+    @objc public class func disableLogging() { TDLogging.isEnabled = false }
+    @objc public class func enableLogging() { TDLogging.isEnabled = true }
 
     @objc public class func disableTraceLogging() { isTraceLoggingEnabled = false }
     @objc public class func enableTraceLogging() { isTraceLoggingEnabled = true }

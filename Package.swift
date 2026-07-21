@@ -15,28 +15,14 @@ let package = Package(
             targets: ["TreasureData"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/treasure-data/KeenClient-iOS.git", exact: "4.1.1"),
         .package(url: "https://github.com/nicklockwood/GZIP.git", exact: "1.3.2")
     ],
     targets: [
-        // Internal Objective-C module: re-declares KeenClient's private
-        // `sendEvents:...` selector (via the KeenClient (TDOverride) category) so
-        // the Swift TDClient subclass can override it. SwiftPM has no bridging
-        // header, so this is exposed as an importable module instead.
-        .target(
-            name: "TreasureDataObjC",
-            dependencies: [
-                .product(name: "KeenClientTD", package: "KeenClient-iOS"),
-            ],
-            path: "TreasureDataObjC",
-            publicHeadersPath: "include"
-        ),
-        // The public Swift SDK. Consumers `import TreasureData`.
+        // The public Swift SDK. Consumers `import TreasureData`. Uses the system
+        // libsqlite3 and CommonCrypto directly; no third-party engine dependency.
         .target(
             name: "TreasureData",
             dependencies: [
-                "TreasureDataObjC",
-                .product(name: "KeenClientTD", package: "KeenClient-iOS"),
                 "GZIP",
             ],
             path: ".",
@@ -51,11 +37,9 @@ let package = Package(
                 "docs",
                 "TestHost",
                 "TreasureData-iOS-SDK.podspec",
-                "TreasureDataObjC",
                 "TreasureDataExample",
                 "TreasureDataExampleSwift",
                 "TreasureDataTests",
-                "Support",
             ],
             sources: [
                 "TreasureData",

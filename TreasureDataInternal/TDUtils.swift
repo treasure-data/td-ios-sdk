@@ -8,12 +8,17 @@
 //
 
 import Foundation
-import KeenClientTD
 
-/// Swift equivalent of KeenClient's `KCLog` macro: log only when Keen logging is
-/// enabled. Kept here so ported code preserves the original gating behavior.
+/// Process-global debug-logging flag, replacing KeenClient's logging toggle.
+/// Off by default, matching the previous behavior.
+enum TDLogging {
+    static var isEnabled = false
+}
+
+/// Log only when debug logging is enabled. Named for the KeenClient `KCLog`
+/// macro it replaces so ported call sites read the same.
 func KCLogString(_ message: String) {
-    if KeenClient.isLoggingEnabled() {
+    if TDLogging.isEnabled {
         NSLog("%@", message)
     }
 }
