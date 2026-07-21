@@ -248,10 +248,14 @@ private func closeDB() {
             while sqlite3_step(findStmt) == SQLITE_ROW {
                 let eventId = sqlite3_column_int64(findStmt, 0)
                 let coll = String(cString: sqlite3_column_text(findStmt, 1))
-                let dataPtr = sqlite3_column_blob(findStmt, 2)
-                let dataSize = sqlite3_column_bytes(findStmt, 2)
-                var data = Data(bytes: dataPtr!, count: Int(dataSize))
-
+let dataPtr = sqlite3_column_blob(findStmt, 2)
+let dataSize = sqlite3_column_bytes(findStmt, 2)
+guard let dataPtr else {
+    KCLogString("Event row has NULL eventData. Deleting it")
+    deleteEvent(NSNumber(value: eventId))
+    continue
+}
+var data = Data(bytes: dataPtr, count: Int(dataSize))
                 // Mark this event pending.
                 guard sqlite3_bind_int64(makePendingStmt, 1, eventId) == SQLITE_OK else {
                     handleFailure("bind int for make pending"); return
