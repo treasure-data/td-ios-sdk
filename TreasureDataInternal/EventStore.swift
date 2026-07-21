@@ -58,16 +58,17 @@ final class EventStore {
     private var ageOutStmt: OpaquePointer?
     private var convertDateStmt: OpaquePointer?
 
-init() {
-    dbQueue.sync { _ = openAndInitDB() }
-}
-
-deinit {
-    dbQueue.sync {
-        if dbIsStmtPrepared { releaseStatements() }
-        if dbIsOpen { closeDB() }
+    init() {
+        dbQueue.sync { _ = openAndInitDB() }
     }
-}
+
+    deinit {
+        // Finalize statements before closing the connection (order matters).
+        dbQueue.sync {
+            if dbIsStmtPrepared { releaseStatements() }
+            if dbIsOpen { closeDB() }
+        }
+    }
 
     // MARK: - Open / schema / statements
 
@@ -175,15 +176,19 @@ deinit {
         return true
     }
 
-private func closeDB() {
-    let rc = sqlite3_close(db)
-    if rc == SQLITE_OK {
+    private func closeDB() {
+        // sqlite3_close_v2 (not _close) always releases the connection object
+        // even if statements are unfinalized or work is pending — it defers the
+        // actual free until safe. Always clear our state: keeping db/dbIsOpen
+        // pointing at a half-closed handle would make openAndInitDB's
+        // `if !dbIsOpen` guard skip reopening and run ops against a dead handle.
+        let rc = sqlite3_close_v2(db)
+        if rc != SQLITE_OK {
+            KCLogString("SQLite close returned rc=\(rc)")
+        }
         db = nil
         dbIsOpen = false
-    } else {
-        KCLogString("Failed to close SQLite DB (rc=\(rc))")
     }
-}
 
     private func releaseStatements() {
         for s in [insertStmt, findStmt, countAllStmt, countPendingStmt, makePendingStmt,
@@ -248,14 +253,16 @@ private func closeDB() {
             while sqlite3_step(findStmt) == SQLITE_ROW {
                 let eventId = sqlite3_column_int64(findStmt, 0)
                 let coll = String(cString: sqlite3_column_text(findStmt, 1))
-let dataPtr = sqlite3_column_blob(findStmt, 2)
-let dataSize = sqlite3_column_bytes(findStmt, 2)
-guard let dataPtr else {
-    KCLogString("Event row has NULL eventData. Deleting it")
-    deleteEvent(NSNumber(value: eventId))
-    continue
-}
-var data = Data(bytes: dataPtr, count: Int(dataSize))
+                let dataSize = sqlite3_column_bytes(findStmt, 2)
+                // sqlite3_column_blob returns NULL both for SQL NULL and for a
+                // zero-length blob; only the former (size <= 0) is a corrupt row
+                // worth dropping. A NULL pointer with size > 0 can't happen.
+                guard let dataPtr = sqlite3_column_blob(findStmt, 2), dataSize > 0 else {
+                    KCLogString("Event row has empty/NULL eventData. Deleting it")
+                    deleteEvent(NSNumber(value: eventId))
+                    continue
+                }
+                var data = Data(bytes: dataPtr, count: Int(dataSize))
                 // Mark this event pending.
                 guard sqlite3_bind_int64(makePendingStmt, 1, eventId) == SQLITE_OK else {
                     handleFailure("bind int for make pending"); return
@@ -295,19 +302,19 @@ var data = Data(bytes: dataPtr, count: Int(dataSize))
 
     // MARK: - Pending / counts
 
-func resetPendingEvents() {
-    dbQueue.sync {
-        guard self.openAndInitDB() else { KCLogString("DB is closed, skipping resetPendingEvents"); return }
-        guard sqlite3_bind_text(self.resetPendingStmt, 1, self.projectId, -1, SQLITE_TRANSIENT) == SQLITE_OK else {
-            self.handleFailure("bind pid to reset pending statement"); return
+    func resetPendingEvents() {
+        dbQueue.sync {
+            guard self.openAndInitDB() else { KCLogString("DB is closed, skipping resetPendingEvents"); return }
+            guard sqlite3_bind_text(self.resetPendingStmt, 1, self.projectId, -1, SQLITE_TRANSIENT) == SQLITE_OK else {
+                self.handleFailure("bind pid to reset pending statement"); return
+            }
+            guard sqlite3_step(self.resetPendingStmt) == SQLITE_DONE else {
+                self.handleFailure("reset pending events"); return
+            }
+            sqlite3_reset(self.resetPendingStmt)
+            sqlite3_clear_bindings(self.resetPendingStmt)
         }
-        guard sqlite3_step(self.resetPendingStmt) == SQLITE_DONE else {
-            self.handleFailure("reset pending events"); return
-        }
-        sqlite3_reset(self.resetPendingStmt)
-        sqlite3_clear_bindings(self.resetPendingStmt)
     }
-}
 
     func hasPendingEvents() -> Bool {
         return getPendingEventCount() > 0
