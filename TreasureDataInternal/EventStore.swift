@@ -291,19 +291,19 @@ private func closeDB() {
 
     // MARK: - Pending / counts
 
-    func resetPendingEvents() {
-        dbQueue.async {
-            guard self.openAndInitDB() else { KCLogString("DB is closed, skipping resetPendingEvents"); return }
-            guard sqlite3_bind_text(self.resetPendingStmt, 1, self.projectId, -1, SQLITE_TRANSIENT) == SQLITE_OK else {
-                self.handleFailure("bind pid to reset pending statement"); return
-            }
-            guard sqlite3_step(self.resetPendingStmt) == SQLITE_DONE else {
-                self.handleFailure("reset pending events"); return
-            }
-            sqlite3_reset(self.resetPendingStmt)
-            sqlite3_clear_bindings(self.resetPendingStmt)
+func resetPendingEvents() {
+    dbQueue.sync {
+        guard self.openAndInitDB() else { KCLogString("DB is closed, skipping resetPendingEvents"); return }
+        guard sqlite3_bind_text(self.resetPendingStmt, 1, self.projectId, -1, SQLITE_TRANSIENT) == SQLITE_OK else {
+            self.handleFailure("bind pid to reset pending statement"); return
         }
+        guard sqlite3_step(self.resetPendingStmt) == SQLITE_DONE else {
+            self.handleFailure("reset pending events"); return
+        }
+        sqlite3_reset(self.resetPendingStmt)
+        sqlite3_clear_bindings(self.resetPendingStmt)
     }
+}
 
     func hasPendingEvents() -> Bool {
         return getPendingEventCount() > 0
