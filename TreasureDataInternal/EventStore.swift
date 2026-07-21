@@ -175,10 +175,15 @@ deinit {
         return true
     }
 
-    private func closeDB() {
-        sqlite3_close(db)
+private func closeDB() {
+    let rc = sqlite3_close(db)
+    if rc == SQLITE_OK {
+        db = nil
         dbIsOpen = false
+    } else {
+        KCLogString("Failed to close SQLite DB (rc=\(rc))")
     }
+}
 
     private func releaseStatements() {
         for s in [insertStmt, findStmt, countAllStmt, countPendingStmt, makePendingStmt,
