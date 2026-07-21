@@ -64,6 +64,10 @@ final class TDClient: KeenClient {
         }
     }
 
+    /// The on-disk buffer namespace derived from the api key. KeenClient used
+    /// the project id for this; the Swift engine reads it to scope its store.
+    var projectIdForBuffer: String { "_td \(TDClient.sha256Hash(apiKey))" }
+
     private static func sha256Hash(_ input: String) -> String {
         let data = Data(input.utf8)
         var digest = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))

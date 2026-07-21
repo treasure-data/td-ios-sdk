@@ -197,7 +197,7 @@ open class TreasureData: NSObject {
 
     @objc(initWithApiKey:apiEndpoint:)
     public convenience init(apiKey: String, apiEndpoint: String) {
-        self.init(engine: KeenEventEngine(apiKey: apiKey, apiEndpoint: apiEndpoint))
+        self.init(engine: SwiftEventEngine(apiKey: apiKey, apiEndpoint: apiEndpoint))
     }
 
     /// Designated initializer. `engine` is injectable for testing; production
@@ -471,6 +471,9 @@ open class TreasureData: NSObject {
     /// Clears the testing `capturedEvents` buffer.
     @objc public func clearCapturedEvents() { capturedEvents.removeAll() }
 
+    /// Test hook: synchronously drop all buffered events via the live engine.
+    @objc public func clearAllBufferedEvents() { engine.deleteAllBufferedEvents() }
+
     @objc(uploadEventsWithCallback:onError:)
     open func uploadEventsWithCallback(_ onSuccess: SuccessHander?, onError: ErrorHandler?) {
         // The former test subclass cleared captured events at upload time; keep
@@ -642,7 +645,7 @@ open class TreasureData: NSObject {
 
     @objc(initializeEncryptionKey:)
     public class func initializeEncryptionKey(_ encryptionKey: String?) {
-        KeenEventEngine.initializeEncryptionKey(encryptionKey)
+        SwiftEventEngine.initializeEncryptionKey(encryptionKey)
     }
 
     // MARK: - Compression / logging / trace

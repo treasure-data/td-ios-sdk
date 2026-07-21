@@ -71,4 +71,8 @@ protocol EventEngine: AnyObject {
     /// Install the encryption key for the on-disk buffer. Must be called once,
     /// before any `addEvent`.
     static func initializeEncryptionKey(_ key: String?)
+
+    /// Synchronously drop all buffered events. Used by tests to reset the buffer
+    /// between cases; routes clearing through the live engine's own store.
+    func deleteAllBufferedEvents()
 }

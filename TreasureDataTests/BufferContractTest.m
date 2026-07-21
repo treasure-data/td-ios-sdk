@@ -14,27 +14,16 @@
 //  scheme drift by even a byte, this goes red. Do not weaken it to make a port
 //  compile — a port that fails this loses upgraders' buffered events.
 //
-//  Ordering constraint: the fixture must be copied into place BEFORE the shared
-//  KIOEventStore opens the DB (it opens in its own -init, lazily, on the first
-//  TreasureData instantiation). So the copy happens in -setUp before any
-//  TreasureData is created, and we can only reliably control that if this is the
-//  first store use in the process. Each test also uses a distinct projectId
-//  (apiKey) matching the fixture, so a store opened earlier still reads our rows.
+//  Ordering constraint: install the fixture BEFORE constructing the TreasureData
+//  under test. The engine's EventStore opens keenEvents.sqlite in its own init,
+//  so a store built after the copy reads the freshly-installed file directly —
+//  no handle juggling needed. Each test uses the projectId (apiKey) the fixture
+//  was generated with so its rows are in scope.
 //
 
 #import <XCTest/XCTest.h>
-@import KeenClientTD;
 #import "TDConstants.h"
 #import "TreasureData-Swift.h"
-
-// The shared KIOEventStore is a process-global singleton that opens
-// keenEvents.sqlite once and keeps the handle. To drain a freshly-installed
-// fixture, we must close that handle so the next access reopens the new file.
-// closeDB is exposed via KeenClient's private-methods header.
-@interface KIOEventStore (ContractTest)
-- (void)closeDB;
-- (void)releaseStatements;
-@end
 
 // The apiKey the fixtures were generated with (BufferFixtureGenerator uses
 // "fixture_apikey"); the store namespaces rows by projectId = _td <sha256(key)>,
@@ -104,15 +93,10 @@ static NSString *const kFixtureEncryptionKey = @"0123456789abcdef";
     return [base stringByAppendingPathComponent:@"keenEvents.sqlite"];
 }
 
-// Copy a fixture over the live DB, then close the shared store's open handle so
-// the next access reopens the freshly-installed file. Without the close, the
-// store keeps reading whichever DB it opened first in this process.
+// Copy a fixture over the live DB. Each test then builds a fresh TreasureData
+// (and thus a fresh EventStore) that opens this freshly-installed file, so no
+// handle-juggling is needed: install first, construct the engine second.
 - (void)installFixture:(NSString *)name {
-    KIOEventStore *store = [KeenClient getEventStore];
-    if (store) {
-        [store releaseStatements];
-        [store closeDB];
-    }
     NSFileManager *fm = [NSFileManager defaultManager];
     NSString *live = [self liveDBPath];
     [fm removeItemAtPath:live error:nil];

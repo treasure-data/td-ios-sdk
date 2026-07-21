@@ -78,4 +78,8 @@ final class KeenEventEngine: EventEngine {
     static func initializeEncryptionKey(_ key: String?) {
         KeenClient.initializeEncryptionKey(key)
     }
+
+    func deleteAllBufferedEvents() {
+        KeenClient.clearAllEvents()
+    }
 }
