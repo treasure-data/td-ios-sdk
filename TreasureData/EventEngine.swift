@@ -3,9 +3,8 @@
 //  TreasureData
 //
 //  The internal seam between the public `TreasureData` façade and the buffering /
-//  upload engine. This is backed by `KeenEventEngine` (which wraps KeenClient).
-//  The engine implementation can be swapped without changing this protocol or
-//  the public API.
+//  upload engine. Backed by `SwiftEventEngine`. The engine implementation can be
+//  swapped without changing this protocol or the public API.
 //
 
 import Foundation

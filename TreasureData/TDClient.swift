@@ -2,10 +2,9 @@
 //  TDClient.swift
 //  TreasureData
 //
-//  The HTTP sender for the event engine: builds a Treasure Data ingest request
-//  (TD auth, content types, gzip) and drives the retry loop. Formerly a
-//  KeenClient subclass overriding KeenClient's private `sendEvents:...`; now a
-//  standalone type owned by `SwiftEventEngine`, with no KeenClient dependency.
+//  The HTTP sender for the event engine, owned by `SwiftEventEngine`: builds a
+//  Treasure Data ingest request (TD auth, content types, gzip) and drives the
+//  retry loop.
 //
 
 import Foundation
@@ -39,10 +38,9 @@ final class TDClient {
         self.apiEndpoint = apiEndpoint
     }
 
-    /// The on-disk buffer namespace derived from the api key. KeenClient used
-    /// the project id for this; the engine reads it to scope its store. The
-    /// "_td <sha256(apiKey)>" scheme is preserved so upgrading apps reuse their
-    /// existing buffer.
+    /// The on-disk buffer namespace derived from the api key; the engine reads
+    /// it to scope its store. The "_td <sha256(apiKey)>" scheme is a legacy
+    /// format preserved so upgrading apps reuse their existing buffer.
     var projectIdForBuffer: String { "_td \(TDClient.sha256Hash(apiKey))" }
 
     private static func sha256Hash(_ input: String) -> String {

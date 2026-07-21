@@ -4,7 +4,7 @@
 //
 //  Faithful Swift port of the Objective-C `TreasureData` façade (TreasureData.m).
 //  Behavior is preserved 1:1; the only structural change is that this talks to
-//  the `EventEngine` seam (default: `KeenEventEngine`) instead of holding a
+//  the `EventEngine` seam (default: `SwiftEventEngine`) instead of holding a
 //  `TDClient` directly. Kept as an @objc class named `TreasureData` so the
 //  existing Objective-C callers and tests keep working.
 //
@@ -78,10 +78,10 @@ open class TreasureData: NSObject {
         static let defaultTable = "td_ios"                                       // TD_DEFAULT_TABLE
     }
 
-    // Mirror KeenClient.h #define error codes (NOT visible to Swift).
+    // Error-code strings surfaced to callers.
     private enum ErrorCode {
-        static let invalidParam = "invalid_param"  // ERROR_CODE_INVALID_PARAM
-        static let initError = "init_error"        // ERROR_CODE_INIT_ERROR
+        static let invalidParam = "invalid_param"
+        static let initError = "init_error"
         static let unknownError = "unknown_error"
     }
 
@@ -200,7 +200,7 @@ open class TreasureData: NSObject {
     }
 
     /// Designated initializer. `engine` is injectable for testing; production
-    /// callers get a `KeenEventEngine` via the convenience initializers above.
+    /// callers get a `SwiftEventEngine` via the convenience initializers above.
     /// Internal (Swift-only) so the protocol stays out of the public/ObjC surface.
     init(engine: EventEngine) {
         self.engine = engine

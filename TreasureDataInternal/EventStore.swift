@@ -2,15 +2,14 @@
 //  EventStore.swift
 //  TreasureData
 //
-//  Pure-Swift port of KeenClient's `KIOEventStore`. Owns the on-disk Buffer:
-//  a SQLite database of tracked events, optionally AES-encrypted. This is a
-//  faithful, byte-compatible translation — same file path, same schema, same
-//  SQL statements, same AES-128/ECB/PKCS7 + base64 encoding — so an app
-//  upgrading from the KeenClient-backed engine reads its existing buffer
-//  unchanged. The `BufferContractTest` fixtures are the parity oracle.
+//  Owns the on-disk Buffer: a SQLite database of tracked events, optionally
+//  AES-encrypted. The file path, schema, SQL, and AES-128/ECB/PKCS7 + base64
+//  encoding are a fixed legacy format that must NOT change — apps upgrading from
+//  an older SDK read their existing buffer with this exact layout, so any drift
+//  loses their buffered events. The `BufferContractTest` fixtures are the parity
+//  oracle that locks this format.
 //
-//  Uses the system `libsqlite3` (import SQLite3) rather than the vendored
-//  keen_io_sqlite3 amalgamation; both produce the same on-disk format.
+//  Uses the system `libsqlite3` (import SQLite3).
 //
 
 import Foundation
@@ -23,14 +22,13 @@ private let SQLITE_TRANSIENT = unsafeBitCast(-1, to: sqlite3_destructor_type.sel
 
 final class EventStore {
 
-    /// The project id scoping this store's rows (KeenClient's `projectId`).
+    /// The project id scoping this store's rows (the `projectId` column).
     var projectId: String = ""
 
-    /// Last SQLite error, mirroring `KIOEventStore.lastErrorMessage`.
+    /// Last SQLite error message, for surfacing storage failures to callers.
     var lastErrorMessage: String?
 
-    /// Process-global encryption key, matching KeenClient's static `encKey`.
-    /// nil means events are stored as plaintext JSON.
+    /// Process-global encryption key. nil means events are stored as plaintext JSON.
     private static var encryptionKey: String?
     static func initializeEncryptionKey(_ key: String?) {
         encryptionKey = key
@@ -78,6 +76,8 @@ final class EventStore {
         #else
         let base = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)[0]
         #endif
+        // Legacy filename — do NOT rename. Existing installs have their buffer
+        // at this path; changing it orphans their pending events.
         return (base as NSString).appendingPathComponent("keenEvents.sqlite")
     }
 
