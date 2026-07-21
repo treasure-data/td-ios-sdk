@@ -3,15 +3,7 @@
 //  TreasureData
 //
 //  Pure-Swift `EventEngine`: buffering via the Swift `EventStore` and the
-//  add/serialize/upload orchestration ported from KeenClient. Replaces
-//  `KeenEventEngine`. The only piece still shared with the old world is the HTTP
-//  send + retry, which already lived in the Swift `TDClient` (a KeenClient
-//  subclass used here purely as a sender — none of its KeenClient store state is
-//  touched). Untangling `TDClient` from KeenClient is deferred to the pod-drop.
-//
-//  Faithful translation of KeenClient.m's add/prepareJSON/upload chain; the
-//  `BufferContractTest` fixtures and the existing unit tests are the parity spec.
-//
+//  add/serialize/upload orchestration ported from KeenClient.
 
 import Foundation
 
@@ -26,26 +18,26 @@ private enum EngineError {
 }
 
 final class SwiftEventEngine: EventEngine {
-
+    
     // Buffer sizing, matching kKeenMaxEventsPerCollection / kKeenNumberEventsToForget
     // and KeenClient's maxUploadEventsAtOnce.
     private static let maxEventsPerCollection = 10000
     private static let numberEventsToForget = 100
     private static let maxUploadEventsAtOnce = 400
-
+    
     private let store = EventStore()
     private let sender: TDClient
     private let uploadQueue = DispatchQueue(label: "com.treasuredata.uploader")
-
+    
     init(apiKey: String, apiEndpoint: String) {
         self.sender = TDClient(apiKey: apiKey, apiEndpoint: apiEndpoint)
         // KeenClient namespaced its on-disk buffer by projectId; keep the exact
         // "_td <sha256(apiKey)>" scheme so upgrading apps reuse their buffer.
         store.projectId = sender.projectIdForBuffer
     }
-
+    
     // MARK: - EventEngine config (forwarded to the sender)
-
+    
     var apiKey: String {
         get { sender.apiKey }
         set { sender.apiKey = newValue }
@@ -76,17 +68,17 @@ final class SwiftEventEngine: EventEngine {
             sender.retryCount = newValue.maxCount
         }
     }
-
+    
     static func initializeEncryptionKey(_ key: String?) {
         EventStore.initializeEncryptionKey(key)
     }
-
+    
     func deleteAllBufferedEvents() {
         store.deleteAllEventsSync()
     }
-
+    
     // MARK: - Add (KeenClient.addEvent:withKeenProperties:...)
-
+    
     func addEvent(_ event: [String: Any],
                   collection: String,
                   onSuccess: EngineSuccessHandler?,
@@ -94,13 +86,13 @@ final class SwiftEventEngine: EventEngine {
         // Stamp a uuid, matching TDClient's globalPropertiesBlock.
         var newEvent = event
         if newEvent["uuid"] == nil { newEvent["uuid"] = UUID().uuidString }
-
+        
         // Age out the collection if we're at the cap.
         let eventCount = Int(store.getTotalEventCount())
         if eventCount + 1 > SwiftEventEngine.maxEventsPerCollection {
             store.deleteEvents(fromOffset: NSNumber(value: eventCount - SwiftEventEngine.numberEventsToForget))
         }
-
+        
         // Serialize (converting NSDate values to ISO-8601 via the store, as
         // KeenClient's handleInvalidJSONInObject did).
         let fixed = handleInvalidJSON(newEvent)
@@ -109,7 +101,7 @@ final class SwiftEventEngine: EventEngine {
             onError?(EngineError.dataConversion, "An error occurred when serializing event to JSON")
             return
         }
-
+        
         store.lastErrorMessage = nil
         if store.addEvent(jsonData, collection: collection) {
             onSuccess?()
@@ -117,7 +109,7 @@ final class SwiftEventEngine: EventEngine {
             onError?(EngineError.storageError, store.lastErrorMessage)
         }
     }
-
+    
     /// Recursively convert NSDate values to ISO-8601 strings; leave everything
     /// else as-is. Mirrors KeenClient's handleInvalidJSONInObject for dates.
     private func handleInvalidJSON(_ value: Any) -> Any {
@@ -134,9 +126,9 @@ final class SwiftEventEngine: EventEngine {
             return value
         }
     }
-
+    
     // MARK: - Upload (KeenClient.upload / uploadCollection / handleIngestAPIResponse)
-
+    
     func upload(compression: Bool,
                 onSuccess: EngineSuccessHandler?,
                 onError: EngineErrorHandler?) {
@@ -147,12 +139,12 @@ final class SwiftEventEngine: EventEngine {
                 onSuccess?()
                 return
             }
-
+            
             let lock = NSObject()
             var finished = Set<String>()
             var finalError: (String, String?)?
             let total = events.count
-
+            
             let collectionDone: (String, (String, String?)?) -> Void = { coll, err in
                 objc_sync_enter(lock); defer { objc_sync_exit(lock) }
                 if finished.contains(coll) { return }
@@ -163,25 +155,25 @@ final class SwiftEventEngine: EventEngine {
                     else { onSuccess?() }
                 }
             }
-
+            
             for (collection, collEvents) in events {
                 uploadCollection(collection, collEvents, done: collectionDone)
             }
         }
     }
-
+    
     /// Split a collection's events into chunks of maxUploadEventsAtOnce and
     /// upload each; report the collection done when all chunks settle.
     private func uploadCollection(_ collection: String,
                                   _ collEvents: [NSNumber: Data],
                                   done: @escaping (String, (String, String?)?) -> Void) {
-let parts = collection.components(separatedBy: ".")
-guard parts.count == 2 else {
-    done(collection, (EngineError.invalidEvent, "Invalid collection name: \(collection)"))
-    return
-}
-let database = parts[0], table = parts[1]
-
+        let parts = collection.components(separatedBy: ".")
+        guard parts.count == 2 else {
+            done(collection, (EngineError.invalidEvent, "Invalid collection name: \(collection)"))
+            return
+        }
+        let database = parts[0], table = parts[1]
+        
         // Deserialize buffered rows into (event dicts, matching event ids).
         var chunks: [(events: [Any], ids: [NSNumber])] = []
         var events: [Any] = []
@@ -195,14 +187,14 @@ let database = parts[0], table = parts[1]
             }
         }
         if !events.isEmpty { chunks.append((events, ids)) }
-
+        
         if chunks.isEmpty { done(collection, nil); return }
-
+        
         let lock = NSObject()
         var finishedChunks = 0
         var finalError: (String, String?)?
         let total = chunks.count
-
+        
         for chunk in chunks {
             guard let requestData = try? JSONSerialization.data(withJSONObject: ["events": chunk.events]) else {
                 objc_sync_enter(lock)
@@ -214,7 +206,7 @@ let database = parts[0], table = parts[1]
                 if complete { done(collection, err) }
                 continue
             }
-
+            
             sender.sendEvents(requestData, database: database, table: table) { [self] data, response, _ in
                 let err = handleResponse(data: data, response: response, eventIds: chunk.ids)
                 objc_sync_enter(lock)
@@ -227,7 +219,7 @@ let database = parts[0], table = parts[1]
             }
         }
     }
-
+    
     /// Parse the ingest response, delete succeeded/user-error events, keep
     /// server-error ones. Mirrors KeenClient.handleIngestAPIResponse.
     private func handleResponse(data: Data?, response: URLResponse?, eventIds: [NSNumber]) -> (String, String?)? {
@@ -243,7 +235,7 @@ let database = parts[0], table = parts[1]
         guard let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
             return (EngineError.dataConversion, "An error occurred when deserializing HTTP response JSON into dictionary.")
         }
-
+        
         let results = dict["receipts"] as? [[String: Any]] ?? []
         // These KeenClient error names mean "user error, drop the event".
         let userErrors: Set<String> = ["InvalidCollectionNameError", "InvalidPropertyNameError", "InvalidPropertyValueError"]
