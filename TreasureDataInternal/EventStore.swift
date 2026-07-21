@@ -58,9 +58,16 @@ final class EventStore {
     private var ageOutStmt: OpaquePointer?
     private var convertDateStmt: OpaquePointer?
 
-    init() {
-        dbQueue.sync { _ = openAndInitDB() }
+init() {
+    dbQueue.sync { _ = openAndInitDB() }
+}
+
+deinit {
+    dbQueue.sync {
+        if dbIsStmtPrepared { releaseStatements() }
+        if dbIsOpen { closeDB() }
     }
+}
 
     // MARK: - Open / schema / statements
 
