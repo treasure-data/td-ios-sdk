@@ -43,7 +43,12 @@ static NSString *const kFixtureApiKey = @"fixture_apikey";
 static NSString *const kFixtureEncryptionKey = @"0123456789abcdef";
 
 // Mirrors MySession in TreasureDataTests.m: captures upload requests and returns
-// a canned 200 so the drain path deletes events and reports success.
+// a canned 200. Unlike a fixed body, the response is computed per request — a
+// `receipts` array (the shape the ingest response parser reads) with one
+// success receipt per event in that request's body. Matching the receipt count
+// to each collection's event count keeps the mock honest: an engine that
+// deletes events by receipt index sees the right count, so the test stays
+// correct even if it later asserts on post-drain buffer state.
 @interface ContractSessionTask : NSURLSessionDataTask
 @end
 @implementation ContractSessionTask
@@ -52,7 +57,6 @@ static NSString *const kFixtureEncryptionKey = @"0123456789abcdef";
 
 @interface ContractSession : NSURLSession
 @property NSMutableArray<NSURLRequest *> *requests;
-@property NSData *responseBody;
 @property NSURLResponse *response;
 @end
 @implementation ContractSession
@@ -62,8 +66,17 @@ static NSString *const kFixtureEncryptionKey = @"0123456789abcdef";
         if (!self.requests) { self.requests = [NSMutableArray new]; }
         [self.requests addObject:request];
     }
+    // Size the receipts array to the events in this request (compression is off
+    // in this test, so the body is plain JSON).
+    NSDictionary *sentBody = [NSJSONSerialization JSONObjectWithData:request.HTTPBody options:0 error:nil];
+    NSUInteger eventCount = [sentBody[@"events"] isKindOfClass:[NSArray class]] ? [sentBody[@"events"] count] : 0;
+    NSMutableArray *receipts = [NSMutableArray arrayWithCapacity:eventCount];
+    for (NSUInteger i = 0; i < eventCount; i++) { [receipts addObject:@{@"success": @YES}]; }
+    NSData *body = [NSJSONSerialization dataWithJSONObject:@{@"receipts": receipts} options:0 error:nil];
+
+    NSURLResponse *response = self.response;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        completionHandler(self.responseBody, self.response, nil);
+        completionHandler(body, response, nil);
     });
     return (NSURLSessionDataTask *)[ContractSessionTask new];
 }
@@ -114,9 +127,7 @@ static NSString *const kFixtureEncryptionKey = @"0123456789abcdef";
     NSHTTPURLResponse *ok = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@"http://localhost/x"]
                                                        statusCode:200 HTTPVersion:@"1.1" headerFields:nil];
     session.response = ok;
-    // Upload response body: report success for each collection so events delete.
-    session.responseBody = [NSJSONSerialization dataWithJSONObject:@{@"receipts": @[@{@"success": @YES}, @{@"success": @YES}]}
-                                                           options:0 error:nil];
+    // The mock builds a matching `receipts` body per request (see ContractSession).
 
     __block BOOL done = NO;
     [td uploadEventsWithCallback:^{ done = YES; }
