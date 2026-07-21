@@ -30,6 +30,8 @@
 		E52CB7F521FDD78A00062EBA /* TDAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52CB7F421FDD78A00062EBA /* TDAPI.swift */; };
 		AA00000000000000000000A1 /* EventEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000B1 /* EventEngine.swift */; };
 		AA00000000000000000000A2 /* KeenEventEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000B2 /* KeenEventEngine.swift */; };
+		BF00000000000000000000C1 /* SwiftEventEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF00000000000000000000D1 /* SwiftEventEngine.swift */; };
+		BF00000000000000000000C2 /* EventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF00000000000000000000D2 /* EventStore.swift */; };
 		AA00000000000000000000A3 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000B4 /* Session.swift */; };
 		AA00000000000000000000A4 /* TDUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000000000000000000B5 /* TDUtils.swift */; };
 		E5A84B5421FEA35300BC699D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A84B5321FEA35300BC699D /* AppDelegate.swift */; };
@@ -111,6 +113,8 @@
 		E52CB7F421FDD78A00062EBA /* TDAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDAPI.swift; sourceTree = "<group>"; };
 		AA00000000000000000000B1 /* EventEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventEngine.swift; sourceTree = "<group>"; };
 		AA00000000000000000000B2 /* KeenEventEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeenEventEngine.swift; sourceTree = "<group>"; };
+		BF00000000000000000000D1 /* SwiftEventEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftEventEngine.swift; sourceTree = "<group>"; };
+		BF00000000000000000000D2 /* EventStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStore.swift; sourceTree = "<group>"; };
 		AA00000000000000000000B3 /* TreasureData-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "TreasureData-Bridging-Header.h"; path = "Support/TreasureData-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		AA00000000000000000000B4 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		AA00000000000000000000B5 /* TDUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDUtils.swift; sourceTree = "<group>"; };
@@ -166,6 +170,7 @@
 				AA00000000000000000000B8 /* KeenClient+TDOverride.h */,
 				AA00000000000000000000B5 /* TDUtils.swift */,
 				AA00000000000000000000B4 /* Session.swift */,
+				BF00000000000000000000D2 /* EventStore.swift */,
 			);
 			path = TreasureDataInternal;
 			sourceTree = "<group>";
@@ -219,6 +224,7 @@
 				AA00000000000000000000B3 /* TreasureData-Bridging-Header.h */,
 				AA00000000000000000000B1 /* EventEngine.swift */,
 				AA00000000000000000000B2 /* KeenEventEngine.swift */,
+				BF00000000000000000000D1 /* SwiftEventEngine.swift */,
 			);
 			path = TreasureData;
 			sourceTree = "<group>";
@@ -481,6 +487,8 @@
 				AA00000000000000000000A5 /* TreasureData.swift in Sources */,
 				AA00000000000000000000A1 /* EventEngine.swift in Sources */,
 				AA00000000000000000000A2 /* KeenEventEngine.swift in Sources */,
+				BF00000000000000000000C1 /* SwiftEventEngine.swift in Sources */,
+				BF00000000000000000000C2 /* EventStore.swift in Sources */,
 				AA00000000000000000000A3 /* Session.swift in Sources */,
 				AA00000000000000000000A4 /* TDUtils.swift in Sources */,
 			);

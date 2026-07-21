@@ -88,7 +88,7 @@ static MyTreasureData *makeTestTD(NSString *apiKey) {
     [self.td initializeFirstRun];
     [self.td setDefaultDatabase:@"my_database"];
     self.session = (MySession*)self.td.session;
-    [[KeenClient getEventStore] deleteAllEvents];
+    [self.td clearAllBufferedEvents];
     [self.td clearCapturedEvents];
     [MyTreasureData disableEventCompression];
     [MyTreasureData resetSession];
