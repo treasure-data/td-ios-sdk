@@ -175,9 +175,12 @@ final class SwiftEventEngine: EventEngine {
     private func uploadCollection(_ collection: String,
                                   _ collEvents: [NSNumber: Data],
                                   done: @escaping (String, (String, String?)?) -> Void) {
-        let parts = collection.components(separatedBy: ".")
-        guard parts.count == 2 else { return }
-        let database = parts[0], table = parts[1]
+let parts = collection.components(separatedBy: ".")
+guard parts.count == 2 else {
+    done(collection, (EngineError.invalidEvent, "Invalid collection name: \(collection)"))
+    return
+}
+let database = parts[0], table = parts[1]
 
         // Deserialize buffered rows into (event dicts, matching event ids).
         var chunks: [(events: [Any], ids: [NSNumber])] = []
