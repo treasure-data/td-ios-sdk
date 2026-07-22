@@ -2,33 +2,20 @@
 //  TDClient.swift
 //  TreasureData
 //
-//  Swift port of the Objective-C `TDClient`. A KeenClient subclass that reuses
-//  KeenClient's event buffer + upload orchestration but overrides the private
-//  `sendEvents:database:table:completionHandler:` hook to send requests to the
-//  Treasure Data endpoint (TD auth, content types, gzip, retry).
-//
-//  This subclass is required because KeenClient invokes `[self sendEvents:...]`
-//  during upload; composition alone can't intercept it. It is internal to the
-//  engine and never exposed in the public API — replacing the KeenClient
-//  dependency wholesale is deferred to a later phase.
+//  The HTTP sender for the event engine: builds a Treasure Data ingest request
+//  (TD auth, content types, gzip) and drives the retry loop. Formerly a
+//  KeenClient subclass overriding KeenClient's private `sendEvents:...`; now a
+//  standalone type owned by `SwiftEventEngine`, with no KeenClient dependency.
 //
 
 import Foundation
-import KeenClientTD
-// The `KeenClient (TDOverride)` category (re-declaring KeenClient's private
-// `sendEvents:...` so Swift can override it) is provided as a module under SwiftPM
-// and via the bridging header in the Xcode/CocoaPods build. Import it when built
-// as a module; otherwise the bridging header supplies it.
-#if canImport(TreasureDataObjC)
-import TreasureDataObjC
-#endif
 import GZIP
 #if canImport(UIKit)
 import UIKit
 #endif
 import CommonCrypto
 
-final class TDClient: KeenClient {
+final class TDClient {
 
     private static let sdkVersion = "2.0.0"
 
@@ -47,25 +34,15 @@ final class TDClient: KeenClient {
     /// Injectable for testing; defaults to the shared session.
     var uploadSession: URLSession = .shared
 
-    // A convenience initializer delegating to KeenClient's own
-    // `initWithProjectId:andWriteKey:andReadKey:`. All stored properties above
-    // have defaults, so TDClient inherits KeenClient's designated `init`
-    // rather than overriding it — this avoids the re-entrant init trap that
-    // arises because `initWithProjectId:` internally calls `[self init]`.
-    convenience init(apiKey: String, apiEndpoint: String) {
-        // KeenClient uses the project id to namespace its on-disk buffer; keep the
-        // exact "_td <sha256(apiKey)>" scheme so upgrading apps reuse their buffer.
-        let projectId = "_td \(TDClient.sha256Hash(apiKey))"
-        self.init(projectId: projectId, andWriteKey: "dummy_write_key", andReadKey: "dummy_read_key")
+    init(apiKey: String, apiEndpoint: String) {
         self.apiKey = apiKey
         self.apiEndpoint = apiEndpoint
-        self.globalPropertiesBlock = { _ in
-            return ["uuid": UUID().uuidString]
-        }
     }
 
     /// The on-disk buffer namespace derived from the api key. KeenClient used
-    /// the project id for this; the Swift engine reads it to scope its store.
+    /// the project id for this; the engine reads it to scope its store. The
+    /// "_td <sha256(apiKey)>" scheme is preserved so upgrading apps reuse their
+    /// existing buffer.
     var projectIdForBuffer: String { "_td \(TDClient.sha256Hash(apiKey))" }
 
     private static func sha256Hash(_ input: String) -> String {
@@ -77,12 +54,12 @@ final class TDClient: KeenClient {
         return digest.map { String(format: "%02x", $0) }.joined()
     }
 
-    // Overrides KeenClient's private `sendEvents:...` (declared to Swift via
-    // KeenClient+TDOverride.h). Builds the TD request and drives the retry loop.
-    override func sendEvents(_ data: Data,
-                             database: String,
-                             table: String,
-                             completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
+    /// Build the TD ingest request for one `database`.`table` and send it,
+    /// driving the retry loop.
+    func sendEvents(_ data: Data,
+                    database: String,
+                    table: String,
+                    completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
         let urlString = "\(apiEndpoint)/\(database)/\(table)"
         guard let url = URL(string: urlString) else {
             completionHandler(nil, nil, nil)

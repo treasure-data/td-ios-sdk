@@ -1,22 +1,16 @@
 PODS:
   - GZIP (1.3.2)
-  - KeenClientTD (4.1.1):
-    - KeenClientTD/keen_sqlite (= 4.1.1)
-  - KeenClientTD/keen_sqlite (4.1.1)
 
 DEPENDENCIES:
   - GZIP (= 1.3.2)
-  - KeenClientTD (= 4.1.1)
 
 SPEC REPOS:
   trunk:
     - GZIP
-    - KeenClientTD
 
 SPEC CHECKSUMS:
   GZIP: 3c0abf794bfce8c7cb34ea05a1837752416c8868
-  KeenClientTD: 6370a6861a152aa8bac2108f68e540dc9b5f72bf
 
-PODFILE CHECKSUM: c7c56130903936173a7ecee314611a525c115504
+PODFILE CHECKSUM: cbdb60457cc28cf0f10e2d9a48f1ca6cdc5d0e5b
 
 COCOAPODS: 1.16.2

@@ -13,18 +13,13 @@ Pod::Spec.new do |s|
   s.swift_version = '5.7'
   s.homepage     = 'https://github.com/treasure-data/td-ios-sdk'
   s.source       = { git: 'https://github.com/treasure-data/td-ios-sdk.git', tag: s.version.to_s }
-  # The public API is Swift; the only Objective-C is the internal
-  # KeenClient (TDOverride) category (in TreasureDataObjC) that lets the Swift
-  # TDClient subclass override KeenClient's private sendEvents:. The Xcode-only
-  # bridging header under Support/ is excluded — CocoaPods compiles the ObjC and
-  # Swift together in one module, so no bridging header is needed.
+  # Pure Swift; the buffer uses the system libsqlite3 + CommonCrypto directly,
+  # so there is no third-party engine dependency and no Objective-C sources.
   s.source_files = 'TreasureData/**/*.swift',
-                   'TreasureDataInternal/**/*.swift',
-                   'TreasureDataObjC/**/*.{h,m}'
+                   'TreasureDataInternal/**/*.swift'
   s.resources    = 'PrivacyInfo.xcprivacy'
-  s.library      = 'z'
+  s.libraries    = 'z', 'sqlite3'
   s.frameworks   = 'Security'
-  s.dependency 'KeenClientTD', '= 4.1.1'
   s.dependency 'GZIP', '= 1.3.2'
   s.requires_arc = true
 end
