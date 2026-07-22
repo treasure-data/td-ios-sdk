@@ -293,7 +293,7 @@ open class TreasureData: NSObject {
                                                      range: NSRange(location: 0, length: (table as NSString).length)) != nil
                 if !(dbMatches && tableMatches) {
                     let errMsg = "database and table need to be consist of lower letters, numbers or '_': database=\(database), table=\(table)"
-                    KCLogString(errMsg)
+                    TDLogString(errMsg)
                     error(ErrorCode.invalidParam, errMsg)
                 } else {
                     let tag = "\(database).\(table)"
@@ -306,7 +306,7 @@ open class TreasureData: NSObject {
                 }
             } else {
                 let errMsg = "database or table is nil: database=\(database ?? "(null)"), table=\(table ?? "(null)")"
-                KCLogString(errMsg)
+                TDLogString(errMsg)
                 error(ErrorCode.invalidParam, errMsg)
             }
         }
@@ -453,7 +453,7 @@ open class TreasureData: NSObject {
 
     private func appendSessionId(_ origRecord: [String: Any]) -> [String: Any] {
         if TreasureData.globalSession != nil && sessionId != nil {
-            KCLogString("instance method TreasureData#startSession(String) and static method TreasureData.startSession() are both enabled, but the instance method will be ignored.")
+            TDLogString("instance method TreasureData#startSession(String) and static method TreasureData.startSession() are both enabled, but the instance method will be ignored.")
         }
         var record = origRecord
         if let session = TreasureData.globalSession {
@@ -510,7 +510,7 @@ open class TreasureData: NSObject {
     @objc(enableAutoAppendLocalTimestamp:)
     public func enableAutoAppendLocalTimestamp(_ columnName: String?) {
         guard let columnName = columnName else {
-            KCLogString("WARN: the specified columnName for local timestamp is nil. This call is noop")
+            TDLogString("WARN: the specified columnName for local timestamp is nil. This call is noop")
             return
         }
         autoAppendLocalTimestampColumn = columnName
@@ -523,7 +523,7 @@ open class TreasureData: NSObject {
     @objc(enableAutoAppendRecordUUID:)
     public func enableAutoAppendRecordUUID(_ columnName: String?) {
         guard let columnName = columnName else {
-            KCLogString("WARN: the specified columnName for record UUID is nil; auto appending record UUID won't be enabled.")
+            TDLogString("WARN: the specified columnName for record UUID is nil; auto appending record UUID won't be enabled.")
             return
         }
         autoAppendRecordUUIDColumn = columnName

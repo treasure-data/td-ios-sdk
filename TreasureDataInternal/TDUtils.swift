@@ -15,7 +15,7 @@ enum TDLogging {
 }
 
 /// Log only when debug logging is enabled.
-func KCLogString(_ message: String) {
+func TDLogString(_ message: String) {
     if TDLogging.isEnabled {
         NSLog("%@", message)
     }
@@ -39,7 +39,7 @@ public class TDUtils: NSObject {
                                             defaultValue defaultStr: String?,
                                             message: String?) -> String? {
         if (str?.count ?? 0) == 0 {
-            if let message = message { KCLogString(message) }
+            if let message = message { TDLogString(message) }
             return defaultStr
         }
         return str

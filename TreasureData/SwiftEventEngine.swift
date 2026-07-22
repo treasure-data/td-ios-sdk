@@ -138,41 +138,41 @@ final class SwiftEventEngine: EventEngine {
                 onSuccess?()
                 return
             }
-            
-            let lock = NSObject()
-            var finished = Set<String>()
+
+            // Fan out one send per chunk across all collections; a DispatchGroup
+            // joins them. `errorLock` guards the single shared error slot.
+            let group = DispatchGroup()
+            let errorLock = NSLock()
             var finalError: (String, String?)?
-            let total = events.count
-            
-            let collectionDone: (String, (String, String?)?) -> Void = { coll, err in
-                objc_sync_enter(lock); defer { objc_sync_exit(lock) }
-                if finished.contains(coll) { return }
-                finished.insert(coll)
-                if let err = err { finalError = err }
-                if finished.count == total {
-                    if let (code, msg) = finalError { onError?(code, msg) }
-                    else { onSuccess?() }
-                }
+            let recordError: ((String, String?)?) -> Void = { err in
+                guard let err = err else { return }
+                errorLock.lock(); finalError = err; errorLock.unlock()
             }
-            
+
             for (collection, collEvents) in events {
-                uploadCollection(collection, collEvents, done: collectionDone)
+                uploadCollection(collection, collEvents, group: group, onError: recordError)
+            }
+
+            group.notify(queue: uploadQueue) {
+                if let (code, msg) = finalError { onError?(code, msg) }
+                else { onSuccess?() }
             }
         }
     }
-    
-    /// Split a collection's events into chunks of maxUploadEventsAtOnce and
-    /// upload each; report the collection done when all chunks settle.
+
+    /// Split a collection's events into chunks of maxUploadEventsAtOnce and send
+    /// each, entering `group` per in-flight send.
     private func uploadCollection(_ collection: String,
                                   _ collEvents: [NSNumber: Data],
-                                  done: @escaping (String, (String, String?)?) -> Void) {
+                                  group: DispatchGroup,
+                                  onError: @escaping ((String, String?)?) -> Void) {
         let parts = collection.components(separatedBy: ".")
         guard parts.count == 2 else {
-            done(collection, (EngineError.invalidEvent, "Invalid collection name: \(collection)"))
+            onError((EngineError.invalidEvent, "Invalid collection name: \(collection)"))
             return
         }
         let database = parts[0], table = parts[1]
-        
+
         // Deserialize buffered rows into (event dicts, matching event ids).
         var chunks: [(events: [Any], ids: [NSNumber])] = []
         var events: [Any] = []
@@ -186,35 +186,16 @@ final class SwiftEventEngine: EventEngine {
             }
         }
         if !events.isEmpty { chunks.append((events, ids)) }
-        
-        if chunks.isEmpty { done(collection, nil); return }
-        
-        let lock = NSObject()
-        var finishedChunks = 0
-        var finalError: (String, String?)?
-        let total = chunks.count
-        
+
         for chunk in chunks {
             guard let requestData = try? JSONSerialization.data(withJSONObject: ["events": chunk.events]) else {
-                objc_sync_enter(lock)
-                finishedChunks += 1
-                finalError = (EngineError.dataConversion, "An error occurred when serializing the final request data back to JSON")
-                let complete = finishedChunks == total
-                let err = finalError
-                objc_sync_exit(lock)
-                if complete { done(collection, err) }
+                onError((EngineError.dataConversion, "An error occurred when serializing the final request data back to JSON"))
                 continue
             }
-            
+            group.enter()
             sender.sendEvents(requestData, database: database, table: table) { [self] data, response, _ in
-                let err = handleResponse(data: data, response: response, eventIds: chunk.ids)
-                objc_sync_enter(lock)
-                finishedChunks += 1
-                if let err = err { finalError = err }
-                let complete = finishedChunks == total
-                let settled = finalError
-                objc_sync_exit(lock)
-                if complete { done(collection, settled) }
+                onError(handleResponse(data: data, response: response, eventIds: chunk.ids))
+                group.leave()
             }
         }
     }
