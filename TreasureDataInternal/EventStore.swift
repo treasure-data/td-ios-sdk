@@ -2,15 +2,14 @@
 //  EventStore.swift
 //  TreasureData
 //
-//  Pure-Swift port of KeenClient's `KIOEventStore`. Owns the on-disk Buffer:
-//  a SQLite database of tracked events, optionally AES-encrypted. This is a
-//  faithful, byte-compatible translation — same file path, same schema, same
-//  SQL statements, same AES-128/ECB/PKCS7 + base64 encoding — so an app
-//  upgrading from the KeenClient-backed engine reads its existing buffer
-//  unchanged. The `BufferContractTest` fixtures are the parity oracle.
+//  Owns the on-disk Buffer: a SQLite database of tracked events, optionally
+//  AES-encrypted. The file path, schema, SQL, and AES-128/ECB/PKCS7 + base64
+//  encoding are a fixed legacy format that must NOT change — apps upgrading from
+//  an older SDK read their existing buffer with this exact layout, so any drift
+//  loses their buffered events. The `BufferContractTest` fixtures are the parity
+//  oracle that locks this format.
 //
-//  Uses the system `libsqlite3` (import SQLite3) rather than the vendored
-//  keen_io_sqlite3 amalgamation; both produce the same on-disk format.
+//  Uses the system `libsqlite3` (import SQLite3).
 //
 
 import Foundation
@@ -23,14 +22,13 @@ private let SQLITE_TRANSIENT = unsafeBitCast(-1, to: sqlite3_destructor_type.sel
 
 final class EventStore {
 
-    /// The project id scoping this store's rows (KeenClient's `projectId`).
+    /// The project id scoping this store's rows (the `projectId` column).
     var projectId: String = ""
 
-    /// Last SQLite error, mirroring `KIOEventStore.lastErrorMessage`.
+    /// Last SQLite error message, for surfacing storage failures to callers.
     var lastErrorMessage: String?
 
-    /// Process-global encryption key, matching KeenClient's static `encKey`.
-    /// nil means events are stored as plaintext JSON.
+    /// Process-global encryption key. nil means events are stored as plaintext JSON.
     private static var encryptionKey: String?
     static func initializeEncryptionKey(_ key: String?) {
         encryptionKey = key
@@ -78,6 +76,8 @@ final class EventStore {
         #else
         let base = NSSearchPathForDirectoriesInDomains(.libraryDirectory, .userDomainMask, true)[0]
         #endif
+        // Legacy filename — do NOT rename. Existing installs have their buffer
+        // at this path; changing it orphans their pending events.
         return (base as NSString).appendingPathComponent("keenEvents.sqlite")
     }
 
@@ -99,20 +99,20 @@ final class EventStore {
     private func openAndInitDB() -> Bool {
         if !dbIsOpen {
             if !isDatabaseFileAccessible() {
-                KCLogString("Database file isn't accessible now")
+                TDLogString("Database file isn't accessible now")
                 return false
             }
             if !openDB() { return false }
         }
         if !dbIsTableCreated {
             if !createTable() {
-                KCLogString("Failed to create SQLite table!")
+                TDLogString("Failed to create SQLite table!")
                 return false
             }
         }
         if !dbIsStmtPrepared {
             if !prepareAllStatements() {
-                KCLogString("Failed to prepare statements!")
+                TDLogString("Failed to prepare statements!")
                 return false
             }
         }
@@ -138,7 +138,7 @@ final class EventStore {
         var err: UnsafeMutablePointer<CChar>?
         if sqlite3_exec(db, sql, nil, nil, &err) != SQLITE_OK {
             if let err = err {
-                KCLogString("Failed to create table: \(String(cString: err))")
+                TDLogString("Failed to create table: \(String(cString: err))")
                 sqlite3_free(err)
             }
             closeDB()
@@ -184,7 +184,7 @@ final class EventStore {
         // `if !dbIsOpen` guard skip reopening and run ops against a dead handle.
         let rc = sqlite3_close_v2(db)
         if rc != SQLITE_OK {
-            KCLogString("SQLite close returned rc=\(rc)")
+            TDLogString("SQLite close returned rc=\(rc)")
         }
         db = nil
         dbIsOpen = false
@@ -207,7 +207,7 @@ final class EventStore {
             if let encrypted = encrypt(eventData), let d = encrypted.data(using: .utf8) {
                 data = d
             } else {
-                KCLogString("Encryption failed. Storing it as a plain...")
+                TDLogString("Encryption failed. Storing it as a plain...")
                 EventStore.encryptionKey = nil
             }
         }
@@ -215,7 +215,7 @@ final class EventStore {
         var added = false
         dbQueue.sync {
             guard openAndInitDB() else {
-                KCLogString("DB is closed, skipping addEvent")
+                TDLogString("DB is closed, skipping addEvent")
                 return
             }
             guard sqlite3_bind_text(insertStmt, 1, projectId, -1, SQLITE_TRANSIENT) == SQLITE_OK else {
@@ -244,7 +244,7 @@ final class EventStore {
         var events: [String: [NSNumber: Data]] = [:]
         dbQueue.sync {
             guard openAndInitDB() else {
-                KCLogString("DB is closed, skipping getEvents")
+                TDLogString("DB is closed, skipping getEvents")
                 return
             }
             guard sqlite3_bind_text(findStmt, 1, projectId, -1, SQLITE_TRANSIENT) == SQLITE_OK else {
@@ -258,7 +258,7 @@ final class EventStore {
                 // zero-length blob; only the former (size <= 0) is a corrupt row
                 // worth dropping. A NULL pointer with size > 0 can't happen.
                 guard let dataPtr = sqlite3_column_blob(findStmt, 2), dataSize > 0 else {
-                    KCLogString("Event row has empty/NULL eventData. Deleting it")
+                    TDLogString("Event row has empty/NULL eventData. Deleting it")
                     deleteEvent(NSNumber(value: eventId))
                     continue
                 }
@@ -280,13 +280,13 @@ final class EventStore {
                        (try? JSONSerialization.jsonObject(with: decrypted)) != nil {
                         data = decrypted
                     } else if (try? JSONSerialization.jsonObject(with: data)) == nil {
-                        KCLogString("This event can't be handled as a plain JSON. Deleting it")
+                        TDLogString("This event can't be handled as a plain JSON. Deleting it")
                         deleteEvent(NSNumber(value: eventId))
                         continue
                     }
                 } else {
                     if (try? JSONSerialization.jsonObject(with: data)) == nil {
-                        KCLogString("This event can't be handled as a plain JSON. Deleting it")
+                        TDLogString("This event can't be handled as a plain JSON. Deleting it")
                         deleteEvent(NSNumber(value: eventId))
                         continue
                     }
@@ -304,7 +304,7 @@ final class EventStore {
 
     func resetPendingEvents() {
         dbQueue.sync {
-            guard self.openAndInitDB() else { KCLogString("DB is closed, skipping resetPendingEvents"); return }
+            guard self.openAndInitDB() else { TDLogString("DB is closed, skipping resetPendingEvents"); return }
             guard sqlite3_bind_text(self.resetPendingStmt, 1, self.projectId, -1, SQLITE_TRANSIENT) == SQLITE_OK else {
                 self.handleFailure("bind pid to reset pending statement"); return
             }
@@ -323,7 +323,7 @@ final class EventStore {
     private func count(_ stmt: OpaquePointer?, _ what: String) -> UInt {
         var result: UInt = 0
         dbQueue.sync {
-            guard openAndInitDB() else { KCLogString("DB is closed, skipping \(what)"); return }
+            guard openAndInitDB() else { TDLogString("DB is closed, skipping \(what)"); return }
             guard sqlite3_bind_text(stmt, 1, projectId, -1, SQLITE_TRANSIENT) == SQLITE_OK else {
                 handleFailure("bind pid to \(what) statement"); return
             }
@@ -343,64 +343,47 @@ final class EventStore {
 
     // MARK: - Delete
 
+    /// Run a write statement on the db queue: open, optionally bind, step to
+    /// DONE, then reset. Must be called already on `dbQueue`.
+    private func execute(_ stmt: OpaquePointer?, _ what: String, bind: (() -> Bool)? = nil) {
+        guard openAndInitDB() else { TDLogString("DB is closed, skipping \(what)"); return }
+        if let bind = bind, !bind() { handleFailure("bind for \(what)"); return }
+        guard sqlite3_step(stmt) == SQLITE_DONE else { handleFailure(what); return }
+        sqlite3_reset(stmt)
+        sqlite3_clear_bindings(stmt)
+    }
+
     func deleteEvent(_ eventId: NSNumber) {
         dbQueue.async {
-            guard self.openAndInitDB() else { KCLogString("DB is closed, skipping deleteEvent"); return }
-            guard sqlite3_bind_int64(self.deleteStmt, 1, eventId.int64Value) == SQLITE_OK else {
-                self.handleFailure("bind eventid to delete statement"); return
+            self.execute(self.deleteStmt, "delete event") {
+                sqlite3_bind_int64(self.deleteStmt, 1, eventId.int64Value) == SQLITE_OK
             }
-            guard sqlite3_step(self.deleteStmt) == SQLITE_DONE else {
-                self.handleFailure("delete event"); return
-            }
-            sqlite3_reset(self.deleteStmt)
-            sqlite3_clear_bindings(self.deleteStmt)
         }
     }
 
     func deleteAllEvents() {
-        dbQueue.async { self.deleteAllEventsLocked() }
+        dbQueue.async { self.execute(self.deleteAllStmt, "delete all events") }
     }
 
     /// Synchronous delete-all, for test reset where the caller must observe an
     /// empty buffer immediately.
     func deleteAllEventsSync() {
-        dbQueue.sync { self.deleteAllEventsLocked() }
-    }
-
-    private func deleteAllEventsLocked() {
-        guard openAndInitDB() else { KCLogString("DB is closed, skipping deleteAllEvents"); return }
-        guard sqlite3_step(deleteAllStmt) == SQLITE_DONE else {
-            handleFailure("delete all events"); return
-        }
-        sqlite3_reset(deleteAllStmt)
-        sqlite3_clear_bindings(deleteAllStmt)
+        dbQueue.sync { self.execute(self.deleteAllStmt, "delete all events") }
     }
 
     func deleteEvents(fromOffset offset: NSNumber) {
         dbQueue.async {
-            guard self.openAndInitDB() else { KCLogString("DB is closed, skipping deleteEventsFromOffset"); return }
-            guard sqlite3_bind_int64(self.ageOutStmt, 1, offset.int64Value) == SQLITE_OK else {
-                self.handleFailure("bind offset to ageOut statement"); return
+            self.execute(self.ageOutStmt, "age out events") {
+                sqlite3_bind_int64(self.ageOutStmt, 1, offset.int64Value) == SQLITE_OK
             }
-            guard sqlite3_step(self.ageOutStmt) == SQLITE_DONE else {
-                self.handleFailure("age out events"); return
-            }
-            sqlite3_reset(self.ageOutStmt)
-            sqlite3_clear_bindings(self.ageOutStmt)
         }
     }
 
     func purgePendingEvents() {
         dbQueue.async {
-            guard self.openAndInitDB() else { KCLogString("DB is closed, skipping purgePendingEvents"); return }
-            guard sqlite3_bind_text(self.purgeStmt, 1, self.projectId, -1, SQLITE_TRANSIENT) == SQLITE_OK else {
-                self.handleFailure("bind pid to purge statement"); return
+            self.execute(self.purgeStmt, "purge pending events") {
+                sqlite3_bind_text(self.purgeStmt, 1, self.projectId, -1, SQLITE_TRANSIENT) == SQLITE_OK
             }
-            guard sqlite3_step(self.purgeStmt) == SQLITE_DONE else {
-                self.handleFailure("purge pending events"); return
-            }
-            sqlite3_reset(self.purgeStmt)
-            sqlite3_clear_bindings(self.purgeStmt)
         }
     }
 
@@ -427,7 +410,7 @@ final class EventStore {
 
         var iso8601 = ""
         dbQueue.sync {
-            guard openAndInitDB() else { KCLogString("DB is closed, skipping convertToISO8601"); return }
+            guard openAndInitDB() else { TDLogString("DB is closed, skipping convertToISO8601"); return }
             let epoch = String(format: "%f", date.timeIntervalSince1970)
             guard sqlite3_bind_text(convertDateStmt, 1, epoch, -1, SQLITE_TRANSIENT) == SQLITE_OK else {
                 handleFailure("bind date to date conversion statement"); return

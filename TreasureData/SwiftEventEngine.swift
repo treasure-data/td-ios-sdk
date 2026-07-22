@@ -2,13 +2,12 @@
 //  SwiftEventEngine.swift
 //  TreasureData
 //
-//  Pure-Swift `EventEngine`: buffering via the Swift `EventStore` and the
-//  add/serialize/upload orchestration ported from KeenClient.
+//  Pure-Swift `EventEngine`: buffering via the Swift `EventStore` plus the
+//  add / serialize / upload orchestration.
 
 import Foundation
 
-// Error codes, matching KeenClient's ERROR_CODE_* string constants that tests
-// and callers observe.
+// Error-code strings surfaced to callers (and asserted by tests).
 private enum EngineError {
     static let invalidEvent = "invalid_event"
     static let dataConversion = "data_conversion"
@@ -19,8 +18,8 @@ private enum EngineError {
 
 final class SwiftEventEngine: EventEngine {
     
-    // Buffer sizing, matching kKeenMaxEventsPerCollection / kKeenNumberEventsToForget
-    // and KeenClient's maxUploadEventsAtOnce.
+    // Buffer sizing: cap per collection, how many to drop when aging out, and
+    // the max events sent in a single upload request.
     private static let maxEventsPerCollection = 10000
     private static let numberEventsToForget = 100
     private static let maxUploadEventsAtOnce = 400
@@ -31,8 +30,9 @@ final class SwiftEventEngine: EventEngine {
     
     init(apiKey: String, apiEndpoint: String) {
         self.sender = TDClient(apiKey: apiKey, apiEndpoint: apiEndpoint)
-        // KeenClient namespaced its on-disk buffer by projectId; keep the exact
-        // "_td <sha256(apiKey)>" scheme so upgrading apps reuse their buffer.
+        // The on-disk buffer is namespaced by a projectId derived from the api
+        // key ("_td <sha256(apiKey)>"); this scheme is preserved so upgrading
+        // apps reuse their existing buffer.
         store.projectId = sender.projectIdForBuffer
     }
     
@@ -77,7 +77,7 @@ final class SwiftEventEngine: EventEngine {
         store.deleteAllEventsSync()
     }
     
-    // MARK: - Add (KeenClient.addEvent:withKeenProperties:...)
+    // MARK: - Add
     
     func addEvent(_ event: [String: Any],
                   collection: String,
@@ -93,8 +93,7 @@ final class SwiftEventEngine: EventEngine {
             store.deleteEvents(fromOffset: NSNumber(value: eventCount - SwiftEventEngine.numberEventsToForget))
         }
         
-        // Serialize (converting NSDate values to ISO-8601 via the store, as
-        // KeenClient's handleInvalidJSONInObject did).
+        // Serialize, converting any NSDate values to ISO-8601 via the store.
         let fixed = handleInvalidJSON(newEvent)
         guard JSONSerialization.isValidJSONObject(fixed),
               let jsonData = try? JSONSerialization.data(withJSONObject: fixed) else {
@@ -111,7 +110,7 @@ final class SwiftEventEngine: EventEngine {
     }
     
     /// Recursively convert NSDate values to ISO-8601 strings; leave everything
-    /// else as-is. Mirrors KeenClient's handleInvalidJSONInObject for dates.
+    /// else as-is.
     private func handleInvalidJSON(_ value: Any) -> Any {
         switch value {
         case let dict as [String: Any]:
@@ -127,7 +126,7 @@ final class SwiftEventEngine: EventEngine {
         }
     }
     
-    // MARK: - Upload (KeenClient.upload / uploadCollection / handleIngestAPIResponse)
+    // MARK: - Upload
     
     func upload(compression: Bool,
                 onSuccess: EngineSuccessHandler?,
@@ -139,41 +138,41 @@ final class SwiftEventEngine: EventEngine {
                 onSuccess?()
                 return
             }
-            
-            let lock = NSObject()
-            var finished = Set<String>()
+
+            // Fan out one send per chunk across all collections; a DispatchGroup
+            // joins them. `errorLock` guards the single shared error slot.
+            let group = DispatchGroup()
+            let errorLock = NSLock()
             var finalError: (String, String?)?
-            let total = events.count
-            
-            let collectionDone: (String, (String, String?)?) -> Void = { coll, err in
-                objc_sync_enter(lock); defer { objc_sync_exit(lock) }
-                if finished.contains(coll) { return }
-                finished.insert(coll)
-                if let err = err { finalError = err }
-                if finished.count == total {
-                    if let (code, msg) = finalError { onError?(code, msg) }
-                    else { onSuccess?() }
-                }
+            let recordError: ((String, String?)?) -> Void = { err in
+                guard let err = err else { return }
+                errorLock.lock(); finalError = err; errorLock.unlock()
             }
-            
+
             for (collection, collEvents) in events {
-                uploadCollection(collection, collEvents, done: collectionDone)
+                uploadCollection(collection, collEvents, group: group, onError: recordError)
+            }
+
+            group.notify(queue: uploadQueue) {
+                if let (code, msg) = finalError { onError?(code, msg) }
+                else { onSuccess?() }
             }
         }
     }
-    
-    /// Split a collection's events into chunks of maxUploadEventsAtOnce and
-    /// upload each; report the collection done when all chunks settle.
+
+    /// Split a collection's events into chunks of maxUploadEventsAtOnce and send
+    /// each, entering `group` per in-flight send.
     private func uploadCollection(_ collection: String,
                                   _ collEvents: [NSNumber: Data],
-                                  done: @escaping (String, (String, String?)?) -> Void) {
+                                  group: DispatchGroup,
+                                  onError: @escaping ((String, String?)?) -> Void) {
         let parts = collection.components(separatedBy: ".")
         guard parts.count == 2 else {
-            done(collection, (EngineError.invalidEvent, "Invalid collection name: \(collection)"))
+            onError((EngineError.invalidEvent, "Invalid collection name: \(collection)"))
             return
         }
         let database = parts[0], table = parts[1]
-        
+
         // Deserialize buffered rows into (event dicts, matching event ids).
         var chunks: [(events: [Any], ids: [NSNumber])] = []
         var events: [Any] = []
@@ -187,41 +186,22 @@ final class SwiftEventEngine: EventEngine {
             }
         }
         if !events.isEmpty { chunks.append((events, ids)) }
-        
-        if chunks.isEmpty { done(collection, nil); return }
-        
-        let lock = NSObject()
-        var finishedChunks = 0
-        var finalError: (String, String?)?
-        let total = chunks.count
-        
+
         for chunk in chunks {
             guard let requestData = try? JSONSerialization.data(withJSONObject: ["events": chunk.events]) else {
-                objc_sync_enter(lock)
-                finishedChunks += 1
-                finalError = (EngineError.dataConversion, "An error occurred when serializing the final request data back to JSON")
-                let complete = finishedChunks == total
-                let err = finalError
-                objc_sync_exit(lock)
-                if complete { done(collection, err) }
+                onError((EngineError.dataConversion, "An error occurred when serializing the final request data back to JSON"))
                 continue
             }
-            
+            group.enter()
             sender.sendEvents(requestData, database: database, table: table) { [self] data, response, _ in
-                let err = handleResponse(data: data, response: response, eventIds: chunk.ids)
-                objc_sync_enter(lock)
-                finishedChunks += 1
-                if let err = err { finalError = err }
-                let complete = finishedChunks == total
-                let settled = finalError
-                objc_sync_exit(lock)
-                if complete { done(collection, settled) }
+                onError(handleResponse(data: data, response: response, eventIds: chunk.ids))
+                group.leave()
             }
         }
     }
     
     /// Parse the ingest response, delete succeeded/user-error events, keep
-    /// server-error ones. Mirrors KeenClient.handleIngestAPIResponse.
+    /// server-error ones for a later retry.
     private func handleResponse(data: Data?, response: URLResponse?, eventIds: [NSNumber]) -> (String, String?)? {
         let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
         guard let data = data else {
@@ -237,7 +217,7 @@ final class SwiftEventEngine: EventEngine {
         }
         
         let results = dict["receipts"] as? [[String: Any]] ?? []
-        // These KeenClient error names mean "user error, drop the event".
+        // These ingest error names mean "user error, drop the event".
         let userErrors: Set<String> = ["InvalidCollectionNameError", "InvalidPropertyNameError", "InvalidPropertyValueError"]
         for (i, result) in results.enumerated() {
             var deleteRow = true

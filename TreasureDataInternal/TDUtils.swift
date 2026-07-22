@@ -9,15 +9,13 @@
 
 import Foundation
 
-/// Process-global debug-logging flag, replacing KeenClient's logging toggle.
-/// Off by default, matching the previous behavior.
+/// Process-global debug-logging flag. Off by default.
 enum TDLogging {
     static var isEnabled = false
 }
 
-/// Log only when debug logging is enabled. Named for the KeenClient `KCLog`
-/// macro it replaces so ported call sites read the same.
-func KCLogString(_ message: String) {
+/// Log only when debug logging is enabled.
+func TDLogString(_ message: String) {
     if TDLogging.isEnabled {
         NSLog("%@", message)
     }
@@ -41,7 +39,7 @@ public class TDUtils: NSObject {
                                             defaultValue defaultStr: String?,
                                             message: String?) -> String? {
         if (str?.count ?? 0) == 0 {
-            if let message = message { KCLogString(message) }
+            if let message = message { TDLogString(message) }
             return defaultStr
         }
         return str
