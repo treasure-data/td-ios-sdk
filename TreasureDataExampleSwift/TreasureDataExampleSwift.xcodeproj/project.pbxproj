@@ -192,14 +192,14 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-TreasureDataExampleSwift/Pods-TreasureDataExampleSwift-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/GZIP/GZIP.framework",
-				"${BUILT_PRODUCTS_DIR}/KeenClientTD/KeenClientTD.framework",
 				"${BUILT_PRODUCTS_DIR}/TreasureData-iOS-SDK/TreasureData.framework",
+				"${BUILT_PRODUCTS_DIR}/TreasureDataEngage/TreasureDataEngage.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GZIP.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeenClientTD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TreasureData.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TreasureDataEngage.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

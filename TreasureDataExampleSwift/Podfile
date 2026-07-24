@@ -1,4 +1,7 @@
 use_frameworks!
 target 'TreasureDataExampleSwift' do
   pod 'TreasureData-iOS-SDK', :path => '..'
+  # The campaign-WebView bridge (separate pod / module) so the example can
+  # smoke-test PopupWebView.
+  pod 'TreasureDataEngage', :path => '..'
 end

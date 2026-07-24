@@ -13,13 +13,18 @@ Pod::Spec.new do |s|
   s.swift_version = '5.7'
   s.homepage     = 'https://github.com/treasure-data/td-ios-sdk'
   s.source       = { git: 'https://github.com/treasure-data/td-ios-sdk.git', tag: s.version.to_s }
-  # Pure Swift; the buffer uses the system libsqlite3 + CommonCrypto directly,
-  # so there is no third-party engine dependency and no Objective-C sources.
+  s.requires_arc = true
+
+  # The pure-Swift event SDK. Buffer uses system libsqlite3 + CommonCrypto, so no
+  # third-party engine dependency and no Objective-C sources. iOS + tvOS.
+  #
+  # The campaign-WebView / TDJSBridge layer ships as a SEPARATE pod,
+  # 'TreasureDataEngage' (its own module, iOS-only), so tracking-only apps never
+  # link WebKit. See TreasureDataEngage.podspec.
   s.source_files = 'TreasureData/**/*.swift',
                    'TreasureDataInternal/**/*.swift'
   s.resources    = 'PrivacyInfo.xcprivacy'
   s.libraries    = 'z', 'sqlite3'
   s.frameworks   = 'Security'
   s.dependency 'GZIP', '= 1.3.2'
-  s.requires_arc = true
 end

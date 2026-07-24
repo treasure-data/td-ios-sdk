@@ -13,6 +13,11 @@ let package = Package(
         .library(
             name: "TreasureData",
             targets: ["TreasureData"]),
+        // Campaign-WebView / TDJSBridge layer. iOS-only (WebKit); tvOS consumers
+        // link only "TreasureData". Opt-in — tracking-only apps never pull WebKit.
+        .library(
+            name: "TreasureDataEngage",
+            targets: ["TreasureDataEngage"]),
     ],
     dependencies: [
         .package(url: "https://github.com/nicklockwood/GZIP.git", exact: "1.3.2")
@@ -40,12 +45,33 @@ let package = Package(
                 "TreasureDataExample",
                 "TreasureDataExampleSwift",
                 "TreasureDataTests",
+                "TreasureDataEngage",
             ],
             sources: [
                 "TreasureData",
                 "TreasureDataInternal",
             ],
             resources: [.copy("PrivacyInfo.xcprivacy")]
+        ),
+        // The campaign-WebView / TDJSBridge layer. Depends on core TreasureData.
+        // iOS-only in practice (WebKit); source is guarded with #if canImport(WebKit)
+        // so it compiles to an empty module on tvOS rather than breaking the build.
+        .target(
+            name: "TreasureDataEngage",
+            dependencies: [
+                "TreasureData",
+            ],
+            path: "TreasureDataEngage",
+            resources: [.copy("Popup/TDJSBridge.js")]
+        ),
+        // Engage unit tests. iOS-only (drives an offscreen WKWebView); run via
+        // `xcodebuild test` against a simulator, not host `swift test`.
+        .testTarget(
+            name: "TreasureDataEngageTests",
+            dependencies: [
+                "TreasureDataEngage",
+            ],
+            path: "TreasureDataEngageTests"
         ),
         // Integration tests (credential-gated; run in CI with API_* env vars).
         // Only the Swift integration files are included — the ObjC unit tests
