@@ -2,10 +2,10 @@
 //  BridgeRoundTripTests.swift
 //  TreasureDataEngageTests
 //
-//  The one real check on the money path: an offscreen WKWebView loads fixture
-//  HTML that drives TDJSBridge, and we assert the four contract behaviors —
-//  payload delivery, closeMessage → onClose, a custom method round-trip, and an
-//  unregistered method being a safe no-op.
+//  Money-path checks for the TDBridge driven through a real
+//  offscreen WKWebView: close → onClose, track/invoke/openUrl →
+//  delegate, TDContext injection, and the invoke-before-close ordering the PoC
+//  requires.
 //
 
 #if canImport(WebKit)
@@ -13,143 +13,134 @@ import XCTest
 import WebKit
 @testable import TreasureDataEngage
 
+/// Records delegate callbacks and fulfills expectations on demand.
+private final class SpyDelegate: TDBridgeDelegate {
+    var onInvoke: ((String, [String: Any]) -> Void)?
+    var onOpenURL: ((URL) -> Void)?
+    var onTrack: ((String, [String: Any]) -> Void)?
+
+    func handleTDBridgeInvoke(name: String, params: [String: Any]) { onInvoke?(name, params) }
+    func handleTDBridgeOpenURL(_ url: URL) { onOpenURL?(url) }
+    func handleTDBridgeTrack(event: String, values: [String: Any]) { onTrack?(event, values) }
+}
+
 final class BridgeRoundTripTests: XCTestCase {
 
-    // A window keeps each test's WKWebView in a render tree — WebKit throttles
-    // JS in a web view that isn't attached to a window, which makes offscreen
-    // bridge round-trips flaky. Torn down per test.
+    // A window keeps the WKWebView in a render tree; WebKit throttles JS in a
+    // web view not attached to a window, which makes offscreen calls flaky.
     private var window: UIWindow?
+    private var delegate: SpyDelegate!
+
+    override func setUp() {
+        super.setUp()
+        delegate = SpyDelegate()
+    }
 
     override func tearDown() {
         window?.isHidden = true
         window = nil
+        delegate = nil
         super.tearDown()
     }
 
-    // Build a popup hosted in a real window and keep it retained via `window`.
-    private func makePopup() -> PopupWebView {
+    private func makeLP() -> LandingPageView {
         let win = UIWindow(frame: CGRect(x: 0, y: 0, width: 320, height: 480))
-        let popup = PopupWebView(frame: win.bounds)
-        win.addSubview(popup)
+        let lp = LandingPageView(frame: win.bounds)
+        lp.delegate = delegate
+        win.addSubview(lp)
         win.isHidden = false
         window = win
-        return popup
+        return lp
     }
 
-    /// getCampaignPayload: the page's callback receives exactly the payload set
-    /// natively. The page echoes what it got back through a custom method so the
-    /// native side can assert on it.
-    func testGetCampaignPayloadDeliversExactPayload() {
-        let popup = makePopup()
-        popup.campaignPayload = ["location": "US", "user_profile": ["id": 42]]
-
-        let got = expectation(description: "payload echoed back")
-        var echoed: String?
-        popup.register("echoPayload") { json, done in
-            echoed = json
-            done(true)
-            got.fulfill()
-        }
-
-        popup.load(html: """
+    private func html(callingBridgeOnReady body: String) -> String {
+        """
         <html><body><script>
-          function init() {
-            TDJSBridge.getCampaignPayload(function (p) {
-              TDJSBridge.echoPayload(JSON.stringify(p), function () {});
-            });
-          }
-          window.TDJSBridge ? init()
-            : document.addEventListener('TDJSBridgeReady', init);
+          function init() { \(body) }
+          window.TDBridge ? init()
+            : document.addEventListener('TDBridgeReady', init);
         </script></body></html>
-        """, baseURL: nil)
-
-        wait(for: [got], timeout: 5)
-        // The echoed JSON must decode to the exact payload set natively.
-        let data = echoed?.data(using: .utf8)
-        let decoded = data.flatMap { try? JSONSerialization.jsonObject(with: $0) as? [String: Any] }
-        XCTAssertEqual(decoded?["location"] as? String, "US")
-        XCTAssertEqual((decoded?["user_profile"] as? [String: Any])?["id"] as? Int, 42)
+        """
     }
 
-    /// closeMessage fires the container's onClose.
-    func testCloseMessageFiresOnClose() {
-        let popup = makePopup()
+    /// close() fires onClose.
+    func testCloseFiresOnClose() {
+        let lp = makeLP()
         let closed = expectation(description: "onClose fired")
-        popup.onClose = { closed.fulfill() }
-
-        popup.load(html: """
-        <html><body><script>
-          function init() { TDJSBridge.closeMessage(); }
-          window.TDJSBridge ? init()
-            : document.addEventListener('TDJSBridgeReady', init);
-        </script></body></html>
-        """, baseURL: nil)
-
+        lp.onClose = { closed.fulfill() }
+        lp.load(html: html(callingBridgeOnReady: "TDBridge.close();"), baseURL: nil)
         wait(for: [closed], timeout: 5)
     }
 
-    /// A registered custom method round-trips: JS call → native handler →
-    /// done(result) → JS callback resolves with that result.
-    func testCustomMethodRoundTrips() {
-        let popup = makePopup()
-        let resolvedInJS = expectation(description: "JS callback resolved")
-        var receivedJSON: String?
-
-        popup.register("submitRaffleEntries") { json, done in
-            receivedJSON = json
-            done(["isSuccess": true])
+    /// invoke(name, params) reaches the delegate with name + params intact.
+    func testInvokeReachesDelegate() {
+        let lp = makeLP()
+        let got = expectation(description: "invoke delegated")
+        delegate.onInvoke = { name, params in
+            XCTAssertEqual(name, "grantPoints")
+            XCTAssertEqual(params["amount"] as? Int, 100)
+            got.fulfill()
         }
-        // The page reports the resolved result back via a second custom method.
-        popup.register("reportResult") { json, done in
-            XCTAssertEqual(json, "{\"isSuccess\":true}")
-            done(nil)
-            resolvedInJS.fulfill()
-        }
-
-        popup.load(html: """
-        <html><body><script>
-          function init() {
-            TDJSBridge.submitRaffleEntries('{"n":3}', function (res) {
-              TDJSBridge.reportResult(JSON.stringify(res), function () {});
-            });
-          }
-          window.TDJSBridge ? init()
-            : document.addEventListener('TDJSBridgeReady', init);
-        </script></body></html>
-        """, baseURL: nil)
-
-        wait(for: [resolvedInJS], timeout: 5)
-        XCTAssertEqual(receivedJSON, "{\"n\":3}")
+        lp.load(html: html(callingBridgeOnReady: "TDBridge.invoke('grantPoints', {amount: 100});"), baseURL: nil)
+        wait(for: [got], timeout: 5)
     }
 
-    /// An unregistered method is a safe no-op: no crash, no callback resolution.
-    /// We prove liveness afterward with a registered method that DOES fire, so a
-    /// hung bridge would fail rather than falsely pass.
-    func testUnregisteredMethodIsNoOp() {
-        let popup = makePopup()
-        let liveness = expectation(description: "bridge still works after unknown call")
-
-        popup.register("ping") { _, done in
-            done(nil)
-            liveness.fulfill()
+    /// track(event, values) reaches the delegate with structured values.
+    func testTrackReachesDelegate() {
+        let lp = makeLP()
+        let got = expectation(description: "track delegated")
+        delegate.onTrack = { event, values in
+            XCTAssertEqual(event, "lp_view")
+            XCTAssertEqual(values["screen"] as? String, "lottery")
+            got.fulfill()
         }
+        lp.load(html: html(callingBridgeOnReady: "TDBridge.track('lp_view', {screen: 'lottery'});"), baseURL: nil)
+        wait(for: [got], timeout: 5)
+    }
 
-        popup.load(html: """
-        <html><body><script>
-          function init() {
-            // Direct __invoke of a name that was never registered: must no-op.
-            TDJSBridge.__invoke('neverRegistered', null, function () {
-              // If this ever resolves, the bridge broke its allowlist.
-              window.__brokeAllowlist = true;
-            });
-            TDJSBridge.ping(null, function () {});
-          }
-          window.TDJSBridge ? init()
-            : document.addEventListener('TDJSBridgeReady', init);
-        </script></body></html>
-        """, baseURL: nil)
+    /// openUrl(url) reaches the delegate as a parsed URL.
+    func testOpenURLReachesDelegate() {
+        let lp = makeLP()
+        let got = expectation(description: "openUrl delegated")
+        delegate.onOpenURL = { url in
+            XCTAssertEqual(url.absoluteString, "myapp://coupon/42")
+            got.fulfill()
+        }
+        lp.load(html: html(callingBridgeOnReady: "TDBridge.openUrl('myapp://coupon/42');"), baseURL: nil)
+        wait(for: [got], timeout: 5)
+    }
 
-        wait(for: [liveness], timeout: 5)
+    /// window.TDContext is injected and readable by the page. The page reports
+    /// it back via track so the native side can assert.
+    func testContextInjected() {
+        let lp = makeLP()
+        lp.context = ["nickname": "Alex", "tier": 3]
+        let got = expectation(description: "context echoed via track")
+        delegate.onTrack = { event, values in
+            XCTAssertEqual(event, "ctx")
+            XCTAssertEqual(values["nickname"] as? String, "Alex")
+            XCTAssertEqual(values["tier"] as? Int, 3)
+            got.fulfill()
+        }
+        lp.load(html: html(callingBridgeOnReady: "TDBridge.track('ctx', window.TDContext);"), baseURL: nil)
+        wait(for: [got], timeout: 5)
+    }
+
+    /// The PoC requires invoke to be delivered BEFORE close destroys the view.
+    /// Fire both in one tick and assert invoke landed before onClose.
+    func testInvokeDeliveredBeforeClose() {
+        let lp = makeLP()
+        var invokeSeen = false
+        let invoked = expectation(description: "invoke")
+        let closed = expectation(description: "close")
+        delegate.onInvoke = { _, _ in invokeSeen = true; invoked.fulfill() }
+        lp.onClose = {
+            XCTAssertTrue(invokeSeen, "close arrived before invoke — ordering violated")
+            closed.fulfill()
+        }
+        lp.load(html: html(callingBridgeOnReady:
+            "TDBridge.invoke('grantPoints', {amount: 1}); TDBridge.close();"), baseURL: nil)
+        wait(for: [invoked, closed], timeout: 5)
     }
 }
 #endif

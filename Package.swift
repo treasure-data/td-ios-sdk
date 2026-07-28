@@ -62,7 +62,7 @@ let package = Package(
                 "TreasureData",
             ],
             path: "TreasureDataEngage",
-            resources: [.copy("Popup/TDJSBridge.js")]
+            resources: [.copy("Popup/TDBridge.js")]
         ),
         // Engage unit tests. iOS-only (drives an offscreen WKWebView); run via
         // `xcodebuild test` against a simulator, not host `swift test`.

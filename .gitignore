@@ -12,3 +12,4 @@ Output
 
 # Logs directory for CI scriptss
 logs/
+.tokensave

@@ -15,7 +15,7 @@ import TreasureDataEngage
 class ViewController: UIViewController {
 
     #if canImport(TreasureDataEngage)
-    private var popup: PopupWebView?
+    private var popup: LandingPageView?
     #endif
 
     override func viewDidLoad() {
@@ -23,11 +23,12 @@ class ViewController: UIViewController {
         addBridgeSmokeTestButton()
     }
 
-    // MARK: - TDJSBridge smoke test
+    // MARK: - TDBridge smoke test
     //
-    // A manual check that PopupWebView + TDJSBridge work end-to-end in a real
-    // app: tapping the button presents a campaign WebView whose page reads the
-    // native payload, invokes a registered custom method, and closes itself.
+    // A manual check that LandingPageView + TDBridge work end-to-end in a real
+    // app: tapping the button presents a campaign WebView whose page reads
+    // window.TDContext, sends a track event, invokes a custom method (routed to
+    // this delegate), and closes itself.
 
     private func addBridgeSmokeTestButton() {
         let button = UIButton(type: .system)
@@ -43,26 +44,21 @@ class ViewController: UIViewController {
 
     @objc private func showCampaignPopup() {
         #if canImport(TreasureDataEngage)
-        let popup = PopupWebView(frame: view.bounds)
-        popup.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        popup.campaignPayload = [
-            "location": "US",
-            "user_profile": ["id": 42, "tier": "gold"],
-        ]
-        popup.onClose = { [weak self] in
+        let lp = LandingPageView(frame: view.bounds)
+        lp.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        // Data pushed to the page as window.TDContext.
+        lp.context = ["nickname": "Alex", "tier": "gold"]
+        lp.delegate = self
+        lp.onClose = { [weak self] in
             self?.popup?.removeFromSuperview()
             self?.popup = nil
-            print("[smoke] campaign popup closed")
+            print("[smoke] LP closed")
         }
-        popup.register("submitRaffleEntries") { json, done in
-            print("[smoke] submitRaffleEntries received: \(json ?? "nil")")
-            done(["isSuccess": true])
-        }
-        popup.load(html: Self.sampleCampaignHTML, baseURL: nil)
-        view.addSubview(popup)
-        self.popup = popup
+        lp.load(html: Self.sampleCampaignHTML, baseURL: nil)
+        view.addSubview(lp)
+        self.popup = lp
         #else
-        print("[smoke] TreasureDataEngage not linked; add the Engage subspec")
+        print("[smoke] TreasureDataEngage not linked; add the Engage pod")
         #endif
     }
 
@@ -70,22 +66,17 @@ class ViewController: UIViewController {
     <html><head><meta name="viewport" content="width=device-width, initial-scale=1"></head>
     <body style="font-family: -apple-system; padding: 24px;">
       <h2>Campaign</h2>
-      <pre id="payload">loading…</pre>
-      <button onclick="submit()">Enter Raffle</button>
-      <button onclick="TDJSBridge.closeMessage()">Close</button>
+      <pre id="ctx">loading…</pre>
+      <button onclick="TDBridge.invoke('grantPoints', {amount: 100})">Enter Raffle</button>
+      <button onclick="TDBridge.close()">Close</button>
       <script>
         function init() {
-          TDJSBridge.getCampaignPayload(function (p) {
-            document.getElementById('payload').textContent = JSON.stringify(p, null, 2);
-          });
+          document.getElementById('ctx').textContent =
+            JSON.stringify(window.TDContext, null, 2);
+          TDBridge.track('lp_view', { screen: 'raffle' });
         }
-        function submit() {
-          TDJSBridge.submitRaffleEntries('{"entries":3}', function (res) {
-            alert('result: ' + JSON.stringify(res));
-          });
-        }
-        window.TDJSBridge ? init()
-          : document.addEventListener('TDJSBridgeReady', init);
+        window.TDBridge ? init()
+          : document.addEventListener('TDBridgeReady', init);
       </script>
     </body></html>
     """
@@ -133,4 +124,22 @@ class ViewController: UIViewController {
         }
     }
 }
+
+#if canImport(TreasureDataEngage)
+extension ViewController: TDBridgeDelegate {
+    func handleTDBridgeInvoke(name: String, params: [String: Any]) {
+        // The app dispatches by name and performs business logic / authorization.
+        print("[smoke] invoke: \(name) \(params)")
+    }
+
+    func handleTDBridgeOpenURL(_ url: URL) {
+        print("[smoke] openUrl: \(url)")
+    }
+
+    func handleTDBridgeTrack(event: String, values: [String: Any]) {
+        // Route LP measurement into the SDK's ingest.
+        print("[smoke] track: \(event) \(values)")
+    }
+}
+#endif
 
