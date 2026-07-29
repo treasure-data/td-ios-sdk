@@ -8,13 +8,78 @@
 
 import UIKit
 import TreasureData
+#if canImport(TreasureDataEngage)
+import TreasureDataEngage
+#endif
 
 class ViewController: UIViewController {
 
+    #if canImport(TreasureDataEngage)
+    private var popup: LandingPageView?
+    #endif
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        addBridgeSmokeTestButton()
     }
+
+    // MARK: - TDBridge smoke test
+    //
+    // A manual check that LandingPageView + TDBridge work end-to-end in a real
+    // app: tapping the button presents a campaign WebView whose page reads
+    // window.TDContext, sends a track event, invokes a custom method (routed to
+    // this delegate), and closes itself.
+
+    private func addBridgeSmokeTestButton() {
+        let button = UIButton(type: .system)
+        button.setTitle("Show Campaign Popup", for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(button)
+        NSLayoutConstraint.activate([
+            button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            button.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -24),
+        ])
+        button.addTarget(self, action: #selector(showCampaignPopup), for: .touchUpInside)
+    }
+
+    @objc private func showCampaignPopup() {
+        #if canImport(TreasureDataEngage)
+        let lp = LandingPageView(frame: view.bounds)
+        lp.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        // Data pushed to the page as window.TDContext.
+        lp.context = ["nickname": "Alex", "tier": "gold"]
+        lp.delegate = self
+        lp.onClose = { [weak self] in
+            self?.popup?.removeFromSuperview()
+            self?.popup = nil
+            print("[smoke] LP closed")
+        }
+        lp.load(html: Self.sampleCampaignHTML, baseURL: nil)
+        view.addSubview(lp)
+        self.popup = lp
+        #else
+        print("[smoke] TreasureDataEngage not linked; add the Engage pod")
+        #endif
+    }
+
+    private static let sampleCampaignHTML = """
+    <html><head><meta name="viewport" content="width=device-width, initial-scale=1"></head>
+    <body style="font-family: -apple-system; padding: 24px;">
+      <h2>Campaign</h2>
+      <pre id="ctx">loading…</pre>
+      <button onclick="TDBridge.invoke('grantPoints', {amount: 100})">Enter Raffle</button>
+      <button onclick="TDBridge.close()">Close</button>
+      <script>
+        function init() {
+          document.getElementById('ctx').textContent =
+            JSON.stringify(window.TDContext, null, 2);
+          TDBridge.track('lp_view', { screen: 'raffle' });
+        }
+        window.TDBridge ? init()
+          : document.addEventListener('TDBridgeReady', init);
+      </script>
+    </body></html>
+    """
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -59,4 +124,22 @@ class ViewController: UIViewController {
         }
     }
 }
+
+#if canImport(TreasureDataEngage)
+extension ViewController: TDBridgeDelegate {
+    func handleTDBridgeInvoke(name: String, params: [String: Any]) {
+        // The app dispatches by name and performs business logic / authorization.
+        print("[smoke] invoke: \(name) \(params)")
+    }
+
+    func handleTDBridgeOpenURL(_ url: URL) {
+        print("[smoke] openUrl: \(url)")
+    }
+
+    func handleTDBridgeTrack(event: String, values: [String: Any]) {
+        // Route LP measurement into the SDK's ingest.
+        print("[smoke] track: \(event) \(values)")
+    }
+}
+#endif
 
