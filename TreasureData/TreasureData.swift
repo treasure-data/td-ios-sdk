@@ -147,6 +147,9 @@ open class TreasureData: NSObject {
     @objc public var defaultTable: String?
     @objc public var cdpEndpoint: String?
 
+    @objc public var personalizationEndpoint: String?
+    @objc public var personalizationToken: String?
+
     // MARK: - Private / internal state
 
     private var autoAppendLocalTimestampColumn: String?

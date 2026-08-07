@@ -302,6 +302,18 @@ static MyTreasureData *makeTestTD(NSString *apiKey) {
     self.isFinished = true;
 }
 
+// The p13n config properties are settable/gettable and, since this is an Obj-C
+// test file, reaching them at all proves the @objc bridging.
+- (void)testPersonalizationConfigProperties {
+    XCTAssertNil(self.td.personalizationEndpoint);
+    XCTAssertNil(self.td.personalizationToken);
+    self.td.personalizationEndpoint = @"https://region.cdp-gw.in.treasuredata.com";
+    self.td.personalizationToken = @"wp13n_token";
+    XCTAssertEqualObjects(self.td.personalizationEndpoint, @"https://region.cdp-gw.in.treasuredata.com");
+    XCTAssertEqualObjects(self.td.personalizationToken, @"wp13n_token");
+    self.isFinished = true;
+}
+
 - (void)testDisableUploading {
     [self baseTestingError:^() {
         self.td.enableRetryUploadingFlag = false;
