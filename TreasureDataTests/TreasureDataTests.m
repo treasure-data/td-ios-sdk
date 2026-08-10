@@ -314,6 +314,57 @@ static MyTreasureData *makeTestTD(NSString *apiKey) {
     self.isFinished = true;
 }
 
+// trackImmediately POSTs the enriched record to the personalization endpoint
+// (not the records endpoint) with both the write Authorization and the p13n
+// read token. The body carries the same enrichment as addEvent.
+- (void)testTrackImmediatelyPostsToPersonalizationEndpoint {
+    [self setupDefaultExpectedResponse];
+    self.td.personalizationEndpoint = @"http://localhost/p13n";
+    self.td.personalizationToken = @"wp13n_token";
+    self.td.defaultTable = @"events";
+    [self.td enableAutoAppendUniqId]; // enrichment marker on the body
+
+    XCTestExpectation *done = [self expectationWithDescription:@"trackImmediately result"];
+    [self.td trackImmediately:@{@"event": @"pageview", @"screen": @"home"}
+                        table:@"events"
+                     onResult:^(BOOL shown) {
+        // Nothing renders yet, so shown is false.
+        XCTAssertFalse(shown);
+        [done fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:5 handler:nil];
+
+    XCTAssertEqual(1, self.session.sendRequestCount);
+    NSURLRequest *req = self.session.requestData.firstObject;
+    XCTAssertEqualObjects(req.URL.absoluteString, @"http://localhost/p13n/my_database/events");
+    XCTAssertEqualObjects(req.HTTPMethod, @"POST");
+    XCTAssertEqualObjects([req valueForHTTPHeaderField:@"Authorization"], @"TD1 dummy_apikey");
+    XCTAssertEqualObjects([req valueForHTTPHeaderField:@"WP13n-Token"], @"wp13n_token");
+    XCTAssertEqualObjects([req valueForHTTPHeaderField:@"Content-Type"], @"application/vnd.treasuredata.v1+json");
+
+    NSDictionary *body = [NSJSONSerialization JSONObjectWithData:req.HTTPBody options:0 error:nil];
+    XCTAssertEqualObjects(body[@"event"], @"pageview");
+    XCTAssertEqualObjects(body[@"screen"], @"home");
+    XCTAssertNotNil(body[@"td_uuid"]); // proves the addEvent enrichment ran
+
+    self.isFinished = true;
+}
+
+// With no personalization endpoint/token configured, trackImmediately makes no
+// request and reports not-shown.
+- (void)testTrackImmediatelyWithoutConfigMakesNoRequest {
+    XCTestExpectation *done = [self expectationWithDescription:@"no-config result"];
+    [self.td trackImmediately:@{@"event": @"pageview"}
+                        table:@"events"
+                     onResult:^(BOOL shown) {
+        XCTAssertFalse(shown);
+        [done fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:5 handler:nil];
+    XCTAssertEqual(0, self.session.sendRequestCount);
+    self.isFinished = true;
+}
+
 - (void)testDisableUploading {
     [self baseTestingError:^() {
         self.td.enableRetryUploadingFlag = false;

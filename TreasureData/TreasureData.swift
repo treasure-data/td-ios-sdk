@@ -288,13 +288,7 @@ open class TreasureData: NSObject {
             }
 
             if let database = database, let table = table {
-                let pattern = "^[0-9a-z_]{3,255}$"
-                let regex = try? NSRegularExpression(pattern: pattern, options: [])
-                let dbMatches = regex?.firstMatch(in: database, options: [],
-                                                  range: NSRange(location: 0, length: (database as NSString).length)) != nil
-                let tableMatches = regex?.firstMatch(in: table, options: [],
-                                                     range: NSRange(location: 0, length: (table as NSString).length)) != nil
-                if !(dbMatches && tableMatches) {
+                if !TreasureData.isValidDatabaseAndTable(database: database, table: table) {
                     let errMsg = "database and table need to be consist of lower letters, numbers or '_': database=\(database), table=\(table)"
                     TDLogString(errMsg)
                     error(ErrorCode.invalidParam, errMsg)
@@ -315,6 +309,92 @@ open class TreasureData: NSObject {
         }
 
         return event
+    }
+
+    /// Validates a database/table name against the TD naming rule
+    /// (`^[0-9a-z_]{3,255}$`). Shared by every ingest path so the rule lives in
+    /// one place.
+    static func isValidDatabaseAndTable(database: String, table: String) -> Bool {
+        let pattern = "^[0-9a-z_]{3,255}$"
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else { return false }
+        func matches(_ s: String) -> Bool {
+            regex.firstMatch(in: s, options: [],
+                             range: NSRange(location: 0, length: (s as NSString).length)) != nil
+        }
+        return matches(database) && matches(table)
+    }
+
+    // MARK: - Personalization (in-app messages)
+
+    @objc(trackImmediately:)
+    public func trackImmediately(_ record: [String: Any]) {
+        trackImmediately(record, table: defaultTable, onResult: nil)
+    }
+
+    @objc(trackImmediately:table:)
+    public func trackImmediately(_ record: [String: Any], table: String?) {
+        trackImmediately(record, table: table, onResult: nil)
+    }
+
+    /// Sends `record` to the personalization (p13n) endpoint to fetch in-app
+    /// message offers. Conceptually "`addEvent` + an immediate p13n flush +
+    /// rendering": the body is built with the same enrichment as `addEvent`, but
+    /// it is POSTed to `personalizationEndpoint` (not the records endpoint) with
+    /// the p13n read token. `table` defaults to `defaultTable` when nil.
+    ///
+    /// `onResult` reports whether an in-app message was displayed.
+    @objc(trackImmediately:table:onResult:)
+    public func trackImmediately(_ record: [String: Any],
+                                 table: String?,
+                                 onResult: ((_ shown: Bool) -> Void)?) {
+        let finish: (Bool) -> Void = { shown in
+            guard let onResult = onResult else { return }
+            if Thread.isMainThread { onResult(shown) }
+            else { DispatchQueue.main.async { onResult(shown) } }
+        }
+
+        guard let endpoint = personalizationEndpoint, !endpoint.isEmpty,
+              let token = personalizationToken, !token.isEmpty else {
+            TDLogString("trackImmediately: personalizationEndpoint/Token not set; skipping")
+            finish(false)
+            return
+        }
+        guard let database = defaultDatabase, let table = table ?? defaultTable else {
+            TDLogString("trackImmediately: database or table is nil")
+            finish(false)
+            return
+        }
+        guard TreasureData.isValidDatabaseAndTable(database: database, table: table) else {
+            TDLogString("trackImmediately: invalid database/table: \(database).\(table)")
+            finish(false)
+            return
+        }
+
+        let body = enrichEventRecord(record, database: database, table: table)
+        guard JSONSerialization.isValidJSONObject(body),
+              let httpBody = try? JSONSerialization.data(withJSONObject: body),
+              let url = URL(string: "\(endpoint)/\(database)/\(table)") else {
+            TDLogString("trackImmediately: could not build request")
+            finish(false)
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/vnd.treasuredata.v1+json", forHTTPHeaderField: "Content-Type")
+        request.setValue("TD1 \(engine.apiKey)", forHTTPHeaderField: "Authorization")
+        request.setValue(token, forHTTPHeaderField: "WP13n-Token")
+        request.httpBody = httpBody
+
+        let task = engine.session.dataTask(with: request) { _, _, error in
+            if let error = error {
+                TDLogString("trackImmediately: request failed: \(error.localizedDescription)")
+                finish(false)
+                return
+            }
+            finish(false)
+        }
+        task.resume()
     }
 
     // MARK: - Enrichment
