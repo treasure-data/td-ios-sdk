@@ -15,15 +15,21 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [TreasureDataExample setupTreasureData];
-    NSLog(@"session_id = %@ before calling `startSession`", [TreasureData getSessionId]);
-    [TreasureData startSession];  // Or [[TreasureData sharedInstance] startSession:@"demotbl"];
-    NSLog(@"session_id = %@ after calling `startSession`", [TreasureData getSessionId]);
     return YES;
 }
 
 
-- (void)applicationDidEnterBackground:(UIApplication *)application
+@end
+
+@interface SceneDelegate : UIResponder <UIWindowSceneDelegate>
+@property (strong, nonatomic) UIWindow *window;
+@end
+
+@implementation SceneDelegate
+
+- (void)sceneDidEnterBackground:(UIScene *)scene
 {
+    UIApplication *application = UIApplication.sharedApplication;
     // [[TreasureData sharedInstance] endSession:@"demotbl"];
     NSLog(@"session_id = %@ before calling `endSession`", [TreasureData getSessionId]);
     [TreasureData endSession];
@@ -39,7 +45,7 @@
      ];
 }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application
+- (void)sceneWillEnterForeground:(UIScene *)scene
 {
     NSLog(@"session_id = %@ before calling `startSession`", [TreasureData getSessionId]);
     [TreasureData startSession];  // Or // [[TreasureData sharedInstance] startSession:@"demotbl"];

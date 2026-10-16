@@ -12,8 +12,6 @@ import TreasureData_iOS_SDK
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    var window: UIWindow?
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         TreasureData.enableLogging()
         TreasureData.initializeEncryptionKey("hello world")
@@ -45,7 +43,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     }
 
-    func applicationDidEnterBackground(_ application: UIApplication) {
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    }
+
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    }
+
+    func applicationWillTerminate(_ application: UIApplication) {
+        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    }
+}
+
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+
+    var window: UIWindow?
+
+    func sceneDidEnterBackground(_ scene: UIScene) {
         TreasureData.sharedInstance().endSession("demotbl")
         let application = UIApplication.shared
         var bgTask : UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier(rawValue: 0)
@@ -62,18 +77,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 application.endBackgroundTask(bgTask)
                 bgTask = UIBackgroundTaskIdentifier.invalid
         })
-    }
-
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-    }
-
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    }
-
-    func applicationWillTerminate(_ application: UIApplication) {
-        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 }
 
