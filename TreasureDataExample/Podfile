@@ -1,11 +1,26 @@
 use_frameworks!
 
 target 'TreasureDataExample' do
-  platform :ios, '12.0'
+  platform :ios, '15.0'
   pod 'TreasureData-iOS-SDK', :path => '..'
 end
 
 target 'TreasureDataTVOSExample' do
-  platform :tvos, '12.0'
+  platform :tvos, '15.0'
   pod 'TreasureData-iOS-SDK', :path => '..'
+end
+
+post_install do |installer|
+  installer.generated_projects.each do |project|
+    project.targets.each do |target|
+      target.build_configurations.each do |config|
+        if config.build_settings.key?('IPHONEOS_DEPLOYMENT_TARGET')
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
+        end
+        if config.build_settings.key?('TVOS_DEPLOYMENT_TARGET')
+          config.build_settings['TVOS_DEPLOYMENT_TARGET'] = '15.0'
+        end
+      end
+    end
+  end
 end
