@@ -5,8 +5,8 @@ import PackageDescription
 let package = Package(
     name: "TreasureData-iOS-SDK",
     platforms: [
-        .iOS(.v12),
-        .tvOS(.v12)
+        .iOS("15.0"),
+        .tvOS("15.0")
     ],
     products: [
         .library(

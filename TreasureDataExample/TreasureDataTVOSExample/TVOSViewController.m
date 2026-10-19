@@ -20,7 +20,6 @@
 @property (strong, nonatomic) NSString *eventTable;
 @property (strong, nonatomic) NSString *eventDatabase;
 @property (strong, nonatomic) NSArray *dataSource;
-@property (strong, nonatomic) NSString *serverSideUploadTimestampColumnName;
 @property (strong, nonatomic) NSString *recordUUIDColumnName;
 @property (strong, nonatomic) NSString *aaidColumnName;
 @property (strong, nonatomic) NSString *sessionTable;
@@ -145,34 +144,6 @@
                     @{
                         @"title": @"Disable",
                         @"action": ^{ [[TreasureData sharedInstance] disableAutoAppendLocaleInformation]; }
-                    }
-            ]
-        },
-        @{
-            @"sectionTitle": @"Server Side Upload Timestamp",
-            @"sectionRows": @[
-                    @{
-                        @"type": @"TextInput",
-                        @"title": @"Column",
-                        @"value": _serverSideUploadTimestampColumnName ?: @"",
-                        @"action": ^(NSString *text) {
-                            self.serverSideUploadTimestampColumnName = text;
-                            [self reloadData];
-                        }
-                    },
-                    @{
-                        @"title": @"Enable",
-                        @"action": ^{
-                            if (self.serverSideUploadTimestampColumnName != nil && ![self.serverSideUploadTimestampColumnName isEqual:@""]) {
-                                [[TreasureData sharedInstance] enableServerSideUploadTimestamp: self.serverSideUploadTimestampColumnName];
-                            } else {
-                                [[TreasureData sharedInstance] enableServerSideUploadTimestamp];
-                            }
-                        }
-                    },
-                    @{
-                        @"title": @"Disable",
-                        @"action": ^{ [[TreasureData sharedInstance] disableServerSideUploadTimestamp]; }
                     }
             ]
         },
@@ -603,7 +574,6 @@
     [[TreasureData sharedInstance] enableAutoAppendModelInformation];
     [[TreasureData sharedInstance] enableAutoAppendAppInformation];
     [[TreasureData sharedInstance] enableAutoAppendLocaleInformation];
-    [[TreasureData sharedInstance] enableServerSideUploadTimestamp:@"server_upload_time"];
     [[TreasureData sharedInstance] enableInAppPurchaseEvent];
     [[TreasureData sharedInstance] enableAutoAppendAdvertisingIdentifier:@"td_maid"];
 }
