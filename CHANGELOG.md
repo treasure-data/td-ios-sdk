@@ -1,5 +1,11 @@
 # Change Log
 
+
+## version 1.4.0
+_2026-10-20_
+
+* Support iOS 27
+
 ## version 1.3.0
 _2026-04-27_
 
