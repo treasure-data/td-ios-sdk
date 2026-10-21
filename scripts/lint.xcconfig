@@ -1,0 +1,3 @@
+// Apply the SDK minimums to dependencies in CocoaPods' generated lint project.
+IPHONEOS_DEPLOYMENT_TARGET = 15.0
+TVOS_DEPLOYMENT_TARGET = 15.0
