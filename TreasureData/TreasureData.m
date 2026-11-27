@@ -762,15 +762,15 @@ static NSString *TreasureDataErrorDomain = @"com.treasuredata";
 }
 
 - (void)resetUniqId {
-    _UUID = [[NSUUID UUID] UUIDString];
-    [[NSUserDefaults standardUserDefaults] setObject:_UUID forKey:storageKeyOfUuid];
+    NSString *previousUuid = [self getUUID];
     NSString *eventTypeColumn = [TDUtils isRunningWithUnity] ? TD_COLUMN_UNITY_EVENT : TD_COLUMN_EVENT;
-    [self addEvent:[TDUtils markAsAuditEvent:@{eventTypeColumn: TD_EVENT_AUDIT_RESET_UUID}]
-             table: [TDUtils requireNonBlank:self.defaultTable
-                                defaultValue:TD_DEFAULT_TABLE
-                                     message:[NSString
-                                              stringWithFormat:@"WARN: defaultTable was not set. \"%@\" will be used as the target table.",
-                                              TD_DEFAULT_TABLE]]];
+    [self addEvent:[TDUtils markAsAuditEvent:@{eventTypeColumn: TD_EVENT_AUDIT_RESET_UUID,
+                                               keyOfUuid: previousUuid}]
+             table:[TDUtils requireNonBlank:self.defaultTable
+                               defaultValue:TD_DEFAULT_TABLE
+                                    message:[NSString
+                                             stringWithFormat:@"WARN: defaultTable was not set. \"%@\" will be used as the target table.",
+                                             TD_DEFAULT_TABLE]]];
     _UUID = [[NSUUID UUID] UUIDString];
     [[NSUserDefaults standardUserDefaults] setObject:_UUID forKey:storageKeyOfUuid];
 }
