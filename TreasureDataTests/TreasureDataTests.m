@@ -951,18 +951,45 @@ static NSString *END_POINT = @"http://localhost";
         [self.td enableAutoAppendUniqId];
         [self.td enableCustomEvent];
         [self.td addEvent:[NSDictionary dictionary] table:@"somewhere"];
-        NSDictionary *sampleEvent= self.td.capturedEvents[0];
-        NSString* uuid = sampleEvent[@"td_uuid"];
+        NSDictionary *sampleEvent = self.td.capturedEvents[0];
+        NSString *uuid = sampleEvent[@"td_uuid"];
+        XCTAssertNotNil(uuid);
 
         [self.td uploadEvents];
         [self.td resetUniqId];
         [self assertHasCapturedEventType:TD_EVENT_AUDIT_RESET_UUID];
+        NSDictionary *resetEvent = self.td.capturedEvents[0];
+        XCTAssertEqualObjects(resetEvent[@"td_uuid"], uuid);
+
         [self.td uploadEvents];
         [self.td addEvent:[NSDictionary dictionary] table:@"somewhere"];
-        NSDictionary *sampleEventAfterReset= self.td.capturedEvents[0];
-        NSString* uuidAfterReset = sampleEventAfterReset[@"td_uuid"];
+        NSDictionary *sampleEventAfterReset = self.td.capturedEvents[0];
+        NSString *uuidAfterReset = sampleEventAfterReset[@"td_uuid"];
 
-        XCTAssertNotEqual(uuid, uuidAfterReset);
+        XCTAssertNotNil(uuidAfterReset);
+        XCTAssertNotEqualObjects(uuid, uuidAfterReset);
+        XCTAssertEqualObjects([self.td getUUID], uuidAfterReset);
+    } @finally {
+        self.isFinished = true;
+    }
+}
+
+- (void)testResetUniqIdWithoutAutoAppendUniqId {
+    @try {
+        [self.td setDefaultDatabase:@"somedb"];
+        [self.td disableAutoAppendUniqId];
+        NSString *previousUuid = [self.td getUUID];
+        XCTAssertNotNil(previousUuid);
+
+        [self.td uploadEvents];
+        [self.td resetUniqId];
+        [self assertHasCapturedEventType:TD_EVENT_AUDIT_RESET_UUID];
+        NSDictionary *resetEvent = self.td.capturedEvents[0];
+        XCTAssertEqualObjects(resetEvent[@"td_uuid"], previousUuid);
+
+        NSString *uuidAfterReset = [self.td getUUID];
+        XCTAssertNotNil(uuidAfterReset);
+        XCTAssertNotEqualObjects(previousUuid, uuidAfterReset);
     } @finally {
         self.isFinished = true;
     }
